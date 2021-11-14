@@ -1,0 +1,19 @@
+{
+  "name": "polkadot",
+  "version": "6.8.1",
+  "description": "Polkadot Js Librayr for Browser",
+  "main": "dependencies.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@polkadot/api": "^6.8.1",
+    "@polkadot/keyring": "^7.8.2",
+    "@polkadot/util": "^7.8.2",
+    "@polkadot/util-crypto": "^7.8.2",
+    "browser-resolve": "^2.0.0",
+    "esmify": "^2.1.1"
+  }
+}

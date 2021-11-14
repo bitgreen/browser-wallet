@@ -1,0 +1,15 @@
+{
+"manifest_version": 2,
+"name": "BitgreenWallet",
+"description": "Bitgreen Browser Extension for Multichain Wallet",
+"version": "0.1",
+"browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "window.html"
+    },
+"background": {"service_worker": "background.js"},
+"permissions": [
+    "storage"
+  ],
+"content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'"
+}
