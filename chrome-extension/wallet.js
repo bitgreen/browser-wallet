@@ -1,13 +1,16 @@
 
-let keyspair='';
+let keyspairv='';
+let keyringv= new keyring.Keyring({ type: 'sr25519' });
 let mnemonic='';
 let apiv='';
 let primaryaccount='';
+let balancev=0;
+let balancevf='0.00';
 change_network();
 if(localStorage.getItem("primaryaccount")){
   primaryaccount=localStorage.getItem("primaryaccount");
 }
-alert("primary account:"+primaryaccount);
+
 // add listeners for events
 document.addEventListener('DOMContentLoaded', function() {
     // network selection
@@ -308,6 +311,16 @@ async function change_network() {
     }  
    });
   // TODO set a green light
+  // get balance
+  let { nonce, data: balance } = await apiv.query.system.account(primaryaccount);
+  if (balance.free>0){
+    balancev=balance.free/1000000000000000000;
+    balancevf=balancev.toPrecision(4);
+  }else {
+    balancev=0;
+    balancevf="0.00";
+  }
+  document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BITG</h1>';
 }
 // generate keys pair
 function newkeys(obj,error) {
@@ -315,7 +328,7 @@ function newkeys(obj,error) {
   if (typeof error == 'undefined'){
       // generate mnemonic 24 words as key
       mnemonic=util_crypto.mnemonicGenerate(24);
-      keyspair = k.addFromUri(mnemonic, { name: '' }, 'sr25519');
+      keyspairv = k.addFromUri(mnemonic, { name: '' }, 'sr25519');
   }
   // show the mnemonic seed and ask for password to secure them
   let n="<br><h3>Create New Keys</H3>"
@@ -370,12 +383,13 @@ function storekeys(){
     const vb2=pwd.charCodeAt(1);
     const p=vb1*vb2; // position to derive other 3 passwords
     // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-    let randomstring = ' ';
+    let randomstring = '';
     const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     for ( let i = 0; i < 32; i++ ) {
       randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
+    alert("RandomString:"+randomstring);
     let dpwd1='';
     let dpwd2='';
     let dpwd3='';
@@ -398,7 +412,9 @@ function storekeys(){
     const secretwordsPreEncryption = util.stringToU8a(mnemonic);
     const { encrypted, nonce } = util_crypto.naclEncrypt(secretwordsPreEncryption, h);
     //convert to Hex json
-    let value='{"iv":"'+util.u8aToHex(randomstring)+'","nonce":"'+util.u8aToHex(nonce)+'","encrypted":"'+util.u8aToHex(encrypted)+'"}'
+    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'","encrypted":"'+util.u8aToHex(encrypted)+'"}'
+    alert("value:"+value);
+  
     //TODO - add multiple layers of encryption
     // encrypt the json with derived password 1
     //const json1PreEncryption = util.stringToU8a(value);
@@ -410,24 +426,156 @@ function storekeys(){
     localStorage.setItem("primaryaccount", keyspair.address);
     dashboard();
 }
-  // Main Dashboard 
-  function dashboard(){
-    let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
-    n=n+'<hr>'
-    n=n+'<div class="row">';
-    n=n+'<div class="col">';
-    n=n+'<button type="button" class="btn btn-primary" id="buy">Buy</button>';
-    n=n+'</div>';
-    n=n+'<div class="col">';
-    n=n+'<button type="button" class="btn btn-primary" id="send">Send</button>'
-    n=n+'</div>';
-    n=n+'<div class="col">';
-    n=n+'<button type="button" class="btn btn-primary" id="send">Swap</button>'
-    n=n+'</div>';
-    n=n+'</div>';
-    n=n+'</center>';
-    document.getElementById("root").innerHTML = n;
-    document.getElementById("buy").addEventListener("click", buy);
-    document.getElementById("send").addEventListener("click", send);
-    document.getElementById("swap").addEventListener("click", swap);
+// Main Dashboard 
+function dashboard(){
+  let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  n=n+'<hr>'
+  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+'<hr>'
+  n=n+'<div class="row">';
+  n=n+'<div class="col">';
+  n=n+'<button type="button" class="btn btn-primary" id="buy">Buy</button>';
+  n=n+'</div>';
+  n=n+'<div class="col">';
+  n=n+'<button type="button" class="btn btn-primary" id="send">Send</button>'
+  n=n+'</div>';
+  n=n+'<div class="col">';
+  n=n+'<button type="button" class="btn btn-primary" id="swap">Swap</button>'
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'</center>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("buy").addEventListener("click", buy);
+  document.getElementById("send").addEventListener("click", send);
+  document.getElementById("swap").addEventListener("click", swap);
+}
+// function to show the form for sending funds
+function send(){
+  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  n=n+'<hr>'
+  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+"<hr><h3>Send Funds</H3>"
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="text" class="form-control" id="inputRecipient" required>';
+  n=n+'</div>';
+  n=n+'</div>';
+  if (typeof error !== 'undefined') {
+      n=n+'<div class="alert alert-danger" role="alert">';
+      n=n+error;
+      n=n+'</div>';
   }
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="number" class="form-control" id="inputAmount" required>';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required>';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="transfer">Transfer</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
+  n=n+'</div>';
+  n=n+'</center>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("transfer").addEventListener("click", transferfunds);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+}
+// function to ask confirmation and submit the extrinsic
+async function transferfunds(){
+  let accountrecipient=document.getElementById("inputRecipient").value;
+  let amount=document.getElementById("inputAmount").value;
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm the transfer of: "
+      n=n+amount;
+      n=n+" BITG, to: "+accountrecipient+' ?';
+      let r=confirm(n);
+      if(r==true){
+        apiv.tx.balances.transfer(accountrecipient, amount).signAndSend(keyspairv, ({ status, events }) => {
+          if (status.isInBlock || status.isFinalized) {
+            events
+              // find/filter for failed events
+              .filter(({ event }) =>
+                api.events.system.ExtrinsicFailed.is(event)
+              )
+              // we know that data for system.ExtrinsicFailed is
+              // (DispatchError, DispatchInfo)
+              .forEach(({ event: { data: [error, info] } }) => {
+                if (error.isModule) {
+                  // for module errors, we have the section indexed, lookup
+                  const decoded = api.registry.findMetaError(error.asModule);
+                  const { docs, method, section } = decoded;
+                  alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
+                } else {
+                  // Other, CannotLookup, BadOrigin, no extra info
+                  alert('Error in transaction:'+error.toString());
+                }
+              });
+          }
+        });
+        alert("The transfer has been submitted to the blockchain, please check the result in the transaction history.");
+        dashboard();
+      }else{
+        alert("The funds transfer has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
+// function to decrypt the web wallet and return a key pair
+async function decrypt_webwallet(encrypted,pwd){
+  // get ascii value of first 2 chars
+  const vb1=pwd.charCodeAt(0);
+  const vb2=pwd.charCodeAt(1);
+  const p=vb1*vb2; // position to derive other 3 passwords
+  // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+  const enc=JSON.parse(encrypted);
+  let randomstring = enc.iv;
+  let dpwd1='';
+  let dpwd2='';
+  let dpwd3='';
+  let h=util_crypto.keccakAsU8a(pwd+randomstring);
+  for (let i = 0; i < 100000; i++) {
+    h=util_crypto.keccakAsU8a(h);
+    if (i==p){
+      dpwd1=h;
+    }
+    h=util_crypto.sha512AsU8a(h);
+    if (i==p){
+      dpwd2=h;
+    }
+    h=util_crypto.blake2AsU8a(h);
+    if (i==p){
+      dpwd3=h;
+    }
+  }
+  const encryptedv = util.hexToU8a(enc.encrypted);
+  const nonce=util.hexToU8a(enc.nonce);
+  const decrypted = util_crypto.naclDecrypt(encryptedv, nonce, h);
+  if(!decrypted){
+    return(false);
+  }else {
+    keyringv= new keyring.Keyring({ type: 'sr25519' });
+    keyspairv = keyringv.addFromUri(util.u8aToString(decrypted), { name: '' }, 'sr25519');
+    return(true);
+  }
+
+}
