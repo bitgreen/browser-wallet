@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("importkeys").addEventListener("click", importkeys);
     }
   });
-// function to connect/change networ
+// function to connect/change network
 async function change_network() {
   // TODO set a red light
   let network='wss://testnet.bitg.org';
@@ -315,7 +315,9 @@ async function change_network() {
   let { nonce, data: balance } = await apiv.query.system.account(primaryaccount);
   if (balance.free>0){
     balancev=balance.free/1000000000000000000;
-    balancevf=balancev.toPrecision(4);
+    //balancevf=balance.free
+    //balancevf=balancev.toPrecision(4);
+    balancevf=new Intl.NumberFormat().format(balancev);
   }else {
     balancev=0;
     balancevf="0.00";
@@ -428,7 +430,13 @@ function storekeys(){
 }
 // Main Dashboard 
 function dashboard(){
-  let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4);
+  n=n+'&nbsp;';
+  n=n+'<a href="#" id="copyaccount" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> \
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> \
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/> \
+  </svg></a>'
+  n=n+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
   n=n+'<hr>'
@@ -448,6 +456,8 @@ function dashboard(){
   document.getElementById("buy").addEventListener("click", buy);
   document.getElementById("send").addEventListener("click", send);
   document.getElementById("swap").addEventListener("click", swap);
+  document.getElementById("copyaccount").addEventListener("click", clipboard_copy_account);
+
 }
 // function to show the form for sending funds
 function send(){
@@ -507,7 +517,8 @@ async function transferfunds(){
       n=n+" BITG, to: "+accountrecipient+' ?';
       let r=confirm(n);
       if(r==true){
-        apiv.tx.balances.transfer(accountrecipient, amount).signAndSend(keyspairv, ({ status, events }) => {
+        const amountb=BigInt(amount)*1000000000000000000n;
+        apiv.tx.balances.transfer(accountrecipient, amountb).signAndSend(keyspairv, ({ status, events }) => {
           if (status.isInBlock || status.isFinalized) {
             events
               // find/filter for failed events
@@ -515,7 +526,6 @@ async function transferfunds(){
                 api.events.system.ExtrinsicFailed.is(event)
               )
               // we know that data for system.ExtrinsicFailed is
-              // (DispatchError, DispatchInfo)
               .forEach(({ event: { data: [error, info] } }) => {
                 if (error.isModule) {
                   // for module errors, we have the section indexed, lookup
@@ -578,4 +588,9 @@ async function decrypt_webwallet(encrypted,pwd){
     return(true);
   }
 
+}
+//copy the account to the clipboard
+async function clipboard_copy_account(){
+  navigator.clipboard.writeText(primaryaccount);
+  alert("Account copied to the clipboard: "+primaryaccount);
 }
