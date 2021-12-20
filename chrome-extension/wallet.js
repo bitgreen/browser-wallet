@@ -324,8 +324,30 @@ async function change_network() {
   }
   document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BITG</h1>';
   // get transactions and create the table
-   
-
+  fetch('https://testnet.bitg.org:9443/transactions?account=5F9WfkRJPk2vJEJjHNJxAUXKTjm4hZq76VxU5FH2WP3vzYW8&dts=2021-08-03+00:00:00&dte=2021-12-20+23:59:59')
+  .then(response => response.json())
+  .then(data => {
+    let n='';
+    n=n+'<table class="table table-striped table-hover">';
+    n=n+'<thead>';
+    n=n+'<tr>';
+    n=n+'<th scope="col">Transaction</th>';
+    n=n+'<th scope="col">Amount</th>';
+    n=n+'</tr>';
+    n=n+'</thead>';
+    n=n+'<tbody>';
+    n=n+'<tr></tr>';
+    for(r in data.transactions){
+      n=n+'<tr>';
+      const dt=data['transactions'][r]['dtblockchain'];
+      const amt=data['transactions'][r]['amount']/1000000000000000000;
+      const amtf=new Intl.NumberFormat().format(amt);
+      n=n+'<td>'+dt.substr(0,10)+'</dt>';
+      n=n+'<td align ="right">'+amtf+' BITG</dt>';
+      n=n+'</tr>';
+    }
+    document.getElementById("transactions").innerHTML = n;
+  }); 
 }
 // generate keys pair
 function newkeys(obj,error) {
