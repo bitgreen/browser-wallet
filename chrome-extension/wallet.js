@@ -323,6 +323,9 @@ async function change_network() {
     balancevf="0.00";
   }
   document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BITG</h1>';
+  // get transactions and create the table
+   
+
 }
 // generate keys pair
 function newkeys(obj,error) {
@@ -451,6 +454,17 @@ function dashboard(){
   n=n+'<button type="button" class="btn btn-primary" id="swap">Swap</button>'
   n=n+'</div>';
   n=n+'</div>';
+  n=n+'<br><div id="transactions">';
+  n=n+'<table class="table table-striped table-hover">';
+  n=n+'<thead>';
+  n=n+'<tr>';
+  n=n+'<th scope="col">Transaction</th>';
+  n=n+'<th scope="col">Amount</th>';
+  n=n+'</tr>';
+  n=n+'</thead>';
+  n=n+'<tbody>';
+  n=n+'<tr></tr>';
+  n=n+'</div">';
   n=n+'</center>';
   document.getElementById("root").innerHTML = n;
   document.getElementById("buy").addEventListener("click", buy);
