@@ -416,7 +416,6 @@ function storekeys(){
     for ( let i = 0; i < 32; i++ ) {
       randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    alert("RandomString:"+randomstring);
     let dpwd1='';
     let dpwd2='';
     let dpwd3='';
@@ -435,22 +434,36 @@ function storekeys(){
         dpwd3=h;
       }
     }
-    // encrypt the secret words AES256
+    // 3 Layers encryption
+    // encrypt the secret words by NACL
     const secretwordsPreEncryption = util.stringToU8a(mnemonic);
-    const { encrypted, nonce } = util_crypto.naclEncrypt(secretwordsPreEncryption, h);
+    const { encrypted, nonce } = util_crypto.naclEncrypt(secretwordsPreEncryption, dpwd1);
+    // encrypt the outoput of NACL in AES256-CBC
+    let ivs='';
+    for ( let i = 0; i < 16; i++ ) {
+      ivs += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const ivaes = aesjs.utils.utf8.toBytes(ivs);
+    //const keyaes= aesjs.utils.utf8.toBytes(dpwd2.slice(0,32));
+    const keyaes= dpwd2.slice(0,32);
+    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaes, ivaes);
+    let encryptedaes = aesCtr.encrypt(encrypted);
+    // encrypt the outoput of AES256-CBC in AES256-OFB
+    let ivso='';
+    for ( let i = 0; i < 16; i++ ) {
+      ivso += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const ivaes2 = aesjs.utils.utf8.toBytes(ivs);
+    const keyaes2= dpwd3.slice(0,32);
+    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaes2, ivaes2);
+    let encryptedaes2 = aesOfb.encrypt(encryptedaes);
+    let encryptedhex=aesjs.utils.hex.fromBytes(encryptedaes2);
     //convert to Hex json
-    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'","encrypted":"'+util.u8aToHex(encrypted)+'"}'
-    alert("value:"+value);
-  
-    //TODO - add multiple layers of encryption
-    // encrypt the json with derived password 1
-    //const json1PreEncryption = util.stringToU8a(value);
-    //const {encrypted, nonce } = util_crypto.naclEncrypt(json1wordsPreEncryption, dpwd1);
-    //value='{"iv":"'+util.u8aToHex(randomstring)+'","nonce":"'+util.u8aToHex(nonce)+'","encrypted":"'+util.u8aToHex(encrypted)+'"}'
+    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'"ivaescbc":"'+ivaes+'","ivaesofb":"'+ivaes2+'","encrypted":"'+encryptedhex+'"}';
     // store encrypted data
     localStorage.setItem("webwallet", value);
     // store main account data
-    localStorage.setItem("primaryaccount", keyspair.address);
+    localStorage.setItem("primaryaccount", keyspairv.address);
     dashboard();
 }
 // Main Dashboard 
