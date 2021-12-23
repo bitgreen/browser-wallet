@@ -315,10 +315,8 @@ async function change_network() {
   let { nonce, data: balance } = await apiv.query.system.account(primaryaccount);
   if (balance.free>0){
     balancev=balance.free/1000000000000000000;
-    //balancevf=balance.free
-    //balancevf=balancev.toPrecision(4);
     balancevf=new Intl.NumberFormat().format(balancev);
-  }else {
+  } else {
     balancev=0;
     balancevf="0.00";
   }
@@ -459,7 +457,7 @@ function storekeys(){
     let encryptedaes2 = aesOfb.encrypt(encryptedaes);
     let encryptedhex=aesjs.utils.hex.fromBytes(encryptedaes2);
     //convert to Hex json
-    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'"ivaescbc":"'+ivaes+'","ivaesofb":"'+ivaes2+'","encrypted":"'+encryptedhex+'"}';
+    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'","ivaesctr":"'+util.u8aToHex(ivaes)+'","ivaesofb":"'+util.u8aToHex(ivaes2)+'","encrypted":"'+encryptedhex+'"}';
     // store encrypted data
     localStorage.setItem("webwallet", value);
     // store main account data
@@ -626,9 +624,22 @@ async function decrypt_webwallet(encrypted,pwd){
       dpwd3=h;
     }
   }
-  const encryptedv = util.hexToU8a(enc.encrypted);
+  // decrypt AES-OFB
+  const ivaesofb=util.hexToU8a(enc.ivaesofb);
+  const keyaesofb= dpwd3.slice(0,32);
+  let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+  const encryptedhex=enc.encrypted;
+  const encryptedaesofb=aesjs.utils.hex.toBytes(encryptedhex);
+  let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+  // decrypt AES-CTR
+  const ivaesctr=util.hexToU8a(enc.ivaesctr);
+  const keyaesctr= dpwd2.slice(0,32);
+  let aesCtr = new aesjs.ModeOfOperation.ofb(keyaesctr, ivaesctr);
+  let encryptedaesnacl = aesCtr.decrypt(encryptedaesctr);
+  // decrypt NACL
+  const keynacl= dpwd1.slice(0,32);
   const nonce=util.hexToU8a(enc.nonce);
-  const decrypted = util_crypto.naclDecrypt(encryptedv, nonce, h);
+  const decrypted = util_crypto.naclDecrypt(encryptedaesnacl, nonce, keynacl);
   if(!decrypted){
     return(false);
   }else {
