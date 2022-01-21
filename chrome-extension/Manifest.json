@@ -8,6 +8,8 @@
     "default_popup": "window.html"
     },
 "permissions": [
+    "clipboardWrite",
+    "clipboardRead",
     "storage",
     "https://testnet.bitg.org:9443/",
     "https://mainnet.bitg.org:9443/",
