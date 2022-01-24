@@ -467,7 +467,6 @@ function storekeys(){
 // Main Dashboard 
 function dashboard(){
   let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4);
-  n=n+'<input id="primaryaccount" name="primaryaccount" type="text" value="'+primaryaccount+'">';
   //n=n+'<div id="primaryaccount" name="primaryaccount" autofocus>'+primaryaccount+'</div>';
   n=n+'&nbsp;';
   n=n+'<a href="#" id="copyaccount" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> \
@@ -489,6 +488,7 @@ function dashboard(){
   n=n+'<button type="button" class="btn btn-primary" id="swap">Swap</button>'
   n=n+'</div>';
   n=n+'</div>';
+  n=n+'<input id="primaryaccount" name="primaryaccount" type="text" value="'+primaryaccount+'" style="color:white;border:none;" >';
   n=n+'<br><div id="transactions">';
   n=n+'<table class="table table-striped table-hover">';
   n=n+'<thead>';
@@ -500,6 +500,7 @@ function dashboard(){
   n=n+'<tbody>';
   n=n+'<tr></tr>';
   n=n+'</div">';
+  
   n=n+'</center>';
   document.getElementById("root").innerHTML = n;
   document.getElementById("buy").addEventListener("click", buy);
@@ -653,16 +654,7 @@ async function decrypt_webwallet(encrypted,pwd){
 }
 //copy the account to the clipboard
 async function clipboard_copy_account(){
-  /*navigator.clipboard.writeText(primaryaccount).then(function() {
-    console.log('Async: Copying to clipboard was successful!');
-  }, function(err) {
-    console.error('Async: Could not copy text: ', err);
-  });*/
-  //navigator.clipboard.write(primaryaccount);
   document.getElementById("primaryaccount").select();
-  //let copyText = document.querySelector("primaryaccount");
-  //let copyText = document.getElementById("primaryaccount");
-  //copyText.select();
   document.execCommand("copy");
   alert("Account: "+primaryaccount);
 }
