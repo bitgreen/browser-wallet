@@ -322,14 +322,17 @@ async function change_network() {
   }
   document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BITG</h1>';
   // get transactions and create the table
-  fetch('https://testnet.bitg.org:9443/transactions?account=5F9WfkRJPk2vJEJjHNJxAUXKTjm4hZq76VxU5FH2WP3vzYW8&dts=2021-08-03+00:00:00&dte=2021-12-20+23:59:59')
+  let dt = new Date();
+  let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
+  let url= 'https://testnet.bitg.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte=2021-12-20+23:59:59'+dtm;
+  fetch(url)
   .then(response => response.json())
   .then(data => {
     let n='';
     n=n+'<table class="table table-striped table-hover">';
     n=n+'<thead>';
     n=n+'<tr>';
-    n=n+'<th scope="col">Transaction</th>';
+    n=n+'<th scope="col">Transactions</th>';
     n=n+'<th scope="col">Amount</th>';
     n=n+'</tr>';
     n=n+'</thead>';
