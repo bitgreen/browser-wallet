@@ -324,7 +324,7 @@ async function change_network() {
   // get transactions and create the table
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
-  let url= 'https://testnet.bitg.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte=2021-12-20+23:59:59'+dtm;
+  let url= 'https://testnet.bitg.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
   fetch(url)
   .then(response => response.json())
   .then(data => {
@@ -435,32 +435,41 @@ function storekeys(){
         dpwd3=h;
       }
     }
+  
     // 3 Layers encryption
-    // encrypt the secret words by NACL
-    const secretwordsPreEncryption = util.stringToU8a(mnemonic);
-    const { encrypted, nonce } = util_crypto.naclEncrypt(secretwordsPreEncryption, dpwd1);
-    // encrypt the outoput of NACL in AES256-CBC
+    // encrypt the secret words in AES256-CFB
+    let ivf='';
+    for ( let i = 0; i < 16; i++ ) {
+      ivf += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const ivaescfb = aesjs.utils.utf8.toBytes(ivf);
+    const keyaescfb= dpwd1.slice(0,32);
+    let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+    var mnemonicbytes = aesjs.utils.utf8.toBytes(mnemonic);
+
+    let encryptedaescfb = aesCfb.encrypt(mnemonicbytes);
+    // encrypt the outoput of AES256-CFB in AES256-CTR
     let ivs='';
     for ( let i = 0; i < 16; i++ ) {
       ivs += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    const ivaes = aesjs.utils.utf8.toBytes(ivs);
+    const ivaesctr = aesjs.utils.utf8.toBytes(ivs);
     //const keyaes= aesjs.utils.utf8.toBytes(dpwd2.slice(0,32));
-    const keyaes= dpwd2.slice(0,32);
-    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaes, ivaes);
-    let encryptedaes = aesCtr.encrypt(encrypted);
-    // encrypt the outoput of AES256-CBC in AES256-OFB
+    const keyaesctr= dpwd2.slice(0,32);
+    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+    let encryptedaesctr = aesCtr.encrypt(encryptedaescfb);
+    // encrypt the outoput of AES256-CTR in AES256-OFB
     let ivso='';
     for ( let i = 0; i < 16; i++ ) {
       ivso += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    const ivaes2 = aesjs.utils.utf8.toBytes(ivs);
-    const keyaes2= dpwd3.slice(0,32);
-    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaes2, ivaes2);
-    let encryptedaes2 = aesOfb.encrypt(encryptedaes);
-    let encryptedhex=aesjs.utils.hex.fromBytes(encryptedaes2);
+    const ivaesofb = aesjs.utils.utf8.toBytes(ivso);
+    const keyaesofb= dpwd3.slice(0,32);
+    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+    let encryptedaesofb = aesOfb.encrypt(encryptedaesctr);
+    let encryptedhex=aesjs.utils.hex.fromBytes(encryptedaesofb);
     //convert to Hex json
-    let value='{"iv":"'+randomstring+'","nonce":"'+util.u8aToHex(nonce)+'","ivaesctr":"'+util.u8aToHex(ivaes)+'","ivaesofb":"'+util.u8aToHex(ivaes2)+'","encrypted":"'+encryptedhex+'"}';
+    let value='{"iv":"'+randomstring+'","ivaescfb":"'+util.u8aToHex(ivaescfb)+'","ivaesctr":"'+util.u8aToHex(ivaesctr)+'","ivaesofb":"'+util.u8aToHex(ivaesofb)+'","encrypted":"'+encryptedhex+'"}';
     // store encrypted data
     localStorage.setItem("webwallet", value);
     // store main account data
@@ -640,17 +649,19 @@ async function decrypt_webwallet(encrypted,pwd){
   // decrypt AES-CTR
   const ivaesctr=util.hexToU8a(enc.ivaesctr);
   const keyaesctr= dpwd2.slice(0,32);
-  let aesCtr = new aesjs.ModeOfOperation.ofb(keyaesctr, ivaesctr);
-  let encryptedaesnacl = aesCtr.decrypt(encryptedaesctr);
-  // decrypt NACL
-  const keynacl= dpwd1.slice(0,32);
-  const nonce=util.hexToU8a(enc.nonce);
-  const decrypted = util_crypto.naclDecrypt(encryptedaesnacl, nonce, keynacl);
-  if(!decrypted){
+  let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+  let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+  // decrypt AES-CFB
+  const ivaescfb=util.hexToU8a(enc.ivaescfb);
+  const keyaescfb= dpwd1.slice(0,32);
+  let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+  let decrypted = aesCfb.decrypt(encryptedaescfb);
+  let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
+  if(!mnemonicdecrypted){
     return(false);
   }else {
     keyringv= new keyring.Keyring({ type: 'sr25519' });
-    keyspairv = keyringv.addFromUri(util.u8aToString(decrypted), { name: '' }, 'sr25519');
+    keyspairv = keyringv.addFromUri(util.u8aToString(mnemonicdecrypted), { name: '' }, 'sr25519');
     return(true);
   }
 
