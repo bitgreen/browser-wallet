@@ -284,12 +284,15 @@ async function mainloop() {
 
    console.log("Get Validators");
    const validators = await api.query.babe.authorities();
-   console.log(validators[0][0]);
-   console.log(uint8arrayToString(validators[0][0]));
-}
+   console.log(validators[0]);
+   
+   //console.log(u8aToString(validators[0][0]));
+   console.log("Available Validators: ");
+   for (const validator of validators) {
+    console.log(validator[0].toString());    
+   }
+   
 
-function uint8arrayToString(myUint8Arr){
-    return String.fromCharCode.apply(null, myUint8Arr);
  }
  /*
  babe.authorities: Vec<(AuthorityId,BabeAuthorityWeight)>
