@@ -325,10 +325,10 @@ async function change_network() {
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
   let url= 'https://testnet.bitg.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
+  let n='';
   fetch(url)
   .then(response => response.json())
   .then(data => {
-    let n='';
     n=n+'<table class="table table-striped table-hover">';
     n=n+'<thead>';
     n=n+'<tr>';
@@ -497,7 +497,7 @@ function dashboard(){
   n=n+'<button type="button" class="btn btn-primary" id="send">Send</button>'
   n=n+'</div>';
   n=n+'<div class="col">';
-  n=n+'<button type="button" class="btn btn-primary" id="swap">Swap</button>'
+  n=n+'<button type="button" class="btn btn-primary" id="staking">Staking</button>'
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<input id="primaryaccount" name="primaryaccount" type="text" value="'+primaryaccount+'" style="color:white;border:none;" >';
@@ -517,7 +517,7 @@ function dashboard(){
   document.getElementById("root").innerHTML = n;
   document.getElementById("buy").addEventListener("click", buy);
   document.getElementById("send").addEventListener("click", send);
-  document.getElementById("swap").addEventListener("click", swap);
+  document.getElementById("staking").addEventListener("click", staking);
   document.getElementById("copyaccount").addEventListener("click", clipboard_copy_account);
 
 }
@@ -557,6 +557,48 @@ function send(){
   document.getElementById("root").innerHTML = n;
   document.getElementById("transfer").addEventListener("click", transferfunds);
   document.getElementById("backmain").addEventListener("click", dashboard);
+}
+// function to show the form for sending funds
+async function staking(){
+  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  n=n+'<hr>'
+  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+"<hr><h3>Stake/Unstake</H3>"
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="number" class="form-control" id="inputAmount" required min="1>';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="mb-3 row">';
+  n=n+'<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg validators">';
+  n=n+'<option value="0" selected>Select a Validator</option>';
+  const validators = await apiv.query.babe.authorities();
+  for (const validator of validators) {
+    n=n+'<option value="'+validator[0].toString()+'">'+validator[0].toString()+'</option>';
+  }
+  n=n+'</select></div>';
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required>';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="alert alert-danger" role="alert" id="stakingerror"></div>';
+  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
+  n=n+'</div>';
+  n=n+'</center>';
+
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("stake").addEventListener("click", stake);
+  document.getElementById("unstake").addEventListener("click", unstake);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+}
+// functiton to stake the amount
+async function stake(){
+
 }
 // function to ask confirmation and submit the extrinsic
 async function transferfunds(){
