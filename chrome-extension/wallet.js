@@ -528,9 +528,9 @@ function send(){
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
   n=n+"<hr><h3>Send Funds</H3>"
   n=n+'<div class="mb-3 row">';
-  n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
+  //n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="text" class="form-control" id="inputRecipient" required>';
+  n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient">';
   n=n+'</div>';
   n=n+'</div>';
   if (typeof error !== 'undefined') {
@@ -539,15 +539,15 @@ function send(){
       n=n+'</div>';
   }
   n=n+'<div class="mb-3 row">';
-  n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
+  //n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="number" class="form-control" id="inputAmount" required>';
+  n=n+'<input type="number" class="form-control" id="inputAmount" required placeholder="Amount">';
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div class="mb-3 row">';
-  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
+  //n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="password" class="form-control" id="inputPassword" required>';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="password">';
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="transfer">Transfer</button></div>';
@@ -563,28 +563,30 @@ async function staking(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
-  n=n+"<hr><h3>Stake/Unstake</H3>"
+  n=n+"<hr><h3>Stake/Unstake</h3>"
   n=n+'<div class="mb-3 row">';
-  n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="number" class="form-control" id="inputAmount" required min="1>';
+  n=n+'<input type="number" class="form-control" id="inputAmount" required min="1" placeholder="Amount">';
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div class="mb-3 row">';
-  n=n+'<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg validators">';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators">';
+
   n=n+'<option value="0" selected>Select a Validator</option>';
   const validators = await apiv.query.babe.authorities();
   for (const validator of validators) {
-    n=n+'<option value="'+validator[0].toString()+'">'+validator[0].toString()+'</option>';
+    let vt=validator[0].toString();
+    n=n+'<option value="'+vt+'">'+vt+'</option>';
   }
-  n=n+'</select></div>';
+  n=n+'</select></div></div>';
   n=n+'<div class="mb-3 row">';
-  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="password" class="form-control" id="inputPassword" required>';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password">';
   n=n+'</div>';
   n=n+'</div>';
-  n=n+'<div class="alert alert-danger" role="alert" id="stakingerror"></div>';
+  //n=n+'<div class="alert alert-danger" role="alert" id="stakingerror"></div>';
+  n=n+'<div id="error"></div>';
   n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
   n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
   n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
