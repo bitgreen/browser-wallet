@@ -2,6 +2,7 @@
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { Keyring } = require('@polkadot/api');
 const util_crypto = require('@polkadot/util-crypto');
+let apiv;
 
 mainloop();
 
@@ -9,7 +10,7 @@ mainloop();
 async function mainloop() {
   let network='wss://testnet.bitg.org';
   const wsProvider = new WsProvider(network);
-  const api = await ApiPromise.create({ provider: wsProvider,types:
+  apiv = await ApiPromise.create({ provider: wsProvider,types:
     {
       "CallOf": "Call",
       "DispatchTime": {
@@ -271,7 +272,7 @@ async function mainloop() {
       }
     }  
    });
-   console.log("Genesis hash: "+api.genesisHash.toHex());
+   console.log("Genesis hash: "+apiv.genesisHash.toHex());
    await util_crypto.cryptoWaitReady();
    console.log("Creating Key Pairs from mnemonic");
    let k= new Keyring({ type: 'sr25519' });   
@@ -283,15 +284,18 @@ async function mainloop() {
    console.log(keyspair.address);
 
    console.log("Get Locks");
-   const locks = await api.query.balances.locks(keyspair.address);
-   console.log("Available Locks: ");
-   for (const lock of locks) {
-    if(lock.id.toString()=='0x7374616b696e6720'){  //staking in hex
-        console.log("Staking:")
-        console.log(parseFloat(lock.amount));
-    }
-   }
+   let a= await get_amount_bonded(keyspair.address)
+   console.log("Amount Bonded: "+a);
    
-
  }
  
+ // function to get the amount bonded for staking
+async function get_amount_bonded(address){
+    const locks = await apiv.query.balances.locks(address);
+    for (const lock of locks) {
+      if(lock.id.toString()=='0x7374616b696e6720'){  //staking in hex
+          return(parseFloat(lock.amount));
+      }
+     }
+     return(0);
+  }

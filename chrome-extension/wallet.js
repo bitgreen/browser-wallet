@@ -784,8 +784,8 @@ async function clipboard_copy_account(){
   alert("Account: "+primaryaccount);
 }
 // function to get the amount bonded for staking
-async function get_amount_bonded(){
-  const locks = await api.query.balances.locks(keyspair.address);
+async function get_amount_bonded(address){
+  const locks = await apiv.query.balances.locks(address);
   for (const lock of locks) {
     if(lock.id.toString()=='0x7374616b696e6720'){  //staking in hex
         return(parseFloat(lock.amount));
