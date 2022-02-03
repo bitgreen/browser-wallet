@@ -571,7 +571,7 @@ async function staking(){
   n=n+'</div>';
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
-  n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators">';
+  n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators" name="validator" id="validator">';
 
   n=n+'<option value="0" selected>Select a Validator</option>';
   const validators = await apiv.query.babe.authorities();
@@ -598,9 +598,75 @@ async function staking(){
   document.getElementById("unstake").addEventListener("click", unstake);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
-// functiton to stake the amount
+// function to stake the amount inserted
 async function stake(){
-
+  let amount=document.getElementById("inputAmount").value;
+  let validator=document.getElementById("validator").value;
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm the staking of: "
+      n=n+amount;
+      n=n+" BITG?";
+      let r=confirm(n);
+      if(r==true){
+        const amountb=BigInt(amount)*1000000000000000000n;
+        apiv.tx.staking.bond(keyspairv.address,amountb,1)
+          .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
+          if (status.isInBlock || status.isFinalized) {
+            if (dispatchError) {
+              if (dispatchError.isModule) {
+                // for module errors, we have the section indexed, lookup
+                const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                const { docs, name, section } = decoded;
+                alert(`Error in transaction: ${section}.${name}: ${docs.join(' ')}`);
+              } else {
+                // Other, CannotLookup, BadOrigin, no extra info
+                alert(`Error in transaction: ${dispatchError.toString()}`);
+              }
+            } else {
+              // no errors, mominate validator
+              console.log("Nominating Validator:"+validator);
+              const validators=[validator];
+              apiv.tx.staking.nominate(validators)
+                .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
+                if (status.isInBlock || status.isFinalized) {
+                    console.log("Status in block or finalized");
+                    if (dispatchError) {
+                        if (dispatchError.isModule) {
+                          // for module errors, we have the section indexed, lookup
+                          const decoded = api.registry.findMetaError(dispatchError.asModule);
+                          const { docs, name, section } = decoded;
+                          alert(`${section}.${name}: ${docs.join(' ')}`);
+                        } else {
+                          // Other, CannotLookup, BadOrigin, no extra info
+                          alert(`Error in transaction: ${dispatchError.toString()}`);
+                        }
+                    }
+                }
+              });
+            }
+          }
+        });
+        alert("The staking has been submitted to the blockchain, please check the result in the transaction history.");
+        dashboard();
+      }else{
+        alert("The staking has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
 }
 // function to ask confirmation and submit the extrinsic
 async function transferfunds(){
@@ -701,11 +767,12 @@ async function decrypt_webwallet(encrypted,pwd){
   let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
   let decrypted = aesCfb.decrypt(encryptedaescfb);
   let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
+  console.log(mnemonicdecrypted);
   if(!mnemonicdecrypted){
     return(false);
   }else {
     keyringv= new keyring.Keyring({ type: 'sr25519' });
-    keyspairv = keyringv.addFromUri(util.u8aToString(mnemonicdecrypted), { name: '' }, 'sr25519');
+    keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
     return(true);
   }
 
@@ -715,4 +782,14 @@ async function clipboard_copy_account(){
   document.getElementById("primaryaccount").select();
   document.execCommand("copy");
   alert("Account: "+primaryaccount);
+}
+// function to get the amount bonded for staking
+async function get_amount_bonded(){
+  const locks = await api.query.balances.locks(keyspair.address);
+  for (const lock of locks) {
+    if(lock.id.toString()=='0x7374616b696e6720'){  //staking in hex
+        return(parseFloat(lock.amount));
+    }
+   }
+   return(0);
 }
