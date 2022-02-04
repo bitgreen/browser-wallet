@@ -558,50 +558,65 @@ function send(){
   document.getElementById("transfer").addEventListener("click", transferfunds);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
-// function to show the form for sending funds
+// function to manage the staking of funds
 async function staking(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
   n=n+"<hr><h3>Stake/Unstake</h3>"
-  n=n+'<div class="mb-3 row">';
-  n=n+'<div class="col-sm-10">';
-  n=n+'<input type="number" class="form-control" id="inputAmount" required min="1" placeholder="Amount">';
-  n=n+'</div>';
-  n=n+'</div>';
-  n=n+'<div class="mb-3 row">';
-  n=n+'<div class="col-sm-10">';
-  n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators" name="validator" id="validator">';
-
-  n=n+'<option value="0" selected>Select a Validator</option>';
-  const validators = await apiv.query.babe.authorities();
-  for (const validator of validators) {
-    let vt=validator[0].toString();
-    n=n+'<option value="'+vt+'">'+vt+'</option>';
+  // get amount bonded
+  let bondamount= await get_amount_bonded(primaryaccount);
+  // input amount
+  if(bondamount==0){
+    n=n+'<div class="mb-3 row">';
+    n=n+'<div class="col-sm-10">';
+    n=n+'<input type="number" class="form-control" id="inputAmount" required min="1" placeholder="Amount">';
+    n=n+'</div>';
+    n=n+'</div>';
   }
-  n=n+'</select></div></div>';
+  // validators list box
+  if (bondamount>0) {
+    n=n+'<div class="mb-3 row">';
+    n=n+'<div class="col-sm-10">';
+    n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators" name="validator" id="validator">';
+    n=n+'<option value="0" selected>Select a Validator</option>';
+    const validators = await apiv.query.session.validators();
+    for (const validator of validators) {
+      let vt=validator.toString();
+      n=n+'<option value="'+vt+'">'+vt+'</option>';
+    }
+    n=n+'</select></div></div>';
+  }
+  // password
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
   n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password">';
   n=n+'</div>';
   n=n+'</div>';
-  //n=n+'<div class="alert alert-danger" role="alert" id="stakingerror"></div>';
   n=n+'<div id="error"></div>';
-  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
+  // show appropriate buttons following the status of the staking
+  if(bondamount>0){
+    n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
+  }else {
+    n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="bond">Bond</button></div>';
+  }
   n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
   n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
   n=n+'</div>';
   n=n+'</center>';
 
   document.getElementById("root").innerHTML = n;
-  document.getElementById("stake").addEventListener("click", stake);
+  if(bondamount>0){
+    document.getElementById("stake").addEventListener("click", stake);
+  }else {
+    document.getElementById("bond").addEventListener("click", bond);
+  }
   document.getElementById("unstake").addEventListener("click", unstake);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
-// function to stake the amount inserted
-async function stake(){
+// function to bond the amount inserted
+async function bond(){
   let amount=document.getElementById("inputAmount").value;
-  let validator=document.getElementById("validator").value;
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
@@ -633,28 +648,54 @@ async function stake(){
                 // Other, CannotLookup, BadOrigin, no extra info
                 alert(`Error in transaction: ${dispatchError.toString()}`);
               }
-            } else {
-              // no errors, mominate validator
-              console.log("Nominating Validator:"+validator);
-              const validators=[validator];
-              apiv.tx.staking.nominate(validators)
-                .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
-                if (status.isInBlock || status.isFinalized) {
-                    console.log("Status in block or finalized");
-                    if (dispatchError) {
-                        if (dispatchError.isModule) {
-                          // for module errors, we have the section indexed, lookup
-                          const decoded = api.registry.findMetaError(dispatchError.asModule);
-                          const { docs, name, section } = decoded;
-                          alert(`${section}.${name}: ${docs.join(' ')}`);
-                        } else {
-                          // Other, CannotLookup, BadOrigin, no extra info
-                          alert(`Error in transaction: ${dispatchError.toString()}`);
-                        }
-                    }
-                }
-              });
-            }
+            } 
+          }
+        });
+        alert("The bonding has been submitted to the blockchain, please check the result in the transaction history.");
+        dashboard();
+      }else{
+        alert("The bonding has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
+// function to stake the amount inserted
+async function stake(){
+  let validator=document.getElementById("validator").value;
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm the nomination of validator: "+validator+" ?";
+      let r=confirm(n);
+      if(r==true){
+        console.log("Nominating Validator:"+validator);
+        const validators=[validator];
+        apiv.tx.staking.nominate(validators)
+          .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
+          if (status.isInBlock || status.isFinalized) {
+            if (dispatchError) {
+              if (dispatchError.isModule) {
+                // for module errors, we have the section indexed, lookup
+                const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                const { docs, name, section } = decoded;
+                alert(`Error in transaction: ${section}.${name}: ${docs.join(' ')}`);
+              } else {
+                // Other, CannotLookup, BadOrigin, no extra info
+                alert(`Error in transaction: ${dispatchError.toString()}`);
+              }
+            } 
           }
         });
         alert("The staking has been submitted to the blockchain, please check the result in the transaction history.");

@@ -283,13 +283,13 @@ async function mainloop() {
    console.log(keyspair.address);
 
    console.log("Get Validators");
-   const validators = await api.query.babe.authorities();
-   console.log(validators[0]);
+   const validators = await api.query.session.validators();
+   console.log(validators[0].toString());
    
    //console.log(u8aToString(validators[0][0]));
    console.log("Available Validators: ");
    for (const validator of validators) {
-    console.log(validator[0].toString());    
+    console.log(validator.toString());    
    }
    
 
