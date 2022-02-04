@@ -563,9 +563,27 @@ async function staking(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
-  n=n+"<hr><h3>Stake/Unstake</h3>"
+  n=n+"<hr>";
+  //n=n+"<h3>Staking</h3>"
   // get amount bonded
   let bondamount= await get_amount_bonded(primaryaccount);
+  let nominator='';
+  if(bondamount>0){
+    nominator= await get_nominator(primaryaccount);
+  }
+  if(bondamount>0){
+    const bondamountv=bondamount/1000000000000000000;
+    const bondamountvf=new Intl.NumberFormat().format(bondamountv);
+    n=n+'<div id="stake"><h3>';
+    if(nominator.length==0){
+      n=n+'Bonded: ';
+    }else {
+      n=n+"Staken: ";
+    }
+    n=n+bondamountvf+' BITG</h3></div>';
+  }else {
+    n=n+"<h3>Staking</h3>"
+  }
   // input amount
   if(bondamount==0){
     n=n+'<div class="mb-3 row">';
@@ -575,7 +593,7 @@ async function staking(){
     n=n+'</div>';
   }
   // validators list box
-  if (bondamount>0) {
+  if (bondamount>0 && nominator.length==0) {
     n=n+'<div class="mb-3 row">';
     n=n+'<div class="col-sm-10">';
     n=n+'<select class="form-select form-select-sg mb-3" aria-label=".form-select-sg validators" name="validator" id="validator">';
@@ -594,24 +612,32 @@ async function staking(){
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div id="error"></div>';
+  n=n+'<div class="row">';
   // show appropriate buttons following the status of the staking
-  if(bondamount>0){
-    n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
-  }else {
-    n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="bond">Bond</button></div>';
+  if(bondamount>0 && nominator.length==0){
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unbond">Unbond</button></div>';
   }
-  n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
+  else if(bondamount>0 && nominator.length>0){
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
+  }
+  else if( bondamount==0) {
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="bond">Bond</button></div>';
+  }
   n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
   n=n+'</div>';
   n=n+'</center>';
 
   document.getElementById("root").innerHTML = n;
-  if(bondamount>0){
+  if(bondamount>0 && nominator.length==0){
     document.getElementById("stake").addEventListener("click", stake);
-  }else {
+    document.getElementById("unbond").addEventListener("click", unbond);
+  }
+  else if (bondamount>0 && nominator.length>0){
+    document.getElementById("unstake").addEventListener("click", unstake);
+  }else if( bondamount==0) {
     document.getElementById("bond").addEventListener("click", bond);
   }
-  document.getElementById("unstake").addEventListener("click", unstake);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
 // function to bond the amount inserted
@@ -629,7 +655,7 @@ async function bond(){
     // try to decrypt and get keypairsv with the keys pair
     let r=await decrypt_webwallet(encrypted,password);
     if(r==true){
-      let n="Do you confirm the staking of: "
+      let n="Do you confirm the bonding of: "
       n=n+amount;
       n=n+" BITG?";
       let r=confirm(n);
@@ -655,6 +681,54 @@ async function bond(){
         dashboard();
       }else{
         alert("The bonding has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
+// function to unbond the current fund
+async function unbond(){
+  let amount= await get_amount_bonded(primaryaccount);
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm the unbonding of: "
+      n=n+(amount/1000000000000000000);
+      n=n+" BITG? It will take effect within 1 hour.";
+      let r=confirm(n);
+      if(r==true){
+        const amountb=BigInt(amount);
+        apiv.tx.staking.unbond(amountb)
+          .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
+          if (status.isInBlock || status.isFinalized) {
+            if (dispatchError) {
+              if (dispatchError.isModule) {
+                // for module errors, we have the section indexed, lookup
+                const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                const { docs, name, section } = decoded;
+                alert(`Error in transaction: ${section}.${name}: ${docs.join(' ')}`);
+              } else {
+                // Other, CannotLookup, BadOrigin, no extra info
+                alert(`Error in transaction: ${dispatchError.toString()}`);
+              }
+            } 
+          }
+        });
+        alert("The unbonding has been submitted to the blockchain, please check the result in the transaction history and expect the effect after 1 hour.");
+        dashboard();
+      }else{
+        alert("The unbonding has been cancelled!");
       }
     }else {
       alert("Password is wrong!")
@@ -702,6 +776,50 @@ async function stake(){
         dashboard();
       }else{
         alert("The staking has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
+// function to unstake the amount inserted
+async function unstake(){
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm to removal of your staking ? It will be done within 1 hour (ERA time)";
+      let r=confirm(n);
+      if(r==true){
+        apiv.tx.staking.chill()
+          .signAndSend(keyspairv, ({ status, events, dispatchError }) => {
+          if (status.isInBlock || status.isFinalized) {
+            if (dispatchError) {
+              if (dispatchError.isModule) {
+                // for module errors, we have the section indexed, lookup
+                const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                const { docs, name, section } = decoded;
+                alert(`Error in transaction: ${section}.${name}: ${docs.join(' ')}`);
+              } else {
+                // Other, CannotLookup, BadOrigin, no extra info
+                alert(`Error in transaction: ${dispatchError.toString()}`);
+              }
+            } 
+          }
+        });
+        alert("The unstaking has been submitted to the blockchain, please check the result in the transaction history.");
+        dashboard();
+      }else{
+        alert("The unstaking has been cancelled!");
       }
     }else {
       alert("Password is wrong!")
@@ -833,4 +951,16 @@ async function get_amount_bonded(address){
     }
    }
    return(0);
+}
+// function to read of there is a nominator for an account
+async function get_nominator(address){
+  console.log(address);
+  const nominators = await apiv.query.staking.nominators(address);
+  if (nominators.isSome) {
+      let n=nominators.unwrap();
+      console.log(n.targets[0].toString());
+      return(n.targets[0].toString());
+  }else {
+      return("");
+  }
 }
