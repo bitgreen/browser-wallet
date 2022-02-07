@@ -268,12 +268,6 @@ async function mainloop() {
       }
     }  
    });
-   console.log("Genesis hash: "+api.genesisHash.toHex());
-   await util_crypto.cryptoWaitReady();
-   console.log("Creating Key Pairs from mnemonic");
-   let k= new Keyring({ type: 'sr25519' });   
-   let mnemonic="frost recycle copper hen mechanic immune develop blanket wine task screen goat";
-   let keyspair = k.addFromUri(mnemonic, { name: '' }, 'sr25519');
-   console.log(keyspair);
+   
    
 }

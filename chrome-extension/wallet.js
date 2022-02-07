@@ -608,21 +608,21 @@ async function staking(){
   // password
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password" minlen="4">';
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div id="error"></div>';
   n=n+'<div class="row">';
   // show appropriate buttons following the status of the staking
   if(bondamount>0 && nominator.length==0){
-    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="stake">Stake</button></div>';
-    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unbond">Unbond</button></div>';
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="stakeid" " >Stake</button></div>';
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unbondid">Unbond</button></div>';
   }
   else if(bondamount>0 && nominator.length>0){
-    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstake">Unstake</button></div>';
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="unstakeid">Unstake</button></div>';
   }
   else if( bondamount==0) {
-    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="bond">Bond</button></div>';
+    n=n+'<div class="col"><button type="button" class="btn btn-primary" id="bondid">Bond</button></div>';
   }
   n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
   n=n+'</div>';
@@ -630,13 +630,13 @@ async function staking(){
 
   document.getElementById("root").innerHTML = n;
   if(bondamount>0 && nominator.length==0){
-    document.getElementById("stake").addEventListener("click", stake);
-    document.getElementById("unbond").addEventListener("click", unbond);
+    document.getElementById("stakeid").addEventListener("click", stake);
+    document.getElementById("unbondid").addEventListener("click", unbond);
   }
   else if (bondamount>0 && nominator.length>0){
-    document.getElementById("unstake").addEventListener("click", unstake);
+    document.getElementById("unstakeid").addEventListener("click", unstake);
   }else if( bondamount==0) {
-    document.getElementById("bond").addEventListener("click", bond);
+    document.getElementById("bondid").addEventListener("click", bond);
   }
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
@@ -926,7 +926,6 @@ async function decrypt_webwallet(encrypted,pwd){
   let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
   let decrypted = aesCfb.decrypt(encryptedaescfb);
   let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
-  console.log(mnemonicdecrypted);
   if(!mnemonicdecrypted){
     return(false);
   }else {
