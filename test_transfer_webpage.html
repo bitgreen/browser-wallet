@@ -1,0 +1,13 @@
+<!--
+    An example to transfer 1 Bitgreen
+-->
+<html>
+  <button id="mybutton">Transfer 1 Bitgreen</button>
+  <script>
+    let button = document.getElementById("mybutton");
+    button.addEventListener("click", () =>{
+       window.postMessage({ type: "BROWSER-WALLET", text: "transfer",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1000000000000000000 }, "*");
+    }
+    , false);
+  </script>
+</html>

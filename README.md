@@ -12,6 +12,9 @@ Features:
 - Shows current balance from the blockchain.  
 - Transfers Funds by signing the transaction.
 - Shows account address to receive funds.
+- Stakes/Unstakes funds
+
+
 
 
 

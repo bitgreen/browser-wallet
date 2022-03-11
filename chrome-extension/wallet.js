@@ -7,6 +7,8 @@ let primaryaccount='';
 let balancev=0;
 let balancevf='0.00';
 change_network();
+// start messages listener to interact with the web pages
+msg_listener();
 if(localStorage.getItem("primaryaccount")){
   primaryaccount=localStorage.getItem("primaryaccount");
 }
@@ -608,7 +610,7 @@ async function staking(){
   // password
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password" minlen="4">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="Password">';
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div id="error"></div>';
@@ -962,4 +964,19 @@ async function get_nominator(address){
   }else {
       return("");
   }
+}
+// add messages listener for web page inter communication
+async function msg_listener() {
+  // it uses a chrome messaging listener
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      console.log(sender.tab ?
+                  "[info] msg from a content script:" + sender.tab.url :
+                  "[info] msg from the extension");
+      if (request.text === "transfer"){
+        console.log("sent: OK");
+        sendResponse({answer: "OK"});
+      }
+    }
+  );
 }

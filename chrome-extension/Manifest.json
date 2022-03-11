@@ -16,5 +16,11 @@
     "https://testnet.bitgreen.org:9443/",
     "https://mainnet.bitg.org:9443/"
   ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentscript.js"]
+    }
+  ],
 "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'"
 }
