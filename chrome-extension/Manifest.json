@@ -22,5 +22,8 @@
       "js": ["contentscript.js"]
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
 "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'"
 }

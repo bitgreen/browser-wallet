@@ -6,9 +6,12 @@ let apiv='';
 let primaryaccount='';
 let balancev=0;
 let balancevf='0.00';
-change_network();
 // start messages listener to interact with the web pages
-msg_listener();
+//msg_listener();
+// open connection
+change_network();
+
+
 if(localStorage.getItem("primaryaccount")){
   primaryaccount=localStorage.getItem("primaryaccount");
 }
@@ -524,7 +527,7 @@ function dashboard(){
 
 }
 // function to show the form for sending funds
-function send(){
+function send(recipient,amount){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
@@ -532,7 +535,11 @@ function send(){
   n=n+'<div class="mb-3 row">';
   //n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient">';
+  if(typeof recipient!=='undefined'){
+    n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient" value="'+recipient+'">';
+  }else {
+    n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient">';
+  }
   n=n+'</div>';
   n=n+'</div>';
   if (typeof error !== 'undefined') {
@@ -973,9 +980,17 @@ async function msg_listener() {
       console.log(sender.tab ?
                   "[info] msg from a content script:" + sender.tab.url :
                   "[info] msg from the extension");
-      if (request.text === "transfer"){
-        console.log("sent: OK");
+      // manage transfer command
+      if (request.command === "transfer"){
+        console.log("Sending: OK");
         sendResponse({answer: "OK"});
+        if(request.recipient!== null && request.amount!==null)
+        // transfer funds
+        //send(request.recipient,request.amount);
+        chrome.tabs.create({
+          active: true,
+          url:  'options.html'
+        }, null);
       }
     }
   );
