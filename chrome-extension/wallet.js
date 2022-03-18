@@ -12,6 +12,7 @@ msg_listener();
 change_network();
 
 
+
 if(localStorage.getItem("primaryaccount")){
   primaryaccount=localStorage.getItem("primaryaccount");
 }
@@ -21,7 +22,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // network selection
     document.getElementById("network").addEventListener("change", change_network);
     if(primaryaccount.length>0){
-      dashboard();
+      const params = new URLSearchParams(window.location.search)
+      //alert(window.location.search);
+      let command="";
+      // evaluate possible actions
+      if (params.has("command")){
+        command=params.get('command');
+        // transfer of funds
+        if(command=="transfer" && params.has("recipient") && params.has("amount")){
+          send(params.get("recipient"),params.get("amount")); 
+        }
+      }else {
+        // main dashboard
+        dashboard();
+      }
+
     }else {
       // set new/import keys screen
       let n='<br><center><H3>New to Bitgreen?</h3><br>';
@@ -550,7 +565,12 @@ function send(recipient,amount){
   n=n+'<div class="mb-3 row">';
   //n=n+'<label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>';
   n=n+'<div class="col-sm-10">';
-  n=n+'<input type="number" class="form-control" id="inputAmount" required placeholder="Amount">';
+  if(typeof amount!=='undefined'){
+    n=n+'<input type="number" class="form-control" id="inputAmount" required placeholder="Amount" value="'+amount+'">';
+  }
+  else{
+    n=n+'<input type="number" class="form-control" id="inputAmount" required placeholder="Amount">';
+  }
   n=n+'</div>';
   n=n+'</div>';
   n=n+'<div class="mb-3 row">';

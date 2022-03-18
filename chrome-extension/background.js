@@ -13,50 +13,44 @@ chrome.runtime.onMessage.addListener(
             console.log("Sending: OK");
             sendResponse({answer: "OK"});
             if(request.recipient!== null && request.amount!==null){
-            // transfer funds
-            //send(request.recipient,request.amount);
-                /*chrome.tabs.create({
-                active: true,
-                url:  'window.html'
-                }, null);*/
-            }
-            let top=0;
-            let left=0;
-            chrome.windows.getCurrent(function(win)
-            {
-                chrome.tabs.getAllInWindow(win.id, function(tabs)
+                let top=0;
+                let left=0;
+                let width=0;
+                let height=0;
+                // get windows properties
+                chrome.windows.getCurrent(function(win)
                 {
-                    // Should output an array of tab objects to your dev console.
-                    console.debug(tabs);
+                    width = win.width;
+                    console.log("width: "+width);
+                    height = win.height;
+                    console.log("height: "+height);
+                    top = win.top;
+                    console.log("top: "+top);
+                    left = win.left;
+                    console.log("left: "+left);
+                    // adjust position
+                    left=left+width-400;
+                    top=top+80;
                 });
-            });
-            //let window=await chrome.windows.getCurrent();
-            /*chrome.system.display.getInfo(function(videoinfo){
-                console.log("videoinfo");
-                console.log(videoinfo);
-            });*/
-            /*const { screenX, screenY, outerWidth } = window;
-            top = Math.max(screenY, 0);
-            left = Math.max(screenX + (outerWidth - NOTIFICATION_WIDTH), 0);*/
-            chrome.tabs.create({
-                url: chrome.extension.getURL('window.html'),
-                active: false
-            }, function(tab) {
-                // After the tab has been created, open a window to inject the tab
-                chrome.windows.create({
-                    tabId: tab.id,
-                    type: 'popup',
-                    focused: true,
-                    width: 400,
-                    height: 620,
-                    left,
-                    top
-                    // incognito, top, left, ...
+                // create new windows for the tansfer funds
+                let url='window.html?command=transfer&recipient='+request.recipient+'&amount='+request.amount;
+                chrome.tabs.create({
+                    url: chrome.extension.getURL(url),
+                    active: false
+                }, function(tab) {
+                    // After the tab has been created, open a window to inject the tab
+                    chrome.windows.create({
+                        tabId: tab.id,
+                        type: 'popup',
+                        focused: true,
+                        width: 400,
+                        height: 620,
+                        left,
+                        top
+                        // incognito, top, left, ...
+                    });
                 });
-            });
-            //chrome.runtime.sendMessage({type: "BROWSER-WALLET", command: "transfer-background",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1000000000000000000 }, function (response) {
-            //});
-
+            }
 
         }
     }
