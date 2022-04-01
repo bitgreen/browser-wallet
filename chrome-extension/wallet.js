@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if(command=="transfer" && params.has("recipient") && params.has("amount")){
           send(params.get("recipient"),params.get("amount")); 
         }
+        // sign-in
+        if(command=="signin"){
+          signin(); 
+        }
       }else {
         // main dashboard
         dashboard();
@@ -367,7 +371,12 @@ async function change_network() {
       n=n+'<td align ="right">'+amtf+' BITG</dt>';
       n=n+'</tr>';
     }
-    document.getElementById("transactions").innerHTML = n;
+    try{
+      document.getElementById("transactions").innerHTML = n;
+    } 
+    catch(e){
+      console.log(e);
+    }
   }); 
 }
 // generate keys pair
@@ -585,6 +594,25 @@ function send(recipient,amount){
   n=n+'</center>';
   document.getElementById("root").innerHTML = n;
   document.getElementById("transfer").addEventListener("click", transferfunds);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+}
+// function to show the form to sign-in
+function signin(){
+  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  n=n+'<hr>'
+  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+"<hr><h3>Sign In</H3>"  
+  n=n+'<div class="mb-3 row">';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="password">';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="signin">Sign In</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
+  n=n+'</div>';
+  n=n+'</center>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("signin").addEventListener("click", signinexecute);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
 // function to manage the staking of funds
@@ -910,6 +938,45 @@ async function transferfunds(){
     }
   }
 }
+// function to execute the signin
+async function signinexecute(){
+  let password=document.getElementById("inputPassword").value;
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      let n="Do you confirm the sign in?"
+      let r=confirm(n);
+      if(r==true){
+        // get current epoch time
+        let dt = new Date(); 
+        let tms=dt.getTime(); 
+        const message=util.stringToU8a(tms);
+        const signature = keyspairv.sign(message);
+        const isValid = keyspairv.verify(message, signature, keyspairv.address);
+        console.log(`${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
+        // return connection token
+        document.cookie = "wallet-message="+util.u8aToHex(message);
+        document.cookie = "wallet-signature="+util.u8aToHex(signature);
+        document.cookie = "wallet-address="+util.u8aToHex(keyspairv.address);
+        window.close();
+        
+      }else{
+        alert("The signin has been cancelled!");
+      }
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
 // function to decrypt the web wallet and return a key pair
 async function decrypt_webwallet(encrypted,pwd){
   // get ascii value of first 2 chars
@@ -959,8 +1026,15 @@ async function decrypt_webwallet(encrypted,pwd){
     return(false);
   }else {
     keyringv= new keyring.Keyring({ type: 'sr25519' });
-    keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
-    return(true);
+    try {
+      keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
+      return(true);
+    }
+    catch(e){
+      console.log(e);
+      return(false);
+    }
+    
   }
 
 }
