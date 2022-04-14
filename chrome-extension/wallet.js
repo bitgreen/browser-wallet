@@ -963,9 +963,16 @@ async function signinexecute(){
         const isValid = keyspairv.verify(message, signature, keyspairv.address);
         console.log(`${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
         // return connection token
-        document.cookie = "wallet-message="+util.u8aToHex(message);
-        document.cookie = "wallet-signature="+util.u8aToHex(signature);
-        document.cookie = "wallet-address="+util.u8aToHex(keyspairv.address);
+        let cdt=new Date();
+        cdt.setMonth(cdt.getMonth() + 1);
+        /*let dm="example.com";
+        document.cookie = "wallet-message="+util.u8aToHex(message)+";expires=" + cdt + ";domain="+dm+";path=/";
+        document.cookie = "wallet-signature="+util.u8aToHex(signature)+";expires=" + cdt + ";domain="+dm+";path=/";
+        document.cookie = "wallet-address="+util.u8aToHex(keyspairv.address)+";expires=" + cdt + ";domain="+dm+";path=/";*/
+        
+        localStorage.setItem("webwallet-message", util.u8aToHex(message));
+        localStorage.setItem("webwallet-signature", util.u8aToHex(signature));
+        localStorage.setItem("webwallet-address", util.u8aToHex(keyspairv.address));
         window.close();
         
       }else{
