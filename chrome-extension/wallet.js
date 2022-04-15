@@ -969,11 +969,19 @@ async function signinexecute(){
         document.cookie = "wallet-message="+util.u8aToHex(message)+";expires=" + cdt + ";domain="+dm+";path=/";
         document.cookie = "wallet-signature="+util.u8aToHex(signature)+";expires=" + cdt + ";domain="+dm+";path=/";
         document.cookie = "wallet-address="+util.u8aToHex(keyspairv.address)+";expires=" + cdt + ";domain="+dm+";path=/";*/
-        
-        localStorage.setItem("webwallet-message", util.u8aToHex(message));
+        /*localStorage.setItem("webwallet-message", util.u8aToHex(message));
         localStorage.setItem("webwallet-signature", util.u8aToHex(signature));
-        localStorage.setItem("webwallet-address", util.u8aToHex(keyspairv.address));
-        window.close();
+        localStorage.setItem("webwallet-address", util.u8aToHex(keyspairv.address));*/
+        //send answer to originatig page
+        //window.postMessage({ message: util.u8aToHex(message), signature: util.u8aToHex(signature)}, "*");
+        //window.postMessage({ type: "BROWSER-WALLET-ANSWER", message: "signin"}, "*");
+        let asw={"webwallet-message": util.u8aToHex(message),"webwallet-signature" : util.u8aToHex(signature),"webwallet-address": util.u8aToHex(keyspairv.address)};
+        let asws=JSON.stringify(asw);
+        window.postMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, "*");
+        //sendResponse(asws);
+        //sendResponse(asws);
+        // closed window
+        //window.close();
         
       }else{
         alert("The signin has been cancelled!");

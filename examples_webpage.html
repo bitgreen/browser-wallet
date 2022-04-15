@@ -10,12 +10,10 @@
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
        window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1 }, "*");
-    }
-    , false);
+    }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
        window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, "*");
-    }
-    , false);
+    }, false);
   </script>
 </html>

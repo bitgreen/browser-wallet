@@ -10,8 +10,6 @@ chrome.runtime.onMessage.addListener(
                     "[info] msg from the extension");
         // manage transfer command
         if (request.command === "transfer"){
-            console.log("Sending: OK");
-            sendResponse({answer: "OK"});
             if(request.recipient!== null && request.amount!==null){
                 let top=0;
                 let left=0;
@@ -53,9 +51,9 @@ chrome.runtime.onMessage.addListener(
             }
 
         }
-        // manage signin command
+        // manage sign-in command
         if (request.command === "signin"){
-            sendResponse({answer: "OK"});
+            //sendResponse({answer: "OK"});
             let top=0;
             let left=0;
             let width=0;
@@ -93,6 +91,13 @@ chrome.runtime.onMessage.addListener(
                     // incognito, top, left, ...
                 });
             });
+            // to keep open the channel for the answer we returns true
+            return true;
+        }
+        // manage answer to sign-in command
+        if (request.command === "signinanswer"){
+                sendResponse({answer: "OKanswer"});
+
         }
     }
 );
