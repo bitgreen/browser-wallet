@@ -961,28 +961,17 @@ async function signinexecute(){
         const message=util.stringToU8a(tms);
         const signature = keyspairv.sign(message);
         const isValid = keyspairv.verify(message, signature, keyspairv.address);
-        console.log(`${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
+        console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
         // return connection token
         let cdt=new Date();
         cdt.setMonth(cdt.getMonth() + 1);
-        /*let dm="example.com";
-        document.cookie = "wallet-message="+util.u8aToHex(message)+";expires=" + cdt + ";domain="+dm+";path=/";
-        document.cookie = "wallet-signature="+util.u8aToHex(signature)+";expires=" + cdt + ";domain="+dm+";path=/";
-        document.cookie = "wallet-address="+util.u8aToHex(keyspairv.address)+";expires=" + cdt + ";domain="+dm+";path=/";*/
-        /*localStorage.setItem("webwallet-message", util.u8aToHex(message));
-        localStorage.setItem("webwallet-signature", util.u8aToHex(signature));
-        localStorage.setItem("webwallet-address", util.u8aToHex(keyspairv.address));*/
-        //send answer to originatig page
-        //window.postMessage({ message: util.u8aToHex(message), signature: util.u8aToHex(signature)}, "*");
-        //window.postMessage({ type: "BROWSER-WALLET-ANSWER", message: "signin"}, "*");
         let asw={"webwallet-message": util.u8aToHex(message),"webwallet-signature" : util.u8aToHex(signature),"webwallet-address": util.u8aToHex(keyspairv.address)};
         let asws=JSON.stringify(asw);
-        window.postMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, "*");
-        //sendResponse(asws);
-        //sendResponse(asws);
-        // closed window
-        //window.close();
-        
+        // TODO (target the calling window only for security)
+        chrome.runtime.sendMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, (response) => {
+          console.log('Received web page data', response);
+        });
+        window.close();
       }else{
         alert("The signin has been cancelled!");
       }
