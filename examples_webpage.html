@@ -1,19 +1,29 @@
 <!--
-    An example to transfer 1 Bitgreen
-    or make a Sign In
+    An example: 
+    - to transfer 1 Bitgreen
+    - make a Signature and receive an authentication token
+
+    ## Attention: the example need to be used from https, it does not work opened locally because of the check on target origin (window.location.href)
+    ## to use locally you should replace the parameter window.location.href with "*".
 -->
 <html>
   <h1>Examples for Browser Wallet</h1>
   <button id="transferbutton">Transfer 1 Bitgreen</button>
   <button id="signinbutton">Sign In</button>
+
   <script>
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
-       window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1 }, "*");
+      // Set the same url as origin target to avoid leaking of the message using "*"
+      // send the message to be received from the injected contentscript.js of the extension
+       window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1 }, window.location.href);
     }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
-       window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, "*");
+      // Set the same url as origin target to avoid leaking of the message using "*"
+      // send the message to be received from the injected contentscript.js of the extension
+       window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
     }, false);
+    
   </script>
 </html>

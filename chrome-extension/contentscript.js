@@ -9,12 +9,9 @@ window.addEventListener("message", function(event) {
     if (event.data.type && (event.data.type == "BROWSER-WALLET")) {        
         // send the message to the extension
         chrome.runtime.sendMessage(event.data, (response) => {
-            // 3. Got an asynchronous response with the data from the background
-            console.log('Received Answer Message', response);
-            console.log('Event.data', event.data);
-            console.log('Event.source',event.source);
-            // set the local storage with the answer
-            localStorage.setItem("webwallet",response);
+            // Got an asynchronous response with the data from the background
+            // set the session variable "bitgreenwallet" with the answer
+            sessionStorage.setItem("bitgreenwallet",response);
         }); 
     } 
 }, false);
