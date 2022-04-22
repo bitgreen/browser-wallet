@@ -12,6 +12,9 @@
   <button id="signinbutton">Sign In</button>
 
   <script>
+    // remove previous signin session
+    sessionStorage.removeItem("bitgreenwallet");
+
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // Set the same url as origin target to avoid leaking of the message using "*"
@@ -23,7 +26,28 @@
       // Set the same url as origin target to avoid leaking of the message using "*"
       // send the message to be received from the injected contentscript.js of the extension
        window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
+       // calle the function wait for signature with a timeout of 60 seconds
+       BWwaitforSignature();
     }, false);
-    
+
+    // function to wait for signed token
+    let BWtimeout=0;   // use for exit after the timeout of 60 seconds.
+    function BWwaitforSignature() {
+        // exit for timeout of 1 minute
+        if(BWtimeout>=60){
+            BWMessage="";
+            BWtimeout=0;
+            return;            
+        }
+        if(sessionStorage.getItem("bitgreenwallet")===null) {
+            setTimeout(BWwaitforSignature, 1000); //wait 1 second and check again
+            BWtimeout=timeout+1;
+            return;
+        }else {
+            // for example, redirect to dashboard 
+            alert("Signup complete, we may redirect to a dashboard now...")
+            BWtimeout=0;
+        }
+    }
   </script>
 </html>

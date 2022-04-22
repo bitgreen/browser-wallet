@@ -11,6 +11,7 @@ window.addEventListener("message", function(event) {
         chrome.runtime.sendMessage(event.data, (response) => {
             // Got an asynchronous response with the data from the background
             // set the session variable "bitgreenwallet" with the answer
+            // it should be verified from the web page
             sessionStorage.setItem("bitgreenwallet",response);
         }); 
     } 

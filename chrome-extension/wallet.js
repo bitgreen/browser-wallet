@@ -10,8 +10,6 @@ let balancevf='0.00';
 // open connection
 change_network();
 
-
-
 if(localStorage.getItem("primaryaccount")){
   primaryaccount=localStorage.getItem("primaryaccount");
 }
@@ -973,7 +971,7 @@ async function signinexecute(){
         chrome.runtime.sendMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, (response) => {
           console.log('Received web page data', response);
         });
-        //window.close();
+        window.close();
       }else{
         alert("The signin has been cancelled!");
       }
