@@ -956,21 +956,24 @@ async function signinexecute(){
       if(r==true){
         // get current epoch time
         let dt = new Date(); 
-        let tms=dt.getTime(); 
+        let tms=dt.getTime().toString(); 
+        console.log("tms: ",tms);
         const message=util.stringToU8a(tms);
         const signature = keyspairv.sign(message);
-        const isValid = keyspairv.verify(message, signature, keyspairv.address);
-        console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
+        const isValid = keyspairv.verify(message, signature, keyspairv.publicKey);
+        //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
         // return connection token
         let cdt=new Date();
         cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"webwallet-message": util.u8aToHex(message),"webwallet-signature" : util.u8aToHex(signature),"webwallet-address": util.u8aToHex(keyspairv.address)};
+        let asw={"webwallet-message": tms,"webwallet-signature" : util.u8aToHex(signature),"webwallet-address": keyspairv.address, "webwallet-publickey":util.u8aToHex(keyspairv.publicKey)};
+        //console.log("keypairv.address: ",keyspairv.address);
         let asws=JSON.stringify(asw);
-        // TODO (target the calling window only for security)
+        //console.log("asws: ",asws);
+        // Target the original caller
         chrome.runtime.sendMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, (response) => {
           console.log('Received web page data', response);
         });
-        window.close();
+        //window.close();
       }else{
         alert("The signin has been cancelled!");
       }
