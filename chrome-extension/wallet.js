@@ -7,7 +7,6 @@ let primaryaccount='';
 let balancev=0;
 let balancevf='0.00';
 // start messages listener to interact with the web pages
-msg_listener();
 // open connection
 change_network();
 
@@ -1069,27 +1068,4 @@ async function get_nominator(address){
   }else {
       return("");
   }
-}
-// add messages listener for web page inter communication
-function msg_listener() {
-  // it uses a chrome messaging listener
-  chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      console.log(sender.tab ?
-                  "[info] msg from a content script:" + sender.tab.url :
-                  "[info] msg from the extension");
-      // manage transfer command
-      if (request.command === "transfer-background"){
-        console.log("Sending: OK");
-        sendResponse({answer: "OK"});
-        if(request.recipient!== null && request.amount!==null)
-        // transfer funds
-        send(request.recipient,request.amount);
-        /*chrome.tabs.create({
-          active: true,
-          url:  'options.html'
-        }, null);*/
-      }
-    }
-  );
 }
