@@ -39,6 +39,7 @@
             BWtimeout=0;
             return;            
         }
+        //check if the session variable has been set, the server side should verify the signature at evevery call.
         if(sessionStorage.getItem("bitgreenwallet")===null) {
             setTimeout(BWwaitforSignature, 1000); //wait 1 second and check again
             BWtimeout=timeout+1;
@@ -49,5 +50,7 @@
             BWtimeout=0;
         }
     }
+    // Class
   </script>
+  
 </html>
