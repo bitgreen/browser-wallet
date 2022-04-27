@@ -8,49 +8,33 @@
 -->
 <html>
   <h1>Examples for Browser Wallet</h1>
+  <hr>
+  <h3>Here the basic examples to call the functions of the Browser Wallet.</h3>
+  <hr>
   <button id="transferbutton">Transfer 1 Bitgreen</button>
   <button id="signinbutton">Sign In</button>
-
+  <!-- include hte BitgreenWallet library-->
+  <script type="text/javascript" src="BitgreenWallet.js"></script>
   <script>
     // remove previous signin session
     sessionStorage.removeItem("bitgreenwallet");
-
+    // create class object for BitGreen Wallet
+    let BW= new BitgreenWallet();
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
-      // Set the same url as origin target to avoid leaking of the message using "*"
-      // send the message to be received from the injected contentscript.js of the extension
-       window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: "5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",amount: 1 }, window.location.href);
+      // send 1 BBB to a recipient
+       BW.send("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1);
     }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
-      // Set the same url as origin target to avoid leaking of the message using "*"
-      // send the message to be received from the injected contentscript.js of the extension
-       window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
-       // calle the function wait for signature with a timeout of 60 seconds
-       BWwaitforSignature();
+        // authenticate signing a random message
+        BW.authenticate(callbackauthentication);
     }, false);
-
-    // function to wait for signed token
-    let BWtimeout=0;   // use for exit after the timeout of 60 seconds.
-    function BWwaitforSignature() {
-        // exit for timeout of 1 minute
-        if(BWtimeout>=60){
-            BWMessage="";
-            BWtimeout=0;
-            return;            
-        }
-        //check if the session variable has been set, the server side should verify the signature at evevery call.
-        if(sessionStorage.getItem("bitgreenwallet")===null) {
-            setTimeout(BWwaitforSignature, 1000); //wait 1 second and check again
-            BWtimeout=timeout+1;
-            return;
-        }else {
-            // for example, redirect to dashboard 
-            alert("Signup complete, we may redirect to a dashboard now...")
-            BWtimeout=0;
-        }
+    // function called after the signing
+    function callbackauthentication(){
+        // the token is stored in the session variable "bitgreen".
+        console.log("Authentication token: ",sessionStorage.getItem("bitgreenwallet"));
     }
-    // Class
   </script>
   
 </html>
