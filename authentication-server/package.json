@@ -1,0 +1,15 @@
+{
+  "name": "BrowserWallet-Authentication-Server",
+  "version": "1.0.0",
+  "author": "Bitgreen",
+  "license": "MIT",
+  "dependencies": {
+    "@polkadot/api": "^8.2.1",
+    "@polkadot/util": "^9.0.1",
+    "@polkadot/util-crypto": "^9.0.1",
+    "body-parser": "^1.20.0",
+    "express": "^4.18.0",
+    "express-session": "^1.17.2",
+    "node-fetch": "^2.6.7"
+  }
+}
