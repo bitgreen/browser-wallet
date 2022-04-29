@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // function to connect/change network
 async function change_network() {
   // TODO set a red light
-  let network='wss://testnet.bitg.org';
+  let network='wss://testnet.bitgreen.org';
   if(document.getElementById("network")){
     network=document.getElementById('network').value;
   }
@@ -341,11 +341,11 @@ async function change_network() {
     balancev=0;
     balancevf="0.00";
   }
-  document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BITG</h1>';
+  document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BBB</h1>';
   // get transactions and create the table
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
-  let url= 'https://testnet.bitg.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
+  let url= 'https://testnet.bitgreen.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
   let n='';
   fetch(url)
   .then(response => response.json())
@@ -365,7 +365,7 @@ async function change_network() {
       const amt=data['transactions'][r]['amount']/1000000000000000000;
       const amtf=new Intl.NumberFormat().format(amt);
       n=n+'<td>'+dt.substr(0,10)+'</dt>';
-      n=n+'<td align ="right">'+amtf+' BITG</dt>';
+      n=n+'<td align ="right">'+amtf+' BBB</dt>';
       n=n+'</tr>';
     }
     try{
@@ -513,7 +513,7 @@ function dashboard(){
   </svg></a>'
   n=n+'<br>';
   n=n+'<hr>'
-  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+'<hr>'
   n=n+'<div class="row">';
   n=n+'<div class="col">';
@@ -551,12 +551,12 @@ function dashboard(){
 function send(recipient,amount){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
-  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr><h3>Send Funds</H3>"
   n=n+'<div class="mb-3 row">';
   //n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
   n=n+'<div class="col-sm-10">';
-  if(typeof recipient!=='undefined'){
+  if(typeof recipient==='string'){
     n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient" value="'+recipient+'">';
   }else {
     n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient">';
@@ -597,7 +597,7 @@ function send(recipient,amount){
 function signin(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
-  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr><h3>Sign In</H3>"  
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
@@ -616,7 +616,7 @@ function signin(){
 async function staking(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
-  n=n+'<div id="balance"><h1>'+balancevf+' BITG</h1></div>';
+  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
   //n=n+"<h3>Staking</h3>"
   // get amount bonded
@@ -634,7 +634,7 @@ async function staking(){
     }else {
       n=n+"Staken: ";
     }
-    n=n+bondamountvf+' BITG</h3></div>';
+    n=n+bondamountvf+' BBB</h3></div>';
   }else {
     n=n+"<h3>Staking</h3>"
   }
@@ -711,7 +711,7 @@ async function bond(){
     if(r==true){
       let n="Do you confirm the bonding of: "
       n=n+amount;
-      n=n+" BITG?";
+      n=n+" BBB?";
       let r=confirm(n);
       if(r==true){
         const amountb=BigInt(amount)*1000000000000000000n;
@@ -759,7 +759,7 @@ async function unbond(){
     if(r==true){
       let n="Do you confirm the unbonding of: "
       n=n+(amount/1000000000000000000);
-      n=n+" BITG? It will take effect within 1 hour.";
+      n=n+" BBB? It will take effect within 1 hour.";
       let r=confirm(n);
       if(r==true){
         const amountb=BigInt(amount);
@@ -899,7 +899,7 @@ async function transferfunds(){
     if(r==true){
       let n="Do you confirm the transfer of: "
       n=n+amount;
-      n=n+" BITG, to: "+accountrecipient+' ?';
+      n=n+" BBB, to: "+accountrecipient+' ?';
       let r=confirm(n);
       if(r==true){
         const amountb=BigInt(amount)*1000000000000000000n;
@@ -958,12 +958,14 @@ async function signinexecute(){
         console.log("tms: ",tms);
         const message=util.stringToU8a(tms);
         const signature = keyspairv.sign(message);
-        const isValid = keyspairv.verify(message, signature, keyspairv.publicKey);
+        //const isValid = keyspairv.verify(message, signature, keyspairv.publicKey);
+        //const isValid=util_crypto.signatureVerify(message, signature,keyspairv.address);
+        //const hexsignature=util.u8aToHex(signature);
         //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
         // return connection token
         let cdt=new Date();
         cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"webwallet-message": tms,"webwallet-signature" : util.u8aToHex(signature),"webwallet-address": keyspairv.address, "webwallet-publickey":util.u8aToHex(keyspairv.publicKey)};
+        let asw={"message": tms,"signature" : util.u8aToHex(signature),"address": keyspairv.address, "publickey":util.u8aToHex(keyspairv.publicKey)};
         //console.log("keypairv.address: ",keyspairv.address);
         let asws=JSON.stringify(asw);
         //console.log("asws: ",asws);
