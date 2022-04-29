@@ -17,9 +17,9 @@
   <script type="text/javascript" src="BrowserWallet.js"></script>
   <script>
     // remove previous signin session
-    sessionStorage.removeItem("bitgreenwallet");
+    sessionStorage.removeItem("BrowserWalletToken");
     // create class object for BitGreen Wallet
-    let BW= new BitgreenWallet();
+    let BW= new BrowserWallet();
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // send 1 BBB to a recipient
@@ -33,7 +33,7 @@
     // function called after the signing
     function callbackauthentication(){
         // the token is stored in the session variable "bitgreen".
-        console.log("Authentication token: ",sessionStorage.getItem("bitgreenwallet"));
+        console.log("Authentication token: ",sessionStorage.getItem("BrowserWalletToken"));
     }
   </script>
   
