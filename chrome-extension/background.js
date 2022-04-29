@@ -21,19 +21,15 @@ chrome.runtime.onMessage.addListener(
                 chrome.windows.getCurrent(function(win)
                 {
                     width = win.width;
-                    console.log("width: "+width);
                     height = win.height;
-                    console.log("height: "+height);
                     top = win.top;
-                    console.log("top: "+top);
                     left = win.left;
-                    console.log("left: "+left);
                     // adjust position
                     left=left+width-400;
                     top=top+80;
                 });
                 // create new windows for the tansfer funds
-                let url='window.html?command=transfer&recipient='+request.recipient+'&amount='+request.amount;
+                let url='window.html?command=transfer&recipient='+request.recipient+'&amount='+request.amount+'&domain='+encodeURI(request.domain);
                 chrome.tabs.create({
                     url: chrome.extension.getURL(url),
                     active: false
@@ -64,19 +60,15 @@ chrome.runtime.onMessage.addListener(
             chrome.windows.getCurrent(function(win)
             {
                 width = win.width;
-                console.log("width: "+width);
                 height = win.height;
-                console.log("height: "+height);
                 top = win.top;
-                console.log("top: "+top);
                 left = win.left;
-                console.log("left: "+left);
                 // adjust position
                 left=left+width-400;
                 top=top+80;
             });
-            // create new windows for the tansfer funds
-            let url='window.html?command=signin';
+            // create new windows for authentication
+            let url='window.html?command=signin&domain='+encodeURI(request.domain);
             chrome.tabs.create({
                 url: chrome.extension.getURL(url),
                 active: false

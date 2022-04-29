@@ -7,8 +7,11 @@ window.addEventListener("message", function(event) {
         return;
     }
     if (event.data.type && (event.data.type == "BROWSER-WALLET")) {        
+        // add the domain of origin to the message data 
+        let j=event.data;
+        j.domain=event.origin;
         // send the message to the extension
-        chrome.runtime.sendMessage(event.data, (response) => {
+        chrome.runtime.sendMessage(j, (response) => {
             // Got an asynchronous response with the data from the background
             // set the session variable "BrowserWalletToken" with the answer
             // it used as the only communication way from the extension to the web page
