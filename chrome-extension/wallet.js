@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function() {
       if (params.has("command")){
         command=params.get('command');
         // transfer of funds
-        if(command=="transfer" && params.has("recipient") && params.has("amount")){
-          send(params.get("recipient"),params.get("amount")); 
+        if(command=="transfer" && params.has("recipient") && params.has("amount") && params.get("domain")){
+          send(params.get("recipient"),params.get("amount"),params.get("domain")); 
         }
         // sign-in
-        if(command=="signin"){
-          signin(); 
+        if(command=="signin" && params.get("domain")){
+          signin(params.get("domain")); 
         }
       }else {
         // main dashboard
@@ -548,13 +548,17 @@ function dashboard(){
 
 }
 // function to show the form for sending funds
-function send(recipient,amount){
+function send(recipient,amount,domain){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr><h3>Send Funds</H3>"
   n=n+'<div class="mb-3 row">';
-  //n=n+'<label for="inputRecipient" class="col-sm-2 col-form-label">Recipient Account</label>';
+  if(typeof domain!=='undefined'){
+    n=n+'<div class="mb-3 row">';
+    n=n+'<div class="col-sm-10"><div class="alert alert-warning" role="alert">Originated from: '+domain+'</div></div></div>';
+  }
+  n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
   if(typeof recipient==='string'){
     n=n+'<input type="text" class="form-control" id="inputRecipient" required placeholder="Recipient" value="'+recipient+'">';
@@ -594,11 +598,16 @@ function send(recipient,amount){
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
 // function to show the form to sign-in
-function signin(){
+function signin(domain){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
-  n=n+"<hr><h3>Sign In</H3>"  
+  n=n+"<hr>";
+  if(typeof domain!=='undefined'){
+    n=n+'<div class="alert alert-warning" role="alert">Originated from: '+domain+'</div>';
+    n=n+'<input type="hidden" name="domain" id="domain" value="'+domain+'">';
+  }
+  n=n+"<h3>Sign In</H3>"  
   n=n+'<div class="mb-3 row">';
   n=n+'<div class="col-sm-10">';
   n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="password">';
@@ -938,6 +947,7 @@ async function transferfunds(){
 // function to execute the signin
 async function signinexecute(){
   let password=document.getElementById("inputPassword").value;
+  let domain=document.getElementById("domain").value;
   let encrypted='';
   // read the encrypted storage
   if(localStorage.getItem("webwallet")){
@@ -954,7 +964,7 @@ async function signinexecute(){
       if(r==true){
         // get current epoch time
         let dt = new Date(); 
-        let tms=dt.getTime().toString(); 
+        let tms=dt.getTime().toString()+"#"+domain; 
         console.log("tms: ",tms);
         const message=util.stringToU8a(tms);
         const signature = keyspairv.sign(message);
@@ -965,7 +975,7 @@ async function signinexecute(){
         // return connection token
         let cdt=new Date();
         cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"message": tms,"signature" : util.u8aToHex(signature),"address": keyspairv.address, "publickey":util.u8aToHex(keyspairv.publicKey)};
+        let asw={"message": tms,"signature" : util.u8aToHex(signature),"address": keyspairv.address, "publickey":util.u8aToHex(keyspairv.publicKey),"domain":domain};
         //console.log("keypairv.address: ",keyspairv.address);
         let asws=JSON.stringify(asw);
         //console.log("asws: ",asws);

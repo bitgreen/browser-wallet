@@ -19,7 +19,7 @@
     // remove previous signin session
     sessionStorage.removeItem("BrowserWalletToken");
     // create class object for BitGreen Wallet
-    let BW= new BrowserWallet();
+    let BW= new BitgreenWallet();
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // send 1 BBB to a recipient

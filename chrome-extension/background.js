@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(
                     left=left+width-400;
                     top=top+80;
                 });
-                // create new windows for the tansfer funds
+                // create new windows for the transfer funds
                 let url='window.html?command=transfer&recipient='+request.recipient+'&amount='+request.amount+'&domain='+encodeURI(request.domain);
                 chrome.tabs.create({
                     url: chrome.extension.getURL(url),

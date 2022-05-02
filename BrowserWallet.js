@@ -34,14 +34,14 @@
                 return;            
             }
             //check if the session variable has been set, the server side should verify the signature at evevery call.
-            if(sessionStorage.getItem("bitgreenwallet")===null) {
+            if(sessionStorage.getItem("BrowserWalletToken")===null) {
                 //wait 1 second and check again
                 setTimeout(() => { this.waitforsignature();},5000);//wait 1 second and check again
                  this.BWtimeout=this.BWtimeout+1;
                 return;
             }else {
                 // execute the call back function
-                let t=sessionStorage.getItem("bitgreenwallet");
+                let t=sessionStorage.getItem("BrowserWalletToken");
                 //console.log("Signup complete - Token",t);
                 this.BWtimeout=0;
                 // execute call back
