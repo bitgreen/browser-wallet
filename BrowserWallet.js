@@ -17,7 +17,7 @@
         // authenticate for login,it generate a random message to be signed because signing a text received from the web page can be used for social engineering attacks
         authenticate(callback) {
             // remove session
-            sessionStorage.removeItem("bitgreenwallet");
+            sessionStorage.removeItem("BrowserWalletToken");
             // set to zero the timeout
             this.BWtimeout=0;   
             this.BWcallback=callback;
