@@ -3,7 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { cryptoWaitReady, decodeAddress, signatureVerify } = require('@polkadot/util-crypto');
-const {u8aToHex,stringToU8a,hexToU8a} = require('@polkadot/util');
+const {stringToU8a,hexToU8a} = require('@polkadot/util');
 
 
 // create web server object
