@@ -345,7 +345,7 @@ async function change_network() {
   // get transactions and create the table
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
-  let url= 'https://testnet.bitgreen.org:9443/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
+  let url= 'https://testnet.bitgreen.org/api/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
   let n='';
   fetch(url)
   .then(response => response.json())
@@ -361,7 +361,7 @@ async function change_network() {
     n=n+'<tr></tr>';
     for(r in data.transactions){
       n=n+'<tr>';
-      const dt=data['transactions'][r]['dtblockchain'];
+      const dt=data['transactions'][r]['date'];
       const amt=data['transactions'][r]['amount']/1000000000000000000;
       const amtf=new Intl.NumberFormat().format(amt);
       n=n+'<td>'+dt.substr(0,10)+'</dt>';
