@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if(command=="signin" && params.get("domain")){
           signin(params.get("domain")); 
         }
+        // tx command to submit any kind of extrinsic 
+        if(command=="tx" && params.has("pallet") && params.has("call")  && params.has("parameters")&& params.get("domain")){
+          extrinsic(params.get("pallet"),params.get("call"),params.get("parameters"),params.get("domain")); 
+        }
       }else {
         // main dashboard
         dashboard();
@@ -621,6 +625,36 @@ function signin(domain){
   document.getElementById("signin").addEventListener("click", signinexecute);
   document.getElementById("backmain").addEventListener("click", dashboard);
 }
+// function to show the form to submit an extrisinc
+async function extrinsic(pallet,call,parameters,domain){
+  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  n=n+'<hr>'
+  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
+  n=n+"<hr>";
+  if(typeof domain!=='undefined'){
+    n=n+'<div class="alert alert-warning" role="alert">Originated from: '+domain+'</div>';
+    n=n+'<input type="hidden" name="domain" id="domain" value="'+domain+'">';
+  }
+  n=n+"<h3>"+pallet+" - "+call+"</H3>"  
+  // insert the fields received
+  n=n+'<input type="hidden" id="pallet" value="'+pallet+'">';
+  n=n+'<input type="hidden" id="call" value="'+call+'">';
+  const p= await stringToHex(parameters);
+  n=n+'<input type="hidden" id="parameters" value="'+p+'">';
+  // TODO SHOW THE PARAMETERS?
+  n=n+'<div class="mb-3 row">';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="password">';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="submit">Submit</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
+  n=n+'</div>';
+  n=n+'</center>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("submit").addEventListener("click", submitextrinsic);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+}
 // function to manage the staking of funds
 async function staking(){
   let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
@@ -944,6 +978,54 @@ async function transferfunds(){
     }
   }
 }
+// function to submit the extrinsic
+async function submitextrinsic(){
+  const pallet=document.getElementById("pallet").value;
+  const call=document.getElementById("call").value;
+  const password=document.getElementById("inputPassword").value;
+  const parametershex=document.getElementById("parameters").value;
+  const parameters= await hexToString(parametershex);
+  let encrypted='';
+  // read the encrypted storage
+  if(localStorage.getItem("webwallet")){
+    encrypted=localStorage.getItem("webwallet");
+  }
+  if(encrypted.length==0){
+    alert("The account has not a valid storage, please remove the extension and re-install it.");
+  }else{
+    // try to decrypt and get keypairsv with the keys pair
+    let r=await decrypt_webwallet(encrypted,password);
+    if(r==true){
+      // build the transactions
+      apiv.tx[pallet][call](parameters).signAndSend(keyspairv, ({ status, events }) => {
+        if (status.isInBlock || status.isFinalized) {
+          events
+            // find/filter for failed events
+            .filter(({ event }) =>
+              api.events.system.ExtrinsicFailed.is(event)
+            )
+            // we know that data for system.ExtrinsicFailed is
+            .forEach(({ event: { data: [error, info] } }) => {
+              if (error.isModule) {
+                // for module errors, we have the section indexed, lookup
+                const decoded = api.registry.findMetaError(error.asModule);
+                const { docs, method, section } = decoded;
+                alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
+              } else {
+                // Other, CannotLookup, BadOrigin, no extra info
+                alert('Error in transaction:'+error.toString());
+              }
+            });
+        }
+      });
+      alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
+      dashboard();
+    }else {
+      alert("Password is wrong!")
+      return;
+    }
+  }
+}
 // function to execute the signin
 async function signinexecute(){
   let password=document.getElementById("inputPassword").value;
@@ -1081,4 +1163,25 @@ async function get_nominator(address){
   }else {
       return("");
   }
+}
+// function to convert string to hex
+async function stringToHex(asciiString) {
+  let hex = '';
+  let tempASCII, tempHex;
+  asciiString.split('').map( i => {
+      tempASCII = i.charCodeAt(0)
+      tempHex = tempASCII.toString(16);
+      hex = hex + tempHex + ' ';
+  });
+  hex = hex.trim();
+  return(hex);
+}
+// function to convert hex to string
+async  function hexToString(hexString) {
+  let stringOut = '';
+  hexString.split(' ').map( (i) => {
+      tempAsciiCode = parseInt(i, 16);
+      stringOut = stringOut + String.fromCharCode(tempAsciiCode);
+  });
+  return(stringOut);
 }

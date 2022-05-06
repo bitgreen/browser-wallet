@@ -14,10 +14,15 @@
             // call Extension for the transfer
             window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: recipient,amount: amount }, window.location.href);
         }
+        // submit Extrinsic
+        tx(pallet,call,parameters) {
+            // call Extension for the extrinsic submission
+            window.postMessage({ type: "BROWSER-WALLET", command: "tx",pallet: pallet,call: call,parameters:parameters }, window.location.href);
+        }
         // authenticate for login,it generate a random message to be signed because signing a text received from the web page can be used for social engineering attacks
         authenticate(callback) {
             // remove session
-            sessionStorage.removeItem("BrowserWalletToken");
+            sessionStorage.removeItem("bitgreenwallet");
             // set to zero the timeout
             this.BWtimeout=0;   
             this.BWcallback=callback;
