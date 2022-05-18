@@ -2,7 +2,7 @@
 // express is a quite famous library for http/https protocol, we use it to create a simple web server in nodejs
 const express = require('express');
 const bodyParser = require('body-parser');
-const { cryptoWaitReady, decodeAddress, signatureVerify } = require('@polkadot/util-crypto');
+const { cryptoWaitReady, signatureVerify } = require('@polkadot/util-crypto');
 const {stringToU8a,hexToU8a} = require('@polkadot/util');
 
 
