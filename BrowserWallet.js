@@ -1,6 +1,7 @@
     //**************************************************************
     // Class to use the function offered from the Browser Wallet
-    // function with # are private
+    // function with # are private 
+    // vers. 1.0
     //**************************************************************
     class BitgreenWallet{
         // constructor definition
@@ -14,7 +15,7 @@
             // call Extension for the transfer
             window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: recipient,amount: amount }, window.location.href);
         }
-        // submit Extrinsic
+        // submit any kind of Extrinsic without transferring funds
         tx(pallet,call,parameters) {
             // call Extension for the extrinsic submission
             window.postMessage({ type: "BROWSER-WALLET", command: "tx",pallet: pallet,call: call,parameters:parameters }, window.location.href);
