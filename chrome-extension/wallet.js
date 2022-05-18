@@ -946,27 +946,29 @@ async function transferfunds(){
       let r=confirm(n);
       if(r==true){
         const amountb=BigInt(amount)*1000000000000000000n;
-        apiv.tx.balances.transfer(accountrecipient, amountb).signAndSend(keyspairv, ({ status, events }) => {
-          if (status.isInBlock || status.isFinalized) {
-            events
-              // find/filter for failed events
-              .filter(({ event }) =>
-                api.events.system.ExtrinsicFailed.is(event)
-              )
-              // we know that data for system.ExtrinsicFailed is
-              .forEach(({ event: { data: [error, info] } }) => {
-                if (error.isModule) {
-                  // for module errors, we have the section indexed, lookup
-                  const decoded = api.registry.findMetaError(error.asModule);
-                  const { docs, method, section } = decoded;
-                  alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
-                } else {
-                  // Other, CannotLookup, BadOrigin, no extra info
-                  alert('Error in transaction:'+error.toString());
-                }
-              });
+        apiv.tx.balances.transfer(accountrecipient, amountb)
+          .signAndSend(keyspairv, ({ status, events }) => {
+            if (status.isInBlock || status.isFinalized) {
+              events
+                // find/filter for failed events
+                .filter(({ event }) =>
+                  api.events.system.ExtrinsicFailed.is(event)
+                )
+                // we know that data for system.ExtrinsicFailed is
+                .forEach(({ event: { data: [error, info] } }) => {
+                  if (error.isModule) {
+                    // for module errors, we have the section indexed, lookup
+                    const decoded = api.registry.findMetaError(error.asModule);
+                    const { docs, method, section } = decoded;
+                    alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
+                  } else {
+                    // Other, CannotLookup, BadOrigin, no extra info
+                    alert('Error in transaction:'+error.toString());
+                  }
+                });
+            }
           }
-        });
+        );
         alert("The transfer has been submitted to the blockchain, please check the result in the transaction history.");
         dashboard();
       }else{
@@ -984,7 +986,10 @@ async function submitextrinsic(){
   const call=document.getElementById("call").value;
   const password=document.getElementById("inputPassword").value;
   const parametershex=document.getElementById("parameters").value;
-  const parameters= await hexToString(parametershex);
+  const parameterstxt= await hexToString(parametershex);
+  console.log("parameterstxt:",parameterstxt);
+  const parameters=JSON.parse(parameterstxt);
+  console.log("parameters:",parameters);
   let encrypted='';
   // read the encrypted storage
   if(localStorage.getItem("webwallet")){
@@ -996,28 +1001,25 @@ async function submitextrinsic(){
     // try to decrypt and get keypairsv with the keys pair
     let r=await decrypt_webwallet(encrypted,password);
     if(r==true){
-      // build the transactions
-      apiv.tx[pallet][call](parameters).signAndSend(keyspairv, ({ status, events }) => {
-        if (status.isInBlock || status.isFinalized) {
-          events
-            // find/filter for failed events
-            .filter(({ event }) =>
-              api.events.system.ExtrinsicFailed.is(event)
-            )
-            // we know that data for system.ExtrinsicFailed is
-            .forEach(({ event: { data: [error, info] } }) => {
-              if (error.isModule) {
-                // for module errors, we have the section indexed, lookup
-                const decoded = api.registry.findMetaError(error.asModule);
-                const { docs, method, section } = decoded;
-                alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
-              } else {
-                // Other, CannotLookup, BadOrigin, no extra info
-                alert('Error in transaction:'+error.toString());
-              }
-            });
-        }
-      });
+      // build the transactions using "spread" operator to pass the correct number of parameters
+      apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
+          // status would still be set, but in the case of error we can shortcut
+          // to just check it (so an error would indicate InBlock or Finalized)
+          if (dispatchError) {
+            if (dispatchError.isModule) {
+              // for module errors, we have the section indexed, lookup
+              const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+              const { docs, name, section } = decoded;
+              const e=`${section}.${name}: ${docs.join(' ')}`;
+              console.log("Transaction Error: ",e);
+              alert("Transaction Error: "+e);
+            } else {
+              // Other, CannotLookup, BadOrigin, no extra info
+              console.log(dispatchError.toString());
+              alert("Transaction Error: "+dispatchError.toString());
+            }
+          }
+        });
       alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
       dashboard();
     }else {
