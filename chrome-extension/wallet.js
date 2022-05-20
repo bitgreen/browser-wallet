@@ -1047,19 +1047,18 @@ async function signinexecute(){
       let r=confirm(n);
       if(r==true){
         // get current epoch time
-        let dt = new Date(); 
-        let tms=dt.getTime().toString()+"#"+domain; 
-        console.log("tms: ",tms);
-        const message=util.stringToU8a(tms);
-        const signature = keyspairv.sign(message);
-        //const isValid = keyspairv.verify(message, signature, keyspairv.publicKey);
-        //const isValid=util_crypto.signatureVerify(message, signature,keyspairv.address);
+        let dt = new Date();
+        let timestamp = dt.getTime()
+        let message = timestamp.toString()+"#"+domain;
+        const signature = keyspairv.sign(util.stringToU8a(message));
+        //const isValid = keyspairv.verify(util.stringToU8a(message), signature, keyspairv.publicKey);
+        //const isValid=util_crypto.signatureVerify(util.stringToU8a(message), signature,keyspairv.address);
         //const hexsignature=util.u8aToHex(signature);
         //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
         // return connection token
         let cdt=new Date();
         cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"message": tms,"signature" : util.u8aToHex(signature),"address": keyspairv.address, "publickey":util.u8aToHex(keyspairv.publicKey),"domain":domain};
+        let asw={"message": message, "signature": util.u8aToHex(signature), "address": keyspairv.address, "publickey": util.u8aToHex(keyspairv.publicKey)};
         //console.log("keypairv.address: ",keyspairv.address);
         let asws=JSON.stringify(asw);
         //console.log("asws: ",asws);
