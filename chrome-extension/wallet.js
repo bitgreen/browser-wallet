@@ -3,22 +3,24 @@ let keyspairv='';
 let keyringv= new keyring.Keyring({ type: 'sr25519' });
 let mnemonic='';
 let apiv='';
-let primaryaccount='';
+let currentaccount='';
 let balancev=0;
 let balancevf='0.00';
+let currentaccountid='';
 // start messages listener to interact with the web pages
 // open connection
 change_network();
 
-if(localStorage.getItem("primaryaccount")){
-  primaryaccount=localStorage.getItem("primaryaccount");
+if(localStorage.getItem("webwalletaccount"+currentaccountid)){
+  currentaccount=localStorage.getItem("webwalletaccount"+currentaccountid);
 }
 
 // add listeners for events
 document.addEventListener('DOMContentLoaded', function() {
     // network selection
     document.getElementById("network").addEventListener("change", change_network);
-    if(primaryaccount.length>0){
+    // if at the least one account is available, we show it
+    if(currentaccount.length>0){
       const params = new URLSearchParams(window.location.search)
       //alert(window.location.search);
       let command="";
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // main dashboard
         dashboard();
       }
-
+    //otherwise we let to create a new account
     }else {
       // set new/import keys screen
       let n='<br><center><H3>New to Bitgreen?</h3><br>';
@@ -337,7 +339,7 @@ async function change_network() {
    });
   // TODO set a green light
   // get balance
-  let { nonce, data: balance } = await apiv.query.system.account(primaryaccount);
+  let { nonce, data: balance } = await apiv.query.system.account(currentaccount);
   if (balance.free>0){
     balancev=balance.free/1000000000000000000;
     balancevf=new Intl.NumberFormat().format(balancev);
@@ -349,7 +351,7 @@ async function change_network() {
   // get transactions and create the table
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
-  let url= 'https://testnet.bitgreen.org/api/transactions?account='+primaryaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
+  let url= 'https://testnet.bitgreen.org/api/transactions?account='+currentaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
   let n='';
   fetch(url)
   .then(response => response.json())
@@ -501,15 +503,14 @@ function storekeys(){
     //convert to Hex json
     let value='{"iv":"'+randomstring+'","ivaescfb":"'+util.u8aToHex(ivaescfb)+'","ivaesctr":"'+util.u8aToHex(ivaesctr)+'","ivaesofb":"'+util.u8aToHex(ivaesofb)+'","encrypted":"'+encryptedhex+'"}';
     // store encrypted data
-    localStorage.setItem("webwallet", value);
+    localStorage.setItem("webwallet"+currentaccountid, value);
     // store main account data
-    localStorage.setItem("primaryaccount", keyspairv.address);
+    localStorage.setItem("webwalletaccount"+currentaccountid, keyspairv.address);
     dashboard();
 }
 // Main Dashboard 
 function dashboard(){
-  let n='<br><center><H3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4);
-  //n=n+'<div id="primaryaccount" name="primaryaccount" autofocus>'+primaryaccount+'</div>';
+  let n='<br><center><H3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4);
   n=n+'&nbsp;';
   n=n+'<a href="#" id="copyaccount" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> \
   <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> \
@@ -530,7 +531,7 @@ function dashboard(){
   n=n+'<button type="button" class="btn btn-primary" id="staking">Staking</button>'
   n=n+'</div>';
   n=n+'</div>';
-  n=n+'<input id="primaryaccount" name="primaryaccount" type="text" value="'+primaryaccount+'" style="color:white;border:none;" >';
+  n=n+'<input id="currentaccount" name="currentaccount" type="text" value="'+currentaccount+'" style="color:white;border:none;" >';
   n=n+'<br><div id="transactions">';
   n=n+'<table class="table table-striped table-hover">';
   n=n+'<thead>';
@@ -553,7 +554,7 @@ function dashboard(){
 }
 // function to show the form for sending funds
 function send(recipient,amount,domain){
-  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr><h3>Send Funds</H3>"
@@ -603,7 +604,7 @@ function send(recipient,amount,domain){
 }
 // function to show the form to sign-in
 function signin(domain){
-  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
@@ -627,7 +628,7 @@ function signin(domain){
 }
 // function to show the form to submit an extrisinc
 async function extrinsic(pallet,call,parameters,domain){
-  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
@@ -657,16 +658,16 @@ async function extrinsic(pallet,call,parameters,domain){
 }
 // function to manage the staking of funds
 async function staking(){
-  let n='<br><center><h3>Main Account</h3>'+primaryaccount.substring(0,4)+"..."+primaryaccount.substring(primaryaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
   //n=n+"<h3>Staking</h3>"
   // get amount bonded
-  let bondamount= await get_amount_bonded(primaryaccount);
+  let bondamount= await get_amount_bonded(currentaccount);
   let nominator='';
   if(bondamount>0){
-    nominator= await get_nominator(primaryaccount);
+    nominator= await get_nominator(currentaccount);
   }
   if(bondamount>0){
     const bondamountv=bondamount/1000000000000000000;
@@ -743,8 +744,8 @@ async function bond(){
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -787,12 +788,12 @@ async function bond(){
 }
 // function to unbond the current fund
 async function unbond(){
-  let amount= await get_amount_bonded(primaryaccount);
+  let amount= await get_amount_bonded(currentaccount);
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -839,8 +840,8 @@ async function stake(){
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -885,8 +886,8 @@ async function unstake(){
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -931,8 +932,8 @@ async function transferfunds(){
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -992,8 +993,8 @@ async function submitextrinsic(){
   console.log("parameters:",parameters);
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -1034,8 +1035,8 @@ async function signinexecute(){
   let domain=document.getElementById("domain").value;
   let encrypted='';
   // read the encrypted storage
-  if(localStorage.getItem("webwallet")){
-    encrypted=localStorage.getItem("webwallet");
+  if(localStorage.getItem("webwallet"+currentaccountid)){
+    encrypted=localStorage.getItem("webwallet"+currentaccountid);
   }
   if(encrypted.length==0){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
@@ -1140,9 +1141,9 @@ async function decrypt_webwallet(encrypted,pwd){
 }
 //copy the account to the clipboard
 async function clipboard_copy_account(){
-  document.getElementById("primaryaccount").select();
+  document.getElementById("currentaccount").select();
   document.execCommand("copy");
-  alert("Account: "+primaryaccount);
+  alert("Account: "+currentaccount);
 }
 // function to get the amount bonded for staking
 async function get_amount_bonded(address){
