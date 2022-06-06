@@ -2,7 +2,7 @@
 "manifest_version": 2,
 "name": "BitgreenWallet",
 "description": "Bitgreen Browser Wallet",
-"version": "0.1",
+"version": "0.2",
 "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "window.html"
@@ -14,10 +14,8 @@
     "tabs",
     "scripting",
     "system.display",
-    "https://testnet.bitg.org:9443/",
-    "https://mainnet.bitg.org:9443/",
     "https://testnet.bitgreen.org:9443/",
-    "https://mainnet.bitg.org:9443/"
+    "https://mainnet.bitgreen.org:9443/"
   ],
   "content_scripts": [
     {

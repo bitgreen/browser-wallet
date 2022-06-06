@@ -1,3 +1,8 @@
+//TODO: import keys, change account description, remove account, copy account without hidden field, improve support link
+// update manifest to ver. 3.0
+// TODO set a red light and switch to green when connected
+// evaluate the encryption of account description and account code (better privacy)
+// ask for access password initially to decrypt the data above and keep it open for the session till the browser is open
 
 let keyspairv='';
 let keyringv= new keyring.Keyring({ type: 'sr25519' });
@@ -6,23 +11,37 @@ let apiv='';
 let currentaccount='';
 let balancev=0;
 let balancevf='0.00';
-let currentaccountid='';
-// start messages listener to interact with the web pages
-// open connection
-change_network();
+let currentaccountid='1';
+let accountdescription="Main Account";
 
+// get last used account id
+if(localStorage.getItem("webwalletcurrentaccountid")){
+  currentaccountid=localStorage.getItem("webwalletcurrentaccountid");
+  if(!localStorage.getItem("webwalletaccount"+currentaccountid)){ 
+    currentaccountid='1';
+  } 
+}
+// get account description
+if(localStorage.getItem("webwalletdescription"+currentaccountid)){
+  accountdescription=localStorage.getItem("webwalletdescription"+currentaccountid);
+  if(accountdescription.length>20){
+    accountdescription=accountdescription.substring(0,20);
+  }
+}
+// get web wallet account
 if(localStorage.getItem("webwalletaccount"+currentaccountid)){
   currentaccount=localStorage.getItem("webwalletaccount"+currentaccountid);
 }
 
-// add listeners for events
+// add listeners for events (you cannot use onclick event in the extension)
 document.addEventListener('DOMContentLoaded', function() {
+   // open connection
+    change_network();
     // network selection
     document.getElementById("network").addEventListener("change", change_network);
     // if at the least one account is available, we show it
     if(currentaccount.length>0){
       const params = new URLSearchParams(window.location.search)
-      //alert(window.location.search);
       let command="";
       // evaluate possible actions
       if (params.has("command")){
@@ -69,7 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 // function to connect/change network
 async function change_network() {
-  // TODO set a red light
+  // set identicon
+  document.getElementById("idicon").innerHTML='<svg width="40" height="40" data-jdenticon-value="'+currentaccount+'"></svg>';
+  // TODO set a red light and switch to green when connected
   let network='wss://testnet.bitgreen.org';
   if(document.getElementById("network")){
     network=document.getElementById('network').value;
@@ -338,7 +359,7 @@ async function change_network() {
     }  
    });
   // TODO set a green light
-  // get balance
+  // get balance and show it
   let { nonce, data: balance } = await apiv.query.system.account(currentaccount);
   if (balance.free>0){
     balancev=balance.free/1000000000000000000;
@@ -348,6 +369,7 @@ async function change_network() {
     balancevf="0.00";
   }
   document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BBB</h1>';
+
   // get transactions and create the table
   let dt = new Date();
   let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
@@ -414,6 +436,12 @@ function newkeys(obj,error) {
   n=n+'<input type="password" class="form-control" id="inputPassword2">';
   n=n+'</div>';
   n=n+'</div>';
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="description" class="col-sm-2 col-form-label">Description</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="text" class="form-control" id="description">';
+  n=n+'</div>';
+  n=n+'</div>';
   n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="storekeys">Submit</button></div>';
   n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="storekeys">Back</button></div>';
   n=n+'</div>';
@@ -429,6 +457,8 @@ function storekeys(){
     // check for password fields
     const pwd=document.getElementById('inputPassword').value;
     const pwd2=document.getElementById('inputPassword2').value;
+    let description=document.getElementById('description').value;
+
     // check for minimum length
     if(pwd.length<1){
       newkeys("","Password must be at the least 12 characters");
@@ -502,15 +532,40 @@ function storekeys(){
     let encryptedhex=aesjs.utils.hex.fromBytes(encryptedaesofb);
     //convert to Hex json
     let value='{"iv":"'+randomstring+'","ivaescfb":"'+util.u8aToHex(ivaescfb)+'","ivaesctr":"'+util.u8aToHex(ivaesctr)+'","ivaesofb":"'+util.u8aToHex(ivaesofb)+'","encrypted":"'+encryptedhex+'"}';
-    // store encrypted data
-    localStorage.setItem("webwallet"+currentaccountid, value);
-    // store main account data
-    localStorage.setItem("webwalletaccount"+currentaccountid, keyspairv.address);
+    // get the next available accountid 
+    for(i=1;i<=99;i++){
+      if(!localStorage.getItem("webwalletaccount"+i)) {
+        currentaccountid=i;
+        break;
+      }
+    }
+    if(i>99){
+      alert("Too many accounts already created");
+    }else {
+      // store encrypted data
+      localStorage.setItem("webwallet"+currentaccountid, value);
+      // store main account data
+      localStorage.setItem("webwalletaccount"+currentaccountid, keyspairv.address);
+      if(!description){
+        localStorage.setItem("webwalletdescription"+currentaccountid, keyspairv.address);
+      }
+      else{
+        localStorage.setItem("webwalletdescription"+currentaccountid, description);
+      }
+
+    }
     dashboard();
 }
 // Main Dashboard 
 function dashboard(){
-  let n='<br><center><H3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4);
+  // refresh the identicon
+  let ic=jdenticon.toSvg(currentaccount,40);
+  try {
+    document.getElementById("idicon").innerHTML = ic;
+  } catch(e){
+    console.log("No identicon available",e);
+  }
+  let n='<br><center><H3>'+accountdescription+'</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4);
   n=n+'&nbsp;';
   n=n+'<a href="#" id="copyaccount" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> \
   <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> \
@@ -550,7 +605,78 @@ function dashboard(){
   document.getElementById("send").addEventListener("click", send);
   document.getElementById("staking").addEventListener("click", staking);
   document.getElementById("copyaccount").addEventListener("click", clipboard_copy_account);
-
+  document.getElementById("idicon").addEventListener("click", manageaccounts);
+}
+// Manage accounts (create/import/delete)
+function manageaccounts(){
+  let n='<br><center><H3>Manage Accounts</h3>';
+  n=n+'&nbsp;';
+  n=n+'<hr>'
+  // add list of the available accounts
+  n=n+'<ul class="list-group" style="text-align:left;">';
+  for(i=1;i<=99;i++){
+    if(localStorage.getItem("webwalletaccount"+i)) {
+      n=n+'<li class="list-group-item list-group-item-action" id="'+i+'">';
+      let ac=localStorage.getItem("webwalletaccount"+i);
+      n=n+jdenticon.toSvg(ac,40);
+      n=n+localStorage.getItem("webwalletdescription"+i);
+      n=n+" ("+ac.substring(0,4)+"..."+ac.substring(ac.length-4)+')</li>';
+    }
+  }
+  n=n+"</ul>"
+  n=n+'<hr>'
+  // icon for adding account
+  n=n+'<ul class="list-group">';
+  n=n+'<li class="list-group-item list-group-item-action" id="createaccount">';
+  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16"><path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/></svg>';
+  n=n+' Create Account';
+  n=n+'</li>';
+  n=n+'</ul>';
+  // icon for importing account
+  n=n+'<ul class="list-group">';
+  n=n+'<li class="list-group-item list-group-item-action" id="importaccount">';
+  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/><path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/></svg>';
+  n=n+' Import Account';
+  n=n+'</li>';
+  n=n+'</ul>';
+  // icon for support
+  n=n+'<ul class="list-group">';
+  n=n+'<li class="list-group-item list-group-item-action" id="support">';
+  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>';
+  n=n+' Support&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  n=n+'</li>';
+  n=n+'</ul>';  
+  n=n+'<hr>'
+  n=n+'</center>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("createaccount").addEventListener("click", newkeys);
+  document.getElementById("support").addEventListener("click", contactsupport);
+  for(i=1;i<=99;i++){
+    if(localStorage.getItem("webwalletaccount"+i)) {
+      document.getElementById(i).addEventListener("click", function(){ setaccount(this.id);},false);
+    } else {
+      break;
+    }
+  }
+}
+// function to open a new tab to contact the support
+function contactsupport(){
+  window.open("https://bitgreen.org/contact");
+}
+// function to set new account and return to dashboard
+function setaccount(id){
+  currentaccount=localStorage.getItem("webwalletaccount"+id);
+  currentaccountid=i;
+  // set the last used account 
+  localStorage.setItem("webwalletcurrentaccountid",id);
+  // set accountdescription for showing in the different screens
+  if(localStorage.getItem("webwalletdescription"+id)){
+    accountdescription=localStorage.getItem("webwalletdescription"+id);
+    if(accountdescription.length>20){
+      accountdescription=accountdescription.substring(0,20);
+    }
+  }
+  dashboard();
 }
 // function to show the form for sending funds
 function send(recipient,amount,domain){
@@ -604,7 +730,7 @@ function send(recipient,amount,domain){
 }
 // function to show the form to sign-in
 function signin(domain){
-  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
+  let n='<br><center><h3>Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
@@ -1138,6 +1264,7 @@ async function decrypt_webwallet(encrypted,pwd){
   }
 
 }
+
 //copy the account to the clipboard
 async function clipboard_copy_account(){
   document.getElementById("currentaccount").select();

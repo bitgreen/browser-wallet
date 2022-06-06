@@ -6,20 +6,22 @@
 <link href="bootstrap-5.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <title>Bitgreen Wallet</title>
 <script src="polkadot-6.8.1/polkadot.min.js" ></script>
+<script src="jdenticon-3.1.1/jdenticon.min.js" ></script>
 <script src="wallet.js"></script>
 </head>
 <body style="width: 400px">
 <div class="container">
 <br>
 <div class="row">
-    <div class="col"><img src="icon.png" width="64" height="64"></div>
-    <div class="col">
+    <div class="col"><img src="icon.png" width="40" height="40"></div>
+    <div class="col-8">
         <select class="form-select form-select-sm" aria-label=".form-select-sm network" id="network" name="network">
-        <!-- <option value="wss://testnet.bitg.org">BitGreen Mainnet</option> -->
-        <option value="wss://testnet.bitg.org">BitGreen Testnet</option>
+        <!-- <option value="wss://mainnet.bitgreen.org">BitGreen Mainnet</option> -->
+        <option value="wss://testnet.bitgreen.org">BitGreen Testnet</option>
         <option value="ws://127.0.0.1:9944" >BitGreen Local Node</option>
     </select>
     </div>
+    <div id="idicon" name="idicon" class="col"><svg width="40" height="40" data-jdenticon-value="iconvalue"></svg></div>
 </div>
 <div id="root" name="root"></div>
 <div><br><br><p><center>For support: <a href="https://www.bitgreen.org" target="_blank">https://www.bitgreen.org</a></center></p></div>
