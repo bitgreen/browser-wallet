@@ -1,4 +1,4 @@
-//TODO: import keys, change account description, remove account, copy account without hidden field, improve support link
+//TODO:  change account description, remove account, copy account without hidden field, improve support link
 // update manifest to ver. 3.0
 // TODO set a red light and switch to green when connected
 // evaluate the encryption of account description and account code (better privacy)
@@ -627,7 +627,9 @@ function dashboard(){
   } catch(e){
     console.log("No identicon available",e);
   }
-  let n='<br><center><H3>'+accountdescription+'</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4);
+  //let n='<br><center><H3>'+accountdescription+'</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4);
+  let n='<br><center><H3>'+accountdescription+'</h3>';
+  n=n+'<input id="currentaccount" name="currentaccount" type="text" spellcheck="false" value="'+currentaccount+'" size="57" style="font-size:9px;">';
   n=n+'&nbsp;';
   n=n+'<a href="#" id="copyaccount" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> \
   <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> \
@@ -648,7 +650,7 @@ function dashboard(){
   n=n+'<button type="button" class="btn btn-primary" id="staking">Staking</button>'
   n=n+'</div>';
   n=n+'</div>';
-  n=n+'<input id="currentaccount" name="currentaccount" type="text" value="'+currentaccount+'" style="color:white;border:none;" >';
+  //n=n+'<input id="currentaccount" name="currentaccount" type="text" value="'+currentaccount+'" style="color:white;border:none;" >';
   n=n+'<br><div id="transactions">';
   n=n+'<table class="table table-striped table-hover">';
   n=n+'<thead>';
@@ -1332,7 +1334,7 @@ async function decrypt_webwallet(encrypted,pwd){
 async function clipboard_copy_account(){
   document.getElementById("currentaccount").select();
   document.execCommand("copy");
-  alert("Account: "+currentaccount);
+  alert("Account Copied: "+currentaccount);
 }
 // function to get the amount bonded for staking
 async function get_amount_bonded(address){
