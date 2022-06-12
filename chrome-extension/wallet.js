@@ -412,60 +412,122 @@ function newkeys(obj,error) {
       mnemonic=util_crypto.mnemonicGenerate(24);
       keyspairv = k.addFromUri(mnemonic, { name: '' }, 'sr25519');
   }
-  // show the mnemonic seed and ask for password to secure them
   let n="<br><h3>Create New Keys</H3>"
   n=n+'<p>Please store carefully the secret words below in a safe place.</p>';
   n=n+'<p>They can be used to recover your keys in a different device and  should not be shared with untrusted parties.</p><p>Anyone having the secret words, can transfer your funds!</p>';
   n=n+'<p> Secret Words:</p>'
   n=n+'<div class="shadow-lg p-3 mb-5 bg-body rounded"><b>'+mnemonic+'</b></div>'
   n=n+'<p>Insert a STRONG password to encrypt the secret words on the local disk. A minimum of 12 characters should be used.</p>'
+  // passwords
   n=n+'<div class="mb-3 row">';
   n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
   n=n+'<div class="col-sm-10">';
   n=n+'<input type="password" class="form-control" id="inputPassword">';
   n=n+'</div>';
   n=n+'</div>';
-  if (typeof error !== 'undefined') {
-      n=n+'<div class="alert alert-danger" role="alert">';
-      n=n+error;
-      n=n+'</div>';
-  }
   n=n+'<div class="mb-3 row">';
   n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Repeat Password</label>';
   n=n+'<div class="col-sm-10">';
   n=n+'<input type="password" class="form-control" id="inputPassword2">';
   n=n+'</div>';
   n=n+'</div>';
+  //description
   n=n+'<div class="mb-3 row">';
   n=n+'<label for="description" class="col-sm-2 col-form-label">Description</label>';
   n=n+'<div class="col-sm-10">';
   n=n+'<input type="text" class="form-control" id="description">';
   n=n+'</div>';
   n=n+'</div>';
+  // show error if any
+  if (typeof error !== 'undefined') {
+    n=n+'<div class="alert alert-danger" role="alert">';
+    n=n+error;
+    n=n+'</div>';
+}
   n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="storekeys">Submit</button></div>';
-  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="storekeys">Back</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
   n=n+'</div>';
   document.getElementById("root").innerHTML = n;
   document.getElementById("storekeys").addEventListener("click", storekeys);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+
 }
 // import existing keys
-function importkeys() {
-    alert("Import keys")
+function importkeys(obj,error) {
+  // show the mnemonic seed and ask for password to secure them
+  let n="<br><h3>Import Account</H3>"
+  // mnemonic seed
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputMnemonic" class="col-sm-2 col-form-label">Mnemonic Seed (12..24 words)</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<textarea class="form-control" id="inputMnemonic" cols="3"></textarea>';
+  n=n+'</div>';
+  n=n+'</div>';
+  //passwords
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword">';
+  n=n+'</div>';
+  n=n+'</div>';
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="inputPassword" class="col-sm-2 col-form-label">Repeat Password</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="password" class="form-control" id="inputPassword2">';
+  n=n+'</div>';
+  n=n+'</div>';
+  //description
+  n=n+'<div class="mb-3 row">';
+  n=n+'<label for="description" class="col-sm-2 col-form-label">Description</label>';
+  n=n+'<div class="col-sm-10">';
+  n=n+'<input type="text" class="form-control" id="description">';
+  n=n+'</div>';
+  n=n+'</div>';
+  // show errors if any
+  if (typeof error !== 'undefined') {
+    n=n+'<div class="alert alert-danger" role="alert">';
+    n=n+error;
+    n=n+'</div>';
+  }
+  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="storekeys">Submit</button></div>';
+  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
+  n=n+'</div>';
+  document.getElementById("root").innerHTML = n;
+  document.getElementById("storekeys").addEventListener("click", importkeysvalidation);
+  document.getElementById("backmain").addEventListener("click", dashboard);
+
 }
+// function to validate the seed phrase and eventually store the imported account
+function importkeysvalidation(){
+  const m=document.getElementById('inputMnemonic').value;
+  const isValidMnemonic = util_crypto.mnemonicValidate(m);  
+  if(!isValidMnemonic){
+    importkeys("","Invalid Mnemonic Seed");
+    return;
+  } else {
+    let k= new keyring.Keyring({ type: 'sr25519' });
+    keyspairv = k.addFromUri(m, { name: '' }, 'sr25519');
+    mnemonic=m;
+    storekeys("",importkeys);
+  }
+}
+
 // function to encrypt and store the secret words
-function storekeys(){
+function storekeys(obj,callback){
     // check for password fields
     const pwd=document.getElementById('inputPassword').value;
     const pwd2=document.getElementById('inputPassword2').value;
     let description=document.getElementById('description').value;
-
+    if (typeof callback === 'undefined') {
+      callback=newkeys;
+    }
     // check for minimum length
     if(pwd.length<1){
-      newkeys("","Password must be at the least 12 characters");
+      callback("","Password must be at the least 12 characters");
       return;
     }
     if(pwd!=pwd2){
-        newkeys("","Password fields are not matching!");
+        callback("","Password fields are not matching!");
         return;
     }
     // get ascii value of first 2 chars
@@ -650,6 +712,7 @@ function manageaccounts(){
   n=n+'</center>';
   document.getElementById("root").innerHTML = n;
   document.getElementById("createaccount").addEventListener("click", newkeys);
+  document.getElementById("importaccount").addEventListener("click", importkeys);
   document.getElementById("support").addEventListener("click", contactsupport);
   for(i=1;i<=99;i++){
     if(localStorage.getItem("webwalletaccount"+i)) {
