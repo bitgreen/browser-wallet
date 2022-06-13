@@ -1,5 +1,4 @@
 //TODO:  change account description, remove account, copy account without hidden field, improve support link
-// update manifest to ver. 3.0
 // TODO set a red light and switch to green when connected
 // evaluate the encryption of account description and account code (better privacy)
 // ask for access password initially to decrypt the data above and keep it open for the session till the browser is open
