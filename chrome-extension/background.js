@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(
                 // create new windows for the transfer funds
                 let url='window.html?command=transfer&recipient='+encodeURI(request.recipient)+'&amount='+encodeURI(request.amount)+'&domain='+encodeURI(request.domain);
                 chrome.tabs.create({
-                    url: chrome.extension.getURL(url),
+                    url: chrome.runtime.getURL(url),
                     active: false
                 }, function(tab) {
                     // After the tab has been created, open a window to inject the tab
@@ -70,7 +70,7 @@ chrome.runtime.onMessage.addListener(
                 // create new windows for the extrinsic
                 let url='window.html?command=tx&recipient='+encodeURI(request.recipient)+'&pallet='+encodeURI(request.pallet)+'&call='+encodeURI(request.call)+'&parameters='+encodeURI(request.parameters)+'&domain='+encodeURI(request.domain);
                 chrome.tabs.create({
-                    url: chrome.extension.getURL(url),
+                    url: chrome.runtime.getURL(url),
                     active: false
                 }, function(tab) {
                     // After the tab has been created, open a window to inject the tab
@@ -109,7 +109,7 @@ chrome.runtime.onMessage.addListener(
             // create new windows for authentication
             let url='window.html?command=signin&domain='+encodeURI(request.domain);
             chrome.tabs.create({
-                url: chrome.extension.getURL(url),
+                url: chrome.runtime.getURL(url),
                 active: false
             }, function(tab) {
                 // After the tab has been created, open a window to inject the tab
