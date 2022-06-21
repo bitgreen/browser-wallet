@@ -1,6 +1,8 @@
 # Browser-Wallet
 BitGreen Browser extension with wallet functionalities.
 
+The Bitgreen Browser Wallet is a browser extension that allows users to create wallets, send and receive funds, and make disbursements to the Bitgreen ecosystem in order to create, sell, purchase and retire Verified Carbon Credits (VCUs). To incorporate this functionality into your own project, please see the technical description below. If you require any assistance using these features, or this repo, please contact us at [contact], we are happy to assist.
+
 Features:
 - New Account creation with 24 secret words (also defined secret seed).  
 - Stores the secret words in an encrypted structure in the permanent storage of the browser.  
