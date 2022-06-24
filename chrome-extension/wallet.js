@@ -61,15 +61,23 @@ document.addEventListener('DOMContentLoaded', function () {
             command = params.get('command');
             // transfer of funds
             if (command == "transfer" && params.has("recipient") && params.has("amount") && params.get("domain")) {
-                send(params.get("recipient"), params.get("amount"), params.get("domain"));
+                const recipient=DOMPurify.sanitize(params.get("recipient"));
+                const amount=DOMPurify.sanitize(params.get("amount"));
+                const domain=DOMPurify.sanitize(params.get("domain"));
+                send(recipient, amount, domain);
             }
             // sign-in
             if (command == "signin" && params.get("domain")) {
-                signin(params.get("domain"));
+                const domain=DOMPurify.sanitize(params.get("domain"));
+                signin(domain);
             }
             // tx command to submit any kind of extrinsic
             if (command == "tx" && params.has("pallet") && params.has("call") && params.has("parameters") && params.get("domain")) {
-                extrinsic(params.get("pallet"), params.get("call"), params.get("parameters"), params.get("domain"));
+              const pallet=DOMPurify.sanitize(params.get("pallet"));
+              const call=DOMPurify.sanitize(params.get("call"));
+              const parameters=DOMPurify.sanitize(params.get("parameters"));
+              const domain=DOMPurify.sanitize(params.get("domain"));
+              extrinsic(pallet, call, parameters, domain);
             }
         } else {
             // main dashboard
