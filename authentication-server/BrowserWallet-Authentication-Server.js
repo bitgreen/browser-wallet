@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const RateLimit = require('express-rate-limit');
+const DOMPurify = require('dompurify');
 const { cryptoWaitReady, signatureVerify } = require('@polkadot/util-crypto');
 const {stringToU8a,hexToU8a} = require('@polkadot/util');
 // set limit of authentication from the same ip address
@@ -25,7 +26,7 @@ async function mainloop(){
     app.post('/',async function(req, res) {
         BrowserWalletToken="";
          if (typeof req.body.BrowserWalletToken != 'undefined'){
-              BrowserWalletToken=req.body.BrowserWalletToken;
+              BrowserWalletToken=DOMPurify.sanitize(req.body.BrowserWalletToken);
               bj=JSON.parse(BrowserWalletToken);
               // verify signature
               const signature=hexToU8a(bj.signature);
