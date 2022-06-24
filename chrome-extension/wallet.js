@@ -903,6 +903,8 @@ function remove_imported_word(e) {
     import_mnemonics_array.splice(import_mnemonics_array.indexOf(import_mnemonics_array[index]), 1)
 
     refresh_imported_mnemonics();
+
+    check_mnemonics()
 }
 function refresh_imported_mnemonics() {
     let import_mnemonics = '';
