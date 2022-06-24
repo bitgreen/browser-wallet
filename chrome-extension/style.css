@@ -27,6 +27,7 @@ body {
     color: #061C00;
     font-size: 14px;
     line-height: 14px;
+    overflow: hidden;
 
     background-image: url('assets/bg-darker.png');
 }
@@ -141,6 +142,12 @@ p {
 .btn.btn-sm .icon.icon-left {
     margin-left: 0;
     margin-right: 6px;
+}
+.btn-error {
+    color: #F53400;
+}
+.btn-error:hover {
+    color: #d22e03;
 }
 .click {
     cursor: pointer;
@@ -306,7 +313,7 @@ label.label {
 }
 #bordered_content.smaller {
     top: 270px;
-    height: 330px;
+    height: 360px;
     padding-top: 38px;
 }
 #bordered_content #top_items {
@@ -542,23 +549,39 @@ label.label {
     padding-bottom: 16px;
 }
 
-#full_page .content .messages {
+.info-messages {
     font-family: "Clash Grotesk Medium", sans-serif;
     font-weight: 500;
     color: #061C00;
 }
-#full_page .content .messages .message {
+.info-messages.bigger {
+    font-size: 16px;
+}
+.info-messages .message {
     padding: 4px 0;
 }
-#full_page .content .messages .icon {
+.info-messages.bigger .message {
+    padding: 8px 0;
+}
+.info-messages .icon {
     display: block;
     width: 18px;
     text-align: center;
     color: #B1B4BD;
     margin-right: 10px;
 }
-#full_page .content .messages .icon.icon-success {
+.info-messages.bigger .icon {
+    width: 20px;
+    margin-right: 12px;
+}
+.info-messages .icon.icon-success {
     color: #9ECC00;
+}
+.info-messages .icon.icon-check {
+    color: #9ECC00;
+}
+.info-messages .icon.icon-error {
+    color: #F53400;
 }
 #portfolio {
     position: relative;
@@ -588,4 +611,35 @@ label.label {
 }
 #portfolio .info .icon {
     margin-right: 8px;
+}
+#app_info {
+    border: 1px solid #061C00;
+    border-radius: 4px;
+    height: 90px;
+}
+#app_info .left {
+    width: 90px;
+    height: 90px;
+    background-color: #061C00;
+    padding: 16px 4px 16px 4px;
+}
+#app_info .icon {
+    color: #ffffff;
+    font-size: 32px;
+    padding: 0 30px;
+}
+#app_info .message {
+    text-transform: uppercase;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 10px;
+}
+#app_info .middle {
+    padding: 8px 16px 36px 16px;
+    color: #9ECC00;
+    font-size: 22px;
+}
+#app_info .right {
+    padding: 8px 16px 8px 0;
 }
