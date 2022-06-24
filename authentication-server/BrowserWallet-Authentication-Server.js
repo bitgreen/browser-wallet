@@ -6,7 +6,7 @@ const RateLimit = require('express-rate-limit');
 const DOMPurify = require('dompurify');
 const { cryptoWaitReady, signatureVerify } = require('@polkadot/util-crypto');
 const {stringToU8a,hexToU8a} = require('@polkadot/util');
-// set limit of authentication from the same ip address
+// set limit of authentication from the same ip address, 5 attempts each minute
 const limiter = RateLimit({
   windowMs: 1*60*1000, // 1 minute
   max: 5
