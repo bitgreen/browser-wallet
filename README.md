@@ -14,8 +14,11 @@ Features:
 - Shows current balance from the blockchain.  
 - Transfers Funds by signing the transaction.
 - Shows account address to receive funds.
+- Import of an existing secret seed
+- Creation of additional Accounts
+- Programmatically calls to any pallet with signed transations
 - Stakes/Unstakes funds
-- Authentication by signing (new)
+- Authentication by signing a random token
 
 ## BrowserWallet.js
 A library to facilitate the usage of the extension has been created. Currently it supports the following functions callable from a web page.  
@@ -65,19 +68,4 @@ You can test the server with the utility CURL with the server running in your lo
 curl -X POST -H "application/x-www-form-urlencoded" -d BrowserWalletToken='{"message":"1651209684994","signature":"0xfaca8deff055379324d6d172eefb48c9f53a78b6d1612c2e7e43effd3967b4344ffc486a9dc9afa08a1a15f5f46cb2d2317a31aab3ada5be866bb49599d7458d","address":"5EEdVDNbCB6jYKSzxH1puaGrhd2WWk1Xs3uoxrPAqJfkrnVs","publickey":"0x600a35e55307f1afc1379bb9e32bd10f5278554e97c7dfd4d6f43559f0fdd906"}' http://localhost:3001  
 ```
 The message content is the timestamp of the token generation. The server side should consider expired the token after some time from its generation.  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
