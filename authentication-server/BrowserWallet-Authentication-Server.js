@@ -2,12 +2,19 @@
 // express is a quite famous library for http/https protocol, we use it to create a simple web server in nodejs
 const express = require('express');
 const bodyParser = require('body-parser');
+const RateLimit = require('express-rate-limit');
 const { cryptoWaitReady, signatureVerify } = require('@polkadot/util-crypto');
 const {stringToU8a,hexToU8a} = require('@polkadot/util');
-
+// set limit of authentication from the same ip address
+const limiter = RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5
+});
 
 // create web server object
-const app = express();
+let app = express();
+// apply rate limiter to all requests
+app.use(limiter);
 
 mainloop();
 async function mainloop(){
