@@ -958,7 +958,7 @@ function storekeys(obj, callback) {
     // check for password fields
     const pwd = document.getElementById('password').value;
     // let description=document.getElementById('description').value; // TODO: add option to set description
-    let description = 'test';
+    let description = 'Main Account';
     if (typeof callback === 'undefined') {
         callback = newkeys;
     }
@@ -1127,7 +1127,7 @@ function dashboard(){
                 n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
                 n=n+'<div id="current_wallet" class="d-flex align-items-center">';
                     n=n+'<div class="identicon">'+ic+'</div>';
-                    n=n+'<div class="info"><span class="desc">Wallet A</span><span>'+currentaccount.substring(0,14)+'...</span></div>';
+                    n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
                     n=n+'<span class="icon icon-down-arrow"></span>';
                 n=n+'</div>';
             n=n+'</div>';
@@ -1372,7 +1372,7 @@ function signin(domain){
             n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
             n=n+'<div id="current_wallet" class="d-flex align-items-center">';
                 n=n+'<div class="identicon">'+ic+'</div>';
-                n=n+'<div class="info"><span class="desc">Wallet A</span><span>'+currentaccount.substring(0,14)+'...</span></div>';
+                n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
                 n=n+'<span class="icon icon-down-arrow"></span>';
             n=n+'</div>';
         n=n+'</div>';
