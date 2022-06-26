@@ -86,6 +86,9 @@ p {
 .text-dark {
     color: #061C00;
 }
+.text-small {
+    font-size: 13px;
+}
 .select-none {
     user-select: none;
 }
@@ -103,6 +106,7 @@ p {
     padding: 4px 8px;
     font-size: 14px;
     line-height: 22px;
+    min-height: 40px;
 }
 .btn-primary {
     background-color: #C0FF00;
@@ -479,6 +483,7 @@ label.label {
 }
 #full_page .content .mnemonics .word {
     padding: 2px;
+    overflow: visible;
 }
 #full_page .content .mnemonics .word .badge {
     position: relative;
@@ -493,14 +498,29 @@ label.label {
 #full_page .content .mnemonics.clickable .word .badge {
     border: 2px solid #ffffff;
 }
+#full_page .content .mnemonics.clickable .word.selected .badge {
+    transform: scale(0.9) !important;
+    background-color: #ffffff !important;
+    border: 2px dashed #D5D6DA;
+    transition: none !important;
+}
+#full_page .content .mnemonics.clickable .word.selected .index {
+    display: none;
+}
+#full_page .content .mnemonics.clickable .word.selected .remove {
+    display: none;
+}
 #full_page .content .mnemonics.clickable .word:hover {
     cursor: pointer;
 }
 #full_page .content .mnemonics.clickable .word:hover .badge {
-    transform: scale(1.06);
+    transform: scale(1.07);
+    border-left-width: 2px;
+    border-right-width: 2px;
 }
 #full_page .content .mnemonics.clickable .word:hover > * {
     pointer-events: none;
+    z-index: 99;
 }
 #full_page .content .mnemonics.clickable .word .badge .remove {
     position: absolute;
@@ -532,6 +552,14 @@ label.label {
     width: 13px;
     font-size: 11px;
     color: #B1B4BD;
+}
+#full_page .content .mnemonics .word .badge .index {
+    font-size: 12px;
+    width: 14px;
+    line-height: 14px;
+    text-align: center;
+    color: #B1B4BD;
+    user-select: none;
 }
 #full_page .content .mnemonics .word .badge .text {
     width: 100%;

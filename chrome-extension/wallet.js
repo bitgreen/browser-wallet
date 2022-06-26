@@ -579,18 +579,19 @@ function newkeys(obj, error) {
             n = n + '<h2>Save your secret phrase</h2>';
             n = n + '<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>';
             n = n + '<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
-            n = n + '<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
+            n = n + '<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
             n = n + '<div class="mnemonics d-block mt-2">';
                 mnemonic_array.forEach(function(val, index) {
-                    n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+                    n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
                 })
-            n = n + '<div class="footer d-flex align-items-sketch">';
-            n = n + '<div class="col-8 p-0"><p class="text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-1"><label for="agree_new_key">I have safely stored my secret phrase</label></p><p class="text-gray">You must confirm in order to proceed.</p></div>';
+            n = n + '<div class="footer d-flex align-items-sketch align-items-center">';
+            n = n + '<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key">I have safely stored my secret phrase<br><span class="text-gray fw-light text-small">You must confirm in order to proceed.</span></label></p></div>';
             n = n + '<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
             n = n + '</div>';
         n = n + '</div>';
     n = n + '</div>';
     document.getElementById("root").innerHTML = n;
+    document.getElementById("copy_seed").addEventListener("click", copy_seed);
     document.getElementById("agree_new_key").addEventListener("change", agree_new_key);
     document.getElementById("continue_new_key").addEventListener("click", confirm_secret_phrase_screen);
     document.getElementById("goback").addEventListener("click", home_screen);
@@ -614,6 +615,10 @@ function newkeys(obj, error) {
 
     sessionStorage.setItem('finish_message', 'created');
 }
+async function copy_seed() {
+    await navigator.clipboard.writeText(mnemonic_array.join(' '));
+    alert("Secret phrase words copied to clipboard!");
+}
 function agree_new_key() {
     let agree = document.getElementById("agree_new_key");
     let continue_new_key = document.getElementById("continue_new_key");
@@ -636,7 +641,7 @@ function confirm_secret_phrase_screen() {
             n = n + '<p class="text-gray pb-2">Confirm the secret phrase from the previous screen, with each phrase in the correct order.</p>';
             n = n + '<div id="shuffled_mnemonics" class="mnemonics clickable select-none d-block mt-2">';
                 shuffled_mnemonic_array.forEach(function(val, index) {
-                    n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+                    n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
                 })
             n = n + '</div>';
             n = n + '<h3 class="mt-2 mb-2">Secret phrase words</h3>';
@@ -664,6 +669,12 @@ function confirm_secret_phrase_screen() {
             refresh_user_mnemonics()
             check_words()
         },
+        onChoose: function (evt) {
+            evt.item.classList.add('selected')
+        },
+        onUnchoose: function (evt) {
+            evt.item.classList.remove('selected')
+        }
     });
 
     anime({
@@ -708,12 +719,12 @@ function add_word(e) {
 function refresh_user_mnemonics() {
     let user_mnemonics = '';
     user_mnemonic_array.forEach(function(val, index) {
-        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
     })
 
     let shuffled_mnemonics = '';
     shuffled_mnemonic_array.forEach(function(val, index) {
-        shuffled_mnemonics = shuffled_mnemonics + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+        shuffled_mnemonics = shuffled_mnemonics + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
     })
 
     document.getElementById("user_mnemonics").innerHTML = user_mnemonics;
@@ -765,6 +776,7 @@ function set_password_screen() {
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", home_screen);
     document.getElementById("password").addEventListener("keyup", check_password);
     document.getElementById("password_repeat").addEventListener("keyup", check_password);
     document.getElementById("set_password").addEventListener("click", storekeys);
@@ -864,6 +876,12 @@ function importkeys() {
 
             check_mnemonics()
         },
+        onChoose: function (evt) {
+            evt.item.classList.add('selected')
+        },
+        onUnchoose: function (evt) {
+            evt.item.classList.remove('selected')
+        }
     });
 
     anime({
@@ -881,14 +899,17 @@ function import_word() {
     let input = document.getElementById("keyword").value;
     document.getElementById("keyword").value = ''
 
-    // max 24 words
-    if(!input || import_mnemonics_array.length >= 24) {
+    if(!input) {
         return false;
     }
 
     input.split(',').forEach(function(val, index) {
         val.split(' ').forEach(function(word, index) {
             if(word) {
+                // max 24 words
+                if(import_mnemonics_array.length >= 24) {
+                    return false;
+                }
                 // maximum word length is 8
                 import_mnemonics_array.push(word.trim().substring(0,8))
             }
@@ -917,7 +938,7 @@ function remove_imported_word(e) {
 function refresh_imported_mnemonics() {
     let import_mnemonics = '';
     import_mnemonics_array.forEach(function(val, index) {
-        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
     })
 
     document.getElementById("import_mnemonics").innerHTML = import_mnemonics;
