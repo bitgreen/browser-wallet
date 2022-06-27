@@ -86,6 +86,9 @@ p {
 .text-dark {
     color: #061C00;
 }
+.text-small {
+    font-size: 13px;
+}
 .select-none {
     user-select: none;
 }
@@ -103,6 +106,7 @@ p {
     padding: 4px 8px;
     font-size: 14px;
     line-height: 22px;
+    min-height: 40px;
 }
 .btn-primary {
     background-color: #C0FF00;
@@ -123,6 +127,14 @@ p {
     background-color: #041100;
     border-color: #041100;
     color: #ffffff;
+}
+.btn-text {
+    background-color: transparent;
+    border: none !important;
+    color: #061C00;
+}
+.btn-text:hover, .btn-text:active, .btn-text:focus {
+    color: #041100;
 }
 .btn.disabled {
     background-color: #F8F8F9;
@@ -391,6 +403,7 @@ label.label {
     font-size: 6px;
     margin-left: 10px;
     margin-right: 4px;
+    color: #B1B4BD;
 }
 #go_settings {
     font-size: 18px;
@@ -478,6 +491,7 @@ label.label {
 }
 #full_page .content .mnemonics .word {
     padding: 2px;
+    overflow: visible;
 }
 #full_page .content .mnemonics .word .badge {
     position: relative;
@@ -492,51 +506,114 @@ label.label {
 #full_page .content .mnemonics.clickable .word .badge {
     border: 2px solid #ffffff;
 }
+#full_page .content .mnemonics.clickable .word.selected .badge {
+    transform: scale(0.9) !important;
+    background-color: #ffffff !important;
+    border: 2px dashed #D5D6DA;
+    transition: none !important;
+}
+#full_page .content .mnemonics.clickable .word.selected .index {
+    display: none;
+}
+#full_page .content .mnemonics.clickable .word.selected .remove {
+    display: none;
+}
 #full_page .content .mnemonics.clickable .word:hover {
     cursor: pointer;
 }
 #full_page .content .mnemonics.clickable .word:hover .badge {
-    transform: scale(1.06);
+    /*transform: scale(1.07);*/
+    border-left-width: 2px;
+    border-right-width: 2px;
 }
 #full_page .content .mnemonics.clickable .word:hover > * {
     pointer-events: none;
+    z-index: 99;
 }
 #full_page .content .mnemonics.clickable .word .badge .remove {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    color: #D5D6DA;
-    background-color: #ffffff;
-    border-radius: 7px;
-    opacity: 0.5;
-    transition: all 0.3s;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    line-height: 100%;
+    font-size: 10px;
+    color: #ffffff;
+    background-color: #cc2400;
+    border-radius: 8px 0 0 8px;
+    transition: all 0.2s linear;
     z-index: 99;
     pointer-events: all !important;
+    overflow: hidden;
+    opacity: 0;
+}
+#full_page .content .mnemonics.clickable .word .badge .remove span {
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 #full_page .content .mnemonics.clickable .word .badge .remove:hover > * {
     pointer-events: none;
 }
-#full_page .content .mnemonics.clickable .word .badge .remove:hover {
+#full_page .content .mnemonics.clickable .word:hover .badge .remove {
+    width: 24px;
     opacity: 1;
+}
+#full_page .content .mnemonics.clickable .word .badge .remove:hover {
+    background-color: #ab1f01;
 }
 #full_page .content .mnemonics.bordered {
     min-height: 38px;
-    border: 2px solid #F8F8F9;
-    border-radius: 4px;
+    border: 1px solid #F8F8F9;
+    border-radius: 8px;
+    padding: 4px;
+}
+#full_page .content .mnemonics.bordered.bordered-green {
+    border-color: #9ECC00;
+}
+#full_page .content .mnemonics.dragging .word .badge .remove {
+    transition: none !important;
+    opacity: 0 !important;
 }
 #full_page .content .mnemonics .word .badge .icon {
     width: 13px;
     font-size: 11px;
     color: #B1B4BD;
 }
+#full_page .content .mnemonics .word .badge .index {
+    font-size: 12px;
+    width: 14px;
+    line-height: 14px;
+    text-align: center;
+    color: #B1B4BD;
+    user-select: none;
+}
 #full_page .content .mnemonics .word .badge .text {
     width: 100%;
     text-align: center;
     font-size: 15px;
     text-transform: lowercase;
+}
+#full_page .content #mnemonics_info {
+    font-size: 14px;
+    font-family: "Clash Grotesk Medium", sans-serif;
+    font-weight: 500;
+    padding: 10px 12px;
+    user-select: none;
+}
+#full_page .content #mnemonics_info .col-6 {
+    padding: 0 8px;
+}
+#full_page .content #mnemonics_info .icon {
+    font-size: 22px;
+    margin: 0 12px;
+}
+#full_page #success_icon {
+    margin-top: 90px;
+    margin-bottom: 40px;
+}
+#full_page #message_text {
+    margin-bottom: 100px;
 }
 #full_page .content .footer {
     width: 370px;

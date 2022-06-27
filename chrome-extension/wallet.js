@@ -9,7 +9,9 @@ let mnemonic='';
 let mnemonic_array=[];
 let shuffled_mnemonic_array=[];
 let user_mnemonic_array=[];
-let import_mnemonics_array=[];
+let user_mnemonic_sortable = [];
+let import_mnemonic_array=[];
+let import_mnemonic_sortable=[];
 let apiv='';
 let currentaccount='';
 let balancev=0;
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!skip_intro) {
             welcome_screen();
         } else {
-            home_screen();
+            wallet_create();
         }
     }
 
@@ -132,7 +134,7 @@ function welcome_screen() {
     n=n+'<div class="browser-wallet">BROWSER WALLET</div>';
     n=n+'<button type="button" class="btn btn-primary" id="getstarted">Get started<span class="icon icon-right-arrow"></span></button>';
     document.getElementById("root").innerHTML = n;
-    document.getElementById("getstarted").addEventListener("click", home_screen);
+    document.getElementById("getstarted").addEventListener("click", wallet_create);
 
     anime({
         targets: '.bitgreen-svg path',
@@ -193,8 +195,14 @@ function hide_init() {
         document.getElementById("init_screen").classList.add("inactive")
     }, 1200)
 }
-function home_screen() {
+function wallet_create() {
     localStorage.setItem("skip_intro", true);
+
+    let ic = '';
+    if (currentaccount.length > 0) {
+        // refresh the identicon
+        ic = jdenticon.toSvg(currentaccount, 30);
+    }
 
     let n='<div id="heading">';
         n=n+'<div id="menu" class="d-flex align-items-center">';
@@ -212,6 +220,13 @@ function home_screen() {
             n=n+'</div>';
             n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
                 n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
+                if (currentaccount.length > 0) {
+                    n=n+'<div id="current_wallet" class="d-flex align-items-center">';
+                        n=n+'<div class="identicon">'+ic+'</div>';
+                        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
+                        n=n+'<span class="icon icon-down-arrow"></span>';
+                    n=n+'</div>';
+                }
             n=n+'</div>';
         n=n+'</div>';
             n=n+'<div class="content row">';
@@ -579,21 +594,22 @@ function newkeys(obj, error) {
             n = n + '<h2>Save your secret phrase</h2>';
             n = n + '<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>';
             n = n + '<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
-            n = n + '<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
+            n = n + '<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
             n = n + '<div class="mnemonics d-block mt-2">';
                 mnemonic_array.forEach(function(val, index) {
-                    n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+                    n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
                 })
-            n = n + '<div class="footer d-flex align-items-sketch">';
-            n = n + '<div class="col-8 p-0"><p class="text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-1"><label for="agree_new_key">I have safely stored my secret phrase</label></p><p class="text-gray">You must confirm in order to proceed.</p></div>';
+            n = n + '<div class="footer d-flex align-items-sketch align-items-center">';
+            n = n + '<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key">I have safely stored my secret phrase<br><span class="text-gray fw-light text-small">You must confirm in order to proceed.</span></label></p></div>';
             n = n + '<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
             n = n + '</div>';
         n = n + '</div>';
     n = n + '</div>';
     document.getElementById("root").innerHTML = n;
+    document.getElementById("copy_seed").addEventListener("click", copy_seed);
     document.getElementById("agree_new_key").addEventListener("change", agree_new_key);
     document.getElementById("continue_new_key").addEventListener("click", confirm_secret_phrase_screen);
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
 
     anime({
         targets: '.icon-alert',
@@ -613,6 +629,10 @@ function newkeys(obj, error) {
     });
 
     sessionStorage.setItem('finish_message', 'created');
+}
+async function copy_seed() {
+    await navigator.clipboard.writeText(mnemonic_array.join(' '));
+    alert("Secret phrase copied to your clipboard!");
 }
 function agree_new_key() {
     let agree = document.getElementById("agree_new_key");
@@ -634,36 +654,46 @@ function confirm_secret_phrase_screen() {
         n = n + '<div class="content">';
             n = n + '<h2>Confirm secret phrase</h2>';
             n = n + '<p class="text-gray pb-2">Confirm the secret phrase from the previous screen, with each phrase in the correct order.</p>';
+            n = n + '<div id="user_mnemonics" class="mnemonics clickable bordered bordered-green select-none d-block"></div>';
+            n = n + '<div id="mnemonics_info" class="text-gray d-flex align-items-center">';
+                n = n + '<div class="col-6 d-flex align-items-center flex-row-reverse p-0"><span>Click to add/remove</span><span class="icon icon-click-radial"></span></div>';
+                n = n + '<div class="col-6 d-flex align-items-center"><span class="icon icon-drag"></span><span>Drag to reorder</span></div>';
+            n = n + '</div>';
             n = n + '<div id="shuffled_mnemonics" class="mnemonics clickable select-none d-block mt-2">';
                 shuffled_mnemonic_array.forEach(function(val, index) {
-                    n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+                    n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
                 })
             n = n + '</div>';
-            n = n + '<h3 class="mt-2 mb-2">Secret phrase words</h3>';
-            n = n + '<div id="user_mnemonics" class="mnemonics clickable bordered select-none d-block"></div>';
             n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("shuffled_mnemonics").addEventListener("click", add_word);
     document.getElementById("user_mnemonics").addEventListener("click", remove_user_word);
     document.getElementById("continue_new_key").addEventListener("click", set_password_screen);
 
     let user_mnemonics_el = document.getElementById("user_mnemonics");
-    Sortable.create(user_mnemonics_el, {
+    user_mnemonic_sortable = Sortable.create(user_mnemonics_el, {
+        dataIdAttr: 'data-id',
         easing: "cubic-bezier(1, 0, 0, 1)",
         animation: 150,
         invertSwap: true,
         emptyInsertThreshold: 100,
         onUpdate: function (evt) {
-            user_mnemonic_array.swapItems(evt.oldIndex, evt.newIndex)
-
             refresh_user_mnemonics()
             check_words()
         },
+        onChoose: function (evt) {
+            evt.item.classList.add('selected')
+            document.getElementById("user_mnemonics").classList.add('dragging')
+        },
+        onUnchoose: function (evt) {
+            evt.item.classList.remove('selected')
+            document.getElementById("user_mnemonics").classList.remove('dragging')
+        }
     });
 
     anime({
@@ -698,22 +728,31 @@ function add_word(e) {
         return false;
     }
 
-    user_mnemonic_array.push(word)
     shuffled_mnemonic_array.splice(shuffled_mnemonic_array.indexOf(shuffled_mnemonic_array[index]), 1)
 
-    refresh_user_mnemonics()
+    refresh_user_mnemonics(word)
 
     check_words()
 }
-function refresh_user_mnemonics() {
+function refresh_user_mnemonics(word = null, action = 'add') {
+    user_mnemonic_array = user_mnemonic_sortable.toArray()
+    
+    if(word && action === 'add') {
+        user_mnemonic_array.push(word)
+    } else if(word && action === 'remove') {
+        // word is index in this case
+        let index = word
+        user_mnemonic_array.splice(user_mnemonic_array.indexOf(user_mnemonic_array[index]), 1)
+    }
+
     let user_mnemonics = '';
     user_mnemonic_array.forEach(function(val, index) {
-        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block" data-id="'+val+'"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove d-flex align-items-center" data-index="'+index+'"><span class="icon-close"></span></span></div></div>';
     })
 
     let shuffled_mnemonics = '';
     shuffled_mnemonic_array.forEach(function(val, index) {
-        shuffled_mnemonics = shuffled_mnemonics + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span></div></div>';
+        shuffled_mnemonics = shuffled_mnemonics + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
     })
 
     document.getElementById("user_mnemonics").innerHTML = user_mnemonics;
@@ -729,9 +768,8 @@ function remove_user_word(e) {
     }
 
     shuffled_mnemonic_array.push(word)
-    user_mnemonic_array.splice(user_mnemonic_array.indexOf(user_mnemonic_array[index]), 1)
 
-    refresh_user_mnemonics();
+    refresh_user_mnemonics(index, 'remove');
 
     check_words()
 }
@@ -765,6 +803,7 @@ function set_password_screen() {
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("password").addEventListener("keyup", check_password);
     document.getElementById("password_repeat").addEventListener("keyup", check_password);
     document.getElementById("set_password").addEventListener("click", storekeys);
@@ -831,39 +870,48 @@ function check_password() {
 }
 // import existing keys
 function importkeys() {
-    import_mnemonics_array = []
+    import_mnemonic_array = []
     let n = '<div id="full_page">';
     n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Import Wallet</h3></div>';
     n = n + '<div class="content">';
     n = n + '<h2>Enter secret phrase</h2>';
     n = n + '<p class="text-gray pb-2">Enter an existing secret phrase to import that wallet. Each phrase must be in the correct sequence.</p>';
     n = n + '<div class="form-group"><div class="input-group"><input id="keyword" type="text" class="form-control ps-3" placeholder="keyword"><span class="input-group-text p-0"><button id="import_word" type="button" class="btn btn-secondary">Add <span class="icon icon-right-arrow"></span></button></span></div></div>';
-    n = n + '<p class="text-gray pt-2 pb-2">Tap to remove, drag to reorder.</p>';
-    n = n + '<div id="import_mnemonics" class="mnemonics clickable bordered select-none d-block"></div>';
+    n = n + '<div id="mnemonics_info" class="text-gray d-flex align-items-center">';
+        n = n + '<div class="col-6 d-flex align-items-center flex-row-reverse"><span>Click to remove</span><span class="icon icon-click-radial"></span></div>';
+        n = n + '<div class="col-6 d-flex align-items-center"><span class="icon icon-drag"></span><span>Drag to reorder</span></div>';
+    n = n + '</div>';
+    n = n + '<div id="import_mnemonics" class="mnemonics clickable bordered bordered-green select-none d-block"></div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
     n = n + '<div class="d-flex"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Import <span class="icon icon-right-arrow"></span></button></div>';
     n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("import_word").addEventListener("click", import_word);
     document.getElementById("import_mnemonics").addEventListener("click", remove_imported_word);
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
 
     let import_mnemonics_el = document.getElementById("import_mnemonics");
-    Sortable.create(import_mnemonics_el, {
+    import_mnemonic_sortable = Sortable.create(import_mnemonics_el, {
+        dataIdAttr: 'data-id',
         easing: "cubic-bezier(1, 0, 0, 1)",
         animation: 150,
         invertSwap: true,
         emptyInsertThreshold: 100,
         onUpdate: function (evt) {
-            import_mnemonics_array.swapItems(evt.oldIndex, evt.newIndex)
-
             refresh_imported_mnemonics();
-
             check_mnemonics()
         },
+        onChoose: function (evt) {
+            evt.item.classList.add('selected')
+            document.getElementById("import_mnemonics").classList.add('dragging')
+        },
+        onUnchoose: function (evt) {
+            evt.item.classList.remove('selected')
+            document.getElementById("import_mnemonics").classList.remove('dragging')
+        }
     });
 
     anime({
@@ -881,50 +929,59 @@ function import_word() {
     let input = document.getElementById("keyword").value;
     document.getElementById("keyword").value = ''
 
-    // max 24 words
-    if(!input || import_mnemonics_array.length >= 24) {
+    if(!input) {
         return false;
     }
 
     input.split(',').forEach(function(val, index) {
         val.split(' ').forEach(function(word, index) {
             if(word) {
+                // max 24 words
+                if(import_mnemonic_array.length >= 24) {
+                    return false;
+                }
                 // maximum word length is 8
-                import_mnemonics_array.push(word.trim().substring(0,8))
+                refresh_imported_mnemonics(word.trim().substring(0,8));
             }
         });
     });
-
-    refresh_imported_mnemonics();
-
+    
     check_mnemonics()
 }
 function remove_imported_word(e) {
     let word_el = e.target
     let index = word_el.dataset.index
-    let word = import_mnemonics_array[index];
+    let word = import_mnemonic_array[index];
 
     if(!word) {
         return false;
     }
 
-    import_mnemonics_array.splice(import_mnemonics_array.indexOf(import_mnemonics_array[index]), 1)
-
-    refresh_imported_mnemonics();
+    refresh_imported_mnemonics(index, 'remove');
 
     check_mnemonics()
 }
-function refresh_imported_mnemonics() {
+function refresh_imported_mnemonics(word = null, action = 'add') {
+    import_mnemonic_array = import_mnemonic_sortable.toArray()
+
+    if(word && action === 'add') {
+        import_mnemonic_array.push(word)
+    } else if(word && action === 'remove') {
+        // word is index in this case
+        let index = word
+        import_mnemonic_array.splice(import_mnemonic_array.indexOf(import_mnemonic_array[index]), 1)
+    }
+    
     let import_mnemonics = '';
-    import_mnemonics_array.forEach(function(val, index) {
-        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="icon icon-hashtag"></span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+    import_mnemonic_array.forEach(function(val, index) {
+        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block" data-id="'+val+'"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove d-flex align-items-center" data-index="'+index+'"><span class="icon-close"></span></span></div></div>';
     })
 
     document.getElementById("import_mnemonics").innerHTML = import_mnemonics;
 }
 function check_mnemonics() {
     let m = ''
-    import_mnemonics_array.forEach(function(word, index) {
+    import_mnemonic_array.forEach(function(word, index) {
         m = m + ' ' + word.trim();
     });
     m = m.trim()
@@ -941,7 +998,7 @@ function check_mnemonics() {
 }
 // function to validate the seed phrase and eventually store the imported account
 function importkeysvalidation() {
-    const m = import_mnemonics_array.join(' ');
+    const m = import_mnemonic_array.join(' ');
     const isValidMnemonic = util_crypto.mnemonicValidate(m);
     if (!isValidMnemonic) {
         importkeys("", "Invalid Mnemonic Seed");
@@ -958,7 +1015,7 @@ function storekeys(obj, callback) {
     // check for password fields
     const pwd = document.getElementById('password').value;
     // let description=document.getElementById('description').value; // TODO: add option to set description
-    let description = 'test';
+    let description = 'Main Account';
     if (typeof callback === 'undefined') {
         callback = newkeys;
     }
@@ -1057,14 +1114,20 @@ function finish_keys() {
     sessionStorage.removeItem('finish_message');
     let n = '<div id="full_page">';
     n = n + '<div class="content full-content">';
-    n = n + '<div id="success_icon" class="text-center w-100 text-green mb-3" style="margin-top: 85px"><span class="icon-huge icon-success"></span></div>';
+    n = n + '<div id="success_icon" class="text-center w-100 text-green"><span class="icon-huge icon-success"></span></div>';
     n = n + '<h1 id="heading_text" class="text-center">Successfully '+message+' wallet</h1>';
-    n = n + '<p id="message_text" class="text-center text-gray mb-5">Congratulations, your new wallet is ready to use.</p>';
-    n = n + '<p class="text-center"><button id="gotodashboard" type="button" class="btn btn-primary">Finish</button></p>';
+    n = n + '<p id="message_text" class="text-center text-gray">Congratulations, your new wallet is ready to use.</p>';
+    if(message === 'created') {
+        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-plus me-2"></span>Create another wallet</button></p>';
+    } else {
+        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-import me-2"></span>Import another wallet</button></p>';
+    }
+    n = n + '<p class="text-center"><button id="gotodashboard" type="button" class="btn btn-primary mt-2">View Portfolio</button></p>';
     n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
+    document.getElementById("another_wallet").addEventListener("click", wallet_create);
     document.getElementById("gotodashboard").addEventListener("click", dashboard);
 
     anime({
@@ -1094,12 +1157,21 @@ function finish_keys() {
     });
 
     anime({
+        targets: '#another_wallet',
+        translateX: [-40, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 600,
+        delay: 1600,
+    });
+
+    anime({
         targets: '#gotodashboard',
         translateX: [-50, 0],
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 600,
-        delay: 1600,
+        delay: 2000,
     });
 
     refresh_account();
@@ -1127,7 +1199,7 @@ function dashboard(){
                 n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
                 n=n+'<div id="current_wallet" class="d-flex align-items-center">';
                     n=n+'<div class="identicon">'+ic+'</div>';
-                    n=n+'<div class="info"><span class="desc">Wallet A</span><span>'+currentaccount.substring(0,14)+'...</span></div>';
+                    n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
                     n=n+'<span class="icon icon-down-arrow"></span>';
                 n=n+'</div>';
             n=n+'</div>';
@@ -1372,7 +1444,7 @@ function signin(domain){
             n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
             n=n+'<div id="current_wallet" class="d-flex align-items-center">';
                 n=n+'<div class="identicon">'+ic+'</div>';
-                n=n+'<div class="info"><span class="desc">Wallet A</span><span>'+currentaccount.substring(0,14)+'...</span></div>';
+                n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
                 n=n+'<span class="icon icon-down-arrow"></span>';
             n=n+'</div>';
         n=n+'</div>';
