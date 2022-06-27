@@ -9,7 +9,9 @@ let mnemonic='';
 let mnemonic_array=[];
 let shuffled_mnemonic_array=[];
 let user_mnemonic_array=[];
-let import_mnemonics_array=[];
+let user_mnemonic_sortable = [];
+let import_mnemonic_array=[];
+let import_mnemonic_sortable=[];
 let apiv='';
 let currentaccount='';
 let balancev=0;
@@ -662,7 +664,6 @@ function confirm_secret_phrase_screen() {
                     n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
                 })
             n = n + '</div>';
-            // n = n + '<h3 class="mt-2 mb-2">Secret phrase words</h3>';
             n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
@@ -675,22 +676,23 @@ function confirm_secret_phrase_screen() {
     document.getElementById("continue_new_key").addEventListener("click", set_password_screen);
 
     let user_mnemonics_el = document.getElementById("user_mnemonics");
-    Sortable.create(user_mnemonics_el, {
+    user_mnemonic_sortable = Sortable.create(user_mnemonics_el, {
+        dataIdAttr: 'data-id',
         easing: "cubic-bezier(1, 0, 0, 1)",
         animation: 150,
         invertSwap: true,
         emptyInsertThreshold: 100,
         onUpdate: function (evt) {
-            user_mnemonic_array.swapItems(evt.oldIndex, evt.newIndex)
-
             refresh_user_mnemonics()
             check_words()
         },
         onChoose: function (evt) {
             evt.item.classList.add('selected')
+            document.getElementById("user_mnemonics").classList.add('dragging')
         },
         onUnchoose: function (evt) {
             evt.item.classList.remove('selected')
+            document.getElementById("user_mnemonics").classList.remove('dragging')
         }
     });
 
@@ -726,17 +728,26 @@ function add_word(e) {
         return false;
     }
 
-    user_mnemonic_array.push(word)
     shuffled_mnemonic_array.splice(shuffled_mnemonic_array.indexOf(shuffled_mnemonic_array[index]), 1)
 
-    refresh_user_mnemonics()
+    refresh_user_mnemonics(word)
 
     check_words()
 }
-function refresh_user_mnemonics() {
+function refresh_user_mnemonics(word = null, action = 'add') {
+    user_mnemonic_array = user_mnemonic_sortable.toArray()
+    
+    if(word && action === 'add') {
+        user_mnemonic_array.push(word)
+    } else if(word && action === 'remove') {
+        // word is index in this case
+        let index = word
+        user_mnemonic_array.splice(user_mnemonic_array.indexOf(user_mnemonic_array[index]), 1)
+    }
+
     let user_mnemonics = '';
     user_mnemonic_array.forEach(function(val, index) {
-        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+        user_mnemonics = user_mnemonics + '<div class="word col-3 d-inline-block" data-id="'+val+'"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove d-flex align-items-center" data-index="'+index+'"><span class="icon-close"></span></span></div></div>';
     })
 
     let shuffled_mnemonics = '';
@@ -757,9 +768,8 @@ function remove_user_word(e) {
     }
 
     shuffled_mnemonic_array.push(word)
-    user_mnemonic_array.splice(user_mnemonic_array.indexOf(user_mnemonic_array[index]), 1)
 
-    refresh_user_mnemonics();
+    refresh_user_mnemonics(index, 'remove');
 
     check_words()
 }
@@ -860,7 +870,7 @@ function check_password() {
 }
 // import existing keys
 function importkeys() {
-    import_mnemonics_array = []
+    import_mnemonic_array = []
     let n = '<div id="full_page">';
     n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Import Wallet</h3></div>';
     n = n + '<div class="content">';
@@ -884,23 +894,23 @@ function importkeys() {
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
 
     let import_mnemonics_el = document.getElementById("import_mnemonics");
-    Sortable.create(import_mnemonics_el, {
+    import_mnemonic_sortable = Sortable.create(import_mnemonics_el, {
+        dataIdAttr: 'data-id',
         easing: "cubic-bezier(1, 0, 0, 1)",
         animation: 150,
         invertSwap: true,
         emptyInsertThreshold: 100,
         onUpdate: function (evt) {
-            import_mnemonics_array.swapItems(evt.oldIndex, evt.newIndex)
-
             refresh_imported_mnemonics();
-
             check_mnemonics()
         },
         onChoose: function (evt) {
             evt.item.classList.add('selected')
+            document.getElementById("import_mnemonics").classList.add('dragging')
         },
         onUnchoose: function (evt) {
             evt.item.classList.remove('selected')
+            document.getElementById("import_mnemonics").classList.remove('dragging')
         }
     });
 
@@ -927,45 +937,51 @@ function import_word() {
         val.split(' ').forEach(function(word, index) {
             if(word) {
                 // max 24 words
-                if(import_mnemonics_array.length >= 24) {
+                if(import_mnemonic_array.length >= 24) {
                     return false;
                 }
                 // maximum word length is 8
-                import_mnemonics_array.push(word.trim().substring(0,8))
+                refresh_imported_mnemonics(word.trim().substring(0,8));
             }
         });
     });
-
-    refresh_imported_mnemonics();
-
+    
     check_mnemonics()
 }
 function remove_imported_word(e) {
     let word_el = e.target
     let index = word_el.dataset.index
-    let word = import_mnemonics_array[index];
+    let word = import_mnemonic_array[index];
 
     if(!word) {
         return false;
     }
 
-    import_mnemonics_array.splice(import_mnemonics_array.indexOf(import_mnemonics_array[index]), 1)
-
-    refresh_imported_mnemonics();
+    refresh_imported_mnemonics(index, 'remove');
 
     check_mnemonics()
 }
-function refresh_imported_mnemonics() {
+function refresh_imported_mnemonics(word = null, action = 'add') {
+    import_mnemonic_array = import_mnemonic_sortable.toArray()
+
+    if(word && action === 'add') {
+        import_mnemonic_array.push(word)
+    } else if(word && action === 'remove') {
+        // word is index in this case
+        let index = word
+        import_mnemonic_array.splice(import_mnemonic_array.indexOf(import_mnemonic_array[index]), 1)
+    }
+    
     let import_mnemonics = '';
-    import_mnemonics_array.forEach(function(val, index) {
-        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove" data-index="'+index+'"><span class="icon-close-circle"></span></span></div></div>';
+    import_mnemonic_array.forEach(function(val, index) {
+        import_mnemonics = import_mnemonics + '<div class="word col-3 d-inline-block" data-id="'+val+'"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span><span class="remove d-flex align-items-center" data-index="'+index+'"><span class="icon-close"></span></span></div></div>';
     })
 
     document.getElementById("import_mnemonics").innerHTML = import_mnemonics;
 }
 function check_mnemonics() {
     let m = ''
-    import_mnemonics_array.forEach(function(word, index) {
+    import_mnemonic_array.forEach(function(word, index) {
         m = m + ' ' + word.trim();
     });
     m = m.trim()
@@ -982,7 +998,7 @@ function check_mnemonics() {
 }
 // function to validate the seed phrase and eventually store the imported account
 function importkeysvalidation() {
-    const m = import_mnemonics_array.join(' ');
+    const m = import_mnemonic_array.join(' ');
     const isValidMnemonic = util_crypto.mnemonicValidate(m);
     if (!isValidMnemonic) {
         importkeys("", "Invalid Mnemonic Seed");
