@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!skip_intro) {
             welcome_screen();
         } else {
-            home_screen();
+            wallet_create();
         }
     }
 
@@ -132,7 +132,7 @@ function welcome_screen() {
     n=n+'<div class="browser-wallet">BROWSER WALLET</div>';
     n=n+'<button type="button" class="btn btn-primary" id="getstarted">Get started<span class="icon icon-right-arrow"></span></button>';
     document.getElementById("root").innerHTML = n;
-    document.getElementById("getstarted").addEventListener("click", home_screen);
+    document.getElementById("getstarted").addEventListener("click", wallet_create);
 
     anime({
         targets: '.bitgreen-svg path',
@@ -193,8 +193,14 @@ function hide_init() {
         document.getElementById("init_screen").classList.add("inactive")
     }, 1200)
 }
-function home_screen() {
+function wallet_create() {
     localStorage.setItem("skip_intro", true);
+
+    let ic = '';
+    if (currentaccount.length > 0) {
+        // refresh the identicon
+        ic = jdenticon.toSvg(currentaccount, 30);
+    }
 
     let n='<div id="heading">';
         n=n+'<div id="menu" class="d-flex align-items-center">';
@@ -212,6 +218,13 @@ function home_screen() {
             n=n+'</div>';
             n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
                 n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
+                if (currentaccount.length > 0) {
+                    n=n+'<div id="current_wallet" class="d-flex align-items-center">';
+                        n=n+'<div class="identicon">'+ic+'</div>';
+                        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
+                        n=n+'<span class="icon icon-down-arrow"></span>';
+                    n=n+'</div>';
+                }
             n=n+'</div>';
         n=n+'</div>';
             n=n+'<div class="content row">';
@@ -594,7 +607,7 @@ function newkeys(obj, error) {
     document.getElementById("copy_seed").addEventListener("click", copy_seed);
     document.getElementById("agree_new_key").addEventListener("change", agree_new_key);
     document.getElementById("continue_new_key").addEventListener("click", confirm_secret_phrase_screen);
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
 
     anime({
         targets: '.icon-alert',
@@ -617,7 +630,7 @@ function newkeys(obj, error) {
 }
 async function copy_seed() {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
-    alert("Secret phrase words copied to clipboard!");
+    alert("Secret phrase copied to your clipboard!");
 }
 function agree_new_key() {
     let agree = document.getElementById("agree_new_key");
@@ -639,20 +652,24 @@ function confirm_secret_phrase_screen() {
         n = n + '<div class="content">';
             n = n + '<h2>Confirm secret phrase</h2>';
             n = n + '<p class="text-gray pb-2">Confirm the secret phrase from the previous screen, with each phrase in the correct order.</p>';
+            n = n + '<div id="user_mnemonics" class="mnemonics clickable bordered bordered-green select-none d-block"></div>';
+            n = n + '<div id="mnemonics_info" class="text-gray d-flex align-items-center">';
+                n = n + '<div class="col-6 d-flex align-items-center flex-row-reverse p-0"><span>Click to add/remove</span><span class="icon icon-click-radial"></span></div>';
+                n = n + '<div class="col-6 d-flex align-items-center"><span class="icon icon-drag"></span><span>Drag to reorder</span></div>';
+            n = n + '</div>';
             n = n + '<div id="shuffled_mnemonics" class="mnemonics clickable select-none d-block mt-2">';
                 shuffled_mnemonic_array.forEach(function(val, index) {
                     n = n + '<div class="word col-3 d-inline-block" data-index="'+index+'"><div class="badge bg-secondary"><span class="text col">'+val+'</span></div></div>';
                 })
             n = n + '</div>';
-            n = n + '<h3 class="mt-2 mb-2">Secret phrase words</h3>';
-            n = n + '<div id="user_mnemonics" class="mnemonics clickable bordered select-none d-block"></div>';
+            // n = n + '<h3 class="mt-2 mb-2">Secret phrase words</h3>';
             n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("shuffled_mnemonics").addEventListener("click", add_word);
     document.getElementById("user_mnemonics").addEventListener("click", remove_user_word);
     document.getElementById("continue_new_key").addEventListener("click", set_password_screen);
@@ -776,7 +793,7 @@ function set_password_screen() {
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("password").addEventListener("keyup", check_password);
     document.getElementById("password_repeat").addEventListener("keyup", check_password);
     document.getElementById("set_password").addEventListener("click", storekeys);
@@ -850,15 +867,18 @@ function importkeys() {
     n = n + '<h2>Enter secret phrase</h2>';
     n = n + '<p class="text-gray pb-2">Enter an existing secret phrase to import that wallet. Each phrase must be in the correct sequence.</p>';
     n = n + '<div class="form-group"><div class="input-group"><input id="keyword" type="text" class="form-control ps-3" placeholder="keyword"><span class="input-group-text p-0"><button id="import_word" type="button" class="btn btn-secondary">Add <span class="icon icon-right-arrow"></span></button></span></div></div>';
-    n = n + '<p class="text-gray pt-2 pb-2">Tap to remove, drag to reorder.</p>';
-    n = n + '<div id="import_mnemonics" class="mnemonics clickable bordered select-none d-block"></div>';
+    n = n + '<div id="mnemonics_info" class="text-gray d-flex align-items-center">';
+        n = n + '<div class="col-6 d-flex align-items-center flex-row-reverse"><span>Click to remove</span><span class="icon icon-click-radial"></span></div>';
+        n = n + '<div class="col-6 d-flex align-items-center"><span class="icon icon-drag"></span><span>Drag to reorder</span></div>';
+    n = n + '</div>';
+    n = n + '<div id="import_mnemonics" class="mnemonics clickable bordered bordered-green select-none d-block"></div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
     n = n + '<div class="d-flex"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Import <span class="icon icon-right-arrow"></span></button></div>';
     n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("goback").addEventListener("click", home_screen);
+    document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("import_word").addEventListener("click", import_word);
     document.getElementById("import_mnemonics").addEventListener("click", remove_imported_word);
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
@@ -1078,14 +1098,20 @@ function finish_keys() {
     sessionStorage.removeItem('finish_message');
     let n = '<div id="full_page">';
     n = n + '<div class="content full-content">';
-    n = n + '<div id="success_icon" class="text-center w-100 text-green mb-3" style="margin-top: 85px"><span class="icon-huge icon-success"></span></div>';
+    n = n + '<div id="success_icon" class="text-center w-100 text-green"><span class="icon-huge icon-success"></span></div>';
     n = n + '<h1 id="heading_text" class="text-center">Successfully '+message+' wallet</h1>';
-    n = n + '<p id="message_text" class="text-center text-gray mb-5">Congratulations, your new wallet is ready to use.</p>';
-    n = n + '<p class="text-center"><button id="gotodashboard" type="button" class="btn btn-primary">Finish</button></p>';
+    n = n + '<p id="message_text" class="text-center text-gray">Congratulations, your new wallet is ready to use.</p>';
+    if(message === 'created') {
+        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-plus me-2"></span>Create another wallet</button></p>';
+    } else {
+        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-import me-2"></span>Import another wallet</button></p>';
+    }
+    n = n + '<p class="text-center"><button id="gotodashboard" type="button" class="btn btn-primary mt-2">View Portfolio</button></p>';
     n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
+    document.getElementById("another_wallet").addEventListener("click", wallet_create);
     document.getElementById("gotodashboard").addEventListener("click", dashboard);
 
     anime({
@@ -1115,12 +1141,21 @@ function finish_keys() {
     });
 
     anime({
+        targets: '#another_wallet',
+        translateX: [-40, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 600,
+        delay: 1600,
+    });
+
+    anime({
         targets: '#gotodashboard',
         translateX: [-50, 0],
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 600,
-        delay: 1600,
+        delay: 2000,
     });
 
     refresh_account();
