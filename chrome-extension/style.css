@@ -810,6 +810,12 @@ label.label {
     height: 40px;
     margin-bottom: 30px;
 }
+#transaction_info .wallet .right {
+    padding-left: 8px;
+}
+#transaction_info .wallet .right .address {
+    font-size: 12px;
+}
 #transaction_info .dot {
     display: block;
     position: relative;
