@@ -200,6 +200,7 @@ label.label {
     border-radius: 0;
     box-shadow: none !important;
     padding-left: 0;
+    background-color: #FFFFFF !important;
 }
 .form-group .input-group-text {
     background-color: transparent;
@@ -856,6 +857,34 @@ label.label {
 }
 #transaction_info .dot.dot-green .dot-line {
     background-color: #9ECC00;
+}
+#qrcode {
+    position: relative;
+    padding: 16px;
+    border: 3px solid #779900;
+    margin: 16px 16px 32px;
+}
+#qrcode * {
+    position: relative;
+    z-index: 999;
+}
+#qrcode:after {
+    position: absolute;
+    content: " ";
+    top: -5px;
+    left: 32px;
+    width: calc(100% - 64px);
+    height: calc(100% + 10px);
+    background-color: #FFFFFF;
+}
+#qrcode:before {
+    position: absolute;
+    content: " ";
+    top: 32px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% - 64px);
+    background-color: #FFFFFF;
 }
 .notification {
     background: #FFFFFF !important;
