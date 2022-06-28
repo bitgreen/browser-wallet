@@ -23,7 +23,8 @@
 body {
     font-family: 'Clash Grotesk Regular', sans-serif;
     width: 400px;
-    height: 600px;
+    min-height: 600px;
+    height: 100%;
     color: #061C00;
     font-size: 14px;
     line-height: 14px;
@@ -244,6 +245,7 @@ label.label {
     width: 100%;
     height: 100%;
     padding: 0;
+    overflow: hidden;
 }
 
 .bitgreen-svg {
@@ -432,6 +434,7 @@ label.label {
     background-color: #F8F8F9;
 }
 .button-item.tab-item {
+    opacity: 0;
     margin-bottom: 8px;
 }
 .button-item.tab-item .icon {
@@ -473,7 +476,7 @@ label.label {
 }
 #full_page .content {
     width: 100%;
-    height: 540px;
+    height: 580px;
     padding: 16px;
     background-color: #ffffff;
     color: #ffffff;
@@ -481,7 +484,7 @@ label.label {
     overflow-x: hidden;
 }
 #full_page .content.full-content {
-    height: 600px;
+    height: 620px;
 }
 #full_page .content .icon-huge {
     font-size: 53px;
@@ -615,10 +618,10 @@ label.label {
 #full_page #message_text {
     margin-bottom: 100px;
 }
-#full_page .content .footer {
+.footer {
     width: 370px;
-    height: 65px;
-    position: absolute;
+    min-height: 65px;
+    position: fixed;
     bottom: 0;
     left: auto;
     right: auto;
@@ -719,4 +722,131 @@ label.label {
 }
 #app_info .right {
     padding: 8px 16px 8px 0;
+}
+#choose_token {
+    padding: 16px;
+    border: 1px solid #D5D6DA !important;
+    border-radius: 0;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
+    margin: 16px 0;
+}
+#choose_token .icon {
+    font-size: 24px;
+    margin: 0 8px;
+}
+#choose_token .name {
+    font-size: 18px;
+    margin: 0 12px;
+    font-weight: 500;
+    font-style: normal;
+}
+#choose_quantity {
+    margin-bottom: 8px;
+}
+#choose_quantity .col-4 {
+    padding: 0 16px 0 0;
+}
+#choose_quantity #amount {
+    text-align: center;
+    width: 100%;
+    padding: .375rem .75rem;
+}
+#choose_quantity #amount::-webkit-outer-spin-button,
+#choose_quantity #amount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+#choose_quantity input[type=range] {
+    width: 100%;
+    margin-top: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #C0FF00 0%, #C0FF00 0%, #F8F8F9 0%, #F8F8F9 100%);
+    -webkit-appearance: none;
+}
+#choose_quantity input[type=range]::-webkit-slider-thumb {
+    height: 24px;
+    width: 24px;
+    background: #FFFFFF;
+    -webkit-appearance: none;
+    box-shadow: 0 4px 8px -2px rgba(17, 20, 30, 0.1), 0 2px 4px -2px rgba(17, 20, 30, 0.06);
+    border-radius: 12px;
+}
+#review_transaction {
+    padding: 16px;
+    margin-bottom: 32px;
+    color: #061C00;
+}
+#review_transaction .token {
+    padding-left: 32px;
+}
+#review_transaction .estimated_fees {
+    padding-right: 32px;
+}
+#review_transaction .amount {
+    font-family: 'Clash Grotesk Medium', sans-serif;
+    font-size: 26px;
+
+    padding: 0 1px 4px;
+}
+#review_transaction .decimals {
+    font-family: 'Clash Grotesk Regular', sans-serif;
+    font-size: 14px;
+
+    letter-spacing: -0.05em;
+}
+#review_transaction .dollar {
+    font-family: 'Clash Grotesk Medium', sans-serif;
+    font-size: 14px;
+    padding-top: 2px;
+
+    letter-spacing: -0.05em;
+}
+#review_transaction .title {
+    margin-top: 6px;
+    font-family: 'Clash Grotesk Medium', sans-serif;
+    color: #667085;
+}
+#transaction_info .wallet {
+    height: 40px;
+    margin-bottom: 30px;
+}
+#transaction_info .dot {
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #B1B4BD;
+    text-align: center;
+    margin-top: -18px;
+}
+#transaction_info .dot:after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    content: " ";
+    background-color: #B1B4BD;
+    border-radius: 4px;
+}
+#transaction_info .dot .dot-line {
+    position: absolute;
+    bottom: 15px;
+    left: 6px;
+    width: 2px;
+    height: 55px;
+    content: " ";
+    background-color: #B1B4BD;
+    border-radius: 4px;
+}
+#transaction_info .dot.dot-green {
+    border: 1px solid #9ECC00;
+}
+#transaction_info .dot.dot-green:after {
+    background-color: #9ECC00;
+}
+#transaction_info .dot.dot-green .dot-line {
+    background-color: #9ECC00;
 }
