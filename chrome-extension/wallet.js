@@ -633,7 +633,23 @@ function newkeys(obj, error) {
 }
 async function copy_seed() {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
-    alert("Secret phrase copied to your clipboard!");
+
+    let notification = Toastify({
+        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Secret phrase copied to your clipboard! Keep it safe!</div></div>',
+        offset: {
+          y: 36
+        },
+        duration: 3000,
+        className: 'notification notification-info',
+        close: false,
+        stopOnFocus: false,
+        gravity: "top", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        escapeMarkup: false,
+        onClick: function(){
+            notification.hideToast()
+        }
+    }).showToast();
 }
 function agree_new_key() {
     let agree = document.getElementById("agree_new_key");
@@ -1291,17 +1307,6 @@ function dashboard(){
     });
 
     document.getElementById("send").addEventListener("click", send);
-
-    try {
-        // TODO: remove/replace
-        document.getElementById("buy").addEventListener("click", buy);
-        document.getElementById("send").addEventListener("click", send);
-        document.getElementById("staking").addEventListener("click", staking);
-        document.getElementById("copyaccount").addEventListener("click", clipboard_copy_account);
-        document.getElementById("idicon").addEventListener("click", manageaccounts);
-    } catch(e){
-        console.log("No identicon available",e);
-    }
 }
 // Manage accounts (create/import/delete)
 function manageaccounts(){
@@ -1378,7 +1383,7 @@ function setaccount(id){
 // function to show the form for sending funds (init)
 let transaction_amount = 0
 let transaction_recipient = ''
-function send(recipient = '', amount = 0) {
+async function send(recipient = '', amount = 0) {
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1440,6 +1445,7 @@ function send(recipient = '', amount = 0) {
     document.getElementById("range").addEventListener("input", sync_amount);
     document.getElementById("amount").addEventListener("input", sync_amount);
     document.getElementById("recipient").addEventListener("input", check_address);
+    document.getElementById("paste").addEventListener("click", paste_recipient);
     document.getElementById("go_review_transaction").addEventListener("click", review_transaction);
 
     check_address();
@@ -1500,6 +1506,43 @@ function check_address() {
 
 
 }
+async function paste_recipient() {
+    let address = await navigator.clipboard.readText()
+    let notification_class = 'notification notification-success'
+    let notification_icon = 'icon-success'
+    let notification_text = 'Recipient\'s address pasted successfully.'
+
+    try {
+        keyring.encodeAddress(
+            util.isHex(address)
+                ? util.hexToU8a(address)
+                : keyring.decodeAddress(address)
+        );
+
+        document.getElementById("recipient").value = address
+    } catch (error) {
+        notification_class = 'notification notification-error'
+        notification_icon = 'icon-alert'
+        notification_text = 'Please enter a valid recipient address.'
+    }
+
+    let notification = Toastify({
+        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon '+notification_icon+'"></span></div><div class="col-10">'+notification_text+'</div></div>',
+        offset: {
+            y: 50
+        },
+        duration: 3000,
+        className: notification_class,
+        close: false,
+        stopOnFocus: false,
+        gravity: "top", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        escapeMarkup: false,
+        onClick: function(){
+            notification.hideToast()
+        }
+    }).showToast();
+}
 // function to preview the form for sending funds
 function review_transaction() {
     let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
@@ -1547,6 +1590,11 @@ function review_transaction() {
     document.getElementById("root").innerHTML = n;
     document.getElementById("goback").addEventListener("click", send);
     document.getElementById("approve_transaction").addEventListener("click", transferfunds);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await transferfunds()
+        }
+    });
 }
 // function to show the form to sign-in
 function signin(domain){
@@ -1602,13 +1650,18 @@ function signin(domain){
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this request</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
         n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
     document.getElementById("signin").addEventListener("click", signinexecute);
     document.getElementById("backmain").addEventListener("click", dashboard);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await signinexecute()
+        }
+    });
 }
 // function to show the form to submit an extrisinc
 async function extrinsic(pallet,call,parameters,domain){
@@ -1910,7 +1963,8 @@ async function unstake(){
   }
 }
 // function to ask confirmation and submit the extrinsic
-async function transferfunds(){
+async function transferfunds() {
+    let notification_message = null;
     let accountrecipient = transaction_recipient
     let amount = transaction_amount
     let password = document.getElementById("password").value;
@@ -1925,14 +1979,14 @@ async function transferfunds(){
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot"></span></div>';
             n = n + '<div class="right col-11">';
                 n = n + '<h3 class="mb-1">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h3>';
-                n = n + '<span class="address text-gray">'+currentaccount+'...</span>';
+                n = n + '<span class="address text-gray">'+currentaccount+'</span>';
             n = n + '</div>';
         n = n + '</div>';
         n = n + '<div class="wallet w-100 d-flex align-items-center">';
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot dot-green"><span class="dot-line"></span></span></div>';
             n = n + '<div class="right col-11">';
                 n = n + '<h3 class="mb-1">Recipient</h3>';
-                n = n + '<span class="address text-gray">'+transaction_recipient+'...</span>';
+                n = n + '<span class="address text-gray">'+transaction_recipient+'</span>';
             n = n + '</div>';
         n = n + '</div>';
     n = n + '</div>';
@@ -1946,11 +2000,10 @@ async function transferfunds(){
         encrypted = localStorage.getItem("webwallet" + currentaccountid);
     }
 
-    console.log()
     if(password === '') {
-        alert("Password is wrong!")
+        notification_message = 'Password is wrong!';
     } else if(encrypted.length === 0) {
-        alert("The account has not a valid storage, please remove the extension and re-install it.");
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
     } else {
         // try to decrypt and get keypairsv with the keys pair
         let r = await decrypt_webwallet(encrypted,password);
@@ -1966,20 +2019,25 @@ async function transferfunds(){
                         )
                         // we know that data for system.ExtrinsicFailed is
                         .forEach(({ event: { data: [error, info] } }) => {
-                        if (error.isModule) {
-                            // for module errors, we have the section indexed, lookup
-                            const decoded = apiv.registry.findMetaError(error.asModule);
-                            const { docs, method, section } = decoded;
+                            if (error.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = apiv.registry.findMetaError(error.asModule);
+                                const { docs, method, section } = decoded;
 
-                            alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
-                        } else {
-                            // Other, CannotLookup, BadOrigin, no extra info
-                            alert('Error in transaction:'+error.toString());
-                        }
+                                notification_message = `Error in transaction: ${section}.${method}: ${docs.join(' ')}`;
+                            } else {
+                                // Other, CannotLookup, BadOrigin, no extra info
+                                notification_message = 'Error in transaction:'+error.toString();
+                            }
                         });
                     }
                 }
             );
+
+            if(notification_message) {
+                // something went wrong, display error and skip success screen
+                return;
+            }
 
             document.getElementById("root").innerHTML = n;
             document.getElementById("another_transaction").addEventListener("click", send);
@@ -2038,8 +2096,27 @@ async function transferfunds(){
                 delay: 2000,
             });
         } else {
-            alert("Password is wrong!")
+            notification_message = 'Password is wrong!';
         }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
     }
 }
 // function to submit the extrinsic
@@ -2091,54 +2168,77 @@ async function submitextrinsic(){
   }
 }
 // function to execute the signin
-async function signinexecute(){
-  let password=document.getElementById("password").value;
-  let domain=document.getElementById("domain").value;
-  let encrypted='';
-  // read the encrypted storage
-  if(localStorage.getItem("webwallet"+currentaccountid)){
-    encrypted=localStorage.getItem("webwallet"+currentaccountid);
-  }
-  if(encrypted.length==0){
-    alert("The account has not a valid storage, please remove the extension and re-install it.");
-  } else if(password.length==0) {
-      alert("Password is wrong!");
-    }else{
-    // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
-    if(r==true){
-      let n="Do you confirm the sign in?"
-      let r=confirm(n);
-      if(r==true){
-        // get current epoch time
-        let dt = new Date();
-        let timestamp = dt.getTime()
-        let message = timestamp.toString()+"#"+domain;
-        const signature = keyspairv.sign(util.stringToU8a(message));
-        //const isValid = keyspairv.verify(util.stringToU8a(message), signature, keyspairv.publicKey);
-        //const isValid=util_crypto.signatureVerify(util.stringToU8a(message), signature,keyspairv.address);
-        //const hexsignature=util.u8aToHex(signature);
-        //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
-        // return connection token
-        let cdt=new Date();
-        cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"message": message, "signature": util.u8aToHex(signature), "address": keyspairv.address, "publickey": util.u8aToHex(keyspairv.publicKey)};
-        //console.log("keypairv.address: ",keyspairv.address);
-        let asws=JSON.stringify(asw);
-        //console.log("asws: ",asws);
-        // Target the original caller
-        chrome.runtime.sendMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, (response) => {
-          console.log('Received web page data', response);
-        });
-        window.close();
-      }else{
-        alert("The signin has been cancelled!");
-      }
-    }else {
-      alert("Password is wrong!")
-      return;
+async function signinexecute() {
+    let notification_message = null;
+    let password = document.getElementById("password").value;
+    let domain = document.getElementById("domain").value;
+
+    let encrypted = '';
+    // read the encrypted storage
+    if (localStorage.getItem("webwallet" + currentaccountid)) {
+        encrypted = localStorage.getItem("webwallet" + currentaccountid);
     }
-  }
+    if (encrypted.length === 0) {
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
+    } else if (password.length === 0) {
+        notification_message = 'Password is wrong!';
+    } else {
+        // try to decrypt and get keypairsv with the keys pair
+        let r = await decrypt_webwallet(encrypted, password);
+        if (r === true) {
+            // get current epoch time
+            let dt = new Date();
+            let timestamp = dt.getTime()
+            let message = timestamp.toString() + "#" + domain;
+            const signature = keyspairv.sign(util.stringToU8a(message));
+            //const isValid = keyspairv.verify(util.stringToU8a(message), signature, keyspairv.publicKey);
+            //const isValid=util_crypto.signatureVerify(util.stringToU8a(message), signature,keyspairv.address);
+            //const hexsignature=util.u8aToHex(signature);
+            //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
+            // return connection token
+            let cdt = new Date();
+            cdt.setMonth(cdt.getMonth() + 1);
+            let asw = {
+                "message": message,
+                "signature": util.u8aToHex(signature),
+                "address": keyspairv.address,
+                "publickey": util.u8aToHex(keyspairv.publicKey)
+            };
+            //console.log("keypairv.address: ",keyspairv.address);
+            let asws = JSON.stringify(asw);
+            //console.log("asws: ",asws);
+            // Target the original caller
+            chrome.runtime.sendMessage({
+                type: "BROWSER-WALLET",
+                command: "signinanswer",
+                message: asws
+            }, (response) => {
+                console.log('Received web page data', response);
+            });
+            window.close();
+        } else {
+            notification_message = 'Password is wrong!';
+        }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
+    }
 }
 // function to decrypt the web wallet and return a key pair
 async function decrypt_webwallet(encrypted,pwd){
