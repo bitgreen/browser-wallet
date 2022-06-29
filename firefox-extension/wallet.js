@@ -81,6 +81,10 @@ document.addEventListener('DOMContentLoaded', async function () {
               const domain=DOMPurify.sanitize(params.get("domain"));
               extrinsic(pallet, call, parameters, domain);
             }
+            // portfolio
+            if (command == "portfolio") {
+                dashboard();
+            }
         } else {
             // main dashboard
             dashboard();
@@ -169,7 +173,7 @@ function welcome_screen() {
         targets: '#getstarted',
         easing: 'linear',
         duration: 400,
-        delay: 3600,
+        delay: 4400,
         translateY: [40, 0],
         opacity: [0, 1]
     });
@@ -633,7 +637,23 @@ function newkeys(obj, error) {
 }
 async function copy_seed() {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
-    alert("Secret phrase copied to your clipboard!");
+
+    let notification = Toastify({
+        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Secret phrase copied to your clipboard! Keep it safe!</div></div>',
+        offset: {
+          y: 44
+        },
+        duration: 3000,
+        className: 'notification notification-info',
+        close: false,
+        stopOnFocus: false,
+        gravity: "top", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        escapeMarkup: false,
+        onClick: function(){
+            notification.hideToast()
+        }
+    }).showToast();
 }
 function agree_new_key() {
     let agree = document.getElementById("agree_new_key");
@@ -1223,7 +1243,7 @@ function dashboard(){
     n=n+'<div id="bordered_content" class="smaller">';
         n=n+'<div id="top_items" class="row">';
         n=n+'<div class="col-6 p-0 d-flex flex-row-reverse"><div class=""><button id="send" type="button" class="btn btn-primary me-2">Send <span class="icon icon-right-up-arrow ms-2"></span></button></div></div>';
-        n=n+'<div class="col-6 p-0 d-flex"><button type="button" class="btn btn-primary ms-2"><span class="icon icon-left-down-arrow me-2"></span> Receive</button></div>';
+        n=n+'<div class="col-6 p-0 d-flex"><button id="receive" type="button" class="btn btn-primary ms-2"><span class="icon icon-left-down-arrow me-2"></span> Receive</button></div>';
         n=n+'</div>';
         n=n+'<div class="row">';
             n=n+'<div class="col-4 pe-1">';
@@ -1291,17 +1311,7 @@ function dashboard(){
     });
 
     document.getElementById("send").addEventListener("click", send);
-
-    try {
-        // TODO: remove/replace
-        document.getElementById("buy").addEventListener("click", buy);
-        document.getElementById("send").addEventListener("click", send);
-        document.getElementById("staking").addEventListener("click", staking);
-        document.getElementById("copyaccount").addEventListener("click", clipboard_copy_account);
-        document.getElementById("idicon").addEventListener("click", manageaccounts);
-    } catch(e){
-        console.log("No identicon available",e);
-    }
+    document.getElementById("receive").addEventListener("click", receive);
 }
 // Manage accounts (create/import/delete)
 function manageaccounts(){
@@ -1378,7 +1388,7 @@ function setaccount(id){
 // function to show the form for sending funds (init)
 let transaction_amount = 0
 let transaction_recipient = ''
-function send(recipient = '', amount = 0) {
+async function send(recipient = '', amount = 0) {
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1440,6 +1450,7 @@ function send(recipient = '', amount = 0) {
     document.getElementById("range").addEventListener("input", sync_amount);
     document.getElementById("amount").addEventListener("input", sync_amount);
     document.getElementById("recipient").addEventListener("input", check_address);
+    document.getElementById("paste").addEventListener("click", paste_recipient);
     document.getElementById("go_review_transaction").addEventListener("click", review_transaction);
 
     check_address();
@@ -1500,6 +1511,43 @@ function check_address() {
 
 
 }
+async function paste_recipient() {
+    let address = await navigator.clipboard.readText()
+    let notification_class = 'notification notification-success'
+    let notification_icon = 'icon-success'
+    let notification_text = 'Recipient\'s address pasted successfully.'
+
+    try {
+        keyring.encodeAddress(
+            util.isHex(address)
+                ? util.hexToU8a(address)
+                : keyring.decodeAddress(address)
+        );
+
+        document.getElementById("recipient").value = address
+    } catch (error) {
+        notification_class = 'notification notification-error'
+        notification_icon = 'icon-alert'
+        notification_text = 'Please enter a valid recipient address.'
+    }
+
+    let notification = Toastify({
+        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon '+notification_icon+'"></span></div><div class="col-10">'+notification_text+'</div></div>',
+        offset: {
+            y: 50
+        },
+        duration: 3000,
+        className: notification_class,
+        close: false,
+        stopOnFocus: false,
+        gravity: "top", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        escapeMarkup: false,
+        onClick: function(){
+            notification.hideToast()
+        }
+    }).showToast();
+}
 // function to preview the form for sending funds
 function review_transaction() {
     let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
@@ -1547,6 +1595,92 @@ function review_transaction() {
     document.getElementById("root").innerHTML = n;
     document.getElementById("goback").addEventListener("click", send);
     document.getElementById("approve_transaction").addEventListener("click", transferfunds);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await transferfunds()
+        }
+    });
+}
+async function receive() {
+    let ic = '';
+    if (currentaccount.length > 0) {
+        // refresh the identicon
+        ic = jdenticon.toSvg(currentaccount, 30);
+    }
+
+    let n='<div id="heading">';
+    n=n+'<div id="menu" class="d-flex align-items-center">';
+    n=n+'<div class="col-4 p-0">';
+    n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
+    n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
+    n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
+    n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
+    n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
+    n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
+    n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
+    n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
+    n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
+    n=n+'</svg>';
+    n=n+'</div>';
+    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
+    n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
+    if (currentaccount.length > 0) {
+        n=n+'<div id="current_wallet" class="d-flex align-items-center">';
+        n=n+'<div class="identicon">'+ic+'</div>';
+        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
+        n=n+'<span class="icon icon-down-arrow"></span>';
+        n=n+'</div>';
+    }
+    n=n+'</div>';
+    n=n+'</div>';
+    n=n+'<div class="content row">';
+    n=n+'<h1 class="text-center text-white">Receive or deposit</h1>';
+    n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div class="d-flex align-items-center justify-content-center">';
+            n=n+'<div id="qrcode"></div>';
+            n=n+'<div class="col text-center">';
+                n=n+'<button id="copy_qrcode" class="btn btn-text"><span class="icon icon-left icon-copy"></span> Copy QR</button>';
+            n=n+'</div>';
+        n=n+'</div>';
+        n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+
+    document.getElementById("copy_qrcode").addEventListener("click", copy_address);
+    document.getElementById("copy_address").addEventListener("click", copy_address);
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: currentaccount,
+        width: 160,
+        height: 160,
+        colorDark : "#061C00",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.L
+    });
+}
+async function copy_address() {
+    await navigator.clipboard.writeText(currentaccount);
+
+    let notification = Toastify({
+        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Account copied to clipboard.</div></div>',
+        offset: {
+            y: 44
+        },
+        duration: 3000,
+        className: 'notification notification-info',
+        close: false,
+        stopOnFocus: false,
+        gravity: "top", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        escapeMarkup: false,
+        onClick: function(){
+            notification.hideToast()
+        }
+    }).showToast();
 }
 // function to show the form to sign-in
 function signin(domain){
@@ -1602,13 +1736,18 @@ function signin(domain){
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this request</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
         n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
     document.getElementById("signin").addEventListener("click", signinexecute);
     document.getElementById("backmain").addEventListener("click", dashboard);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await signinexecute()
+        }
+    });
 }
 // function to show the form to submit an extrisinc
 async function extrinsic(pallet,call,parameters,domain){
@@ -1910,7 +2049,8 @@ async function unstake(){
   }
 }
 // function to ask confirmation and submit the extrinsic
-async function transferfunds(){
+async function transferfunds() {
+    let notification_message = null;
     let accountrecipient = transaction_recipient
     let amount = transaction_amount
     let password = document.getElementById("password").value;
@@ -1925,14 +2065,14 @@ async function transferfunds(){
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot"></span></div>';
             n = n + '<div class="right col-11">';
                 n = n + '<h3 class="mb-1">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h3>';
-                n = n + '<span class="address text-gray">'+currentaccount+'...</span>';
+                n = n + '<span class="address text-gray">'+currentaccount+'</span>';
             n = n + '</div>';
         n = n + '</div>';
         n = n + '<div class="wallet w-100 d-flex align-items-center">';
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot dot-green"><span class="dot-line"></span></span></div>';
             n = n + '<div class="right col-11">';
                 n = n + '<h3 class="mb-1">Recipient</h3>';
-                n = n + '<span class="address text-gray">'+transaction_recipient+'...</span>';
+                n = n + '<span class="address text-gray">'+transaction_recipient+'</span>';
             n = n + '</div>';
         n = n + '</div>';
     n = n + '</div>';
@@ -1946,11 +2086,10 @@ async function transferfunds(){
         encrypted = localStorage.getItem("webwallet" + currentaccountid);
     }
 
-    console.log()
     if(password === '') {
-        alert("Password is wrong!")
+        notification_message = 'Password is wrong!';
     } else if(encrypted.length === 0) {
-        alert("The account has not a valid storage, please remove the extension and re-install it.");
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
     } else {
         // try to decrypt and get keypairsv with the keys pair
         let r = await decrypt_webwallet(encrypted,password);
@@ -1966,20 +2105,25 @@ async function transferfunds(){
                         )
                         // we know that data for system.ExtrinsicFailed is
                         .forEach(({ event: { data: [error, info] } }) => {
-                        if (error.isModule) {
-                            // for module errors, we have the section indexed, lookup
-                            const decoded = apiv.registry.findMetaError(error.asModule);
-                            const { docs, method, section } = decoded;
+                            if (error.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = apiv.registry.findMetaError(error.asModule);
+                                const { docs, method, section } = decoded;
 
-                            alert(`Error in transaction: ${section}.${method}: ${docs.join(' ')}`);
-                        } else {
-                            // Other, CannotLookup, BadOrigin, no extra info
-                            alert('Error in transaction:'+error.toString());
-                        }
+                                notification_message = `Error in transaction: ${section}.${method}: ${docs.join(' ')}`;
+                            } else {
+                                // Other, CannotLookup, BadOrigin, no extra info
+                                notification_message = 'Error in transaction:'+error.toString();
+                            }
                         });
                     }
                 }
             );
+
+            if(notification_message) {
+                // something went wrong, display error and skip success screen
+                return;
+            }
 
             document.getElementById("root").innerHTML = n;
             document.getElementById("another_transaction").addEventListener("click", send);
@@ -2038,8 +2182,27 @@ async function transferfunds(){
                 delay: 2000,
             });
         } else {
-            alert("Password is wrong!")
+            notification_message = 'Password is wrong!';
         }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
     }
 }
 // function to submit the extrinsic
@@ -2091,54 +2254,77 @@ async function submitextrinsic(){
   }
 }
 // function to execute the signin
-async function signinexecute(){
-  let password=document.getElementById("password").value;
-  let domain=document.getElementById("domain").value;
-  let encrypted='';
-  // read the encrypted storage
-  if(localStorage.getItem("webwallet"+currentaccountid)){
-    encrypted=localStorage.getItem("webwallet"+currentaccountid);
-  }
-  if(encrypted.length==0){
-    alert("The account has not a valid storage, please remove the extension and re-install it.");
-  } else if(password.length==0) {
-      alert("Password is wrong!");
-    }else{
-    // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
-    if(r==true){
-      let n="Do you confirm the sign in?"
-      let r=confirm(n);
-      if(r==true){
-        // get current epoch time
-        let dt = new Date();
-        let timestamp = dt.getTime()
-        let message = timestamp.toString()+"#"+domain;
-        const signature = keyspairv.sign(util.stringToU8a(message));
-        //const isValid = keyspairv.verify(util.stringToU8a(message), signature, keyspairv.publicKey);
-        //const isValid=util_crypto.signatureVerify(util.stringToU8a(message), signature,keyspairv.address);
-        //const hexsignature=util.u8aToHex(signature);
-        //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
-        // return connection token
-        let cdt=new Date();
-        cdt.setMonth(cdt.getMonth() + 1);
-        let asw={"message": message, "signature": util.u8aToHex(signature), "address": keyspairv.address, "publickey": util.u8aToHex(keyspairv.publicKey)};
-        //console.log("keypairv.address: ",keyspairv.address);
-        let asws=JSON.stringify(asw);
-        //console.log("asws: ",asws);
-        // Target the original caller
-        chrome.runtime.sendMessage({ type: "BROWSER-WALLET", command: "signinanswer",message: asws}, (response) => {
-          console.log('Received web page data', response);
-        });
-        window.close();
-      }else{
-        alert("The signin has been cancelled!");
-      }
-    }else {
-      alert("Password is wrong!")
-      return;
+async function signinexecute() {
+    let notification_message = null;
+    let password = document.getElementById("password").value;
+    let domain = document.getElementById("domain").value;
+
+    let encrypted = '';
+    // read the encrypted storage
+    if (localStorage.getItem("webwallet" + currentaccountid)) {
+        encrypted = localStorage.getItem("webwallet" + currentaccountid);
     }
-  }
+    if (encrypted.length === 0) {
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
+    } else if (password.length === 0) {
+        notification_message = 'Password is wrong!';
+    } else {
+        // try to decrypt and get keypairsv with the keys pair
+        let r = await decrypt_webwallet(encrypted, password);
+        if (r === true) {
+            // get current epoch time
+            let dt = new Date();
+            let timestamp = dt.getTime()
+            let message = timestamp.toString() + "#" + domain;
+            const signature = keyspairv.sign(util.stringToU8a(message));
+            //const isValid = keyspairv.verify(util.stringToU8a(message), signature, keyspairv.publicKey);
+            //const isValid=util_crypto.signatureVerify(util.stringToU8a(message), signature,keyspairv.address);
+            //const hexsignature=util.u8aToHex(signature);
+            //console.log(`signature ${util.u8aToHex(signature)} is ${isValid ? 'valid' : 'invalid'}`);
+            // return connection token
+            let cdt = new Date();
+            cdt.setMonth(cdt.getMonth() + 1);
+            let asw = {
+                "message": message,
+                "signature": util.u8aToHex(signature),
+                "address": keyspairv.address,
+                "publickey": util.u8aToHex(keyspairv.publicKey)
+            };
+            //console.log("keypairv.address: ",keyspairv.address);
+            let asws = JSON.stringify(asw);
+            //console.log("asws: ",asws);
+            // Target the original caller
+            chrome.runtime.sendMessage({
+                type: "BROWSER-WALLET",
+                command: "signinanswer",
+                message: asws
+            }, (response) => {
+                console.log('Received web page data', response);
+            });
+            window.close();
+        } else {
+            notification_message = 'Password is wrong!';
+        }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
+    }
 }
 // function to decrypt the web wallet and return a key pair
 async function decrypt_webwallet(encrypted,pwd){
@@ -2200,13 +2386,6 @@ async function decrypt_webwallet(encrypted,pwd){
     
   }
 
-}
-
-//copy the account to the clipboard
-async function clipboard_copy_account(){
-  document.getElementById("currentaccount").select();
-  document.execCommand("copy");
-  alert("Account Copied: "+currentaccount);
 }
 // function to get the amount bonded for staking
 async function get_amount_bonded(address){

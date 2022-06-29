@@ -133,7 +133,41 @@ chrome.runtime.onMessage.addListener(
             // to keep open the channel for the answer we returns true
             return true;
         }
-
+        if (request.command === "portfolio"){
+            let top=0;
+            let left=0;
+            let width=0;
+            let height=0;
+            // get windows properties
+            chrome.windows.getCurrent(function(win)
+            {
+                width = win.width;
+                height = win.height;
+                top = win.top;
+                left = win.left;
+                // adjust position
+                left=left+width-400;
+                top=top+80;
+            });
+            // create new windows for the extrinsic
+            let url='window.html?command=portfolio';
+            chrome.tabs.create({
+                url: chrome.runtime.getURL(url),
+                active: false
+            }, function(tab) {
+                // After the tab has been created, open a window to inject the tab
+                chrome.windows.create({
+                    tabId: tab.id,
+                    type: 'popup',
+                    focused: true,
+                    width: 400,
+                    height: 620,
+                    left,
+                    top
+                    // incognito, top, left, ...
+                });
+            });
+        }
         // manage answer to sign-in command
         if (request.command === "signinanswer"){
             console.log("signinanswer",request.message);

@@ -200,6 +200,7 @@ label.label {
     border-radius: 0;
     box-shadow: none !important;
     padding-left: 0;
+    background-color: #FFFFFF !important;
 }
 .form-group .input-group-text {
     background-color: transparent;
@@ -453,6 +454,7 @@ label.label {
 }
 
 #full_page {
+    position: absolute;
     width: 100%;
     height: 100%;
 }
@@ -476,7 +478,7 @@ label.label {
 }
 #full_page .content {
     width: 100%;
-    height: 580px;
+    height: calc(100% - 60px);
     padding: 16px;
     background-color: #ffffff;
     color: #ffffff;
@@ -855,4 +857,56 @@ label.label {
 }
 #transaction_info .dot.dot-green .dot-line {
     background-color: #9ECC00;
+}
+#qrcode {
+    position: relative;
+    padding: 16px;
+    border: 3px solid #779900;
+    margin: 16px 16px 32px;
+}
+#qrcode * {
+    position: relative;
+    z-index: 999;
+}
+#qrcode:after {
+    position: absolute;
+    content: " ";
+    top: -5px;
+    left: 32px;
+    width: calc(100% - 64px);
+    height: calc(100% + 10px);
+    background-color: #FFFFFF;
+}
+#qrcode:before {
+    position: absolute;
+    content: " ";
+    top: 32px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% - 64px);
+    background-color: #FFFFFF;
+}
+.notification {
+    background: #FFFFFF !important;
+    border: 1px solid #F8F8F9 !important;
+    box-shadow: 0 3px 4px rgb(17 20 30 / 0.18), 0 2px 3px rgb(17 20 30 / 0.08) !important;
+    border-radius: 8px !important;
+    max-width: 100% !important;
+    width: calc(100% - 24px) !important;
+    color: #061C00 !important;
+    padding: 24px 12px !important;
+    font-size: 16px !important;
+    user-select: none !important;
+}
+.notification .icon {
+    font-size: 26px;
+}
+.notification.notification-info .icon {
+    color: #026AA2;
+}
+.notification.notification-success .icon {
+    color: #9ECC00;
+}
+.notification.notification-error .icon {
+    color: #F53400;
 }
