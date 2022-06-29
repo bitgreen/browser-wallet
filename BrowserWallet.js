@@ -31,6 +31,11 @@
             window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
             this.waitforsignature();
         }
+        // send BBB
+        portfolio() {
+            // call Extension for the transfer
+            window.postMessage({ type: "BROWSER-WALLET", command: "portfolio" }, window.location.href);
+        }
         // private function to wait for signature
         waitforsignature() {
             // exit for timeout of 60 seconds

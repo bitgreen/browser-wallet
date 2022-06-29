@@ -14,6 +14,7 @@
   <button id="transferbutton">Transfer 1 Bitgreen</button>
   <button id="signinbutton">Sign In</button>
   <button id="kyc">Bond - Submit KYC</button>
+  <button id="portfolio">Porfolio</button>
   <!-- include hte BitgreenWallet library-->
   <script type="text/javascript" src="BrowserWallet.js"></script>
   <script>
@@ -37,6 +38,11 @@
         //BW.tx("bonds","createChangeKyc",'{"accountid":"5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","info":"{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"}',false);
         BW.tx("bonds","createChangeKyc",'["5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"]',false);
     },false);
+    let button4 = document.getElementById("portfolio");
+    button4.addEventListener("click", () =>{
+      // send 1 BBB to a recipient
+      BW.portfolio();
+    }, false);
     // function called after the signing
     function callbackauthentication(){
         // the token is stored in the session variable "bitgreen".

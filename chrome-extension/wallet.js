@@ -81,6 +81,10 @@ document.addEventListener('DOMContentLoaded', async function () {
               const domain=DOMPurify.sanitize(params.get("domain"));
               extrinsic(pallet, call, parameters, domain);
             }
+            // portfolio
+            if (command == "portfolio") {
+                dashboard();
+            }
         } else {
             // main dashboard
             dashboard();
