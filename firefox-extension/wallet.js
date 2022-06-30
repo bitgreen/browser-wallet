@@ -18,6 +18,7 @@ let balancev=0;
 let balancevf='0.00';
 let currentaccountid='1';
 let accountdescription="Main Account";
+let current_account_transactions=[];
 let skip_intro = false;
 
 refresh_account();
@@ -45,6 +46,10 @@ function refresh_account() {
     // get web wallet account
     if (localStorage.getItem("webwalletaccount" + currentaccountid)) {
         currentaccount = localStorage.getItem("webwalletaccount" + currentaccountid);
+    }
+    // get account transactions
+    if (localStorage.getItem("webwalletaccounttransactions" + currentaccountid)) {
+        current_account_transactions = JSON.parse(localStorage.getItem("webwalletaccounttransactions" + currentaccountid));
     }
 }
 
@@ -83,11 +88,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             // portfolio
             if (command == "portfolio") {
-                dashboard();
+                dashboard(true);
             }
         } else {
             // main dashboard
-            dashboard();
+            dashboard(true);
         }
         //otherwise we let to create a new account
     } else {
@@ -546,42 +551,6 @@ async function change_network() {
     balancev=0;
     balancevf=new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(balancev);
   }
-  // document.getElementById("balance").innerHTML = '<h1>'+balancevf+' BBB</h1>';
-
-  // get transactions and create the table
-  let dt = new Date();
-  let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
-  let url= 'https://testnet.bitgreen.org/api/transactions?account='+currentaccount+'&dts=2022-01-01+00:00:00&dte='+dtm;
-  let n='';
-  fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    n=n+'<table class="table table-striped table-hover">';
-    n=n+'<thead>';
-    n=n+'<tr>';
-    n=n+'<th scope="col">Transactions</th>';
-    n=n+'<th scope="col">Amount</th>';
-    n=n+'</tr>';
-    n=n+'</thead>';
-    n=n+'<tbody>';
-    n=n+'<tr></tr>';
-    for(r in data.transactions){
-      n=n+'<tr>';
-      const dt=data['transactions'][r]['created_at'];
-      const amt=data['transactions'][r]['amount']/1000000000000000000;
-      const amtf=new Intl.NumberFormat().format(amt);
-      // n=n+'<td>'+dt.substr(0,10)+'</dt>';
-      n=n+'<td></dt>';
-      n=n+'<td align ="right">'+amtf+' BBB</dt>';
-      n=n+'</tr>';
-    }
-    try{
-      document.getElementById("transactions").innerHTML = n;
-    } 
-    catch(e){
-      console.log(e);
-    }
-  }); 
 }
 // generate keys pair
 function newkeys(obj, error) {
@@ -725,10 +694,6 @@ function confirm_secret_phrase_screen() {
         duration: 150,
         delay: function(el, i) { return i * 50 },
     });
-}
-Array.prototype.swapItems = function(a, b){
-    this[a] = this.splice(b, 1, this[a])[0];
-    return this;
 }
 function shuffleArray(array) {
     let cloned_array = [...array];
@@ -1199,9 +1164,11 @@ function finish_keys() {
     change_network(); // we need  this to refresh balance; todo: make separate function for that
 }
 // Main Dashboard 
-function dashboard(){
+function dashboard(extend_delay = false){
     // refresh the identicon
     let ic = jdenticon.toSvg(currentaccount, 30);
+
+    extend_delay = (typeof extend_delay === 'boolean' ? extend_delay : false)
 
     let n='<div id="heading" class="bigger">';
         n=n+'<div id="menu" class="d-flex align-items-center">';
@@ -1245,50 +1212,83 @@ function dashboard(){
         n=n+'<div class="col-6 p-0 d-flex flex-row-reverse"><div class=""><button id="send" type="button" class="btn btn-primary me-2">Send <span class="icon icon-right-up-arrow ms-2"></span></button></div></div>';
         n=n+'<div class="col-6 p-0 d-flex"><button id="receive" type="button" class="btn btn-primary ms-2"><span class="icon icon-left-down-arrow me-2"></span> Receive</button></div>';
         n=n+'</div>';
-        n=n+'<div class="row">';
-            n=n+'<div class="col-4 pe-1">';
-                n=n+'<div id="bbb_token" class="button-item button-gray tab-item">';
+        n=n+'<div class="row" style="margin-top: -6px;">';
+            n=n+'<div class="col-4 pe-2">';
+                n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-b"></span>';
-                n=n+'<div class="title">BBB TOKEN</div>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">BBB TOKEN</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
             n=n+'<div class="col-4 ps-1 pe-1">';
-                n=n+'<div id="bbb_token" class="button-item button-gray tab-item">';
+                n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-carbon" style="color: #9ECC00;"></span>';
-                n=n+'<div class="title">CARBON CREDITS</div>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">CARBON CREDITS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
-            n=n+'<div class="col-4 ps-1">';
-                n=n+'<div id="bbb_token" class="button-item button-gray tab-item">';
+            n=n+'<div class="col-4 ps-2">';
+                n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-retired" style="color: #9ECC00;"></span>';
-                n=n+'<div class="title">RETIRED CREDITS</div>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">RETIRED CREDITS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
         n=n+'</div>';
         n=n+'<div class="row">';
-            n=n+'<div class="col-4 pe-1">';
-                n=n+'<div id="bbb_token" class="button-item button-gray tab-item">';
+            n=n+'<div class="col-4 pe-2">';
+                n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-impact" style="color: #026AA2;"></span>';
-                n=n+'<div class="title">IMPACT BONDS</div>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">IMPACT BONDS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
             n=n+'<div class="col-4 ps-1 pe-1">';
-                n=n+'<div id="bbb_token" class="button-item button-gray tab-item">';
+                n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-other" style="color: #D5D6DA;"></span>';
-                n=n+'<div class="title">OTHER</div>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">OTHER</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
         n=n+'</div>';
     n=n+'</div>';
+    n=n+'<div id="main_footer" class="d-flex">';
+        n=n+'<div id="go_dashboard" class="item active d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
+        n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
+        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
+    n=n+'</div>';
+    n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
+
+    anime({
+        targets: '#portfolio .info h1',
+        translateX: [-20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 300,
+        delay: extend_delay ? 1000 : 200
+    });
+
+    anime({
+        targets: '#portfolio .info p',
+        translateX: [-20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 300,
+        delay: function(el, i) { return i * 200 + (extend_delay ? 1200 : 400) },
+    });
+
+    anime({
+        targets: '#portfolio .info p .icon',
+        translateX: [20, 0],
+        scale: [1.5, 1],
+        easing: 'easeInOutSine',
+        duration: 300,
+        delay: function(el, i) { return i * 200 + (extend_delay ? 1200 : 400) },
+    });
 
     anime({
         targets: '#bordered_content',
         duration: 800,
         translateY: [50, 0],
         easing: 'linear',
-        delay: 800
+        delay: extend_delay ? 800 : 0
     });
 
     anime({
@@ -1297,7 +1297,7 @@ function dashboard(){
         translateX: [20, 0],
         opacity: [0, 1],
         easing: 'linear',
-        delay: function(el, i) { return i * 300 + 1400 },
+        delay: function(el, i) { return i * 300 + (extend_delay ? 1400 : 600) },
     });
 
     anime({
@@ -1306,12 +1306,241 @@ function dashboard(){
         translateX: [-20, 0],
         opacity: [0, 1],
         // duration: 300,
-        duration: function(el, i) { return 600 - i * 100 },
-        delay: function(el, i) { return i * 200 + 800 },
+        duration: function(el, i) { return (extend_delay ? 600 : 400) - i * (extend_delay ? 100 : 50) },
+        delay: function(el, i) { return i * 200 + (extend_delay ? 800 : 200) },
     });
 
     document.getElementById("send").addEventListener("click", send);
     document.getElementById("receive").addEventListener("click", receive);
+    document.getElementById("go_dashboard").addEventListener("click", dashboard);
+    document.getElementById("go_transactions").addEventListener("click", send);
+    document.getElementById("go_history").addEventListener("click", transactions_history);
+}
+async function transactions_history() {
+    let ic = '';
+    if (currentaccount.length > 0) {
+        // refresh the identicon
+        ic = jdenticon.toSvg(currentaccount, 30);
+    }
+
+    let n='<div id="heading">';
+    n=n+'<div id="menu" class="d-flex align-items-center">';
+    n=n+'<div class="col-4 p-0">';
+    n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
+    n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
+    n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
+    n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
+    n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
+    n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
+    n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
+    n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
+    n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
+    n=n+'</svg>';
+    n=n+'</div>';
+    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
+    n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
+    if (currentaccount.length > 0) {
+        n=n+'<div id="current_wallet" class="d-flex align-items-center">';
+        n=n+'<div class="identicon">'+ic+'</div>';
+        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
+        n=n+'<span class="icon icon-down-arrow"></span>';
+        n=n+'</div>';
+    }
+    n=n+'</div>';
+    n=n+'</div>';
+    n=n+'<div class="content row">';
+    n=n+'<h1 class="text-center text-white">Transaction history</h1>';
+    n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="transactions"></div>';
+        n=n+'<div id="transactions_end"></div>';
+    n=n+'</div>';
+    n=n+'<div id="main_footer" class="d-flex">';
+        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
+        n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
+        n=n+'<div id="go_history" class="item active d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("go_dashboard").addEventListener("click", dashboard);
+    document.getElementById("go_transactions").addEventListener("click", send);
+    document.getElementById("go_history").addEventListener("click", transactions_history);
+
+    let transactions = await get_transactions();
+
+    n='';
+    if(transactions.length > 0) {
+        for(let r in transactions) {
+            let transaction = transactions[r];
+            let created_at = Date.parse(transaction['created_at']);
+            created_at = new Date(created_at)
+            let amount = transaction['amount']/1000000000000000000;
+            amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(amount);
+            let formatted_amount = amount.split('.')
+            let transfer_element = '';
+            let amount_element = '';
+
+            if(transaction.sender.toLowerCase() === currentaccount.toLowerCase()) {
+                amount_element = '<div class="token-amount align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount token-amount">-'+formatted_amount[0]+'<span class="d-inline-block digits text-gray">.'+formatted_amount[1]+'</span></span><span class="desc d-block w-100">TOKENS</span></div>';
+                transfer_element = '<div class="col align-items-center"><span class="d-block w-100 icon icon-right-up-arrow icon-error"></span><span class="desc d-block w-100 text-gray">SENT</span></div>';
+            } else {
+                amount_element = '<div class="token-amount align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount token-amount">+'+formatted_amount[0]+'<span class="d-inline-block digits text-gray">.'+formatted_amount[1]+'</span></span><span class="desc d-block w-100">TOKENS</span></div>';
+                transfer_element = '<div class="col align-items-center"><span class="d-block w-100 icon icon-left-down-arrow icon-success"></span><span class="desc d-block w-100 text-gray">RECEIVED</span></div>';
+            }
+
+            // backup design (text: transfer; icon: arrows)
+            // amount_element = '<div class="token-amount align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount token-amount">'+formatted_amount[0]+'<span class="d-inline-block digits text-gray">.'+formatted_amount[1]+'</span></span><span class="desc d-block w-100">TOKENS</span></div>';
+            // transfer_element = '<div class="col align-items-center"><span class="d-block w-100 icon icon-arrows icon-success"></span><span class="desc d-block w-100 text-gray">RECEIVED</span></div>';
+
+            n=n+'<div class="button-item d-flex align-items-center" data-hash="'+transaction.hash+'">';
+            n=n+'<div class="transaction-info d-flex align-items-center">';
+                n=n+'<div class="col align-items-center"><span class="d-block w-100 amount">'+created_at.getDate()+'</span><span class="desc d-block w-100">'+created_at.toLocaleString('default', { month: 'short' })+'</span></div>';
+                n=n+transfer_element;
+                n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-cicircle"></span><span class="desc d-block w-100 text-gray">BBB</span></div>';
+                n=n+amount_element;
+            n=n+'</div>';
+            n=n+'<span class="icon icon-small icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+        }
+    } else {
+        n='<h3>No transactions yet.</h3>'
+    }
+
+    document.getElementById("transactions").innerHTML = n;
+    document.querySelectorAll("#transactions .button-item").forEach(t => {
+        t.addEventListener("click", transaction)
+    })
+
+        anime({
+        targets: '#transactions .button-item',
+        translateX: [-20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 250,
+        delay: function(el, i) { return (i * 150) > 1200 ? 1200 : (i * 150) },
+    });
+}
+async function get_transactions() {
+    let dt = new Date();
+    let dtm=dt.toISOString().slice(0, 19).replace('T', '+');
+    let url= 'http://157.90.126.46:3000/transactions?account='+currentaccount+'&date_start=2022-05-01&date_end='+dtm;
+
+    current_account_transactions = []
+
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            for(let r in data.transactions) {
+                let transaction = data['transactions'][r];
+
+                current_account_transactions.push(transaction)
+            }
+
+            localStorage.setItem("webwalletaccounttransactions" + currentaccountid, JSON.stringify(current_account_transactions));
+
+            return current_account_transactions;
+        });
+}
+function transaction(e) {
+    let ic = '';
+    if (currentaccount.length > 0) {
+        // refresh the identicon
+        ic = jdenticon.toSvg(currentaccount, 30);
+    }
+
+    let transaction_hash = this.dataset.hash
+    let transaction = current_account_transactions.find(({ hash }) => hash === transaction_hash)
+    let transaction_amount = transaction.amount/1000000000000000000;
+
+    let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
+    let total_value = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.67).split('.')
+    let estimated_fees = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.65*0.046).split('.')
+
+    let created_at = Date.parse(transaction.created_at);
+    created_at = new Date(created_at)
+
+    let n = '<div id="full_page">';
+    n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Transaction detail</h3></div>';
+    n = n + '<div class="content">';
+        n = n + '<div id="review_transaction" class="d-flex">';
+            n = n + '<div class="token col-4 align-items-center justify-content-center">';
+                n = n + '<div class="w-100 d-flex align-items-center justify-content-center"><span class="amount">'+formatted_amount[0]+'</span><span class="decimals">.'+formatted_amount[1]+'</span></div>';
+                n = n + '<div class="title w-100 text-center">BBB</div>';
+            n = n + '</div>';
+            n = n + '<div class="col-4 align-items-center justify-content-center">';
+                n = n + '<div class="w-100 d-flex align-items-center justify-content-center"><span class="dollar">$</span><span class="amount">'+total_value[0]+'</span><span class="decimals">.'+total_value[1]+'</span></div>';
+                n = n + '<div class="title w-100 text-center">TOTAL VALUE</div>';
+            n = n + '</div>';
+            n = n + '<div class="estimated_fees col-4 align-items-center justify-content-center">';
+                n = n + '<div class="w-100 d-flex align-items-center justify-content-center"><span class="dollar">$</span><span class="amount">'+estimated_fees[0]+'</span><span class="decimals">.'+estimated_fees[1]+'</span></div>';
+                n = n + '<div class="title w-100 text-center">EST. FEES</div>';
+            n = n + '</div>';
+        n = n + '</div>';
+        n = n + '<p class="text-center mb-2"><a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet.bitgreen.org#/explorer/query/'+transaction.block_number+'" class="btn btn-text" target="_blank">View in explorer <span class="icon icon-right-up-arrow ms-2"></span></a></p>';
+        n = n + '<p class="text-grotesk text-center text-bold text-gray mb-2">'+created_at.toLocaleString('default', { weekday: 'long' })+', '+created_at.getDate()+' '+created_at.toLocaleString('default', { month: 'long' })+' '+created_at.getFullYear()+' ('+timeSince(created_at)+')</p>';
+        n = n + '<div id="transaction_info">';
+            n = n + '<div class="wallet w-100 d-flex align-items-center">';
+                n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot"></span></div>';
+                n = n + '<div class="right col-11">';
+                    // n = n + '<h3 class="mb-1">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h3>';
+                    n = n + '<h3 class="mb-1">From</h3>'; // TODO: read account name from storage
+                    n = n + '<span class="address text-gray">'+transaction.sender+'</span>';
+                n = n + '</div>';
+            n = n + '</div>';
+            n = n + '<div class="wallet w-100 d-flex align-items-center">';
+                n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot dot-green"><span class="dot-line"></span></span></div>';
+                n = n + '<div class="right col-11">';
+                    n = n + '<h3 class="mb-1">Recipient</h3>'; // TODO: or read here, depending if send or receive
+                    n = n + '<span class="address text-gray">'+transaction.recipient+'</span>';
+                n = n + '</div>';
+            n = n + '</div>';
+        n = n + '</div>';
+    n = n + '</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", transactions_history);
+}
+function timeSince(date) {
+    let seconds = Math.floor((new Date() - date) / 1000);
+
+    let interval = seconds / 31536000;
+    if (interval > 1 && interval < 2) {
+        return "last year";
+    }
+    if (interval > 1) {
+        return Math.floor(interval) + " years ago";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1 && interval < 2) {
+        return "last month";
+    }
+    if (interval > 1) {
+        return Math.floor(interval) + " months ago";
+    }
+    interval = seconds / 86400;
+    if (interval > 1 && interval < 2) {
+        return "yesterday";
+    }
+    if (interval > 1) {
+        return Math.floor(interval) + " days ago";
+    }
+    interval = seconds / 3600;
+    if (interval > 1 && interval < 2) {
+        return "hour ago";
+    }
+    if (interval > 1) {
+        return Math.floor(interval) + " hours ago";
+    }
+    interval = seconds / 60;
+    if (interval > 1 && interval < 2) {
+        return "minute ago";
+    }
+    if (interval > 1) {
+        return Math.floor(interval) + " minutes ago";
+    }
+    return "moment ago";
 }
 // Manage accounts (create/import/delete)
 function manageaccounts(){
@@ -1441,9 +1670,14 @@ async function send(recipient = '', amount = 0) {
         n = n + '<div id="choose_token" class="d-flex align-items-sketch"><span class="icon icon-b"></span><div class="col d-flex align-items-center"><span class="name">BBB Token</span></div></div>';
         n = n + '<label class="label text-dark">Amount</label><div id="choose_quantity" class="d-flex mb-3"><div class="col-4"><div class="form-group"><input id="amount" type="number" class="form-control" value="'+amount+'"></div></div><div class="col-8"><div class="w-100 text-gray d-flex flex-row-reverse"><span>'+balancevf+' Available</span></div><input id="range" type="range" min="0" max="'+balancevf+'" step="0.0001" value="'+amount+'"></div></div>';
         n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
-        n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
+        n = n + '<div class="footer double-footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
+    n=n+'</div>';
+    n=n+'<div id="main_footer" class="d-flex">';
+        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
+        n=n+'<div id="go_transactions" class="item active d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
+        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
@@ -1452,6 +1686,8 @@ async function send(recipient = '', amount = 0) {
     document.getElementById("recipient").addEventListener("input", check_address);
     document.getElementById("paste").addEventListener("click", paste_recipient);
     document.getElementById("go_review_transaction").addEventListener("click", review_transaction);
+    document.getElementById("go_dashboard").addEventListener("click", dashboard);
+    document.getElementById("go_history").addEventListener("click", transactions_history);
 
     check_address();
     sync_amount();
@@ -1531,6 +1767,8 @@ async function paste_recipient() {
         notification_text = 'Please enter a valid recipient address.'
     }
 
+    check_address();
+
     let notification = Toastify({
         text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon '+notification_icon+'"></span></div><div class="col-10">'+notification_text+'</div></div>',
         offset: {
@@ -1551,8 +1789,8 @@ async function paste_recipient() {
 // function to preview the form for sending funds
 function review_transaction() {
     let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
-    let total_value = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.65).split('.')
-    let estimated_fees = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.65*0.16).split('.')
+    let total_value = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.67).split('.')
+    let estimated_fees = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.65*0.046).split('.')
 
     let n = '<div id="full_page">';
     n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Review transaction</h3></div>';
@@ -1647,11 +1885,19 @@ async function receive() {
         n=n+'</div>';
         n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
     n=n+'</div>';
+    n=n+'<div id="main_footer" class="d-flex">';
+        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
+        n=n+'<div id="go_transactions" class="item active d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
+        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
+    n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
 
     document.getElementById("copy_qrcode").addEventListener("click", copy_address);
     document.getElementById("copy_address").addEventListener("click", copy_address);
+
+    document.getElementById("go_dashboard").addEventListener("click", dashboard);
+    document.getElementById("go_history").addEventListener("click", transactions_history);
 
     new QRCode(document.getElementById("qrcode"), {
         text: currentaccount,

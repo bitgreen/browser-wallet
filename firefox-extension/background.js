@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(
                         type: 'popup',
                         focused: true,
                         width: 400,
-                        height: 620,
+                        height: 600,
                         left,
                         top
                         // incognito, top, left, ...
@@ -79,7 +79,7 @@ chrome.runtime.onMessage.addListener(
                         type: 'popup',
                         focused: true,
                         width: 400,
-                        height: 620,
+                        height: 600,
                         left,
                         top
                         // incognito, top, left, ...
@@ -118,7 +118,7 @@ chrome.runtime.onMessage.addListener(
                     type: 'popup',
                     focused: true,
                     width: 400,
-                    height: 620,
+                    height: 600,
                     left,
                     top
                     // incognito, top, left, ...
@@ -161,7 +161,7 @@ chrome.runtime.onMessage.addListener(
                     type: 'popup',
                     focused: true,
                     width: 400,
-                    height: 620,
+                    height: 600,
                     left,
                     top
                     // incognito, top, left, ...
