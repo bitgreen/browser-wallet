@@ -2550,8 +2550,8 @@ async function signinexecute() {
                 message: asws
             }, (response) => {
                 console.log('Received web page data', response);
+                window.close();
             });
-            window.close();
         } else {
             notification_message = 'Password is wrong!';
         }
