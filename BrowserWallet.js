@@ -31,7 +31,7 @@
             window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
             this.waitforsignature();
         }
-        // send BBB
+        // open portfolio
         portfolio() {
             // call Extension for the transfer
             window.postMessage({ type: "BROWSER-WALLET", command: "portfolio" }, window.location.href);

@@ -55,6 +55,8 @@ function refresh_account() {
 
 // add listeners for events (you cannot use onclick event in the extension)
 document.addEventListener('DOMContentLoaded', async function () {
+    hide_footer();
+
     // open connection
     await change_network();
     // network selection
@@ -109,6 +111,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 });
 function welcome_screen() {
+    hide_footer();
+
     // hide init screen
     anime({
         targets: '#init_screen',
@@ -205,6 +209,8 @@ function hide_init() {
     }, 1200)
 }
 function wallet_create() {
+    hide_footer(); // TODO: hide only when there is no wallets (init screen)
+
     localStorage.setItem("skip_intro", true);
 
     let ic = '';
@@ -554,6 +560,8 @@ async function change_network() {
 }
 // generate keys pair
 function newkeys(obj, error) {
+    hide_footer();
+
     let k = new keyring.Keyring({type: 'sr25519'});
     if (typeof error == 'undefined') {
         // generate mnemonic 24 words as key
@@ -637,6 +645,8 @@ function agree_new_key() {
     }
 }
 function confirm_secret_phrase_screen() {
+    hide_footer();
+
     shuffled_mnemonic_array = shuffleArray(mnemonic_array);
     user_mnemonic_array = [];
     let n = '<div id="full_page">';
@@ -769,6 +779,8 @@ function check_words() {
     }
 }
 function set_password_screen() {
+    hide_footer();
+
     let n = '<div id="full_page">';
     n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Create Wallet</h3></div>';
     n = n + '<div class="content">';
@@ -856,6 +868,8 @@ function check_password() {
 }
 // import existing keys
 function importkeys() {
+    hide_footer();
+
     import_mnemonic_array = []
     let n = '<div id="full_page">';
     n = n + '<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Import Wallet</h3></div>';
@@ -1093,6 +1107,8 @@ function storekeys(obj, callback) {
     finish_keys();
 }
 function finish_keys() {
+    hide_footer();
+
     let message = 'created'
     if(sessionStorage.getItem('finish_message') === 'imported') {
         message = 'imported';
@@ -1165,6 +1181,8 @@ function finish_keys() {
 }
 // Main Dashboard 
 function dashboard(extend_delay = false){
+    show_footer('dashboard', extend_delay);
+
     // refresh the identicon
     let ic = jdenticon.toSvg(currentaccount, 30);
 
@@ -1247,11 +1265,6 @@ function dashboard(extend_delay = false){
             n=n+'</div>';
         n=n+'</div>';
     n=n+'</div>';
-    n=n+'<div id="main_footer" class="d-flex">';
-        n=n+'<div id="go_dashboard" class="item active d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
-        n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
-        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
-    n=n+'</div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
@@ -1317,6 +1330,8 @@ function dashboard(extend_delay = false){
     document.getElementById("go_history").addEventListener("click", transactions_history);
 }
 async function transactions_history() {
+    show_footer('history');
+
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1357,16 +1372,8 @@ async function transactions_history() {
         n=n+'<div id="transactions"></div>';
         n=n+'<div id="transactions_end"></div>';
     n=n+'</div>';
-    n=n+'<div id="main_footer" class="d-flex">';
-        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
-        n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
-        n=n+'<div id="go_history" class="item active d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
-    n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("go_dashboard").addEventListener("click", dashboard);
-    document.getElementById("go_transactions").addEventListener("click", send);
-    document.getElementById("go_history").addEventListener("click", transactions_history);
 
     let transactions = await get_transactions();
 
@@ -1444,6 +1451,8 @@ async function get_transactions() {
         });
 }
 function transaction(e) {
+    hide_footer();
+
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1618,6 +1627,8 @@ function setaccount(id){
 let transaction_amount = 0
 let transaction_recipient = ''
 async function send(recipient = '', amount = 0) {
+    show_footer('transactions');
+
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1674,11 +1685,6 @@ async function send(recipient = '', amount = 0) {
             n = n + '<div class="d-flex"><button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
     n=n+'</div>';
-    n=n+'<div id="main_footer" class="d-flex">';
-        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
-        n=n+'<div id="go_transactions" class="item active d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
-        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
-    n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
     document.getElementById("range").addEventListener("input", sync_amount);
@@ -1686,8 +1692,6 @@ async function send(recipient = '', amount = 0) {
     document.getElementById("recipient").addEventListener("input", check_address);
     document.getElementById("paste").addEventListener("click", paste_recipient);
     document.getElementById("go_review_transaction").addEventListener("click", review_transaction);
-    document.getElementById("go_dashboard").addEventListener("click", dashboard);
-    document.getElementById("go_history").addEventListener("click", transactions_history);
 
     check_address();
     sync_amount();
@@ -1788,6 +1792,8 @@ async function paste_recipient() {
 }
 // function to preview the form for sending funds
 function review_transaction() {
+    hide_footer();
+
     let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
     let total_value = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.67).split('.')
     let estimated_fees = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(transaction_amount*2.65*0.046).split('.')
@@ -1840,6 +1846,8 @@ function review_transaction() {
     });
 }
 async function receive() {
+    show_footer('transactions');
+
     let ic = '';
     if (currentaccount.length > 0) {
         // refresh the identicon
@@ -1885,19 +1893,11 @@ async function receive() {
         n=n+'</div>';
         n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
     n=n+'</div>';
-    n=n+'<div id="main_footer" class="d-flex">';
-        n=n+'<div id="go_dashboard" class="item d-flex align-items-center justify-content-center"><span class="icon icon-b"></span></div>';
-        n=n+'<div id="go_transactions" class="item active d-flex align-items-center justify-content-center ms-2 me-2"><span class="icon icon-arrows"></span></div>';
-        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center"><span class="icon icon-history"></span></div>';
-    n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
 
     document.getElementById("copy_qrcode").addEventListener("click", copy_address);
     document.getElementById("copy_address").addEventListener("click", copy_address);
-
-    document.getElementById("go_dashboard").addEventListener("click", dashboard);
-    document.getElementById("go_history").addEventListener("click", transactions_history);
 
     new QRCode(document.getElementById("qrcode"), {
         text: currentaccount,
@@ -1930,6 +1930,8 @@ async function copy_address() {
 }
 // function to show the form to sign-in
 function signin(domain){
+    hide_footer();
+
     // refresh the identicon
     let ic = jdenticon.toSvg(currentaccount, 30);
 
@@ -2296,6 +2298,8 @@ async function unstake(){
 }
 // function to ask confirmation and submit the extrinsic
 async function transferfunds() {
+    hide_footer();
+
     let notification_message = null;
     let accountrecipient = transaction_recipient
     let amount = transaction_amount
@@ -2675,4 +2679,49 @@ async  function hexToString(hexString) {
       stringOut = stringOut + String.fromCharCode(tempAsciiCode);
   });
   return(stringOut);
+}
+function show_footer(active = '', extend_delay = false) {
+    let footer_el = document.getElementById("main_footer");
+
+    let n='<div id="go_dashboard" class="item d-flex align-items-center justify-content-center '+ (active === "dashboard" ? "active" : '') +'"><span class="icon icon-b"></span></div>';
+        n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2 '+ (active === "transactions" ? "active" : null) +'"><span class="icon icon-arrows"></span></div>';
+        n=n+'<div id="go_history" class="item d-flex align-items-center justify-content-center '+ (active === "history" ? "active" : '') +'"><span class="icon icon-history"></span></div>';
+
+    footer_el.innerHTML = n;
+
+    document.getElementById("go_dashboard").addEventListener("click", dashboard);
+    document.getElementById("go_history").addEventListener("click", transactions_history);
+
+    if(active !== 'transactions') {
+        document.getElementById("go_transactions").addEventListener("click", send);
+    }
+
+    if(!footer_el.classList.contains('visible')) {
+        anime({
+            targets: '#main_footer',
+            duration: 300,
+            translateY: [120, 0],
+            opacity: 1,
+            easing: 'linear',
+            delay: extend_delay ? 800 : 0
+        });
+    }
+
+    footer_el.classList.add('visible')
+}
+function hide_footer() {
+    let footer_el = document.getElementById("main_footer");
+
+    if(footer_el.classList.contains('visible')) {
+        anime({
+            targets: '#main_footer',
+            duration: 300,
+            translateY: [0, 120],
+            opacity: [1, 0],
+            easing: 'linear',
+            delay: 0
+        });
+    }
+
+    footer_el.classList.remove('visible')
 }
