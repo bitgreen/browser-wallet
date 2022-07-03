@@ -6,8 +6,8 @@ window.addEventListener("message", function(event) {
         console.log("[Alert] Message not coming from the same web page. Possible attack.")
         return;
     }
-    if (event.data.type && (event.data.type == "BROWSER-WALLET")) {        
-        // add the domain of origin to the message data 
+    if (event.data.type && (event.data.type == "BROWSER-WALLET")) {
+        // add the domain of origin to the message data
         let j=event.data;
         j.domain=event.origin;
         // send the message to the extension
@@ -15,7 +15,11 @@ window.addEventListener("message", function(event) {
             // Got an asynchronous response with the data from the background
             // set the session variable "BrowserWalletToken" with the answer
             // it used as the only communication way from the extension to the web page
-            sessionStorage.setItem("BrowserWalletToken",response);
+            if(j.command === 'check') {
+                sessionStorage.setItem("BrowserWalletInstalled", response.status === 'OK');
+            } else if(j.command === 'signin') {
+                sessionStorage.setItem("BrowserWalletToken", response);
+            }
         }); 
     } 
 }, false);

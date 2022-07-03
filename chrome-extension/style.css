@@ -724,6 +724,11 @@ label.label {
     background-color: #061C00;
     border-radius: 8px;
     padding: 8px;
+    opacity: 0;
+}
+#main_footer.visible {
+    display: block;
+    opacity: 1;
 }
 #main_footer .item {
     width: 44px;
