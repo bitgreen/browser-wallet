@@ -168,6 +168,11 @@ chrome.runtime.onMessage.addListener(
                 });
             });
         }
+        // check if extension is installed
+        if (request.command === "check"){
+            sendResponse({status: 'OK'});
+            // return true;
+        }
         // manage answer to sign-in command
         if (request.command === "signinanswer"){
             console.log("signinanswer",request.message);
