@@ -519,6 +519,7 @@ async function change_network() {
     }
    });
   // TODO set a green light
+    // TODO: export this as separate function, so it can be called separately
   // get balance and show it
   let { nonce, data: balance } = await apiv.query.system.account(currentaccount);
   if (parseInt(balance.free.toString())>0){
