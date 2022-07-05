@@ -1,0 +1,126 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?zf3bed');
+  src:  url('fonts/icomoon.eot?zf3bed#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?zf3bed') format('truetype'),
+    url('fonts/icomoon.woff?zf3bed') format('woff'),
+    url('fonts/icomoon.svg?zf3bed#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-right-2:before {
+  content: "\e91f";
+}
+.icon-click-radial:before {
+  content: "\e91b";
+}
+.icon-drag:before {
+  content: "\e91c";
+}
+.icon-other:before {
+  content: "\e912";
+}
+.icon-impact:before {
+  content: "\e913";
+}
+.icon-circle:before {
+  content: "\e911";
+}
+.icon-down-arrow:before {
+  content: "\e90f";
+}
+.icon-hashtag:before {
+  content: "\e90b";
+}
+.icon-dot:before {
+  content: "\e91e";
+}
+.icon-wallet:before {
+  content: "\e91d";
+}
+.icon-left-arrow:before {
+  content: "\e90c";
+}
+.icon-success:before {
+  content: "\e903";
+}
+.icon-unknown:before {
+  content: "\e919";
+}
+.icon-known:before {
+  content: "\e91a";
+}
+.icon-retired:before {
+  content: "\e914";
+}
+.icon-carbon:before {
+  content: "\e915";
+}
+.icon-alert:before {
+  content: "\e904";
+}
+.icon-ecosystem:before {
+  content: "\e905";
+}
+.icon-history:before {
+  content: "\e906";
+}
+.icon-b:before {
+  content: "\e916";
+}
+.icon-import:before {
+  content: "\e907";
+}
+.icon-copy:before {
+  content: "\e908";
+}
+.icon-cog:before {
+  content: "\e909";
+}
+.icon-plus:before {
+  content: "\e902";
+}
+.icon-close:before {
+  content: "\e90d";
+}
+.icon-check:before {
+  content: "\e90e";
+}
+.icon-password:before {
+  content: "\e901";
+}
+.icon-cicircle:before {
+  content: "\e920";
+}
+.icon-right-up-arrow:before {
+  content: "\e917";
+}
+.icon-left-down-arrow:before {
+  content: "\e918";
+}
+.icon-close-circle:before {
+  content: "\e910";
+}
+.icon-arrows:before {
+  content: "\e90a";
+}
+.icon-right-arrow:before {
+  content: "\e900";
+}

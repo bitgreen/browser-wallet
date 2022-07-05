@@ -1,0 +1,1070 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8E8684472872B3500037E6C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684462872B3500037E6C9 /* AppDelegate.swift */; };
+		8E8684492872B3500037E6C9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684482872B3500037E6C9 /* SceneDelegate.swift */; };
+		8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */; };
+		8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E86844D2872B3500037E6C9 /* Main.storyboard */; };
+		8E8684582872B3500037E6C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684572872B3500037E6C9 /* AppDelegate.swift */; };
+		8E86845B2872B3500037E6C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684592872B3500037E6C9 /* Main.storyboard */; };
+		8E8684632872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8E86846D2872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8E8684732872B3500037E6C9 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684362872B34D0037E6C9 /* Main.html */; };
+		8E8684742872B3500037E6C9 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684362872B34D0037E6C9 /* Main.html */; };
+		8E8684752872B3500037E6C9 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684382872B34D0037E6C9 /* Icon.png */; };
+		8E8684762872B3500037E6C9 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684382872B34D0037E6C9 /* Icon.png */; };
+		8E8684772872B3500037E6C9 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684392872B34D0037E6C9 /* Style.css */; };
+		8E8684782872B3500037E6C9 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684392872B34D0037E6C9 /* Style.css */; };
+		8E8684792872B3500037E6C9 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843A2872B34D0037E6C9 /* Script.js */; };
+		8E86847A2872B3500037E6C9 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843A2872B34D0037E6C9 /* Script.js */; };
+		8E86847B2872B3500037E6C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843B2872B34D0037E6C9 /* ViewController.swift */; };
+		8E86847C2872B3500037E6C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843B2872B34D0037E6C9 /* ViewController.swift */; };
+		8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
+		8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
+		8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
+		8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
+		8E8684A82872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
+		8E8684A92872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
+		8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
+		8E8684AB2872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
+		8E8684AC2872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
+		8E8684AD2872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
+		8E8684AE2872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
+		8E8684AF2872B3510037E6C9 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849A2872B3510037E6C9 /* logo.png */; };
+		8E8684B02872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
+		8E8684B12872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
+		8E8684B22872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
+		8E8684B32872B3510037E6C9 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849E2872B3510037E6C9 /* options.html */; };
+		8E8684B42872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
+		8E8684B52872B3510037E6C9 /* polkadot-6.8.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */; };
+		8E8684B62872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
+		8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
+		8E8684B82872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
+		8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
+		8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
+		8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
+		8E8684BD2872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
+		8E8684BE2872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
+		8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
+		8E8684C02872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
+		8E8684C12872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
+		8E8684C22872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
+		8E8684C32872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
+		8E8684C42872B3510037E6C9 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849A2872B3510037E6C9 /* logo.png */; };
+		8E8684C52872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
+		8E8684C62872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
+		8E8684C72872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
+		8E8684C82872B3510037E6C9 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849E2872B3510037E6C9 /* options.html */; };
+		8E8684C92872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
+		8E8684CA2872B3510037E6C9 /* polkadot-6.8.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */; };
+		8E8684CB2872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
+		8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
+		8E8684CD2872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
+		8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
+		8E8684CF2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
+		8E8684D02872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8E8684642872B3500037E6C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E8684302872B34D0037E6C9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8E8684612872B3500037E6C9;
+			remoteInfo = "BitgreenWallet Extension (iOS)";
+		};
+		8E86846E2872B3500037E6C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E8684302872B34D0037E6C9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8E86846B2872B3500037E6C9;
+			remoteInfo = "BitgreenWallet Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8E8684862872B3500037E6C9 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8E8684632872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E86848D2872B3500037E6C9 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8E86846D2872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8E8684372872B34D0037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		8E8684382872B34D0037E6C9 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		8E8684392872B34D0037E6C9 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		8E86843A2872B34D0037E6C9 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		8E86843B2872B34D0037E6C9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8E86843C2872B3500037E6C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		8E8684432872B3500037E6C9 /* BitgreenWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BitgreenWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8684462872B3500037E6C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8E8684482872B3500037E6C9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		8E86844B2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8E86844E2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8E8684502872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E8684552872B3500037E6C9 /* BitgreenWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BitgreenWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8684572872B3500037E6C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8E86845A2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8E86845C2872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E86845D2872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
+		8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8684672872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8684712872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
+		8E8684932872B3510037E6C9 /* iconmoon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iconmoon; path = ../javascript/iconmoon; sourceTree = "<group>"; };
+		8E8684942872B3510037E6C9 /* window.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = window.html; path = ../javascript/window.html; sourceTree = "<group>"; };
+		8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "jdenticon-3.1.1"; path = "../javascript/jdenticon-3.1.1"; sourceTree = "<group>"; };
+		8E8684962872B3510037E6C9 /* toastify-1.11.2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "toastify-1.11.2"; path = "../javascript/toastify-1.11.2"; sourceTree = "<group>"; };
+		8E8684972872B3510037E6C9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../javascript/background.js; sourceTree = "<group>"; };
+		8E8684982872B3510037E6C9 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = ../javascript/tests; sourceTree = "<group>"; };
+		8E8684992872B3510037E6C9 /* domppurify-2.3.8 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "domppurify-2.3.8"; path = "../javascript/domppurify-2.3.8"; sourceTree = "<group>"; };
+		8E86849A2872B3510037E6C9 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "../../chrome-extension/logo.png"; sourceTree = "<group>"; };
+		8E86849B2872B3510037E6C9 /* wallet.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = wallet.js; path = ../javascript/wallet.js; sourceTree = "<group>"; };
+		8E86849C2872B3510037E6C9 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../javascript/style.css; sourceTree = "<group>"; };
+		8E86849D2872B3510037E6C9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../javascript/manifest.json; sourceTree = "<group>"; };
+		8E86849E2872B3510037E6C9 /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = ../javascript/options.html; sourceTree = "<group>"; };
+		8E86849F2872B3510037E6C9 /* aesjs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = aesjs.js; path = ../javascript/aesjs.js; sourceTree = "<group>"; };
+		8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "polkadot-6.8.1"; path = "../javascript/polkadot-6.8.1"; sourceTree = "<group>"; };
+		8E8684A12872B3510037E6C9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../javascript/assets; sourceTree = "<group>"; };
+		8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bootstrap-5.1.3"; path = "../javascript/bootstrap-5.1.3"; sourceTree = "<group>"; };
+		8E8684A32872B3510037E6C9 /* anime-3.2.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anime-3.2.1"; path = "../javascript/anime-3.2.1"; sourceTree = "<group>"; };
+		8E8684A42872B3510037E6C9 /* sortable-1.15.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "sortable-1.15.0"; path = "../javascript/sortable-1.15.0"; sourceTree = "<group>"; };
+		8E8684A52872B3510037E6C9 /* qrcodejs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qrcodejs; path = ../javascript/qrcodejs; sourceTree = "<group>"; };
+		8E8684A62872B3510037E6C9 /* contentscript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = contentscript.js; path = ../javascript/contentscript.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8E8684402872B3500037E6C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684522872B3500037E6C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E86845F2872B3500037E6C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684692872B3500037E6C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8E86842F2872B34D0037E6C9 = {
+			isa = PBXGroup;
+			children = (
+				8E8684342872B34D0037E6C9 /* Shared (App) */,
+				8E86843D2872B3500037E6C9 /* Shared (Extension) */,
+				8E8684452872B3500037E6C9 /* iOS (App) */,
+				8E8684562872B3500037E6C9 /* macOS (App) */,
+				8E8684662872B3500037E6C9 /* iOS (Extension) */,
+				8E8684702872B3500037E6C9 /* macOS (Extension) */,
+				8E8684442872B3500037E6C9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8E8684342872B34D0037E6C9 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				8E86843B2872B34D0037E6C9 /* ViewController.swift */,
+				8E86843C2872B3500037E6C9 /* Assets.xcassets */,
+				8E8684352872B34D0037E6C9 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		8E8684352872B34D0037E6C9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684362872B34D0037E6C9 /* Main.html */,
+				8E8684382872B34D0037E6C9 /* Icon.png */,
+				8E8684392872B34D0037E6C9 /* Style.css */,
+				8E86843A2872B34D0037E6C9 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8E86843D2872B3500037E6C9 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684912872B3510037E6C9 /* Resources */,
+				8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		8E8684442872B3500037E6C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684432872B3500037E6C9 /* BitgreenWallet.app */,
+				8E8684552872B3500037E6C9 /* BitgreenWallet.app */,
+				8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */,
+				8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8E8684452872B3500037E6C9 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684462872B3500037E6C9 /* AppDelegate.swift */,
+				8E8684482872B3500037E6C9 /* SceneDelegate.swift */,
+				8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */,
+				8E86844D2872B3500037E6C9 /* Main.storyboard */,
+				8E8684502872B3500037E6C9 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		8E8684562872B3500037E6C9 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684572872B3500037E6C9 /* AppDelegate.swift */,
+				8E8684592872B3500037E6C9 /* Main.storyboard */,
+				8E86845C2872B3500037E6C9 /* Info.plist */,
+				8E86845D2872B3500037E6C9 /* BitgreenWallet.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		8E8684662872B3500037E6C9 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684672872B3500037E6C9 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		8E8684702872B3500037E6C9 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684712872B3500037E6C9 /* Info.plist */,
+				8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		8E8684912872B3510037E6C9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8E8684932872B3510037E6C9 /* iconmoon */,
+				8E8684942872B3510037E6C9 /* window.html */,
+				8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */,
+				8E8684962872B3510037E6C9 /* toastify-1.11.2 */,
+				8E8684972872B3510037E6C9 /* background.js */,
+				8E8684982872B3510037E6C9 /* tests */,
+				8E8684992872B3510037E6C9 /* domppurify-2.3.8 */,
+				8E86849A2872B3510037E6C9 /* logo.png */,
+				8E86849B2872B3510037E6C9 /* wallet.js */,
+				8E86849C2872B3510037E6C9 /* style.css */,
+				8E86849D2872B3510037E6C9 /* manifest.json */,
+				8E86849E2872B3510037E6C9 /* options.html */,
+				8E86849F2872B3510037E6C9 /* aesjs.js */,
+				8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */,
+				8E8684A12872B3510037E6C9 /* assets */,
+				8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */,
+				8E8684A32872B3510037E6C9 /* anime-3.2.1 */,
+				8E8684A42872B3510037E6C9 /* sortable-1.15.0 */,
+				8E8684A52872B3510037E6C9 /* qrcodejs */,
+				8E8684A62872B3510037E6C9 /* contentscript.js */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8E8684422872B3500037E6C9 /* BitgreenWallet (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E8684872872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet (iOS)" */;
+			buildPhases = (
+				8E86843F2872B3500037E6C9 /* Sources */,
+				8E8684402872B3500037E6C9 /* Frameworks */,
+				8E8684412872B3500037E6C9 /* Resources */,
+				8E8684862872B3500037E6C9 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8E8684652872B3500037E6C9 /* PBXTargetDependency */,
+			);
+			name = "BitgreenWallet (iOS)";
+			productName = "BitgreenWallet (iOS)";
+			productReference = 8E8684432872B3500037E6C9 /* BitgreenWallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8E8684542872B3500037E6C9 /* BitgreenWallet (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E86848E2872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet (macOS)" */;
+			buildPhases = (
+				8E8684512872B3500037E6C9 /* Sources */,
+				8E8684522872B3500037E6C9 /* Frameworks */,
+				8E8684532872B3500037E6C9 /* Resources */,
+				8E86848D2872B3500037E6C9 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8E86846F2872B3500037E6C9 /* PBXTargetDependency */,
+			);
+			name = "BitgreenWallet (macOS)";
+			productName = "BitgreenWallet (macOS)";
+			productReference = 8E8684552872B3500037E6C9 /* BitgreenWallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8E8684612872B3500037E6C9 /* BitgreenWallet Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E8684832872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet Extension (iOS)" */;
+			buildPhases = (
+				8E86845E2872B3500037E6C9 /* Sources */,
+				8E86845F2872B3500037E6C9 /* Frameworks */,
+				8E8684602872B3500037E6C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BitgreenWallet Extension (iOS)";
+			productName = "BitgreenWallet Extension (iOS)";
+			productReference = 8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		8E86846B2872B3500037E6C9 /* BitgreenWallet Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E86848A2872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet Extension (macOS)" */;
+			buildPhases = (
+				8E8684682872B3500037E6C9 /* Sources */,
+				8E8684692872B3500037E6C9 /* Frameworks */,
+				8E86846A2872B3500037E6C9 /* Resources */,
+				8EF31D9C28745F0A0069BECA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BitgreenWallet Extension (macOS)";
+			productName = "BitgreenWallet Extension (macOS)";
+			productReference = 8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8E8684302872B34D0037E6C9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					8E8684422872B3500037E6C9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					8E8684542872B3500037E6C9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					8E8684612872B3500037E6C9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					8E86846B2872B3500037E6C9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 8E8684332872B34D0037E6C9 /* Build configuration list for PBXProject "BitgreenWallet" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8E86842F2872B34D0037E6C9;
+			productRefGroup = 8E8684442872B3500037E6C9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8E8684422872B3500037E6C9 /* BitgreenWallet (iOS) */,
+				8E8684542872B3500037E6C9 /* BitgreenWallet (macOS) */,
+				8E8684612872B3500037E6C9 /* BitgreenWallet Extension (iOS) */,
+				8E86846B2872B3500037E6C9 /* BitgreenWallet Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8E8684412872B3500037E6C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E8684752872B3500037E6C9 /* Icon.png in Resources */,
+				8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */,
+				8E8684732872B3500037E6C9 /* Main.html in Resources */,
+				8E8684792872B3500037E6C9 /* Script.js in Resources */,
+				8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */,
+				8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */,
+				8E8684772872B3500037E6C9 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684532872B3500037E6C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E8684762872B3500037E6C9 /* Icon.png in Resources */,
+				8E8684782872B3500037E6C9 /* Style.css in Resources */,
+				8E86845B2872B3500037E6C9 /* Main.storyboard in Resources */,
+				8E86847A2872B3500037E6C9 /* Script.js in Resources */,
+				8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */,
+				8E8684742872B3500037E6C9 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684602872B3500037E6C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E8684BD2872B3510037E6C9 /* iconmoon in Resources */,
+				8E8684D02872B3510037E6C9 /* contentscript.js in Resources */,
+				8E8684CA2872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
+				8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
+				8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */,
+				8E8684C82872B3510037E6C9 /* options.html in Resources */,
+				8E8684C42872B3510037E6C9 /* logo.png in Resources */,
+				8E8684BE2872B3510037E6C9 /* window.html in Resources */,
+				8E8684C72872B3510037E6C9 /* manifest.json in Resources */,
+				8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				8E8684C52872B3510037E6C9 /* wallet.js in Resources */,
+				8E8684CB2872B3510037E6C9 /* assets in Resources */,
+				8E8684C62872B3510037E6C9 /* style.css in Resources */,
+				8E8684C12872B3510037E6C9 /* background.js in Resources */,
+				8E8684C32872B3510037E6C9 /* domppurify-2.3.8 in Resources */,
+				8E8684CF2872B3510037E6C9 /* qrcodejs in Resources */,
+				8E8684CD2872B3510037E6C9 /* anime-3.2.1 in Resources */,
+				8E8684C02872B3510037E6C9 /* toastify-1.11.2 in Resources */,
+				8E8684C22872B3510037E6C9 /* tests in Resources */,
+				8E8684C92872B3510037E6C9 /* aesjs.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E86846A2872B3500037E6C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E8684A82872B3510037E6C9 /* iconmoon in Resources */,
+				8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */,
+				8E8684B52872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
+				8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
+				8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */,
+				8E8684B32872B3510037E6C9 /* options.html in Resources */,
+				8E8684AF2872B3510037E6C9 /* logo.png in Resources */,
+				8E8684A92872B3510037E6C9 /* window.html in Resources */,
+				8E8684B22872B3510037E6C9 /* manifest.json in Resources */,
+				8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				8E8684B02872B3510037E6C9 /* wallet.js in Resources */,
+				8E8684B62872B3510037E6C9 /* assets in Resources */,
+				8E8684B12872B3510037E6C9 /* style.css in Resources */,
+				8E8684AC2872B3510037E6C9 /* background.js in Resources */,
+				8E8684AE2872B3510037E6C9 /* domppurify-2.3.8 in Resources */,
+				8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */,
+				8E8684B82872B3510037E6C9 /* anime-3.2.1 in Resources */,
+				8E8684AB2872B3510037E6C9 /* toastify-1.11.2 in Resources */,
+				8E8684AD2872B3510037E6C9 /* tests in Resources */,
+				8E8684B42872B3510037E6C9 /* aesjs.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8EF31D9C28745F0A0069BECA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nxattr -cr ~/Library/Developer/Xcode/DerivedData || echo Clear\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8E86843F2872B3500037E6C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E86847B2872B3500037E6C9 /* ViewController.swift in Sources */,
+				8E8684472872B3500037E6C9 /* AppDelegate.swift in Sources */,
+				8E8684492872B3500037E6C9 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684512872B3500037E6C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E86847C2872B3500037E6C9 /* ViewController.swift in Sources */,
+				8E8684582872B3500037E6C9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E86845E2872B3500037E6C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E8684682872B3500037E6C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8E8684652872B3500037E6C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8E8684612872B3500037E6C9 /* BitgreenWallet Extension (iOS) */;
+			targetProxy = 8E8684642872B3500037E6C9 /* PBXContainerItemProxy */;
+		};
+		8E86846F2872B3500037E6C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8E86846B2872B3500037E6C9 /* BitgreenWallet Extension (macOS) */;
+			targetProxy = 8E86846E2872B3500037E6C9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8E8684362872B34D0037E6C9 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8E8684372872B34D0037E6C9 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8E86844B2872B3500037E6C9 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8E86844D2872B3500037E6C9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8E86844E2872B3500037E6C9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8E8684592872B3500037E6C9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8E86845A2872B3500037E6C9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8E8684812872B3500037E6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8E8684822872B3500037E6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		8E8684842872B3500037E6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet.Extension";
+				PRODUCT_NAME = "BitgreenWallet Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8E8684852872B3500037E6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet.Extension";
+				PRODUCT_NAME = "BitgreenWallet Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8E8684882872B3500037E6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet";
+				PRODUCT_NAME = BitgreenWallet;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8E8684892872B3500037E6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet";
+				PRODUCT_NAME = BitgreenWallet;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8E86848B2872B3500037E6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/BitgreenWallet.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet.Extension";
+				PRODUCT_NAME = "BitgreenWallet Extension";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8E86848C2872B3500037E6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/BitgreenWallet.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet.Extension";
+				PRODUCT_NAME = "BitgreenWallet Extension";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8E86848F2872B3500037E6C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/BitgreenWallet.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet";
+				PRODUCT_NAME = BitgreenWallet;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8E8684902872B3500037E6C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/BitgreenWallet.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6LFC8BL478;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet";
+				PRODUCT_NAME = BitgreenWallet;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8E8684332872B34D0037E6C9 /* Build configuration list for PBXProject "BitgreenWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E8684812872B3500037E6C9 /* Debug */,
+				8E8684822872B3500037E6C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8E8684832872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E8684842872B3500037E6C9 /* Debug */,
+				8E8684852872B3500037E6C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8E8684872872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E8684882872B3500037E6C9 /* Debug */,
+				8E8684892872B3500037E6C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8E86848A2872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E86848B2872B3500037E6C9 /* Debug */,
+				8E86848C2872B3500037E6C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8E86848E2872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E86848F2872B3500037E6C9 /* Debug */,
+				8E8684902872B3500037E6C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8E8684302872B34D0037E6C9 /* Project object */;
+}
