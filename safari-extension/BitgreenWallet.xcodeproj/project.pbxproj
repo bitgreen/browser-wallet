@@ -29,7 +29,6 @@
 		8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
 		8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
 		8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
-		8E8684A72872B3510037E6C9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684922872B3510037E6C9 /* icon.png */; };
 		8E8684A82872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
 		8E8684A92872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
 		8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
@@ -50,7 +49,6 @@
 		8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
 		8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
 		8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
-		8E8684BC2872B3510037E6C9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684922872B3510037E6C9 /* icon.png */; };
 		8E8684BD2872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
 		8E8684BE2872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
 		8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
@@ -139,27 +137,26 @@
 		8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E8684712872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
-		8E8684922872B3510037E6C9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "../../../chrome-extension/icon.png"; sourceTree = "<group>"; };
-		8E8684932872B3510037E6C9 /* iconmoon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iconmoon; path = "../../../chrome-extension/iconmoon"; sourceTree = "<group>"; };
-		8E8684942872B3510037E6C9 /* window.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = window.html; path = "../../../chrome-extension/window.html"; sourceTree = "<group>"; };
-		8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "jdenticon-3.1.1"; path = "../../../chrome-extension/jdenticon-3.1.1"; sourceTree = "<group>"; };
-		8E8684962872B3510037E6C9 /* toastify-1.11.2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "toastify-1.11.2"; path = "../../../chrome-extension/toastify-1.11.2"; sourceTree = "<group>"; };
-		8E8684972872B3510037E6C9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = "../../../chrome-extension/background.js"; sourceTree = "<group>"; };
-		8E8684982872B3510037E6C9 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = "../../../chrome-extension/tests"; sourceTree = "<group>"; };
-		8E8684992872B3510037E6C9 /* domppurify-2.3.8 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "domppurify-2.3.8"; path = "../../../chrome-extension/domppurify-2.3.8"; sourceTree = "<group>"; };
-		8E86849A2872B3510037E6C9 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "../../../chrome-extension/logo.png"; sourceTree = "<group>"; };
-		8E86849B2872B3510037E6C9 /* wallet.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = wallet.js; path = "../../../chrome-extension/wallet.js"; sourceTree = "<group>"; };
-		8E86849C2872B3510037E6C9 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = "../../../chrome-extension/style.css"; sourceTree = "<group>"; };
-		8E86849D2872B3510037E6C9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = "../../../chrome-extension/manifest.json"; sourceTree = "<group>"; };
-		8E86849E2872B3510037E6C9 /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = "../../../chrome-extension/options.html"; sourceTree = "<group>"; };
-		8E86849F2872B3510037E6C9 /* aesjs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = aesjs.js; path = "../../../chrome-extension/aesjs.js"; sourceTree = "<group>"; };
-		8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "polkadot-6.8.1"; path = "../../../chrome-extension/polkadot-6.8.1"; sourceTree = "<group>"; };
-		8E8684A12872B3510037E6C9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = "../../../chrome-extension/assets"; sourceTree = "<group>"; };
-		8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bootstrap-5.1.3"; path = "../../../chrome-extension/bootstrap-5.1.3"; sourceTree = "<group>"; };
-		8E8684A32872B3510037E6C9 /* anime-3.2.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anime-3.2.1"; path = "../../../chrome-extension/anime-3.2.1"; sourceTree = "<group>"; };
-		8E8684A42872B3510037E6C9 /* sortable-1.15.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "sortable-1.15.0"; path = "../../../chrome-extension/sortable-1.15.0"; sourceTree = "<group>"; };
-		8E8684A52872B3510037E6C9 /* qrcodejs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qrcodejs; path = "../../../chrome-extension/qrcodejs"; sourceTree = "<group>"; };
-		8E8684A62872B3510037E6C9 /* contentscript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = contentscript.js; path = "../../../chrome-extension/contentscript.js"; sourceTree = "<group>"; };
+		8E8684932872B3510037E6C9 /* iconmoon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iconmoon; path = ../javascript/iconmoon; sourceTree = "<group>"; };
+		8E8684942872B3510037E6C9 /* window.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = window.html; path = ../javascript/window.html; sourceTree = "<group>"; };
+		8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "jdenticon-3.1.1"; path = "../javascript/jdenticon-3.1.1"; sourceTree = "<group>"; };
+		8E8684962872B3510037E6C9 /* toastify-1.11.2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "toastify-1.11.2"; path = "../javascript/toastify-1.11.2"; sourceTree = "<group>"; };
+		8E8684972872B3510037E6C9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../javascript/background.js; sourceTree = "<group>"; };
+		8E8684982872B3510037E6C9 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = ../javascript/tests; sourceTree = "<group>"; };
+		8E8684992872B3510037E6C9 /* domppurify-2.3.8 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "domppurify-2.3.8"; path = "../javascript/domppurify-2.3.8"; sourceTree = "<group>"; };
+		8E86849A2872B3510037E6C9 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "../../chrome-extension/logo.png"; sourceTree = "<group>"; };
+		8E86849B2872B3510037E6C9 /* wallet.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = wallet.js; path = ../javascript/wallet.js; sourceTree = "<group>"; };
+		8E86849C2872B3510037E6C9 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../javascript/style.css; sourceTree = "<group>"; };
+		8E86849D2872B3510037E6C9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../javascript/manifest.json; sourceTree = "<group>"; };
+		8E86849E2872B3510037E6C9 /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = ../javascript/options.html; sourceTree = "<group>"; };
+		8E86849F2872B3510037E6C9 /* aesjs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = aesjs.js; path = ../javascript/aesjs.js; sourceTree = "<group>"; };
+		8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "polkadot-6.8.1"; path = "../javascript/polkadot-6.8.1"; sourceTree = "<group>"; };
+		8E8684A12872B3510037E6C9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../javascript/assets; sourceTree = "<group>"; };
+		8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bootstrap-5.1.3"; path = "../javascript/bootstrap-5.1.3"; sourceTree = "<group>"; };
+		8E8684A32872B3510037E6C9 /* anime-3.2.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anime-3.2.1"; path = "../javascript/anime-3.2.1"; sourceTree = "<group>"; };
+		8E8684A42872B3510037E6C9 /* sortable-1.15.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "sortable-1.15.0"; path = "../javascript/sortable-1.15.0"; sourceTree = "<group>"; };
+		8E8684A52872B3510037E6C9 /* qrcodejs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qrcodejs; path = ../javascript/qrcodejs; sourceTree = "<group>"; };
+		8E8684A62872B3510037E6C9 /* contentscript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = contentscript.js; path = ../javascript/contentscript.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,7 +288,6 @@
 		8E8684912872B3510037E6C9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8E8684922872B3510037E6C9 /* icon.png */,
 				8E8684932872B3510037E6C9 /* iconmoon */,
 				8E8684942872B3510037E6C9 /* window.html */,
 				8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */,
@@ -473,7 +469,6 @@
 				8E8684BD2872B3510037E6C9 /* iconmoon in Resources */,
 				8E8684D02872B3510037E6C9 /* contentscript.js in Resources */,
 				8E8684CA2872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
-				8E8684BC2872B3510037E6C9 /* icon.png in Resources */,
 				8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
 				8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */,
 				8E8684C82872B3510037E6C9 /* options.html in Resources */,
@@ -501,7 +496,6 @@
 				8E8684A82872B3510037E6C9 /* iconmoon in Resources */,
 				8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */,
 				8E8684B52872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
-				8E8684A72872B3510037E6C9 /* icon.png in Resources */,
 				8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
 				8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */,
 				8E8684B32872B3510037E6C9 /* options.html in Resources */,
