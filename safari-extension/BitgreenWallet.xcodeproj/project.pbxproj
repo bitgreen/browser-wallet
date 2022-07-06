@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E77E4422875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
+		8E77E4432875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
+		8E77E4442875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
+		8E77E4452875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
+		8E77E44728754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
+		8E77E44828754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
+		8E77E44928754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
+		8E77E44A28754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
 		8E8684472872B3500037E6C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684462872B3500037E6C9 /* AppDelegate.swift */; };
 		8E8684492872B3500037E6C9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684482872B3500037E6C9 /* SceneDelegate.swift */; };
 		8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */; };
@@ -114,6 +122,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8E77E4412875495C0020A55D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		8E77E44628754AA80020A55D /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
 		8E8684372872B34D0037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
 		8E8684382872B34D0037E6C9 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		8E8684392872B34D0037E6C9 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -297,6 +307,8 @@
 				8E8684992872B3510037E6C9 /* domppurify-2.3.8 */,
 				8E86849A2872B3510037E6C9 /* logo.png */,
 				8E86849B2872B3510037E6C9 /* wallet.js */,
+				8E77E4412875495C0020A55D /* icon.png */,
+				8E77E44628754AA80020A55D /* icons */,
 				8E86849C2872B3510037E6C9 /* style.css */,
 				8E86849D2872B3510037E6C9 /* manifest.json */,
 				8E86849E2872B3510037E6C9 /* options.html */,
@@ -442,7 +454,9 @@
 				8E8684752872B3500037E6C9 /* Icon.png in Resources */,
 				8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */,
 				8E8684732872B3500037E6C9 /* Main.html in Resources */,
+				8E77E44728754AA80020A55D /* icons in Resources */,
 				8E8684792872B3500037E6C9 /* Script.js in Resources */,
+				8E77E4422875495C0020A55D /* icon.png in Resources */,
 				8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */,
 				8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */,
 				8E8684772872B3500037E6C9 /* Style.css in Resources */,
@@ -454,6 +468,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E8684762872B3500037E6C9 /* Icon.png in Resources */,
+				8E77E44828754AA80020A55D /* icons in Resources */,
+				8E77E4432875495C0020A55D /* icon.png in Resources */,
 				8E8684782872B3500037E6C9 /* Style.css in Resources */,
 				8E86845B2872B3500037E6C9 /* Main.storyboard in Resources */,
 				8E86847A2872B3500037E6C9 /* Script.js in Resources */,
@@ -474,8 +490,10 @@
 				8E8684C82872B3510037E6C9 /* options.html in Resources */,
 				8E8684C42872B3510037E6C9 /* logo.png in Resources */,
 				8E8684BE2872B3510037E6C9 /* window.html in Resources */,
+				8E77E4442875495C0020A55D /* icon.png in Resources */,
 				8E8684C72872B3510037E6C9 /* manifest.json in Resources */,
 				8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				8E77E44928754AA80020A55D /* icons in Resources */,
 				8E8684C52872B3510037E6C9 /* wallet.js in Resources */,
 				8E8684CB2872B3510037E6C9 /* assets in Resources */,
 				8E8684C62872B3510037E6C9 /* style.css in Resources */,
@@ -501,8 +519,10 @@
 				8E8684B32872B3510037E6C9 /* options.html in Resources */,
 				8E8684AF2872B3510037E6C9 /* logo.png in Resources */,
 				8E8684A92872B3510037E6C9 /* window.html in Resources */,
+				8E77E4452875495C0020A55D /* icon.png in Resources */,
 				8E8684B22872B3510037E6C9 /* manifest.json in Resources */,
 				8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				8E77E44A28754AA80020A55D /* icons in Resources */,
 				8E8684B02872B3510037E6C9 /* wallet.js in Resources */,
 				8E8684B62872B3510037E6C9 /* assets in Resources */,
 				8E8684B12872B3510037E6C9 /* style.css in Resources */,

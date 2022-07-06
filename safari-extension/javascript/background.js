@@ -30,21 +30,12 @@ chrome.runtime.onMessage.addListener(
                 });
                 // create new windows for the transfer funds
                 let url='window.html?command=transfer&recipient='+encodeURI(request.recipient)+'&amount='+encodeURI(request.amount)+'&domain='+encodeURI(request.domain);
-                chrome.tabs.create({
-                    url: chrome.runtime.getURL(url),
-                    active: false
-                }, function(tab) {
-                    // After the tab has been created, open a window to inject the tab
-                    chrome.windows.create({
-                        tabId: tab.id,
-                        type: 'popup',
-                        focused: true,
-                        width: 400,
-                        height: 600,
-                        left,
-                        top
-                        // incognito, top, left, ...
-                    });
+                chrome.windows.create({
+                    url: url,
+                    type: 'popup',
+                    focused: true,
+                    width: 400,
+                    height: 600,
                 });
             }
 
@@ -69,21 +60,12 @@ chrome.runtime.onMessage.addListener(
                 });
                 // create new windows for the extrinsic
                 let url='window.html?command=tx&recipient='+encodeURI(request.recipient)+'&pallet='+encodeURI(request.pallet)+'&call='+encodeURI(request.call)+'&parameters='+encodeURI(request.parameters)+'&domain='+encodeURI(request.domain);
-                chrome.tabs.create({
-                    url: chrome.runtime.getURL(url),
-                    active: false
-                }, function(tab) {
-                    // After the tab has been created, open a window to inject the tab
-                    chrome.windows.create({
-                        tabId: tab.id,
-                        type: 'popup',
-                        focused: true,
-                        width: 400,
-                        height: 600,
-                        left,
-                        top
-                        // incognito, top, left, ...
-                    });
+                chrome.windows.create({
+                    url: url,
+                    type: 'popup',
+                    focused: true,
+                    width: 400,
+                    height: 600,
                 });
             }
 
@@ -108,21 +90,12 @@ chrome.runtime.onMessage.addListener(
             });
             // create new windows for authentication
             let url='window.html?command=signin&domain='+encodeURI(request.domain);
-            chrome.tabs.create({
-                url: chrome.runtime.getURL(url),
-                active: false
-            }, function(tab) {
-                // After the tab has been created, open a window to inject the tab
-                chrome.windows.create({
-                    tabId: tab.id,
-                    type: 'popup',
-                    focused: true,
-                    width: 400,
-                    height: 600,
-                    left,
-                    top
-                    // incognito, top, left, ...
-                });
+            chrome.windows.create({
+                url: url,
+                type: 'popup',
+                focused: true,
+                width: 400,
+                height: 600,
             });
             
             // Will be called asynchronously from sendAnswerBW()
@@ -151,21 +124,12 @@ chrome.runtime.onMessage.addListener(
             });
             // create new windows for the extrinsic
             let url='window.html?command=portfolio';
-            chrome.tabs.create({
-                url: chrome.runtime.getURL(url),
-                active: false
-            }, function(tab) {
-                // After the tab has been created, open a window to inject the tab
-                chrome.windows.create({
-                    tabId: tab.id,
-                    type: 'popup',
-                    focused: true,
-                    width: 400,
-                    height: 600,
-                    left,
-                    top
-                    // incognito, top, left, ...
-                });
+            chrome.windows.create({
+                url: url,
+                type: 'popup',
+                focused: true,
+                width: 400,
+                height: 600,
             });
         }
         // check if extension is installed

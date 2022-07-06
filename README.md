@@ -20,6 +20,15 @@ Features:
 - Stakes/Unstakes funds
 - Authentication by signing a random token
 
+## Browser Compatibility
+The wallet extension is available for the following browser:  
+- Chrome
+- Firefox 
+- Safari (Desktop and Mobile version)
+- Edge (install Chrome Extension)
+- Brave (install Chrome extension)
+
+
 ## BrowserWallet.js
 A library to facilitate the usage of the extension has been created. Currently it supports the following functions callable from a web page.  
 From a web page you can request to :  
