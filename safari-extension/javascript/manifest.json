@@ -5,7 +5,7 @@
   "version": "0.22",
   "browser_action": {
       "default_icon": "icon.png",
-      "default_popup": "windowpopup.html"
+      "default_popup": "window.html"
       },
   "icons":{
         "16":"icons/16.png",
