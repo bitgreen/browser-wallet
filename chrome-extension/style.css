@@ -219,6 +219,18 @@ label.label {
     border: 0;
     font-size: 12px;
 }
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 56px;
+    padding: 8px 16px;
+    z-index: 999;
+    opacity: 0;
+}
+#header.visible {
+    opacity: 1;
+}
 #init_screen {
     position: absolute;
     top: 0;
@@ -307,8 +319,8 @@ label.label {
 #heading {
     display: block;
     width: 100%;
-    height: 180px;
-    padding: 5px 16px 16px 16px;
+    height: 140px;
+    padding: 60px 16px 16px 16px;
 }
 #heading.bigger {
     height: 240px;
@@ -317,20 +329,17 @@ label.label {
     display: inline-block;
     float: left;
 }
-#heading #menu {
-    height: 45px;
-}
 #heading .content {
-    padding-top: 30px;
+    padding-top: 22px;
 }
 #bordered_content {
     position: absolute;
-    top: 160px;
+    top: 140px;
     left: 0;
     right: 0;
 
     width: 100%;
-    height: 600px;
+    height: calc(100% - 140px);
 
     padding: 16px;
 
@@ -339,7 +348,7 @@ label.label {
 }
 #bordered_content.smaller {
     top: 270px;
-    height: 360px;
+    height: calc(100% - 270px);
     padding-top: 38px;
 }
 #bordered_content #top_items {
@@ -456,7 +465,7 @@ label.label {
     width: 100%;
     height: 65px;
     line-height: 65px;
-    font-size: 30px;
+    font-size: 36px;
     text-align: center;
 }
 .button-item.tab-item .title {
@@ -531,7 +540,7 @@ label.label {
     color: #039855;
 }
 #transactions .transaction-info .icon.icon-error {
-    color: #991900;
+    color: #CC2400;
 }
 #transactions .transaction-info .amount {
     font-family: "Clash Grotesk Regular", sans-serif;
@@ -801,7 +810,6 @@ label.label {
     position: relative;
     width: 100%;
     height: 180px;
-    margin-top: 10px;
     color: #ffffff;
     padding: 12px;
 }
@@ -866,8 +874,8 @@ label.label {
     margin: 16px 0;
 }
 #choose_token .icon {
-    font-size: 24px;
-    margin: 0 8px;
+    font-size: 26px;
+    margin-right: 4px;
 }
 #choose_token .name {
     font-size: 18px;
