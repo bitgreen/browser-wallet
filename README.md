@@ -21,12 +21,13 @@ Features:
 - Authentication by signing a random token
 
 ## Browser Compatibility
-The wallet extension is available for the following browser:  
+The wallet extension is available for the following browsers:  
 - Chrome
 - Firefox 
 - Safari (Desktop and Mobile version)
-- Edge (install Chrome Extension)
-- Brave (install Chrome extension)
+- Edge (compatible with Chrome Extension)
+- Brave (compatible with Chrome extension)
+- Other Browsers based on Chrome Engine
 
 
 ## BrowserWallet.js
