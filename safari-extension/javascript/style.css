@@ -90,6 +90,9 @@ p {
 .text-small {
     font-size: 13px;
 }
+.text-very-small {
+    font-size: 11px;
+}
 .text-grotesk {
     font-family: "Clash Grotesk Regular", sans-serif;
     font-weight: 300;
@@ -174,7 +177,7 @@ p {
     color: #d22e03;
 }
 .click {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .alert {
     padding: 0;
@@ -218,6 +221,34 @@ label.label {
     border-radius: 0;
     border: 0;
     font-size: 12px;
+    padding: 0;
+}
+.form-group .input-group-text.bigger {
+    font-size: 16px;
+}
+.form-group .input-group-text .icon {
+    width: 48px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+}
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 56px;
+    padding: 8px 16px;
+    z-index: 999;
+    opacity: 0;
+}
+#header.visible {
+    opacity: 1;
+}
+#header #go_settings {
+    transition: all linear 0.2s;
+}
+#header #go_settings:hover {
+    transform: rotate(60deg);
 }
 #init_screen {
     position: absolute;
@@ -278,6 +309,12 @@ label.label {
     height: 2px;
     background: #ffffff;
 }
+.separator-line {
+    margin: 0 auto 8px;
+    width: 100%;
+    height: 1px;
+    background-color: #E4E7EC;
+}
 
 .browser-wallet {
     position: absolute;
@@ -307,8 +344,11 @@ label.label {
 #heading {
     display: block;
     width: 100%;
-    height: 180px;
-    padding: 5px 16px 16px 16px;
+    height: 140px;
+    padding: 60px 16px 16px 16px;
+}
+#heading.custom-header {
+    padding: 0;
 }
 #heading.bigger {
     height: 240px;
@@ -317,30 +357,51 @@ label.label {
     display: inline-block;
     float: left;
 }
-#heading #menu {
-    height: 45px;
-}
 #heading .content {
-    padding-top: 30px;
+    padding-top: 22px;
+}
+#heading.custom-header .heading {
+    width: 100%;
+    height: 60px;
+    padding: 12px 24px 12px 24px;
+    background-color: transparent;
+    color: #ffffff;
+}
+#heading.custom-header .heading #goback {
+    width: 40px;
+    text-align: center;
+    font-size: 18px;
+}
+#heading.custom-header .heading h3 {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    color: #ffffff;
 }
 #bordered_content {
     position: absolute;
-    top: 160px;
+    top: 140px;
     left: 0;
     right: 0;
 
     width: 100%;
-    height: 600px;
+    height: calc(100% - 140px);
 
-    padding: 16px;
+    padding: 16px 16px 76px;
 
     background-color: #ffffff;
     border-radius: 16px 16px 0 0;
 }
 #bordered_content.smaller {
     top: 270px;
-    height: 360px;
+    height: calc(100% - 270px);
     padding-top: 38px;
+}
+#bordered_content #wallet_list {
+    height: 100%;
+    overflow-y: scroll;
+    padding-right: 8px;
+    padding-bottom: 8px;
 }
 #bordered_content #top_items {
     position: absolute;
@@ -367,6 +428,7 @@ label.label {
     padding: 6px 10px;
     overflow: hidden;
     z-index: 2;
+    cursor: pointer;
 }
 #current_wallet:after {
     position: absolute;
@@ -425,26 +487,54 @@ label.label {
 }
 .button-item {
     width: 100%;
-    height: 85px;
+    min-height: 85px;
     background-color: #ffffff;
     margin-bottom: 15px;
 
     box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all linear 0.3s;
     user-select: none;
 }
 .button-item:hover {
     box-shadow: 0 3px 4px rgb(17 20 30 / 18%), 0 2px 3px rgb(17 20 30 / 8%);
-    transition: all 0.1s;
+    transition: all linear 0.1s;
 }
 .button-item .icon {
     width: 60px;
     font-size: 18px;
 }
+.button-item svg {
+    width: 56px;
+    height: 56px;
+    padding: 0 8px;
+}
 .button-item.button-gray {
     background-color: #F8F8F9;
+}
+.button-item.settings-item {
+    cursor: auto;
+    box-shadow: none !important;
+    min-height: 45px;
+    height: auto;
+    margin-bottom: 8px;
+}
+.button-item.settings-item .icon {
+    transition: all linear 0.1s;
+    transform: translateX(-4px);
+    width: 15px;
+    font-size: 12px;
+}
+.button-item.settings-item.click:hover .icon {
+    transform: translateX(0px);
+}
+.button-item.settings-item select {
+    width: 120px;
+    outline: none !important;
+    border-radius: 0 !important;
+    border: 1px solid #E4E7EC !important;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
 }
 .button-item.tab-item {
     opacity: 0;
@@ -456,7 +546,7 @@ label.label {
     width: 100%;
     height: 65px;
     line-height: 65px;
-    font-size: 30px;
+    font-size: 36px;
     text-align: center;
 }
 .button-item.tab-item .title {
@@ -470,9 +560,9 @@ label.label {
 #transactions {
     height: 345px;
     overflow: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding-right: 8px;
-    padding-bottom: 5px;
+    padding-bottom: 8px;
 }
 #transactions_end {
     position: absolute;
@@ -483,19 +573,19 @@ label.label {
     background: linear-gradient(to bottom, transparent 0%, transparent 10%, #FFFFFF 80%, #FFFFFF 100%);
     pointer-events: none;
 }
-#transactions::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
 }
-#transactions::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #F8F8F9;
     border-radius: 4px;
 }
-#transactions::-webkit-scrollbar-thumb {
-    background: #B1B4BD;
+::-webkit-scrollbar-thumb {
+    background: #E4E7EC;
     border-radius: 4px;
 }
-#transactions::-webkit-scrollbar-thumb:hover {
-    background: #667085;
+::-webkit-scrollbar-thumb:hover {
+    background: #B1B4BD;
 }
 #transactions .button-item {
     height: 65px;
@@ -531,7 +621,7 @@ label.label {
     color: #039855;
 }
 #transactions .transaction-info .icon.icon-error {
-    color: #991900;
+    color: #CC2400;
 }
 #transactions .transaction-info .amount {
     font-family: "Clash Grotesk Regular", sans-serif;
@@ -577,7 +667,6 @@ label.label {
     height: calc(100% - 60px);
     padding: 16px;
     background-color: #ffffff;
-    color: #ffffff;
     overflow: auto;
     overflow-x: hidden;
 }
@@ -642,7 +731,7 @@ label.label {
     color: #ffffff;
     background-color: #cc2400;
     border-radius: 8px 0 0 8px;
-    transition: all 0.2s linear;
+    transition: all linear 0.2s;
     z-index: 99;
     pointer-events: all !important;
     overflow: hidden;
@@ -736,7 +825,7 @@ label.label {
     border-radius: 4px;
     color: #E9F2D9;
     font-size: 18px;
-    transition: color 0.3s;
+    transition: color linear 0.3s;
     cursor: pointer;
 }
 #main_footer .item:hover,
@@ -801,7 +890,6 @@ label.label {
     position: relative;
     width: 100%;
     height: 180px;
-    margin-top: 10px;
     color: #ffffff;
     padding: 12px;
 }
@@ -866,8 +954,8 @@ label.label {
     margin: 16px 0;
 }
 #choose_token .icon {
-    font-size: 24px;
-    margin: 0 8px;
+    font-size: 26px;
+    margin-right: 4px;
 }
 #choose_token .name {
     font-size: 18px;
