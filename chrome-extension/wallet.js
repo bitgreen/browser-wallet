@@ -55,12 +55,12 @@ function refresh_account() {
 
 // add listeners for events (you cannot use onclick event in the extension)
 document.addEventListener('DOMContentLoaded', async function () {
+    hide_header();
     hide_footer();
 
     // open connection
-    await change_network();
-    // network selection
-    // document.getElementById("network").addEventListener("change", change_network); // TODO: temp disabled
+    await set_network();
+
     // if at the least one account is available, we show it
     if (currentaccount.length > 0) {
         const params = new URLSearchParams(window.location.search)
@@ -216,7 +216,7 @@ function wallet_create() {
 
     let n='<div id="heading">';
         n=n+'<div class="content row">';
-            n=n+'<h1 class="text-center text-white">Get started</h1>';
+            n=n+'<h1 class="text-center text-white">'+(currentaccountid ? "Create or Import Wallet" : "Get started")+'</h1>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -246,289 +246,330 @@ function wallet_create() {
         easing: 'linear',
     });
 }
-// function to connect/change network
+// function to change network
 async function change_network() {
-  // set identicon
-  // document.getElementById("idicon").innerHTML='<svg width="40" height="40" data-jdenticon-value="'+currentaccount+'"></svg>';
-  // TODO set a red light and switch to green when connected
-  let network='wss://testnet.bitgreen.org';
-  if(document.getElementById("network")){
-    network=document.getElementById('network').value;
-  }
-  const wsProvider = new api.WsProvider(network);
-  apiv = await api.ApiPromise.create({ provider: wsProvider,types:
-    {
-      "CallOf": "Call",
-      "DispatchTime": {
-        "_enum": {
-          "At": "BlockNumber",
-          "After": "BlockNumber"
-        }
-      },
-      "ScheduleTaskIndex": "u32",
-      "DelayedOrigin": {
-        "delay": "BlockNumber",
-        "origin": "PalletsOrigin"
-      },
-      "StorageValue": "Vec<u8>",
-      "GraduallyUpdate": {
-        "key": "StorageKey",
-        "targetValue": "StorageValue",
-        "perBlock": "StorageValue"
-      },
-      "StorageKeyBytes": "Vec<u8>",
-      "StorageValueBytes": "Vec<u8>",
-      "RpcDataProviderId": "Text",
-      "OrderedSet": "Vec<AccountId>",
-      "OrmlAccountData": {
-        "free": "Balance",
-        "frozen": "Balance",
-        "reserved": "Balance"
-      },
-      "OrmlBalanceLock": {
-        "amount": "Balance",
-        "id": "LockIdentifier"
-      },
-      "DelayedDispatchTime": {
-        "_enum": {
-          "At": "BlockNumber",
-          "After": "BlockNumber"
-        }
-      },
-      "DispatchId": "u32",
-      "Price": "FixedU128",
-      "OrmlVestingSchedule": {
-        "start": "BlockNumber",
-        "period": "BlockNumber",
-        "periodCount": "u32",
-        "perPeriod": "Compact<Balance>"
-      },
-      "VestingScheduleOf": "OrmlVestingSchedule",
-      "PalletBalanceOf": "Balance",
-      "ChangeBalance": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Balance"
-        }
-      },
-      "BalanceWrapper": {
-        "amount": "Balance"
-      },
-      "BalanceRequest": {
-        "amount": "Balance"
-      },
-      "EvmAccountInfo": {
-        "nonce": "Index",
-        "contractInfo": "Option<EvmContractInfo>",
-        "developerDeposit": "Option<Balance>"
-      },
-      "CodeInfo": {
-        "codeSize": "u32",
-        "refCount": "u32"
-      },
-      "EvmContractInfo": {
-        "codeHash": "H256",
-        "maintainer": "H160",
-        "deployed": "bool"
-      },
-      "EvmAddress": "H160",
-      "CallRequest": {
-        "from": "Option<H160>",
-        "to": "Option<H160>",
-        "gasLimit": "Option<u32>",
-        "storageLimit": "Option<u32>",
-        "value": "Option<U128>",
-        "data": "Option<Bytes>"
-      },
-      "CID": "Vec<u8>",
-      "ClassId": "u32",
-      "ClassIdOf": "ClassId",
-      "TokenId": "u64",
-      "TokenIdOf": "TokenId",
-      "TokenInfoOf": {
-        "metadata": "CID",
-        "owner": "AccountId",
-        "data": "TokenData"
-      },
-      "TokenData": {
-        "deposit": "Balance"
-      },
-      "Properties": {
-        "_set": {
-          "_bitLength": 8,
-          "Transferable": 1,
-          "Burnable": 2
-        }
-      },
-      "BondingLedger": {
-        "total": "Compact<Balance>",
-        "active": "Compact<Balance>",
-        "unlocking": "Vec<UnlockChunk>"
-      },
-      "Amount": "i128",
-      "AmountOf": "Amount",
-      "AuctionId": "u32",
-      "AuctionIdOf": "AuctionId",
-      "TokenSymbol": {
-        "_enum": {
-          "BITG": 0,
-          "USDG": 1
-        }
-      },
-      "CurrencyId": {
-        "_enum": {
-          "Token": "TokenSymbol",
-          "DEXShare": "(TokenSymbol, TokenSymbol)",
-          "ERC20": "EvmAddress"
-        }
-      },
-      "CurrencyIdOf": "CurrencyId",
-      "AuthoritysOriginId": {
-        "_enum": [
-          "Root"
-        ]
-      },
-      "TradingPair": "(CurrencyId,  CurrencyId)",
-      "AsOriginId": "AuthoritysOriginId",
-      "SubAccountStatus": {
-        "bonded": "Balance",
-        "available": "Balance",
-        "unbonding": "Vec<(EraIndex,Balance)>",
-        "mockRewardRate": "Rate"
-      },
-      "Params": {
-        "targetMaxFreeUnbondedRatio": "Ratio",
-        "targetMinFreeUnbondedRatio": "Ratio",
-        "targetUnbondingToFreeRatio": "Ratio",
-        "unbondingToFreeAdjustment": "Ratio",
-        "baseFeeRate": "Rate"
-      },
-      "Ledger": {
-        "bonded": "Balance",
-        "unbondingToFree": "Balance",
-        "freePool": "Balance",
-        "toUnbondNextEra": "(Balance, Balance)"
-      },
-      "ChangeRate": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Rate"
-        }
-      },
-      "ChangeRatio": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Ratio"
-        }
-      },
-      "BalanceInfo": {
-        "amount": "Balance"
-      },
-      "Rate": "FixedU128",
-      "Ratio": "FixedU128",
-      "PublicKey": "[u8; 20]",
-      "DestAddress": "Vec<u8>",
-      "Keys": "SessionKeys2",
-      "PalletsOrigin": {
-        "_enum": {
-          "System": "SystemOrigin",
-          "Timestamp": "Null",
-          "RandomnessCollectiveFlip": "Null",
-          "Balances": "Null",
-          "Accounts": "Null",
-          "Currencies": "Null",
-          "Tokens": "Null",
-          "Vesting": "Null",
-          "Utility": "Null",
-          "Multisig": "Null",
-          "Recovery": "Null",
-          "Proxy": "Null",
-          "Scheduler": "Null",
-          "Indices": "Null",
-          "GraduallyUpdate": "Null",
-          "Authorship": "Null",
-          "Babe": "Null",
-          "Grandpa": "Null",
-          "Staking": "Null",
-          "Session": "Null",
-          "Historical": "Null",
-          "Authority": "DelayedOrigin",
-          "ElectionsPhragmen": "Null",
-          "Contracts": "Null",
-          "EVM": "Null",
-          "Sudo": "Null",
-          "TransactionPayment": "Null"
-        }
-      },
-      "LockState": {
-        "_enum": {
-          "Committed": "None",
-          "Unbonding": "BlockNumber"
-        }
-      },
-      "LockDuration": {
-        "_enum": [
-          "OneMonth",
-          "OneYear",
-          "TenYears"
-        ]
-      },
-      "EraIndex": "u32",
-      "Era": {
-        "index": "EraIndex",
-        "start": "BlockNumber"
-      },
-      "Commitment": {
-        "state": "LockState",
-        "duration": "LockDuration",
-        "amount": "Balance",
-        "candidate": "AccountId"
-      },
-      "AssetDetails": {
-          "owner": "AccountId",
-          "issuer": "AccountId",
-          "admin": "AccountId",
-          "freezer": "AccountId",
-          "supply": "Balance",
-          "deposit": "DepositBalance",
-          "max_zombies": "u32",
-          "min_balance":"Balance",
-          "zombies":"u32",
-          "accounts":"u32",
-          "is_frozen":"bool"
-      },
-      "AssetMetadata": {
-          "deposit":"DepositBalance",
-          "name": "Vec<u8>",
-          "symbol": "Vec<u8>",
-          "decimals":"u8"
-      },
-      "AssetBalance" : {
-          "balance":"Balance",
-          "is_frozen":"bool",
-          "is_zombie":"bool"
-      },
-      "AssetId":"u32",
-      "BalanceOf":"Balance",
-      "VCU": {
-        "serial_number": "i32",
-        "project": "Vec<u8>",
-        "amount_co2": "Balance",
-        "ipfs_hash": "Vec<u8>"
-      }
+    let network;
+    if (document.getElementById("change_network")) {
+        network = document.getElementById("change_network").value;
     }
-   });
-  // TODO set a green light
+
+    localStorage.setItem("selected_network", network);
+
+    await set_network();
+}
+// function to open connection to network
+async function set_network(count = 1) {
+    // TODO set a red light and switch to green when connected
+    let network = localStorage.getItem("selected_network");
+    if(!network) {
+        network = 'testnet' // default endpoint TODO: update once we go live
+        localStorage.setItem("selected_network", network);
+    }
+    let ws_provider = 'wss://testnet.bitgreen.org';
+
+    if (network === 'mainnet') {
+        ws_provider = 'wss://mainnet.bitgreen.org';
+    } else if (network === 'testnet') {
+        ws_provider = 'wss://testnet.bitgreen.org';
+    } else {
+        // TODO: custom endpoints
+    }
+
+    let error = false;
+    const wsProvider = new api.WsProvider(ws_provider);
+    wsProvider.on('error', async function(e) {
+        if(count > 5) {
+            // after 5 tries, load default
+            localStorage.removeItem("selected_network")
+            window.top.location.reload();
+        }
+        await wsProvider.disconnect()
+        return await set_network(++count);
+    });
+
+    apiv = await api.ApiPromise.create({
+        provider: wsProvider, types:
+            {
+                "CallOf": "Call",
+                "DispatchTime": {
+                    "_enum": {
+                        "At": "BlockNumber",
+                        "After": "BlockNumber"
+                    }
+                },
+                "ScheduleTaskIndex": "u32",
+                "DelayedOrigin": {
+                    "delay": "BlockNumber",
+                    "origin": "PalletsOrigin"
+                },
+                "StorageValue": "Vec<u8>",
+                "GraduallyUpdate": {
+                    "key": "StorageKey",
+                    "targetValue": "StorageValue",
+                    "perBlock": "StorageValue"
+                },
+                "StorageKeyBytes": "Vec<u8>",
+                "StorageValueBytes": "Vec<u8>",
+                "RpcDataProviderId": "Text",
+                "OrderedSet": "Vec<AccountId>",
+                "OrmlAccountData": {
+                    "free": "Balance",
+                    "frozen": "Balance",
+                    "reserved": "Balance"
+                },
+                "OrmlBalanceLock": {
+                    "amount": "Balance",
+                    "id": "LockIdentifier"
+                },
+                "DelayedDispatchTime": {
+                    "_enum": {
+                        "At": "BlockNumber",
+                        "After": "BlockNumber"
+                    }
+                },
+                "DispatchId": "u32",
+                "Price": "FixedU128",
+                "OrmlVestingSchedule": {
+                    "start": "BlockNumber",
+                    "period": "BlockNumber",
+                    "periodCount": "u32",
+                    "perPeriod": "Compact<Balance>"
+                },
+                "VestingScheduleOf": "OrmlVestingSchedule",
+                "PalletBalanceOf": "Balance",
+                "ChangeBalance": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Balance"
+                    }
+                },
+                "BalanceWrapper": {
+                    "amount": "Balance"
+                },
+                "BalanceRequest": {
+                    "amount": "Balance"
+                },
+                "EvmAccountInfo": {
+                    "nonce": "Index",
+                    "contractInfo": "Option<EvmContractInfo>",
+                    "developerDeposit": "Option<Balance>"
+                },
+                "CodeInfo": {
+                    "codeSize": "u32",
+                    "refCount": "u32"
+                },
+                "EvmContractInfo": {
+                    "codeHash": "H256",
+                    "maintainer": "H160",
+                    "deployed": "bool"
+                },
+                "EvmAddress": "H160",
+                "CallRequest": {
+                    "from": "Option<H160>",
+                    "to": "Option<H160>",
+                    "gasLimit": "Option<u32>",
+                    "storageLimit": "Option<u32>",
+                    "value": "Option<U128>",
+                    "data": "Option<Bytes>"
+                },
+                "CID": "Vec<u8>",
+                "ClassId": "u32",
+                "ClassIdOf": "ClassId",
+                "TokenId": "u64",
+                "TokenIdOf": "TokenId",
+                "TokenInfoOf": {
+                    "metadata": "CID",
+                    "owner": "AccountId",
+                    "data": "TokenData"
+                },
+                "TokenData": {
+                    "deposit": "Balance"
+                },
+                "Properties": {
+                    "_set": {
+                        "_bitLength": 8,
+                        "Transferable": 1,
+                        "Burnable": 2
+                    }
+                },
+                "BondingLedger": {
+                    "total": "Compact<Balance>",
+                    "active": "Compact<Balance>",
+                    "unlocking": "Vec<UnlockChunk>"
+                },
+                "Amount": "i128",
+                "AmountOf": "Amount",
+                "AuctionId": "u32",
+                "AuctionIdOf": "AuctionId",
+                "TokenSymbol": {
+                    "_enum": {
+                        "BITG": 0,
+                        "USDG": 1
+                    }
+                },
+                "CurrencyId": {
+                    "_enum": {
+                        "Token": "TokenSymbol",
+                        "DEXShare": "(TokenSymbol, TokenSymbol)",
+                        "ERC20": "EvmAddress"
+                    }
+                },
+                "CurrencyIdOf": "CurrencyId",
+                "AuthoritysOriginId": {
+                    "_enum": [
+                        "Root"
+                    ]
+                },
+                "TradingPair": "(CurrencyId,  CurrencyId)",
+                "AsOriginId": "AuthoritysOriginId",
+                "SubAccountStatus": {
+                    "bonded": "Balance",
+                    "available": "Balance",
+                    "unbonding": "Vec<(EraIndex,Balance)>",
+                    "mockRewardRate": "Rate"
+                },
+                "Params": {
+                    "targetMaxFreeUnbondedRatio": "Ratio",
+                    "targetMinFreeUnbondedRatio": "Ratio",
+                    "targetUnbondingToFreeRatio": "Ratio",
+                    "unbondingToFreeAdjustment": "Ratio",
+                    "baseFeeRate": "Rate"
+                },
+                "Ledger": {
+                    "bonded": "Balance",
+                    "unbondingToFree": "Balance",
+                    "freePool": "Balance",
+                    "toUnbondNextEra": "(Balance, Balance)"
+                },
+                "ChangeRate": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Rate"
+                    }
+                },
+                "ChangeRatio": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Ratio"
+                    }
+                },
+                "BalanceInfo": {
+                    "amount": "Balance"
+                },
+                "Rate": "FixedU128",
+                "Ratio": "FixedU128",
+                "PublicKey": "[u8; 20]",
+                "DestAddress": "Vec<u8>",
+                "Keys": "SessionKeys2",
+                "PalletsOrigin": {
+                    "_enum": {
+                        "System": "SystemOrigin",
+                        "Timestamp": "Null",
+                        "RandomnessCollectiveFlip": "Null",
+                        "Balances": "Null",
+                        "Accounts": "Null",
+                        "Currencies": "Null",
+                        "Tokens": "Null",
+                        "Vesting": "Null",
+                        "Utility": "Null",
+                        "Multisig": "Null",
+                        "Recovery": "Null",
+                        "Proxy": "Null",
+                        "Scheduler": "Null",
+                        "Indices": "Null",
+                        "GraduallyUpdate": "Null",
+                        "Authorship": "Null",
+                        "Babe": "Null",
+                        "Grandpa": "Null",
+                        "Staking": "Null",
+                        "Session": "Null",
+                        "Historical": "Null",
+                        "Authority": "DelayedOrigin",
+                        "ElectionsPhragmen": "Null",
+                        "Contracts": "Null",
+                        "EVM": "Null",
+                        "Sudo": "Null",
+                        "TransactionPayment": "Null"
+                    }
+                },
+                "LockState": {
+                    "_enum": {
+                        "Committed": "None",
+                        "Unbonding": "BlockNumber"
+                    }
+                },
+                "LockDuration": {
+                    "_enum": [
+                        "OneMonth",
+                        "OneYear",
+                        "TenYears"
+                    ]
+                },
+                "EraIndex": "u32",
+                "Era": {
+                    "index": "EraIndex",
+                    "start": "BlockNumber"
+                },
+                "Commitment": {
+                    "state": "LockState",
+                    "duration": "LockDuration",
+                    "amount": "Balance",
+                    "candidate": "AccountId"
+                },
+                "AssetDetails": {
+                    "owner": "AccountId",
+                    "issuer": "AccountId",
+                    "admin": "AccountId",
+                    "freezer": "AccountId",
+                    "supply": "Balance",
+                    "deposit": "DepositBalance",
+                    "max_zombies": "u32",
+                    "min_balance": "Balance",
+                    "zombies": "u32",
+                    "accounts": "u32",
+                    "is_frozen": "bool"
+                },
+                "AssetMetadata": {
+                    "deposit": "DepositBalance",
+                    "name": "Vec<u8>",
+                    "symbol": "Vec<u8>",
+                    "decimals": "u8"
+                },
+                "AssetBalance": {
+                    "balance": "Balance",
+                    "is_frozen": "bool",
+                    "is_zombie": "bool"
+                },
+                "AssetId": "u32",
+                "BalanceOf": "Balance",
+                "VCU": {
+                    "serial_number": "i32",
+                    "project": "Vec<u8>",
+                    "amount_co2": "Balance",
+                    "ipfs_hash": "Vec<u8>"
+                }
+            }
+    });
+
+    await apiv.isReady;
+
+    // TODO set a green light
     // TODO: export this as separate function, so it can be called separately
-  // get balance and show it
-  let { nonce, data: balance } = await apiv.query.system.account(currentaccount);
-  if (parseInt(balance.free.toString())>0){
-    balancev=parseInt(balance.free.toString())/1000000000000000000;
-    balancevf=new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(balancev);
-  } else {
-    balancev=0;
-    balancevf=new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(balancev);
-  }
+    // get balance and show it
+    let {nonce, data: balance} = await apiv.query.system.account(currentaccount);
+    if (parseInt(balance.free.toString()) > 0) {
+        balancev = parseInt(balance.free.toString()) / 1000000000000000000;
+        balancevf = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4
+        }).format(balancev);
+    } else {
+        balancev = 0;
+        balancevf = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4
+        }).format(balancev);
+    }
 }
 // generate keys pair
 function newkeys(obj, error) {
@@ -761,7 +802,7 @@ function set_password_screen() {
     n = n + '<div class="content">';
     n = n + '<h2>Set your wallet password</h2>';
     n = n + '<p class="text-gray pb-2">Set a strong password to encrypt the secret words on your computer. This password will allow you to unlock this wallet when you need to use it.</p>';
-    n = n + '<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="strong password"></div></div>';
+    n = n + '<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="strong password"></div></div>';
     n = n + '<div class="info-messages mt-2 mb-4">';
     n = n + '<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close"></span></span>12 characters or more</div>';
     n = n + '<div class="message d-flex align-items-center"><span id="lowercase_icon"><span class="icon icon-close"></span></span>At least 1 lowercase letter</div>';
@@ -769,7 +810,8 @@ function set_password_screen() {
     n = n + '<div class="message d-flex align-items-center"><span id="digit_icon"><span class="icon icon-close"></span></span>At least 1 digit</div>';
     n = n + '<div class="message d-flex align-items-center"><span id="symbol_icon"><span class="icon icon-close"></span></span>At least 1 special symbol</div>';
     n = n + '</div>';
-    n = n + '<label class="label text-dark d-flex align-items-center"><div class="col">Repeat Password</div><div class="col d-flex flex-row-reverse align-items-center">Both match <div id="repeat_icon" class="me-2"><span class="icon icon-close"></span></div></div></label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password_repeat" type="password" class="form-control" placeholder="repeat password"></div></div>';
+    n = n + '<label class="label text-dark d-flex align-items-center"><div class="col">Repeat Password</div><div class="col d-flex flex-row-reverse align-items-center">Both match <div id="repeat_icon" class="me-2"><span class="icon icon-close"></span></div></div></label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password_repeat" type="password" class="form-control" placeholder="repeat password"></div></div>';
+    n = n + '<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name"></div></div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
     n = n + '<div class="d-flex"><button id="set_password" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
     n = n + '</div>';
@@ -779,11 +821,13 @@ function set_password_screen() {
     document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("password").addEventListener("input", check_password);
     document.getElementById("password_repeat").addEventListener("input", check_password);
+    document.getElementById("wallet_name").addEventListener("input", check_password);
     document.getElementById("set_password").addEventListener("click", storekeys);
 }
 function check_password() {
     let password = document.getElementById('password').value
     let password_repeat = document.getElementById('password_repeat').value
+    let wallet_name = document.getElementById('wallet_name').value
     let success = true;
 
     if(password.length >= 12) {
@@ -830,6 +874,10 @@ function check_password() {
         document.getElementById('repeat_icon').innerHTML = '<span class="icon icon-success icon-check"></span>'
     } else {
         document.getElementById('repeat_icon').innerHTML = '<span class="icon icon-close"></span>'
+        success = false;
+    }
+
+    if(wallet_name.length === 0) {
         success = false;
     }
 
@@ -990,8 +1038,7 @@ function importkeysvalidation() {
 function storekeys(obj, callback) {
     // check for password fields
     const pwd = document.getElementById('password').value;
-    // let description=document.getElementById('description').value; // TODO: add option to set description
-    let description = 'Main Account';
+    let description = document.getElementById('wallet_name').value;
     if (typeof callback === 'undefined') {
         callback = newkeys;
     }
@@ -1154,7 +1201,7 @@ function finish_keys() {
     });
 
     refresh_account();
-    change_network(); // we need  this to refresh balance; todo: make separate function for that
+    set_network(); // we need  this to refresh balance; todo: make separate function for that
 }
 // Main Dashboard 
 function dashboard(extend_delay = false){
@@ -1344,7 +1391,7 @@ async function transactions_history() {
         t.addEventListener("click", transaction)
     })
 
-        anime({
+    anime({
         targets: '#transactions .button-item',
         translateX: [-20, 0],
         opacity: [0, 1],
@@ -1470,77 +1517,114 @@ function timeSince(date) {
     }
     return "moment ago";
 }
+function settings() {
+    hide_header();
+    show_footer();
+
+    let n='<div id="full_page">';
+    n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Settings</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<div class="button-item settings-item d-flex align-items-center">';
+                n=n+'<div class="col-7"><h4 class="m-0">Preferred display currency</h4><p class="text-gray m-0">Your preferred base currency.</p></div>';
+                n=n+'<div class="col-5 d-flex flex-row-reverse"><select class="form-select"><option value="usd">USD</option></select></div>';
+            n=n+'</div>';
+            n=n+'<div class="button-item settings-item d-flex align-items-center">';
+                n=n+'<div class="col-7"><h4 class="m-0">Network</h4><p class="text-gray m-0">Choose which network this wallet connects to.</p></div>';
+                n=n+'<div class="col-5 d-flex flex-row-reverse">';
+                n=n+'<select id="change_network" class="form-select">';
+                    n=n+'<option value="mainnet" '+ ((localStorage.getItem("selected_network") === "mainnet" || !localStorage.getItem("selected_network")) ? "selected" : "") +'>Mainnet</option>';
+                    n=n+'<option value="testnet" '+ (localStorage.getItem("selected_network") === "testnet" ? "selected" : "") +'>Testnet</option>';
+                n=n+'</select>';
+                n=n+'</div>';
+            n=n+'</div>';
+            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Manage Custom Networks</h4><p class="text-gray m-0">Add or remove other trusted networks.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div class="separator-line"></div>';
+            n=n+'<div id="manage_wallets" class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Manage wallets</h4><p class="text-gray m-0">Manage multiple wallets that you own.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col pe-3"><h4 class="m-0">Backup your wallet</h4><p class="text-gray m-0">Display your secret phrase, so you can back it up securely.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Restore a wallet</h4><p class="text-gray m-0">Import a wallet using an existing secret phrase.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div class="separator-line"></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", dashboard);
+    document.getElementById("change_network").addEventListener("change", change_network);
+    document.getElementById("manage_wallets").addEventListener("click", manage_wallets);
+}
 // Manage accounts (create/import/delete)
-function manageaccounts(){
-  let n='<br><center><H3>Manage Accounts</h3>';
-  n=n+'&nbsp;';
-  n=n+'<hr>'
-  // add list of the available accounts
-  n=n+'<ul class="list-group" style="text-align:left;">';
-  for(i=1;i<=99;i++){
-    if(localStorage.getItem("webwalletaccount"+i)) {
-      n=n+'<li class="list-group-item list-group-item-action" id="'+i+'">';
-      let ac=localStorage.getItem("webwalletaccount"+i);
-      n=n+jdenticon.toSvg(ac,40);
-      n=n+localStorage.getItem("webwalletdescription"+i);
-      n=n+" ("+ac.substring(0,4)+"..."+ac.substring(ac.length-4)+')</li>';
-    }
-  }
-  n=n+"</ul>"
-  n=n+'<hr>'
-  // icon for adding account
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="createaccount">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16"><path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/></svg>';
-  n=n+' Create Account';
-  n=n+'</li>';
-  n=n+'</ul>';
-  // icon for importing account
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="importaccount">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/><path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/></svg>';
-  n=n+' Import Account';
-  n=n+'</li>';
-  n=n+'</ul>';
-  // icon for support
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="support">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>';
-  n=n+' Support&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-  n=n+'</li>';
-  n=n+'</ul>';  
-  n=n+'<hr>'
-  n=n+'</center>';
-  document.getElementById("root").innerHTML = n;
-  document.getElementById("createaccount").addEventListener("click", newkeys);
-  document.getElementById("importaccount").addEventListener("click", importkeys);
-  document.getElementById("support").addEventListener("click", contactsupport);
-  for(i=1;i<=99;i++){
-    if(localStorage.getItem("webwalletaccount"+i)) {
-      document.getElementById(i).addEventListener("click", function(){ setaccount(this.id);},false);
-    } else {
-      break;
-    }
-  }
+function manage_wallets(){
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"></span>';
+            n=n+'<div class="col w-100 d-flex flex-row-reverse"><button id="wallet_create" type="button" class="btn btn-primary btn-sm ps-2 pe-3"><span class="icon icon-plus me-2"></span> New</button></div>';
+        n=n+'</div>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Manage Wallets</h1>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="wallet_list">';
+            for(let i = 1; i <= 99; i++) {
+                if(localStorage.getItem("webwalletaccount"+i)) {
+                    let account = localStorage.getItem("webwalletaccount"+i);
+                    let is_active = parseInt(currentaccountid) === i;
+                    console.log(is_active)
+                    console.log(i)
+
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+jdenticon.toSvg(account, 56);
+                        n=n+'<div class="col"><h4 class="m-0">'+localStorage.getItem("webwalletdescription"+i)+(is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "")+'</h4><p class="text-gray m-0 w-75">'+account.substring(0, 28)+'...</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.getElementById("wallet_create").addEventListener("click", wallet_create);
+    document.querySelectorAll("#bordered_content .button-item").forEach(w => {
+        w.addEventListener("click", function () {
+            // TODO: this is logic for header, open page to edit wallet here.
+            set_account(this.dataset.id);
+        }, false)
+    })
 }
 // function to open a new tab to contact the support
 function contactsupport(){
   window.open("https://bitgreen.org/contact");
 }
 // function to set new account and return to dashboard
-function setaccount(id){
-  currentaccount=localStorage.getItem("webwalletaccount"+id);
-  currentaccountid=i;
-  // set the last used account 
-  localStorage.setItem("webwalletcurrentaccountid",id);
-  // set accountdescription for showing in the different screens
-  if(localStorage.getItem("webwalletdescription"+id)){
-    accountdescription=localStorage.getItem("webwalletdescription"+id);
-    if(accountdescription.length>20){
-      accountdescription=accountdescription.substring(0,20);
+function set_account(id){
+    currentaccount = localStorage.getItem("webwalletaccount" + id);
+    currentaccountid = id;
+    // set the last used account
+    localStorage.setItem("webwalletcurrentaccountid", id);
+    // set accountdescription for showing in the different screens
+    if (localStorage.getItem("webwalletdescription" + id)) {
+        accountdescription = localStorage.getItem("webwalletdescription" + id);
+        if (accountdescription.length > 20) {
+            accountdescription = accountdescription.substring(0, 20);
+        }
     }
-  }
-  dashboard();
+    dashboard();
 }
 // function to show the form for sending funds (init)
 let transaction_amount = 0
@@ -1570,7 +1654,7 @@ async function send(recipient = '', amount = 0) {
         n=n+'<p class="text-gray" style="font-size: 13px;">'+currentaccount+'</p>';
         n = n + '<div id="choose_token" class="d-flex align-items-sketch"><span class="icon icon-b-circle"></span><div class="col d-flex align-items-center"><span class="name">BBB Token</span></div></div>';
         n = n + '<label class="label text-dark">Amount</label><div id="choose_quantity" class="d-flex mb-3"><div class="col-4"><div class="form-group"><input id="amount" type="number" class="form-control" value="'+amount+'"></div></div><div class="col-8"><div class="w-100 text-gray d-flex flex-row-reverse"><span>'+balancevf+' Available</span></div><input id="range" type="range" min="0" max="'+balancevf+'" step="0.0001" value="'+amount+'"></div></div>';
-        n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
         n = n + '<div class="footer double-footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
@@ -1723,7 +1807,7 @@ function review_transaction() {
         n = n + '</div>';
     n = n + '</div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
-        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
     n = n + '</div>';
     n = n + '</div>';
 
@@ -1753,7 +1837,7 @@ async function receive() {
                 n=n+'<button id="copy_qrcode" class="btn btn-text"><span class="icon icon-left icon-copy"></span> Copy QR</button>';
             n=n+'</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
@@ -1822,7 +1906,7 @@ function signin(domain){
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
         n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
     n=n+'</div>';
 
@@ -2520,6 +2604,8 @@ async  function hexToString(hexString) {
   return(stringOut);
 }
 function show_header() {
+    remove_notifications();
+
     let header_el = document.getElementById("header");
 
     // refresh the identicon
@@ -2539,7 +2625,7 @@ function show_header() {
         n=n+'</svg>';
     n=n+'</div>';
     n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-        n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
+        n=n+'<span id="go_settings" class="icon-cog text-white click"></span>';
         if(currentaccount) {
             n=n+'<div id="current_wallet" class="d-flex align-items-center">';
                 n=n+'<div class="identicon">'+ic+'</div>';
@@ -2562,10 +2648,14 @@ function show_header() {
         });
     }
 
+    document.getElementById("go_settings").addEventListener("click", settings)
+
     header_el.classList.add('visible')
     header_el.classList.add('init')
 }
 function hide_header() {
+    remove_notifications();
+
     let header_el = document.getElementById("header");
 
     if(header_el.classList.contains('visible')) {
@@ -2582,6 +2672,8 @@ function hide_header() {
     header_el.classList.remove('visible')
 }
 function show_footer(active = '', extend_delay = false) {
+    remove_notifications();
+
     let footer_el = document.getElementById("main_footer");
 
     // hide footer if there is no account yet
@@ -2617,6 +2709,8 @@ function show_footer(active = '', extend_delay = false) {
     footer_el.classList.add('visible')
 }
 function hide_footer() {
+    remove_notifications();
+
     let footer_el = document.getElementById("main_footer");
 
     if(footer_el.classList.contains('visible')) {
@@ -2631,4 +2725,9 @@ function hide_footer() {
     }
 
     footer_el.classList.remove('visible')
+}
+function remove_notifications() {
+    document.querySelectorAll('.notification').forEach(n => {
+        n.remove()
+    });
 }
