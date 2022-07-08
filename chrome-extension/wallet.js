@@ -250,7 +250,7 @@ function wallet_create() {
 async function change_network() {
     let network;
     if (document.getElementById("change_network")) {
-        network = document.getElementById("change_network").value;
+        network = DOMPurify.sanitize(document.getElementById("change_network").value);
     }
 
     localStorage.setItem("selected_network", network);
@@ -825,9 +825,9 @@ function set_password_screen() {
     document.getElementById("set_password").addEventListener("click", storekeys);
 }
 function check_password() {
-    let password = document.getElementById('password').value
-    let password_repeat = document.getElementById('password_repeat').value
-    let wallet_name = document.getElementById('wallet_name').value
+    let password = DOMPurify.sanitize(document.getElementById('password').value);
+    let password_repeat = DOMPurify.sanitize(document.getElementById('password_repeat').value);
+    let wallet_name = DOMPurify.sanitize(document.getElementById('wallet_name').value);
     let success = true;
 
     if(password.length >= 12) {
@@ -950,7 +950,7 @@ function importkeys() {
     sessionStorage.setItem('finish_message', 'imported');
 }
 function import_word() {
-    let input = document.getElementById("keyword").value;
+    let input = DOMPurify.sanitize(document.getElementById("keyword").value);
     document.getElementById("keyword").value = ''
 
     if(!input) {
@@ -1037,8 +1037,8 @@ function importkeysvalidation() {
 // function to encrypt and store the secret words
 function storekeys(obj, callback) {
     // check for password fields
-    const pwd = document.getElementById('password').value;
-    let description = document.getElementById('wallet_name').value;
+    const pwd = DOMPurify.sanitize(document.getElementById('password').value);
+    let description = DOMPurify.sanitize(document.getElementById('wallet_name').value);
     if (typeof callback === 'undefined') {
         callback = newkeys;
     }
@@ -1584,8 +1584,6 @@ function manage_wallets(){
                 if(localStorage.getItem("webwalletaccount"+i)) {
                     let account = localStorage.getItem("webwalletaccount"+i);
                     let is_active = parseInt(currentaccountid) === i;
-                    console.log(is_active)
-                    console.log(i)
 
                     n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
                         n=n+jdenticon.toSvg(account, 56);
@@ -1738,7 +1736,7 @@ async function paste_recipient() {
                 : keyring.decodeAddress(address)
         );
 
-        document.getElementById("recipient").value = address
+        document.getElementById("recipient").value = DOMPurify.sanitize(address)
     } catch (error) {
         notification_class = 'notification notification-error'
         notification_icon = 'icon-alert'
@@ -2226,7 +2224,7 @@ async function transferfunds() {
     let notification_message = null;
     let accountrecipient = transaction_recipient
     let amount = transaction_amount
-    let password = document.getElementById("password").value;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
 
     let n = '<div id="full_page">';
     n = n + '<div class="content full-content">';
@@ -2429,8 +2427,8 @@ async function submitextrinsic(){
 // function to execute the signin
 async function signinexecute() {
     let notification_message = null;
-    let password = document.getElementById("password").value;
-    let domain = document.getElementById("domain").value;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
+    let domain = DOMPurify.sanitize(document.getElementById("domain").value);
 
     let encrypted = '';
     // read the encrypted storage
