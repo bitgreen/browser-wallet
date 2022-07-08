@@ -2611,7 +2611,7 @@ function show_header() {
 
     let n=''
     n=n+'<div class="col-4 p-0">';
-        n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
+        n=n+'<svg id="top_logo" class="click" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
             n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
             n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
             n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
@@ -2629,6 +2629,22 @@ function show_header() {
                 n=n+'<div class="identicon">'+ic+'</div>';
                 n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
                 n=n+'<span class="icon icon-down-arrow"></span>';
+                n=n+'<div class="dropdown">';
+                    for(let i = 1; i <= 99; i++) {
+                        if(localStorage.getItem("webwalletaccount"+i)) {
+                            let account = localStorage.getItem("webwalletaccount"+i);
+                            let account_description = localStorage.getItem("webwalletdescription"+i);
+                            let is_active = parseInt(currentaccountid) === i;
+
+                            if(is_active) continue;
+
+                            n=n+'<div class="wallet d-flex align-items-center" data-id="'+i+'">';
+                                n=n+'<div class="identicon">'+jdenticon.toSvg(account, 56)+'</div>';
+                                n=n+'<div class="info"><span class="desc">'+(account_description.length > 14 ? account_description.substring(0,14)+'...' : account_description)+'</span><span>'+account.substring(0,16)+'...</span></div>';
+                            n=n+'</div>';
+                        }
+                    }
+                n=n+'</div>';
             n=n+'</div>';
         }
     n=n+'</div>';
@@ -2647,6 +2663,28 @@ function show_header() {
     }
 
     document.getElementById("go_settings").addEventListener("click", settings)
+    document.getElementById("top_logo").addEventListener("click", dashboard)
+    document.getElementById("current_wallet").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if(document.getElementById("current_wallet").classList.contains('active')) {
+            document.getElementById("current_wallet").classList.remove('active')
+        } else {
+            document.getElementById("current_wallet").classList.add('active')
+        }
+    })
+    document.querySelectorAll("#current_wallet .wallet").forEach(w => {
+        w.addEventListener("click", function(e) {
+            e.stopPropagation();
+            set_account(this.dataset.id);
+            document.getElementById("current_wallet").classList.remove('active')
+        }, false)
+    })
+
+    // click anywhere, hide dropdown
+    document.addEventListener("click", function(e) {
+        e.stopPropagation();
+        document.getElementById("current_wallet").classList.remove('active')
+    });
 
     header_el.classList.add('visible')
     header_el.classList.add('init')
