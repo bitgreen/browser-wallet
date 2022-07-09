@@ -1600,9 +1600,72 @@ function manage_wallets(){
     document.getElementById("wallet_create").addEventListener("click", wallet_create);
     document.querySelectorAll("#bordered_content .button-item").forEach(w => {
         w.addEventListener("click", function () {
-            // TODO: this is logic for header, open page to edit wallet here.
-            set_account(this.dataset.id);
+            manage_wallet(this.dataset.id);
         }, false)
+    })
+}
+function manage_wallet(wallet_id) {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Manage wallet</h3><button id="delete_wallet" type="button" class="btn btn-sm btn-danger"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>'+localStorage.getItem("webwalletdescription"+wallet_id)+'</h2>';
+            n=n+'<p class="text-gray text-small">'+localStorage.getItem("webwalletaccount"+wallet_id)+'</p>';
+            n=n+'<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name" value="'+localStorage.getItem("webwalletdescription"+wallet_id)+'"></div></div>';
+            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_wallet" class="btn btn-sm btn-primary ps-3 pe-3 d-flex align-items-center"><span class="icon icon-left icon-large icon-save"></span> Save</button></div></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="modal" class="modal">';
+        n=n+'<div class="modal-dialog">';
+            n=n+'<div class="modal-content">';
+                n=n+'<div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>';
+                n=n+'<div class="modal-body">';
+                    n=n+'<h4 class="text-center">'+localStorage.getItem("webwalletdescription"+wallet_id)+'</h4>';
+                    n=n+'<p class="text-center text-gray text-small mb-4">'+localStorage.getItem("webwalletaccount"+wallet_id)+'</p>';
+                    n=n+'<p class="text-center text-gray text-small">This action cannot be undone. Ensure you have the secret phrase for this wallet backed up securely.</p>';
+                n=n+'</div>';
+                n=n+'<div class="modal-footer justify-content-center">';
+                    n=n+'<button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+wallet_id+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
+                    n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
+                n=n+'</div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", manage_wallets);
+    document.getElementById("wallet_name").addEventListener("input", function() {
+        if(document.getElementById("wallet_name").value.length === 0) {
+            document.getElementById("save_wallet").classList.add('disabled')
+            document.getElementById("save_wallet").classList.remove('btn-primary')
+        } else {
+            document.getElementById("save_wallet").classList.add('btn-primary')
+            document.getElementById("save_wallet").classList.remove('disabled')
+        }
+    });
+    document.getElementById("save_wallet").addEventListener("click", function() {
+        localStorage.setItem("webwalletdescription" + wallet_id, document.getElementById("wallet_name").value);
+    });
+    document.getElementById("delete_wallet").addEventListener("click", function() {
+        document.getElementById("modal").classList.add('fade')
+        document.getElementById("modal").classList.add('show')
+    });
+    document.getElementById("hide_modal").addEventListener("click", function() {
+        document.getElementById("modal").classList.remove('fade')
+        document.getElementById("modal").classList.remove('show')
+    });
+    document.getElementById("confirm_delete_wallet").addEventListener("click", function() {
+        let wallet_id = this.dataset.id;
+
+        localStorage.removeItem("webwallet"+wallet_id)
+        localStorage.removeItem("webwalletaccount"+wallet_id)
+        localStorage.removeItem("webwalletdescription"+wallet_id)
+        localStorage.removeItem("webwalletaccounttransactions"+wallet_id)
+
+        manage_wallets();
     })
 }
 // function to open a new tab to contact the support
@@ -2603,6 +2666,7 @@ async  function hexToString(hexString) {
 }
 function show_header() {
     remove_notifications();
+    refresh_account();
 
     let header_el = document.getElementById("header");
 
