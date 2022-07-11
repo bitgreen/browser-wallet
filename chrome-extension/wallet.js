@@ -597,6 +597,7 @@ function newkeys(obj, error) {
                 mnemonic_array.forEach(function(val, index) {
                     n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
                 })
+            n = n + '</div>';
             n = n + '<div class="footer d-flex align-items-sketch align-items-center">';
             n = n + '<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key">I have safely stored my secret phrase<br><span class="text-gray fw-light text-small">You must confirm in order to proceed.</span></label></p></div>';
             n = n + '<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
@@ -627,6 +628,165 @@ function newkeys(obj, error) {
     });
 
     sessionStorage.setItem('finish_message', 'created');
+}
+// backup wallets screen
+function backup_wallets() {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Backup Wallets</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>Backup your secret phrase</h2>';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
+            n=n+'<div id="wallet_list" class="backup-list">';
+            for(let i = 1; i <= 99; i++) {
+                if(localStorage.getItem("webwalletaccount"+i)) {
+                    let account = localStorage.getItem("webwalletaccount"+i);
+                    let is_active = parseInt(currentaccountid) === i;
+
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+jdenticon.toSvg(account, 56);
+                        n=n+'<div class="col"><h4 class="m-0">'+localStorage.getItem("webwalletdescription"+i)+(is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "")+'</h4><p class="text-gray m-0 w-75">'+account.substring(0, 28)+'...</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.querySelectorAll("#wallet_list .button-item").forEach(w => {
+        w.addEventListener("click", function () {
+            backup_wallet(this.dataset.id);
+        }, false)
+    })
+
+    anime({
+        targets: '.icon-alert',
+        scale: [1, 0.8, 1.2, 1],
+        easing: 'easeInOutSine',
+        duration: 1600,
+        delay: 200,
+    });
+}
+function backup_wallet(wallet_id) {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Backup Wallet</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>Backup your secret phrase</h2>';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
+            n=n+'<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>';
+            n=n+'<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary btn-hidden pe-3 ps-3" style="opacity: 0;"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
+            n=n+'<div id="backup_mnemonics" class="mnemonics mnemonics-hidden d-block mt-2">';
+                Array(24).fill().forEach(function(val, index) {
+                    n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+random_string(Math.floor(Math.random() * 4) + 3)+'</span></div></div>';
+                })
+            n=n+'</div>';
+            n=n+'<div id="password_input" class="footer d-flex align-items-sketch flex-row-reverse">';
+                n=n+'<div class="w-100"><label class="label text-dark">Enter your password to reveal secret phrase</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-primary">Reveal <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", backup_wallets);
+    document.getElementById("reveal_mnemonics").addEventListener("click", reveal_mnemonics);
+    document.getElementById("copy_seed").addEventListener("click", copy_seed);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await reveal_mnemonics();
+        }
+    });
+}
+function random_string(len) {
+    let text = "";
+
+    let charset = "abcdefghijklmnopqrstuvwxyz";
+
+    for (let i = 0; i < len; i++)
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+    return text;
+}
+async function reveal_mnemonics() {
+    let notification_message = null;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
+
+    let encrypted = '';
+    // read the encrypted storage
+    if (localStorage.getItem("webwallet" + currentaccountid)) {
+        encrypted = localStorage.getItem("webwallet" + currentaccountid);
+    }
+
+    if(password === '') {
+        notification_message = 'Password is wrong!';
+    } else if(encrypted.length === 0) {
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
+    } else {
+        // try to decrypt and get keypairsv with the keys pair
+        let mnemonics = await decrypt_webwallet_mnemonics(encrypted, password);
+        if(mnemonics) {
+            mnemonic_array = mnemonics.split(' ');
+            let n = '';
+            mnemonic_array.forEach(function(val, index) {
+                n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
+            })
+            document.getElementById("backup_mnemonics").innerHTML = n;
+            document.getElementById("backup_mnemonics").classList.remove('mnemonics-hidden');
+            document.getElementById("copy_seed").classList.remove('btn-hidden');
+
+            anime({
+                targets: '#password_input',
+                duration: 300,
+                translateY: [0, 60],
+                opacity: [1, 0],
+                easing: 'linear',
+                delay: 0
+            });
+
+            anime({
+                targets: '#copy_seed',
+                duration: 300,
+                opacity: [0, 1],
+                easing: 'linear',
+                delay: 0
+            });
+
+            anime({
+                targets: '#backup_mnemonics .badge .text',
+                opacity: [0, 1],
+                easing: 'easeInOutSine',
+                duration: 250,
+                delay: function(el, i) { return i * 50 },
+            });
+        } else {
+            notification_message = 'Password is wrong!';
+        }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
+    }
 }
 async function copy_seed() {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
@@ -920,7 +1080,7 @@ async function importkeys() {
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
     document.getElementById("keyword").addEventListener("keypress", async function(e) {
         if (e.key === "Enter") {
-            await import_word()
+            import_word()
         }
     });
 
@@ -1553,7 +1713,7 @@ function settings() {
                 n=n+'<div class="col"><h4 class="m-0">Manage wallets</h4><p class="text-gray m-0">Manage multiple wallets that you own.</p></div>';
                 n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
             n=n+'</div>';
-            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+            n=n+'<div id="backup_wallets" class="button-item settings-item d-flex align-items-center click">';
                 n=n+'<div class="col pe-3"><h4 class="m-0">Backup your wallet</h4><p class="text-gray m-0">Display your secret phrase, so you can back it up securely.</p></div>';
                 n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
             n=n+'</div>';
@@ -1579,6 +1739,7 @@ function settings() {
     document.getElementById("goback").addEventListener("click", dashboard);
     document.getElementById("change_network").addEventListener("change", change_network);
     document.getElementById("manage_wallets").addEventListener("click", manage_wallets);
+    document.getElementById("backup_wallets").addEventListener("click", backup_wallets);
     document.getElementById("go_import").addEventListener("click", importkeys);
 }
 // Manage accounts (create/import/delete)
@@ -2639,6 +2800,67 @@ async function decrypt_webwallet(encrypted,pwd){
       return(false);
     }
     
+  }
+
+}
+// function to decrypt the web wallet and return a mnemonics
+async function decrypt_webwallet_mnemonics(encrypted,pwd){
+  // get ascii value of first 2 chars
+  const vb1=pwd.charCodeAt(0);
+  const vb2=pwd.charCodeAt(1);
+  const p=vb1*vb2; // position to derive other 3 passwords
+  // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+  const enc=JSON.parse(encrypted);
+  let randomstring = enc.iv;
+  let dpwd1='';
+  let dpwd2='';
+  let dpwd3='';
+  let h=util_crypto.keccakAsU8a(pwd+randomstring);
+  for (let i = 0; i < 100000; i++) {
+    h=util_crypto.keccakAsU8a(h);
+    if (i==p){
+      dpwd1=h;
+    }
+    h=util_crypto.sha512AsU8a(h);
+    if (i==p){
+      dpwd2=h;
+    }
+    h=util_crypto.blake2AsU8a(h);
+    if (i==p){
+      dpwd3=h;
+    }
+  }
+  // decrypt AES-OFB
+  const ivaesofb=util.hexToU8a(enc.ivaesofb);
+  const keyaesofb= dpwd3.slice(0,32);
+  let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+  const encryptedhex=enc.encrypted;
+  const encryptedaesofb=aesjs.utils.hex.toBytes(encryptedhex);
+  let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+  // decrypt AES-CTR
+  const ivaesctr=util.hexToU8a(enc.ivaesctr);
+  const keyaesctr= dpwd2.slice(0,32);
+  let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+  let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+  // decrypt AES-CFB
+  const ivaescfb=util.hexToU8a(enc.ivaescfb);
+  const keyaescfb= dpwd1.slice(0,32);
+  let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+  let decrypted = aesCfb.decrypt(encryptedaescfb);
+  let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
+  if(!mnemonicdecrypted){
+    return(false);
+  }else {
+    keyringv= new keyring.Keyring({ type: 'sr25519' });
+    try {
+      keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
+      return(mnemonicdecrypted);
+    }
+    catch(e){
+      console.log(e);
+      return(false);
+    }
+
   }
 
 }
