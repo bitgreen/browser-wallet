@@ -256,6 +256,33 @@ label.label {
     text-align: center;
     line-height: 32px;
 }
+.form-switch {
+    margin: 12px 0;
+}
+.form-switch .form-check-input {
+    border-radius: 12px;
+    width: 44px;
+    height: 24px;
+    border: none !important;
+    margin-top: 0;
+    margin-right: 12px;
+    background-color: #F8F8F9 !important;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='rgba%28255, 255, 255, 1%29'/></svg>") !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+.form-switch .form-check-input:checked {
+    background-color: #C0FF00 !important;
+}
+.form-switch .form-check-label {
+    height: 24px;
+    line-height: 24px;
+    user-select: none;
+}
+.form-switch .form-check-label h4 {
+    height: 24px;
+    line-height: 24px;
+}
 #header {
     position: fixed;
     top: 0;

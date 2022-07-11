@@ -551,10 +551,12 @@ async function set_network(count = 1) {
             }
     });
 
+    await get_balances();
+}
+async function get_balances() {
     await apiv.isReady;
 
     // TODO set a green light
-    // TODO: export this as separate function, so it can be called separately
     // get balance and show it
     let {nonce, data: balance} = await apiv.query.system.account(currentaccount);
     if (parseInt(balance.free.toString()) > 0) {
@@ -890,7 +892,7 @@ function check_password() {
     }
 }
 // import existing keys
-function importkeys() {
+async function importkeys() {
     hide_header();
     hide_footer();
 
@@ -916,6 +918,11 @@ function importkeys() {
     document.getElementById("import_word").addEventListener("click", import_word);
     document.getElementById("import_mnemonics").addEventListener("click", remove_imported_word);
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
+    document.getElementById("keyword").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await import_word()
+        }
+    });
 
     let import_mnemonics_el = document.getElementById("import_mnemonics");
     import_mnemonic_sortable = Sortable.create(import_mnemonics_el, {
@@ -1129,7 +1136,7 @@ function storekeys(obj, callback) {
 
     finish_keys();
 }
-function finish_keys() {
+async function finish_keys() {
     hide_header();
     hide_footer();
 
@@ -1201,7 +1208,7 @@ function finish_keys() {
     });
 
     refresh_account();
-    set_network(); // we need  this to refresh balance; todo: make separate function for that
+    await get_balances();
 }
 // Main Dashboard 
 function dashboard(extend_delay = false){
@@ -1550,11 +1557,21 @@ function settings() {
                 n=n+'<div class="col pe-3"><h4 class="m-0">Backup your wallet</h4><p class="text-gray m-0">Display your secret phrase, so you can back it up securely.</p></div>';
                 n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
             n=n+'</div>';
-            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+            n=n+'<div id="go_import" class="button-item settings-item d-flex align-items-center click">';
                 n=n+'<div class="col"><h4 class="m-0">Restore a wallet</h4><p class="text-gray m-0">Import a wallet using an existing secret phrase.</p></div>';
                 n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
             n=n+'</div>';
+
             n=n+'<div class="separator-line"></div>';
+
+            n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                n=n+'<input class="form-check-input" type="checkbox" role="switch" id="dark_theme">';
+                n=n+'<label class="form-check-label" for="dark_theme"><h4 class="m-0">Enable dark theme</h4></label>';
+            n=n+'</div>';
+            n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                n=n+'<input class="form-check-input" type="checkbox" role="switch" id="keep_me_signed_in">';
+                n=n+'<label class="form-check-label" for="keep_me_signed_in"><h4 class="m-0">Keep me signed in</h4><p class="text-gray m-0">Don’t ask me to sign in each time.</p></label>';
+            n=n+'</div>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -1562,6 +1579,7 @@ function settings() {
     document.getElementById("goback").addEventListener("click", dashboard);
     document.getElementById("change_network").addEventListener("change", change_network);
     document.getElementById("manage_wallets").addEventListener("click", manage_wallets);
+    document.getElementById("go_import").addEventListener("click", importkeys);
 }
 // Manage accounts (create/import/delete)
 function manage_wallets(){
@@ -1673,7 +1691,7 @@ function contactsupport(){
   window.open("https://bitgreen.org/contact");
 }
 // function to set new account and return to dashboard
-function set_account(id){
+async function set_account(id){
     currentaccount = localStorage.getItem("webwalletaccount" + id);
     currentaccountid = id;
     // set the last used account
@@ -1685,6 +1703,9 @@ function set_account(id){
             accountdescription = accountdescription.substring(0, 20);
         }
     }
+
+    await get_balances();
+
     dashboard();
 }
 // function to show the form for sending funds (init)
@@ -2728,26 +2749,30 @@ function show_header() {
 
     document.getElementById("go_settings").addEventListener("click", settings)
     document.getElementById("top_logo").addEventListener("click", dashboard)
-    document.getElementById("current_wallet").addEventListener("click", function(e) {
-        e.stopPropagation();
-        if(document.getElementById("current_wallet").classList.contains('active')) {
-            document.getElementById("current_wallet").classList.remove('active')
-        } else {
-            document.getElementById("current_wallet").classList.add('active')
-        }
-    })
-    document.querySelectorAll("#current_wallet .wallet").forEach(w => {
-        w.addEventListener("click", function(e) {
+    if(document.getElementById("current_wallet")) {
+        document.getElementById("current_wallet").addEventListener("click", function(e) {
             e.stopPropagation();
-            set_account(this.dataset.id);
-            document.getElementById("current_wallet").classList.remove('active')
-        }, false)
-    })
+            if(document.getElementById("current_wallet").classList.contains('active')) {
+                document.getElementById("current_wallet").classList.remove('active')
+            } else {
+                document.getElementById("current_wallet").classList.add('active')
+            }
+        })
+        document.querySelectorAll("#current_wallet .wallet").forEach(w => {
+            w.addEventListener("click", function(e) {
+                e.stopPropagation();
+                set_account(this.dataset.id);
+                document.getElementById("current_wallet").classList.remove('active')
+            }, false)
+        })
+    }
 
     // click anywhere, hide dropdown
     document.addEventListener("click", function(e) {
         e.stopPropagation();
-        document.getElementById("current_wallet").classList.remove('active')
+        if(document.getElementById("current_wallet")) {
+            document.getElementById("current_wallet").classList.remove('active')
+        }
     });
 
     header_el.classList.add('visible')
