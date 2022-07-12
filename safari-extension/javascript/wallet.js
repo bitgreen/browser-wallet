@@ -55,12 +55,12 @@ function refresh_account() {
 
 // add listeners for events (you cannot use onclick event in the extension)
 document.addEventListener('DOMContentLoaded', async function () {
+    hide_header();
     hide_footer();
 
     // open connection
-    await change_network();
-    // network selection
-    // document.getElementById("network").addEventListener("change", change_network); // TODO: temp disabled
+    await set_network();
+
     // if at the least one account is available, we show it
     if (currentaccount.length > 0) {
         const params = new URLSearchParams(window.location.search)
@@ -209,45 +209,16 @@ function hide_init() {
     }, 1200)
 }
 function wallet_create() {
-    hide_footer(); // TODO: hide only when there is no wallets (init screen)
+    show_header();
+    show_footer();
 
     localStorage.setItem("skip_intro", true);
 
-    let ic = '';
-    if (currentaccount.length > 0) {
-        // refresh the identicon
-        ic = jdenticon.toSvg(currentaccount, 30);
-    }
-
     let n='<div id="heading">';
-        n=n+'<div id="menu" class="d-flex align-items-center">';
-            n=n+'<div class="col-4 p-0">';
-                n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-                n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-                n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-                n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-                n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-                n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-                n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-                n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-                n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-                n=n+'</svg>';
-            n=n+'</div>';
-            n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-                n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-                if (currentaccount.length > 0) {
-                    n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-                        n=n+'<div class="identicon">'+ic+'</div>';
-                        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-                        n=n+'<span class="icon icon-down-arrow"></span>';
-                    n=n+'</div>';
-                }
-            n=n+'</div>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">'+(currentaccountid ? "Create or Import Wallet" : "Get started")+'</h1>';
         n=n+'</div>';
-            n=n+'<div class="content row">';
-                n=n+'<h1 class="text-center text-white">Get started</h1>';
-            n=n+'</div>';
-        n=n+'</div>';
+    n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
         n=n+'<div id="newkeys" class="button-item d-flex align-items-center">';
@@ -275,291 +246,337 @@ function wallet_create() {
         easing: 'linear',
     });
 }
-// function to connect/change network
+// function to change network
 async function change_network() {
-  // set identicon
-  // document.getElementById("idicon").innerHTML='<svg width="40" height="40" data-jdenticon-value="'+currentaccount+'"></svg>';
-  // TODO set a red light and switch to green when connected
-  let network='wss://testnet.bitgreen.org';
-  if(document.getElementById("network")){
-    network=document.getElementById('network').value;
-  }
-  const wsProvider = new api.WsProvider(network);
-  apiv = await api.ApiPromise.create({ provider: wsProvider,types:
-    {
-      "CallOf": "Call",
-      "DispatchTime": {
-        "_enum": {
-          "At": "BlockNumber",
-          "After": "BlockNumber"
-        }
-      },
-      "ScheduleTaskIndex": "u32",
-      "DelayedOrigin": {
-        "delay": "BlockNumber",
-        "origin": "PalletsOrigin"
-      },
-      "StorageValue": "Vec<u8>",
-      "GraduallyUpdate": {
-        "key": "StorageKey",
-        "targetValue": "StorageValue",
-        "perBlock": "StorageValue"
-      },
-      "StorageKeyBytes": "Vec<u8>",
-      "StorageValueBytes": "Vec<u8>",
-      "RpcDataProviderId": "Text",
-      "OrderedSet": "Vec<AccountId>",
-      "OrmlAccountData": {
-        "free": "Balance",
-        "frozen": "Balance",
-        "reserved": "Balance"
-      },
-      "OrmlBalanceLock": {
-        "amount": "Balance",
-        "id": "LockIdentifier"
-      },
-      "DelayedDispatchTime": {
-        "_enum": {
-          "At": "BlockNumber",
-          "After": "BlockNumber"
-        }
-      },
-      "DispatchId": "u32",
-      "Price": "FixedU128",
-      "OrmlVestingSchedule": {
-        "start": "BlockNumber",
-        "period": "BlockNumber",
-        "periodCount": "u32",
-        "perPeriod": "Compact<Balance>"
-      },
-      "VestingScheduleOf": "OrmlVestingSchedule",
-      "PalletBalanceOf": "Balance",
-      "ChangeBalance": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Balance"
-        }
-      },
-      "BalanceWrapper": {
-        "amount": "Balance"
-      },
-      "BalanceRequest": {
-        "amount": "Balance"
-      },
-      "EvmAccountInfo": {
-        "nonce": "Index",
-        "contractInfo": "Option<EvmContractInfo>",
-        "developerDeposit": "Option<Balance>"
-      },
-      "CodeInfo": {
-        "codeSize": "u32",
-        "refCount": "u32"
-      },
-      "EvmContractInfo": {
-        "codeHash": "H256",
-        "maintainer": "H160",
-        "deployed": "bool"
-      },
-      "EvmAddress": "H160",
-      "CallRequest": {
-        "from": "Option<H160>",
-        "to": "Option<H160>",
-        "gasLimit": "Option<u32>",
-        "storageLimit": "Option<u32>",
-        "value": "Option<U128>",
-        "data": "Option<Bytes>"
-      },
-      "CID": "Vec<u8>",
-      "ClassId": "u32",
-      "ClassIdOf": "ClassId",
-      "TokenId": "u64",
-      "TokenIdOf": "TokenId",
-      "TokenInfoOf": {
-        "metadata": "CID",
-        "owner": "AccountId",
-        "data": "TokenData"
-      },
-      "TokenData": {
-        "deposit": "Balance"
-      },
-      "Properties": {
-        "_set": {
-          "_bitLength": 8,
-          "Transferable": 1,
-          "Burnable": 2
-        }
-      },
-      "BondingLedger": {
-        "total": "Compact<Balance>",
-        "active": "Compact<Balance>",
-        "unlocking": "Vec<UnlockChunk>"
-      },
-      "Amount": "i128",
-      "AmountOf": "Amount",
-      "AuctionId": "u32",
-      "AuctionIdOf": "AuctionId",
-      "TokenSymbol": {
-        "_enum": {
-          "BITG": 0,
-          "USDG": 1
-        }
-      },
-      "CurrencyId": {
-        "_enum": {
-          "Token": "TokenSymbol",
-          "DEXShare": "(TokenSymbol, TokenSymbol)",
-          "ERC20": "EvmAddress"
-        }
-      },
-      "CurrencyIdOf": "CurrencyId",
-      "AuthoritysOriginId": {
-        "_enum": [
-          "Root"
-        ]
-      },
-      "TradingPair": "(CurrencyId,  CurrencyId)",
-      "AsOriginId": "AuthoritysOriginId",
-      "SubAccountStatus": {
-        "bonded": "Balance",
-        "available": "Balance",
-        "unbonding": "Vec<(EraIndex,Balance)>",
-        "mockRewardRate": "Rate"
-      },
-      "Params": {
-        "targetMaxFreeUnbondedRatio": "Ratio",
-        "targetMinFreeUnbondedRatio": "Ratio",
-        "targetUnbondingToFreeRatio": "Ratio",
-        "unbondingToFreeAdjustment": "Ratio",
-        "baseFeeRate": "Rate"
-      },
-      "Ledger": {
-        "bonded": "Balance",
-        "unbondingToFree": "Balance",
-        "freePool": "Balance",
-        "toUnbondNextEra": "(Balance, Balance)"
-      },
-      "ChangeRate": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Rate"
-        }
-      },
-      "ChangeRatio": {
-        "_enum": {
-          "NoChange": "Null",
-          "NewValue": "Ratio"
-        }
-      },
-      "BalanceInfo": {
-        "amount": "Balance"
-      },
-      "Rate": "FixedU128",
-      "Ratio": "FixedU128",
-      "PublicKey": "[u8; 20]",
-      "DestAddress": "Vec<u8>",
-      "Keys": "SessionKeys2",
-      "PalletsOrigin": {
-        "_enum": {
-          "System": "SystemOrigin",
-          "Timestamp": "Null",
-          "RandomnessCollectiveFlip": "Null",
-          "Balances": "Null",
-          "Accounts": "Null",
-          "Currencies": "Null",
-          "Tokens": "Null",
-          "Vesting": "Null",
-          "Utility": "Null",
-          "Multisig": "Null",
-          "Recovery": "Null",
-          "Proxy": "Null",
-          "Scheduler": "Null",
-          "Indices": "Null",
-          "GraduallyUpdate": "Null",
-          "Authorship": "Null",
-          "Babe": "Null",
-          "Grandpa": "Null",
-          "Staking": "Null",
-          "Session": "Null",
-          "Historical": "Null",
-          "Authority": "DelayedOrigin",
-          "ElectionsPhragmen": "Null",
-          "Contracts": "Null",
-          "EVM": "Null",
-          "Sudo": "Null",
-          "TransactionPayment": "Null"
-        }
-      },
-      "LockState": {
-        "_enum": {
-          "Committed": "None",
-          "Unbonding": "BlockNumber"
-        }
-      },
-      "LockDuration": {
-        "_enum": [
-          "OneMonth",
-          "OneYear",
-          "TenYears"
-        ]
-      },
-      "EraIndex": "u32",
-      "Era": {
-        "index": "EraIndex",
-        "start": "BlockNumber"
-      },
-      "Commitment": {
-        "state": "LockState",
-        "duration": "LockDuration",
-        "amount": "Balance",
-        "candidate": "AccountId"
-      },
-      "AssetDetails": {
-          "owner": "AccountId",
-          "issuer": "AccountId",
-          "admin": "AccountId",
-          "freezer": "AccountId",
-          "supply": "Balance",
-          "deposit": "DepositBalance",
-          "max_zombies": "u32",
-          "min_balance":"Balance",
-          "zombies":"u32",
-          "accounts":"u32",
-          "is_frozen":"bool"
-      },
-      "AssetMetadata": {
-          "deposit":"DepositBalance",
-          "name": "Vec<u8>",
-          "symbol": "Vec<u8>",
-          "decimals":"u8"
-      },
-      "AssetBalance" : {
-          "balance":"Balance",
-          "is_frozen":"bool",
-          "is_zombie":"bool"
-      },
-      "AssetId":"u32",
-      "BalanceOf":"Balance",
-      "VCU": {
-        "serial_number": "i32",
-        "project": "Vec<u8>",
-        "amount_co2": "Balance",
-        "ipfs_hash": "Vec<u8>"
-      }
+    let network;
+    if (document.getElementById("change_network")) {
+        network = DOMPurify.sanitize(document.getElementById("change_network").value);
     }
-   });
-  // TODO set a green light
-  // get balance and show it
-  let { nonce, data: balance } = await apiv.query.system.account(currentaccount);
-  if (parseInt(balance.free.toString())>0){
-    balancev=parseInt(balance.free.toString())/1000000000000000000;
-    balancevf=new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(balancev);
-  } else {
-    balancev=0;
-    balancevf=new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(balancev);
-  }
+
+    localStorage.setItem("selected_network", network);
+
+    await set_network();
+}
+// function to open connection to network
+async function set_network(count = 1) {
+    // TODO set a red light and switch to green when connected
+    let network = localStorage.getItem("selected_network");
+    if(!network) {
+        network = 'testnet' // default endpoint TODO: update once we go live
+        localStorage.setItem("selected_network", network);
+    }
+    let ws_provider;
+
+    if (network === 'mainnet') {
+        ws_provider = 'wss://mainnet.bitgreen.org';
+    } else if (network === 'testnet') {
+        ws_provider = 'wss://testnet.bitgreen.org';
+    } else {
+        let custom_network = JSON.parse(localStorage.getItem(network));
+        ws_provider = custom_network.url;
+    }
+
+    let error = false;
+    const wsProvider = new api.WsProvider(ws_provider);
+    wsProvider.on('error', async function(e) {
+        if(count > 5) {
+            // after 5 tries, load default
+            localStorage.removeItem("selected_network")
+            window.top.location.reload();
+        }
+        await wsProvider.disconnect()
+        return await set_network(++count);
+    });
+
+    apiv = await api.ApiPromise.create({
+        provider: wsProvider, types:
+            {
+                "CallOf": "Call",
+                "DispatchTime": {
+                    "_enum": {
+                        "At": "BlockNumber",
+                        "After": "BlockNumber"
+                    }
+                },
+                "ScheduleTaskIndex": "u32",
+                "DelayedOrigin": {
+                    "delay": "BlockNumber",
+                    "origin": "PalletsOrigin"
+                },
+                "StorageValue": "Vec<u8>",
+                "GraduallyUpdate": {
+                    "key": "StorageKey",
+                    "targetValue": "StorageValue",
+                    "perBlock": "StorageValue"
+                },
+                "StorageKeyBytes": "Vec<u8>",
+                "StorageValueBytes": "Vec<u8>",
+                "RpcDataProviderId": "Text",
+                "OrderedSet": "Vec<AccountId>",
+                "OrmlAccountData": {
+                    "free": "Balance",
+                    "frozen": "Balance",
+                    "reserved": "Balance"
+                },
+                "OrmlBalanceLock": {
+                    "amount": "Balance",
+                    "id": "LockIdentifier"
+                },
+                "DelayedDispatchTime": {
+                    "_enum": {
+                        "At": "BlockNumber",
+                        "After": "BlockNumber"
+                    }
+                },
+                "DispatchId": "u32",
+                "Price": "FixedU128",
+                "OrmlVestingSchedule": {
+                    "start": "BlockNumber",
+                    "period": "BlockNumber",
+                    "periodCount": "u32",
+                    "perPeriod": "Compact<Balance>"
+                },
+                "VestingScheduleOf": "OrmlVestingSchedule",
+                "PalletBalanceOf": "Balance",
+                "ChangeBalance": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Balance"
+                    }
+                },
+                "BalanceWrapper": {
+                    "amount": "Balance"
+                },
+                "BalanceRequest": {
+                    "amount": "Balance"
+                },
+                "EvmAccountInfo": {
+                    "nonce": "Index",
+                    "contractInfo": "Option<EvmContractInfo>",
+                    "developerDeposit": "Option<Balance>"
+                },
+                "CodeInfo": {
+                    "codeSize": "u32",
+                    "refCount": "u32"
+                },
+                "EvmContractInfo": {
+                    "codeHash": "H256",
+                    "maintainer": "H160",
+                    "deployed": "bool"
+                },
+                "EvmAddress": "H160",
+                "CallRequest": {
+                    "from": "Option<H160>",
+                    "to": "Option<H160>",
+                    "gasLimit": "Option<u32>",
+                    "storageLimit": "Option<u32>",
+                    "value": "Option<U128>",
+                    "data": "Option<Bytes>"
+                },
+                "CID": "Vec<u8>",
+                "ClassId": "u32",
+                "ClassIdOf": "ClassId",
+                "TokenId": "u64",
+                "TokenIdOf": "TokenId",
+                "TokenInfoOf": {
+                    "metadata": "CID",
+                    "owner": "AccountId",
+                    "data": "TokenData"
+                },
+                "TokenData": {
+                    "deposit": "Balance"
+                },
+                "Properties": {
+                    "_set": {
+                        "_bitLength": 8,
+                        "Transferable": 1,
+                        "Burnable": 2
+                    }
+                },
+                "BondingLedger": {
+                    "total": "Compact<Balance>",
+                    "active": "Compact<Balance>",
+                    "unlocking": "Vec<UnlockChunk>"
+                },
+                "Amount": "i128",
+                "AmountOf": "Amount",
+                "AuctionId": "u32",
+                "AuctionIdOf": "AuctionId",
+                "TokenSymbol": {
+                    "_enum": {
+                        "BITG": 0,
+                        "USDG": 1
+                    }
+                },
+                "CurrencyId": {
+                    "_enum": {
+                        "Token": "TokenSymbol",
+                        "DEXShare": "(TokenSymbol, TokenSymbol)",
+                        "ERC20": "EvmAddress"
+                    }
+                },
+                "CurrencyIdOf": "CurrencyId",
+                "AuthoritysOriginId": {
+                    "_enum": [
+                        "Root"
+                    ]
+                },
+                "TradingPair": "(CurrencyId,  CurrencyId)",
+                "AsOriginId": "AuthoritysOriginId",
+                "SubAccountStatus": {
+                    "bonded": "Balance",
+                    "available": "Balance",
+                    "unbonding": "Vec<(EraIndex,Balance)>",
+                    "mockRewardRate": "Rate"
+                },
+                "Params": {
+                    "targetMaxFreeUnbondedRatio": "Ratio",
+                    "targetMinFreeUnbondedRatio": "Ratio",
+                    "targetUnbondingToFreeRatio": "Ratio",
+                    "unbondingToFreeAdjustment": "Ratio",
+                    "baseFeeRate": "Rate"
+                },
+                "Ledger": {
+                    "bonded": "Balance",
+                    "unbondingToFree": "Balance",
+                    "freePool": "Balance",
+                    "toUnbondNextEra": "(Balance, Balance)"
+                },
+                "ChangeRate": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Rate"
+                    }
+                },
+                "ChangeRatio": {
+                    "_enum": {
+                        "NoChange": "Null",
+                        "NewValue": "Ratio"
+                    }
+                },
+                "BalanceInfo": {
+                    "amount": "Balance"
+                },
+                "Rate": "FixedU128",
+                "Ratio": "FixedU128",
+                "PublicKey": "[u8; 20]",
+                "DestAddress": "Vec<u8>",
+                "Keys": "SessionKeys2",
+                "PalletsOrigin": {
+                    "_enum": {
+                        "System": "SystemOrigin",
+                        "Timestamp": "Null",
+                        "RandomnessCollectiveFlip": "Null",
+                        "Balances": "Null",
+                        "Accounts": "Null",
+                        "Currencies": "Null",
+                        "Tokens": "Null",
+                        "Vesting": "Null",
+                        "Utility": "Null",
+                        "Multisig": "Null",
+                        "Recovery": "Null",
+                        "Proxy": "Null",
+                        "Scheduler": "Null",
+                        "Indices": "Null",
+                        "GraduallyUpdate": "Null",
+                        "Authorship": "Null",
+                        "Babe": "Null",
+                        "Grandpa": "Null",
+                        "Staking": "Null",
+                        "Session": "Null",
+                        "Historical": "Null",
+                        "Authority": "DelayedOrigin",
+                        "ElectionsPhragmen": "Null",
+                        "Contracts": "Null",
+                        "EVM": "Null",
+                        "Sudo": "Null",
+                        "TransactionPayment": "Null"
+                    }
+                },
+                "LockState": {
+                    "_enum": {
+                        "Committed": "None",
+                        "Unbonding": "BlockNumber"
+                    }
+                },
+                "LockDuration": {
+                    "_enum": [
+                        "OneMonth",
+                        "OneYear",
+                        "TenYears"
+                    ]
+                },
+                "EraIndex": "u32",
+                "Era": {
+                    "index": "EraIndex",
+                    "start": "BlockNumber"
+                },
+                "Commitment": {
+                    "state": "LockState",
+                    "duration": "LockDuration",
+                    "amount": "Balance",
+                    "candidate": "AccountId"
+                },
+                "AssetDetails": {
+                    "owner": "AccountId",
+                    "issuer": "AccountId",
+                    "admin": "AccountId",
+                    "freezer": "AccountId",
+                    "supply": "Balance",
+                    "deposit": "DepositBalance",
+                    "max_zombies": "u32",
+                    "min_balance": "Balance",
+                    "zombies": "u32",
+                    "accounts": "u32",
+                    "is_frozen": "bool"
+                },
+                "AssetMetadata": {
+                    "deposit": "DepositBalance",
+                    "name": "Vec<u8>",
+                    "symbol": "Vec<u8>",
+                    "decimals": "u8"
+                },
+                "AssetBalance": {
+                    "balance": "Balance",
+                    "is_frozen": "bool",
+                    "is_zombie": "bool"
+                },
+                "AssetId": "u32",
+                "BalanceOf": "Balance",
+                "VCU": {
+                    "serial_number": "i32",
+                    "project": "Vec<u8>",
+                    "amount_co2": "Balance",
+                    "ipfs_hash": "Vec<u8>"
+                }
+            }
+    });
+
+    await get_balances();
+}
+async function get_balances() {
+    await apiv.isReady;
+
+    // TODO set a green light
+    // get balance and show it
+    let {nonce, data: balance} = await apiv.query.system.account(currentaccount);
+    if (parseInt(balance.free.toString()) > 0) {
+        balancev = parseInt(balance.free.toString()) / 1000000000000000000;
+        balancevf = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4
+        }).format(balancev);
+    } else {
+        balancev = 0;
+        balancevf = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4
+        }).format(balancev);
+    }
 }
 // generate keys pair
 function newkeys(obj, error) {
+    hide_header();
     hide_footer();
 
     let k = new keyring.Keyring({type: 'sr25519'});
@@ -581,6 +598,7 @@ function newkeys(obj, error) {
                 mnemonic_array.forEach(function(val, index) {
                     n = n + '<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
                 })
+            n = n + '</div>';
             n = n + '<div class="footer d-flex align-items-sketch align-items-center">';
             n = n + '<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key">I have safely stored my secret phrase<br><span class="text-gray fw-light text-small">You must confirm in order to proceed.</span></label></p></div>';
             n = n + '<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
@@ -611,6 +629,165 @@ function newkeys(obj, error) {
     });
 
     sessionStorage.setItem('finish_message', 'created');
+}
+// backup wallets screen
+function backup_wallets() {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Backup Wallets</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>Backup your secret phrase</h2>';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
+            n=n+'<div id="wallet_list" class="backup-list">';
+            for(let i = 1; i <= 99; i++) {
+                if(localStorage.getItem("webwalletaccount"+i)) {
+                    let account = localStorage.getItem("webwalletaccount"+i);
+                    let is_active = parseInt(currentaccountid) === i;
+
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+jdenticon.toSvg(account, 56);
+                        n=n+'<div class="col"><h4 class="m-0">'+localStorage.getItem("webwalletdescription"+i)+(is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "")+'</h4><p class="text-gray m-0 w-75">'+account.substring(0, 28)+'...</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.querySelectorAll("#wallet_list .button-item").forEach(w => {
+        w.addEventListener("click", function () {
+            backup_wallet(this.dataset.id);
+        }, false)
+    })
+
+    anime({
+        targets: '.icon-alert',
+        scale: [1, 0.8, 1.2, 1],
+        easing: 'easeInOutSine',
+        duration: 1600,
+        delay: 200,
+    });
+}
+function backup_wallet(wallet_id) {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Backup Wallet</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>Backup your secret phrase</h2>';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>';
+            n=n+'<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>';
+            n=n+'<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary btn-hidden pe-3 ps-3" style="opacity: 0;"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>';
+            n=n+'<div id="backup_mnemonics" class="mnemonics mnemonics-hidden d-block mt-2">';
+                Array(24).fill().forEach(function(val, index) {
+                    n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+random_string(Math.floor(Math.random() * 4) + 3)+'</span></div></div>';
+                })
+            n=n+'</div>';
+            n=n+'<div id="password_input" class="footer d-flex align-items-sketch flex-row-reverse">';
+                n=n+'<div class="w-100"><label class="label text-dark">Enter your password to reveal secret phrase</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-primary">Reveal <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", backup_wallets);
+    document.getElementById("reveal_mnemonics").addEventListener("click", reveal_mnemonics);
+    document.getElementById("copy_seed").addEventListener("click", copy_seed);
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await reveal_mnemonics();
+        }
+    });
+}
+function random_string(len) {
+    let text = "";
+
+    let charset = "abcdefghijklmnopqrstuvwxyz";
+
+    for (let i = 0; i < len; i++)
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+    return text;
+}
+async function reveal_mnemonics() {
+    let notification_message = null;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
+
+    let encrypted = '';
+    // read the encrypted storage
+    if (localStorage.getItem("webwallet" + currentaccountid)) {
+        encrypted = localStorage.getItem("webwallet" + currentaccountid);
+    }
+
+    if(password === '') {
+        notification_message = 'Password is wrong!';
+    } else if(encrypted.length === 0) {
+        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
+    } else {
+        // try to decrypt and get keypairsv with the keys pair
+        let mnemonics = await decrypt_webwallet_mnemonics(encrypted, password);
+        if(mnemonics) {
+            mnemonic_array = mnemonics.split(' ');
+            let n = '';
+            mnemonic_array.forEach(function(val, index) {
+                n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
+            })
+            document.getElementById("backup_mnemonics").innerHTML = n;
+            document.getElementById("backup_mnemonics").classList.remove('mnemonics-hidden');
+            document.getElementById("copy_seed").classList.remove('btn-hidden');
+
+            anime({
+                targets: '#password_input',
+                duration: 300,
+                translateY: [0, 60],
+                opacity: [1, 0],
+                easing: 'linear',
+                delay: 0
+            });
+
+            anime({
+                targets: '#copy_seed',
+                duration: 300,
+                opacity: [0, 1],
+                easing: 'linear',
+                delay: 0
+            });
+
+            anime({
+                targets: '#backup_mnemonics .badge .text',
+                opacity: [0, 1],
+                easing: 'easeInOutSine',
+                duration: 250,
+                delay: function(el, i) { return i * 50 },
+            });
+        } else {
+            notification_message = 'Password is wrong!';
+        }
+    }
+
+    if(notification_message) {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">'+notification_message+'</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
+    }
 }
 async function copy_seed() {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
@@ -645,6 +822,7 @@ function agree_new_key() {
     }
 }
 function confirm_secret_phrase_screen() {
+    hide_header();
     hide_footer();
 
     shuffled_mnemonic_array = shuffleArray(mnemonic_array);
@@ -779,6 +957,7 @@ function check_words() {
     }
 }
 function set_password_screen() {
+    hide_header();
     hide_footer();
 
     let n = '<div id="full_page">';
@@ -786,7 +965,7 @@ function set_password_screen() {
     n = n + '<div class="content">';
     n = n + '<h2>Set your wallet password</h2>';
     n = n + '<p class="text-gray pb-2">Set a strong password to encrypt the secret words on your computer. This password will allow you to unlock this wallet when you need to use it.</p>';
-    n = n + '<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="strong password"></div></div>';
+    n = n + '<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="strong password"></div></div>';
     n = n + '<div class="info-messages mt-2 mb-4">';
     n = n + '<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close"></span></span>12 characters or more</div>';
     n = n + '<div class="message d-flex align-items-center"><span id="lowercase_icon"><span class="icon icon-close"></span></span>At least 1 lowercase letter</div>';
@@ -794,7 +973,8 @@ function set_password_screen() {
     n = n + '<div class="message d-flex align-items-center"><span id="digit_icon"><span class="icon icon-close"></span></span>At least 1 digit</div>';
     n = n + '<div class="message d-flex align-items-center"><span id="symbol_icon"><span class="icon icon-close"></span></span>At least 1 special symbol</div>';
     n = n + '</div>';
-    n = n + '<label class="label text-dark d-flex align-items-center"><div class="col">Repeat Password</div><div class="col d-flex flex-row-reverse align-items-center">Both match <div id="repeat_icon" class="me-2"><span class="icon icon-close"></span></div></div></label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password_repeat" type="password" class="form-control" placeholder="repeat password"></div></div>';
+    n = n + '<label class="label text-dark d-flex align-items-center"><div class="col">Repeat Password</div><div class="col d-flex flex-row-reverse align-items-center">Both match <div id="repeat_icon" class="me-2"><span class="icon icon-close"></span></div></div></label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password_repeat" type="password" class="form-control" placeholder="repeat password"></div></div>';
+    n = n + '<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name"></div></div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
     n = n + '<div class="d-flex"><button id="set_password" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
     n = n + '</div>';
@@ -804,11 +984,13 @@ function set_password_screen() {
     document.getElementById("goback").addEventListener("click", wallet_create);
     document.getElementById("password").addEventListener("input", check_password);
     document.getElementById("password_repeat").addEventListener("input", check_password);
+    document.getElementById("wallet_name").addEventListener("input", check_password);
     document.getElementById("set_password").addEventListener("click", storekeys);
 }
 function check_password() {
-    let password = document.getElementById('password').value
-    let password_repeat = document.getElementById('password_repeat').value
+    let password = DOMPurify.sanitize(document.getElementById('password').value);
+    let password_repeat = DOMPurify.sanitize(document.getElementById('password_repeat').value);
+    let wallet_name = DOMPurify.sanitize(document.getElementById('wallet_name').value);
     let success = true;
 
     if(password.length >= 12) {
@@ -858,6 +1040,10 @@ function check_password() {
         success = false;
     }
 
+    if(wallet_name.length === 0) {
+        success = false;
+    }
+
     if(success) {
         document.getElementById("set_password").classList.remove('disabled')
         document.getElementById("set_password").classList.add('btn-primary')
@@ -867,7 +1053,8 @@ function check_password() {
     }
 }
 // import existing keys
-function importkeys() {
+async function importkeys() {
+    hide_header();
     hide_footer();
 
     import_mnemonic_array = []
@@ -892,6 +1079,11 @@ function importkeys() {
     document.getElementById("import_word").addEventListener("click", import_word);
     document.getElementById("import_mnemonics").addEventListener("click", remove_imported_word);
     document.getElementById("continue_new_key").addEventListener("click", importkeysvalidation);
+    document.getElementById("keyword").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            import_word()
+        }
+    });
 
     let import_mnemonics_el = document.getElementById("import_mnemonics");
     import_mnemonic_sortable = Sortable.create(import_mnemonics_el, {
@@ -926,7 +1118,7 @@ function importkeys() {
     sessionStorage.setItem('finish_message', 'imported');
 }
 function import_word() {
-    let input = document.getElementById("keyword").value;
+    let input = DOMPurify.sanitize(document.getElementById("keyword").value);
     document.getElementById("keyword").value = ''
 
     if(!input) {
@@ -1013,9 +1205,8 @@ function importkeysvalidation() {
 // function to encrypt and store the secret words
 function storekeys(obj, callback) {
     // check for password fields
-    const pwd = document.getElementById('password').value;
-    // let description=document.getElementById('description').value; // TODO: add option to set description
-    let description = 'Main Account';
+    const pwd = DOMPurify.sanitize(document.getElementById('password').value);
+    let description = DOMPurify.sanitize(document.getElementById('wallet_name').value);
     if (typeof callback === 'undefined') {
         callback = newkeys;
     }
@@ -1106,7 +1297,8 @@ function storekeys(obj, callback) {
 
     finish_keys();
 }
-function finish_keys() {
+async function finish_keys() {
+    hide_header();
     hide_footer();
 
     let message = 'created'
@@ -1177,52 +1369,28 @@ function finish_keys() {
     });
 
     refresh_account();
-    change_network(); // we need  this to refresh balance; todo: make separate function for that
+    await get_balances();
 }
 // Main Dashboard 
 function dashboard(extend_delay = false){
+    show_header();
     show_footer('dashboard', extend_delay);
-
-    // refresh the identicon
-    let ic = jdenticon.toSvg(currentaccount, 30);
 
     extend_delay = (typeof extend_delay === 'boolean' ? extend_delay : false)
 
     let n='<div id="heading" class="bigger">';
-        n=n+'<div id="menu" class="d-flex align-items-center">';
-            n=n+'<div class="col-4 p-0">';
-            n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-            n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-            n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-            n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-            n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-            n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-            n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-            n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-            n=n+'</svg>';
+        n=n+'<div id="portfolio" class="d-flex align-items-center">';
+            n=n+'<div class="col-6">';
+                n=n+'<img src="assets/demo-portfolio.png">';
             n=n+'</div>';
-            n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-                n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-                n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-                    n=n+'<div class="identicon">'+ic+'</div>';
-                    n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-                    n=n+'<span class="icon icon-down-arrow"></span>';
-                n=n+'</div>';
+            n=n+'<div class="col-6 info">';
+                n=n+'<h1 class="text-white">Portfolio</h1>';
+                n=n+'<p><span class="icon icon-circle" style="color: #9ECC00"></span> BBB Token</p>';
+                n=n+'<p><span class="icon icon-circle" style="color: #02A238"></span> Impact Bonds</p>';
+                n=n+'<p><span class="icon icon-circle" style="color: #026AA2"></span> Nature Based Credits</p>';
+                n=n+'<p><span class="icon icon-circle" style="color: #D5D6DA"></span> Other</p>';
             n=n+'</div>';
         n=n+'</div>';
-    n=n+'<div id="portfolio" class="d-flex align-items-center">';
-        n=n+'<div class="col-6">';
-            n=n+'<img src="assets/demo-portfolio.png">';
-        n=n+'</div>';
-        n=n+'<div class="col-6 info">';
-            n=n+'<h1 class="text-white">Portfolio</h1>';
-            n=n+'<p><span class="icon icon-circle" style="color: #9ECC00"></span> BBB Token</p>';
-            n=n+'<p><span class="icon icon-circle" style="color: #02A238"></span> Impact Bonds</p>';
-            n=n+'<p><span class="icon icon-circle" style="color: #026AA2"></span> Nature Based Credits</p>';
-            n=n+'<p><span class="icon icon-circle" style="color: #D5D6DA"></span> Other</p>';
-        n=n+'</div>';
-    n=n+'</div>';
     n=n+'</div>';
 
     n=n+'<div id="bordered_content" class="smaller">';
@@ -1233,19 +1401,19 @@ function dashboard(extend_delay = false){
         n=n+'<div class="row" style="margin-top: -6px;">';
             n=n+'<div class="col-4 pe-2">';
                 n=n+'<div class="button-item button-gray tab-item">';
-                n=n+'<span class="icon icon-b"></span>';
+                n=n+'<span class="icon icon-b-circle"></span>';
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">BBB TOKEN</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
             n=n+'<div class="col-4 ps-1 pe-1">';
                 n=n+'<div class="button-item button-gray tab-item">';
-                n=n+'<span class="icon icon-carbon" style="color: #9ECC00;"></span>';
-                n=n+'<div class="title d-flex align-items-center"><span class="w-100">CARBON CREDITS</span></div>';
+                n=n+'<span class="icon icon-co2-circle" style="color: #9ECC00;"></span>';
+                n=n+'<div class="title d-flex align-items-center"><span class="w-100">NATURE-BASED CREDITS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
             n=n+'<div class="col-4 ps-2">';
                 n=n+'<div class="button-item button-gray tab-item">';
-                n=n+'<span class="icon icon-retired" style="color: #9ECC00;"></span>';
+                n=n+'<span class="icon icon-retired-outline" style="color: #D5D6DA;"></span>';
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">RETIRED CREDITS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
@@ -1253,7 +1421,7 @@ function dashboard(extend_delay = false){
         n=n+'<div class="row">';
             n=n+'<div class="col-4 pe-2">';
                 n=n+'<div class="button-item button-gray tab-item">';
-                n=n+'<span class="icon icon-impact" style="color: #026AA2;"></span>';
+                n=n+'<span class="icon icon-impact-outline" style="color: #026AA2;"></span>';
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">IMPACT BONDS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
@@ -1330,42 +1498,13 @@ function dashboard(extend_delay = false){
     document.getElementById("go_history").addEventListener("click", transactions_history);
 }
 async function transactions_history() {
+    show_header();
     show_footer('history');
 
-    let ic = '';
-    if (currentaccount.length > 0) {
-        // refresh the identicon
-        ic = jdenticon.toSvg(currentaccount, 30);
-    }
-
     let n='<div id="heading">';
-    n=n+'<div id="menu" class="d-flex align-items-center">';
-    n=n+'<div class="col-4 p-0">';
-    n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-    n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-    n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-    n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-    n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-    n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-    n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-    n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-    n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-    n=n+'</svg>';
-    n=n+'</div>';
-    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-    n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-    if (currentaccount.length > 0) {
-        n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-        n=n+'<div class="identicon">'+ic+'</div>';
-        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-        n=n+'<span class="icon icon-down-arrow"></span>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Transaction history</h1>';
         n=n+'</div>';
-    }
-    n=n+'</div>';
-    n=n+'</div>';
-    n=n+'<div class="content row">';
-    n=n+'<h1 class="text-center text-white">Transaction history</h1>';
-    n=n+'</div>';
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
@@ -1420,7 +1559,7 @@ async function transactions_history() {
         t.addEventListener("click", transaction)
     })
 
-        anime({
+    anime({
         targets: '#transactions .button-item',
         translateX: [-20, 0],
         opacity: [0, 1],
@@ -1451,13 +1590,8 @@ async function get_transactions() {
         });
 }
 function transaction(e) {
+    hide_header();
     hide_footer();
-
-    let ic = '';
-    if (currentaccount.length > 0) {
-        // refresh the identicon
-        ic = jdenticon.toSvg(currentaccount, 30);
-    }
 
     let transaction_hash = this.dataset.hash
     let transaction = current_account_transactions.find(({ hash }) => hash === transaction_hash)
@@ -1551,89 +1685,364 @@ function timeSince(date) {
     }
     return "moment ago";
 }
+function settings() {
+    hide_header();
+    show_footer();
+
+    let n='<div id="full_page">';
+    n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Settings</h3></div>';
+        n=n+'<div class="content">';
+            n=n+'<div class="button-item settings-item d-flex align-items-center">';
+                n=n+'<div class="col-7"><h4 class="m-0">Preferred display currency</h4><p class="text-gray m-0">Your preferred base currency.</p></div>';
+                n=n+'<div class="col-5 d-flex flex-row-reverse"><select class="form-select"><option value="usd">USD</option></select></div>';
+            n=n+'</div>';
+            n=n+'<div class="button-item settings-item d-flex align-items-center">';
+                n=n+'<div class="col-7"><h4 class="m-0">Network</h4><p class="text-gray m-0">Choose which network this wallet connects to.</p></div>';
+                n=n+'<div class="col-5 d-flex flex-row-reverse">';
+                n=n+'<select id="change_network" class="form-select">';
+                    n=n+'<option value="mainnet" '+ ((localStorage.getItem("selected_network") === "mainnet" || !localStorage.getItem("selected_network")) ? "selected" : "") +'>Mainnet</option>';
+                    n=n+'<option value="testnet" '+ (localStorage.getItem("selected_network") === "testnet" ? "selected" : "") +'>Testnet</option>';
+                    for(let i = 1; i <= 99; i++) {
+                        let network = JSON.parse(localStorage.getItem("custom_rpc_network_"+i));
+                        if(network) {
+                            n=n+'<option value="custom_rpc_network_'+i+'" '+ (localStorage.getItem("selected_network") === "custom_rpc_network_"+i ? "selected" : "") +'>'+network.name+'</option>';
+                        }
+                    }
+                n=n+'</select>';
+                n=n+'</div>';
+            n=n+'</div>';
+            n=n+'<div id="manage_networks" class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Manage Custom Networks</h4><p class="text-gray m-0">Add or remove other trusted networks.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div class="separator-line"></div>';
+            n=n+'<div id="manage_wallets" class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Manage wallets</h4><p class="text-gray m-0">Manage multiple wallets that you own.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div id="backup_wallets" class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col pe-3"><h4 class="m-0">Backup your wallet</h4><p class="text-gray m-0">Display your secret phrase, so you can back it up securely.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+            n=n+'<div id="go_import" class="button-item settings-item d-flex align-items-center click">';
+                n=n+'<div class="col"><h4 class="m-0">Restore a wallet</h4><p class="text-gray m-0">Import a wallet using an existing secret phrase.</p></div>';
+                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+            n=n+'</div>';
+
+            n=n+'<div class="separator-line"></div>';
+
+            n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                n=n+'<input class="form-check-input" type="checkbox" role="switch" id="dark_theme">';
+                n=n+'<label class="form-check-label" for="dark_theme"><h4 class="m-0">Enable dark theme</h4></label>';
+            n=n+'</div>';
+            n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                n=n+'<input class="form-check-input" type="checkbox" role="switch" id="keep_me_signed_in">';
+                n=n+'<label class="form-check-label" for="keep_me_signed_in"><h4 class="m-0">Keep me signed in</h4><p class="text-gray m-0">Don’t ask me to sign in each time.</p></label>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", dashboard);
+    document.getElementById("change_network").addEventListener("change", change_network);
+    document.getElementById("manage_networks").addEventListener("click", manage_networks);
+    document.getElementById("manage_wallets").addEventListener("click", manage_wallets);
+    document.getElementById("backup_wallets").addEventListener("click", backup_wallets);
+    document.getElementById("go_import").addEventListener("click", importkeys);
+}
 // Manage accounts (create/import/delete)
-function manageaccounts(){
-  let n='<br><center><H3>Manage Accounts</h3>';
-  n=n+'&nbsp;';
-  n=n+'<hr>'
-  // add list of the available accounts
-  n=n+'<ul class="list-group" style="text-align:left;">';
-  for(i=1;i<=99;i++){
-    if(localStorage.getItem("webwalletaccount"+i)) {
-      n=n+'<li class="list-group-item list-group-item-action" id="'+i+'">';
-      let ac=localStorage.getItem("webwalletaccount"+i);
-      n=n+jdenticon.toSvg(ac,40);
-      n=n+localStorage.getItem("webwalletdescription"+i);
-      n=n+" ("+ac.substring(0,4)+"..."+ac.substring(ac.length-4)+')</li>';
+function manage_wallets(){
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"></span>';
+            n=n+'<div class="col w-100 d-flex flex-row-reverse"><button id="wallet_create" type="button" class="btn btn-primary btn-sm ps-2 pe-3"><span class="icon icon-plus me-2"></span> New</button></div>';
+        n=n+'</div>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Manage Wallets</h1>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="wallet_list">';
+            for(let i = 1; i <= 99; i++) {
+                if(localStorage.getItem("webwalletaccount"+i)) {
+                    let account = localStorage.getItem("webwalletaccount"+i);
+                    let is_active = parseInt(currentaccountid) === i;
+
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+jdenticon.toSvg(account, 56);
+                        n=n+'<div class="col"><h4 class="m-0">'+localStorage.getItem("webwalletdescription"+i)+(is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "")+'</h4><p class="text-gray m-0 w-75">'+account.substring(0, 28)+'...</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.getElementById("wallet_create").addEventListener("click", wallet_create);
+    document.querySelectorAll("#bordered_content .button-item").forEach(w => {
+        w.addEventListener("click", function () {
+            manage_wallet(this.dataset.id);
+        }, false)
+    })
+}
+function manage_wallet(wallet_id) {
+    hide_header();
+    hide_footer();
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Manage wallet</h3><button id="delete_wallet" type="button" class="btn btn-sm btn-danger"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button></div>';
+        n=n+'<div class="content">';
+            n=n+'<h2>'+localStorage.getItem("webwalletdescription"+wallet_id)+'</h2>';
+            n=n+'<p class="text-gray text-small">'+localStorage.getItem("webwalletaccount"+wallet_id)+'</p>';
+            n=n+'<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name" value="'+localStorage.getItem("webwalletdescription"+wallet_id)+'"></div></div>';
+            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_wallet" class="btn btn-sm btn-primary ps-3 pe-3 d-flex align-items-center"><span class="icon icon-left icon-large icon-save"></span> Save</button></div></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="modal" class="modal">';
+        n=n+'<div class="modal-dialog">';
+            n=n+'<div class="modal-content">';
+                n=n+'<div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>';
+                n=n+'<div class="modal-body">';
+                    n=n+'<h4 class="text-center">'+localStorage.getItem("webwalletdescription"+wallet_id)+'</h4>';
+                    n=n+'<p class="text-center text-gray text-small mb-4">'+localStorage.getItem("webwalletaccount"+wallet_id)+'</p>';
+                    n=n+'<p class="text-center text-gray text-small">This action cannot be undone. Ensure you have the secret phrase for this wallet backed up securely.</p>';
+                n=n+'</div>';
+                n=n+'<div class="modal-footer justify-content-center">';
+                    n=n+'<button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+wallet_id+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
+                    n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
+                n=n+'</div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", manage_wallets);
+    document.getElementById("wallet_name").addEventListener("input", function() {
+        if(document.getElementById("wallet_name").value.length === 0) {
+            document.getElementById("save_wallet").classList.add('disabled')
+            document.getElementById("save_wallet").classList.remove('btn-primary')
+        } else {
+            document.getElementById("save_wallet").classList.add('btn-primary')
+            document.getElementById("save_wallet").classList.remove('disabled')
+        }
+    });
+    document.getElementById("save_wallet").addEventListener("click", function() {
+        localStorage.setItem("webwalletdescription" + wallet_id, document.getElementById("wallet_name").value);
+    });
+    document.getElementById("delete_wallet").addEventListener("click", function() {
+        document.getElementById("modal").classList.add('fade')
+        document.getElementById("modal").classList.add('show')
+    });
+    document.getElementById("hide_modal").addEventListener("click", function() {
+        document.getElementById("modal").classList.remove('fade')
+        document.getElementById("modal").classList.remove('show')
+    });
+    document.getElementById("confirm_delete_wallet").addEventListener("click", function() {
+        let wallet_id = this.dataset.id;
+
+        localStorage.removeItem("webwallet"+wallet_id)
+        localStorage.removeItem("webwalletaccount"+wallet_id)
+        localStorage.removeItem("webwalletdescription"+wallet_id)
+        localStorage.removeItem("webwalletaccounttransactions"+wallet_id)
+
+        manage_wallets();
+    })
+}
+// Manage custom networks
+function manage_networks(){
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"></span>';
+            n=n+'<div class="col w-100 d-flex flex-row-reverse"><button id="add_custom_rpc_network" type="button" class="btn btn-primary btn-sm ps-2 pe-3"><span class="icon icon-plus me-2"></span> New</button></div>';
+        n=n+'</div>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Manage custom networks</h1>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="wallet_list">';
+            for(let i = 1; i <= 99; i++) {
+                let network = JSON.parse(localStorage.getItem("custom_rpc_network_"+i));
+                if(network) {
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+'<span class="icon icon-network text-center"></span>';
+                        n=n+'<div class="col"><h4 class="m-0">'+network.name+'</h4><p class="text-gray m-0 w-75">'+network.url+'</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.getElementById("add_custom_rpc_network").addEventListener("click", manage_network);
+    document.querySelectorAll("#bordered_content .button-item").forEach(w => {
+        w.addEventListener("click", function(e) {
+            manage_network(e, this.dataset.id);
+        }, false)
+    })
+}
+function manage_network(e, network_id = null) {
+    hide_header();
+    hide_footer();
+
+    let network = {
+        name: '',
+        url: ''
+    };
+
+    if(network_id) {
+        network = JSON.parse(localStorage.getItem("custom_rpc_network_"+network_id));
     }
-  }
-  n=n+"</ul>"
-  n=n+'<hr>'
-  // icon for adding account
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="createaccount">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16"><path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/></svg>';
-  n=n+' Create Account';
-  n=n+'</li>';
-  n=n+'</ul>';
-  // icon for importing account
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="importaccount">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/><path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/></svg>';
-  n=n+' Import Account';
-  n=n+'</li>';
-  n=n+'</ul>';
-  // icon for support
-  n=n+'<ul class="list-group">';
-  n=n+'<li class="list-group-item list-group-item-action" id="support">';
-  n=n+'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>';
-  n=n+' Support&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-  n=n+'</li>';
-  n=n+'</ul>';  
-  n=n+'<hr>'
-  n=n+'</center>';
-  document.getElementById("root").innerHTML = n;
-  document.getElementById("createaccount").addEventListener("click", newkeys);
-  document.getElementById("importaccount").addEventListener("click", importkeys);
-  document.getElementById("support").addEventListener("click", contactsupport);
-  for(i=1;i<=99;i++){
-    if(localStorage.getItem("webwalletaccount"+i)) {
-      document.getElementById(i).addEventListener("click", function(){ setaccount(this.id);},false);
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>'+(network_id ? "Edit Custom Network" : "Add Custom Network")+'</h3><button id="delete_network" type="button" class="btn btn-sm btn-danger '+(network_id ? "" : "opacity-0 disabled")+'"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button></div>';
+        n=n+'<div class="content">';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Some networks are malicious and may be deceitful about the state of the blockchain, whilst also tracking your activity. Only add networks that you trust.</p></div>';
+            n=n+'<label class="label text-dark mt-3">Network name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-network"></span></span><input id="network_name" type="text" class="form-control" placeholder="Name" value="'+network.name+'"></div></div>';
+            n=n+'<label class="label text-dark mt-3">RPC URL</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-globe"></span></span><input id="network_url" type="text" class="form-control" placeholder="URL" value="'+network.url+'"></div></div>';
+            if(!network_id) {
+                n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                    n=n+'<input class="form-check-input" type="checkbox" role="switch" id="switch_to_this" checked="checked">';
+                    n=n+'<label class="form-check-label d-flex align-items-center" for="switch_to_this"><h5 class="m-0">Switch to this network upon saving</h5></label>';
+                n=n+'</div>';
+            } else {
+                n=n+'<input type="hidden" id="switch_to_this" value="off">';
+            }
+            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_network" class="btn btn-sm disabled ps-3 pe-3 d-flex align-items-center">Save network <span class="icon icon-large icon-right-arrow"></span></button></div></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="modal" class="modal">';
+        n=n+'<div class="modal-dialog">';
+            n=n+'<div class="modal-content">';
+                n=n+'<div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>';
+                n=n+'<div class="modal-body">';
+                    n=n+'<h4 class="text-center">'+network.name+'</h4>';
+                    n=n+'<p class="text-center text-gray text-small mb-4">'+network.url+'</p>';
+                    n=n+'<p class="text-center text-gray text-small">This action cannot be undone.</p>';
+                n=n+'</div>';
+                n=n+'<div class="modal-footer justify-content-center">';
+                    n=n+'<button id="confirm_delete_network" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+network_id+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
+                    n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
+                n=n+'</div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+
+    check_network();
+
+    document.getElementById("goback").addEventListener("click", manage_networks);
+    document.getElementById("network_name").addEventListener("input", check_network);
+    document.getElementById("network_url").addEventListener("input", check_network);
+    document.getElementById("save_network").addEventListener("click", async function() {
+        if(!network_id) {
+            for (let i = 1; i <= 99; i++) {
+                if (!localStorage.getItem("custom_rpc_network_" + i)) {
+                    network_id = i;
+                    break;
+                }
+            }
+        }
+        network.name = DOMPurify.sanitize(document.getElementById("network_name").value)
+        network.url = DOMPurify.sanitize(document.getElementById("network_url").value)
+
+        localStorage.setItem("custom_rpc_network_" + network_id, JSON.stringify(network));
+
+        if(document.getElementById("switch_to_this").value === 'on') {
+            localStorage.setItem("selected_network", "custom_rpc_network_"+network_id);
+
+            await set_network();
+        }
+
+        manage_networks();
+    });
+    document.getElementById("delete_network").addEventListener("click", function() {
+        document.getElementById("modal").classList.add('fade')
+        document.getElementById("modal").classList.add('show')
+    });
+    document.getElementById("hide_modal").addEventListener("click", function() {
+        document.getElementById("modal").classList.remove('fade')
+        document.getElementById("modal").classList.remove('show')
+    });
+    document.getElementById("confirm_delete_network").addEventListener("click", function() {
+        let network_id = this.dataset.id;
+
+        localStorage.removeItem("custom_rpc_network_"+network_id)
+
+        manage_networks();
+    })
+
+    anime({
+        targets: '.icon-alert',
+        scale: [1, 0.8, 1.2, 1],
+        easing: 'easeInOutSine',
+        duration: 1600,
+        delay: 200,
+    });
+}
+function check_network() {
+    if(document.getElementById("network_name").value.length === 0 || document.getElementById("network_url").value.length === 0 || !isValidWssUrl(document.getElementById("network_url").value)) {
+        document.getElementById("save_network").classList.add('disabled')
+        document.getElementById("save_network").classList.remove('btn-primary')
     } else {
-      break;
+        document.getElementById("save_network").classList.add('btn-primary')
+        document.getElementById("save_network").classList.remove('disabled')
     }
-  }
+}
+function isValidWssUrl(string) {
+    let url;
+
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
+
+    return url.protocol === "ws:" || url.protocol === "wss:";
 }
 // function to open a new tab to contact the support
 function contactsupport(){
   window.open("https://bitgreen.org/contact");
 }
 // function to set new account and return to dashboard
-function setaccount(id){
-  currentaccount=localStorage.getItem("webwalletaccount"+id);
-  currentaccountid=i;
-  // set the last used account 
-  localStorage.setItem("webwalletcurrentaccountid",id);
-  // set accountdescription for showing in the different screens
-  if(localStorage.getItem("webwalletdescription"+id)){
-    accountdescription=localStorage.getItem("webwalletdescription"+id);
-    if(accountdescription.length>20){
-      accountdescription=accountdescription.substring(0,20);
+async function set_account(id){
+    currentaccount = localStorage.getItem("webwalletaccount" + id);
+    currentaccountid = id;
+    // set the last used account
+    localStorage.setItem("webwalletcurrentaccountid", id);
+    // set accountdescription for showing in the different screens
+    if (localStorage.getItem("webwalletdescription" + id)) {
+        accountdescription = localStorage.getItem("webwalletdescription" + id);
+        if (accountdescription.length > 20) {
+            accountdescription = accountdescription.substring(0, 20);
+        }
     }
-  }
-  dashboard();
+
+    await get_balances();
+
+    dashboard();
 }
 // function to show the form for sending funds (init)
 let transaction_amount = 0
 let transaction_recipient = ''
 async function send(recipient = '', amount = 0) {
+    show_header();
     show_footer('transactions');
-
-    let ic = '';
-    if (currentaccount.length > 0) {
-        // refresh the identicon
-        ic = jdenticon.toSvg(currentaccount, 30);
-    }
 
     if(typeof recipient !== 'string') {
         recipient = ''
@@ -1646,41 +2055,17 @@ async function send(recipient = '', amount = 0) {
     transaction_recipient = recipient
 
     let n='<div id="heading">';
-    n=n+'<div id="menu" class="d-flex align-items-center">';
-    n=n+'<div class="col-4 p-0">';
-    n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-    n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-    n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-    n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-    n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-    n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-    n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-    n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-    n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-    n=n+'</svg>';
-    n=n+'</div>';
-    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-    n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-    if (currentaccount.length > 0) {
-        n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-        n=n+'<div class="identicon">'+ic+'</div>';
-        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-        n=n+'<span class="icon icon-down-arrow"></span>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Send</h1>';
         n=n+'</div>';
-    }
-    n=n+'</div>';
-    n=n+'</div>';
-    n=n+'<div class="content row">';
-    n=n+'<h1 class="text-center text-white">Send</h1>';
-    n=n+'</div>';
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
         n=n+'<h4 class="mb-0">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h4>';
         n=n+'<p class="text-gray" style="font-size: 13px;">'+currentaccount+'</p>';
-        n = n + '<div id="choose_token" class="d-flex align-items-sketch"><span class="icon icon-b"></span><div class="col d-flex align-items-center"><span class="name">BBB Token</span></div></div>';
+        n = n + '<div id="choose_token" class="d-flex align-items-sketch"><span class="icon icon-b-circle"></span><div class="col d-flex align-items-center"><span class="name">BBB Token</span></div></div>';
         n = n + '<label class="label text-dark">Amount</label><div id="choose_quantity" class="d-flex mb-3"><div class="col-4"><div class="form-group"><input id="amount" type="number" class="form-control" value="'+amount+'"></div></div><div class="col-8"><div class="w-100 text-gray d-flex flex-row-reverse"><span>'+balancevf+' Available</span></div><input id="range" type="range" min="0" max="'+balancevf+'" step="0.0001" value="'+amount+'"></div></div>';
-        n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
         n = n + '<div class="footer double-footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span class="icon icon-right-arrow"></span></button></div>';
         n = n + '</div>';
@@ -1764,7 +2149,7 @@ async function paste_recipient() {
                 : keyring.decodeAddress(address)
         );
 
-        document.getElementById("recipient").value = address
+        document.getElementById("recipient").value = DOMPurify.sanitize(address)
     } catch (error) {
         notification_class = 'notification notification-error'
         notification_icon = 'icon-alert'
@@ -1792,6 +2177,7 @@ async function paste_recipient() {
 }
 // function to preview the form for sending funds
 function review_transaction() {
+    hide_header();
     hide_footer();
 
     let formatted_amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(transaction_amount).split('.')
@@ -1832,7 +2218,7 @@ function review_transaction() {
         n = n + '</div>';
     n = n + '</div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
-        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
     n = n + '</div>';
     n = n + '</div>';
 
@@ -1846,42 +2232,13 @@ function review_transaction() {
     });
 }
 async function receive() {
+    show_header();
     show_footer('transactions');
 
-    let ic = '';
-    if (currentaccount.length > 0) {
-        // refresh the identicon
-        ic = jdenticon.toSvg(currentaccount, 30);
-    }
-
     let n='<div id="heading">';
-    n=n+'<div id="menu" class="d-flex align-items-center">';
-    n=n+'<div class="col-4 p-0">';
-    n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-    n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-    n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-    n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-    n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-    n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-    n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-    n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-    n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-    n=n+'</svg>';
-    n=n+'</div>';
-    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-    n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-    if (currentaccount.length > 0) {
-        n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-        n=n+'<div class="identicon">'+ic+'</div>';
-        n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-        n=n+'<span class="icon icon-down-arrow"></span>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Receive or deposit</h1>';
         n=n+'</div>';
-    }
-    n=n+'</div>';
-    n=n+'</div>';
-    n=n+'<div class="content row">';
-    n=n+'<h1 class="text-center text-white">Receive or deposit</h1>';
-    n=n+'</div>';
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
@@ -1891,7 +2248,7 @@ async function receive() {
                 n=n+'<button id="copy_qrcode" class="btn btn-text"><span class="icon icon-left icon-copy"></span> Copy QR</button>';
             n=n+'</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="'+currentaccount+'" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
@@ -1930,37 +2287,13 @@ async function copy_address() {
 }
 // function to show the form to sign-in
 function signin(domain){
+    show_header();
     hide_footer();
 
-    // refresh the identicon
-    let ic = jdenticon.toSvg(currentaccount, 30);
-
     let n='<div id="heading">';
-    n=n+'<div id="menu" class="d-flex align-items-center">';
-        n=n+'<div class="col-4 p-0">';
-            n=n+'<svg id="top_logo" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
-            n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
-            n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
-            n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
-            n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
-            n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
-            n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
-            n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
-            n=n+'</svg>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Sign in request</h1>';
         n=n+'</div>';
-        n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
-            n=n+'<span id="go_settings" class="icon-cog text-white"></span>';
-            n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-                n=n+'<div class="identicon">'+ic+'</div>';
-                n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
-                n=n+'<span class="icon icon-down-arrow"></span>';
-            n=n+'</div>';
-        n=n+'</div>';
-    n=n+'</div>';
-    n=n+'<div class="content row">';
-    n=n+'<h1 class="text-center text-white">Sign in request</h1>';
-    n=n+'</div>';
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
@@ -1984,7 +2317,7 @@ function signin(domain){
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
         n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
     n=n+'</div>';
 
@@ -2298,12 +2631,13 @@ async function unstake(){
 }
 // function to ask confirmation and submit the extrinsic
 async function transferfunds() {
+    hide_header();
     hide_footer();
 
     let notification_message = null;
     let accountrecipient = transaction_recipient
     let amount = transaction_amount
-    let password = document.getElementById("password").value;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
 
     let n = '<div id="full_page">';
     n = n + '<div class="content full-content">';
@@ -2506,8 +2840,8 @@ async function submitextrinsic(){
 // function to execute the signin
 async function signinexecute() {
     let notification_message = null;
-    let password = document.getElementById("password").value;
-    let domain = document.getElementById("domain").value;
+    let password = DOMPurify.sanitize(document.getElementById("password").value);
+    let domain = DOMPurify.sanitize(document.getElementById("domain").value);
 
     let encrypted = '';
     // read the encrypted storage
@@ -2637,6 +2971,67 @@ async function decrypt_webwallet(encrypted,pwd){
   }
 
 }
+// function to decrypt the web wallet and return a mnemonics
+async function decrypt_webwallet_mnemonics(encrypted,pwd){
+  // get ascii value of first 2 chars
+  const vb1=pwd.charCodeAt(0);
+  const vb2=pwd.charCodeAt(1);
+  const p=vb1*vb2; // position to derive other 3 passwords
+  // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+  const enc=JSON.parse(encrypted);
+  let randomstring = enc.iv;
+  let dpwd1='';
+  let dpwd2='';
+  let dpwd3='';
+  let h=util_crypto.keccakAsU8a(pwd+randomstring);
+  for (let i = 0; i < 100000; i++) {
+    h=util_crypto.keccakAsU8a(h);
+    if (i==p){
+      dpwd1=h;
+    }
+    h=util_crypto.sha512AsU8a(h);
+    if (i==p){
+      dpwd2=h;
+    }
+    h=util_crypto.blake2AsU8a(h);
+    if (i==p){
+      dpwd3=h;
+    }
+  }
+  // decrypt AES-OFB
+  const ivaesofb=util.hexToU8a(enc.ivaesofb);
+  const keyaesofb= dpwd3.slice(0,32);
+  let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+  const encryptedhex=enc.encrypted;
+  const encryptedaesofb=aesjs.utils.hex.toBytes(encryptedhex);
+  let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+  // decrypt AES-CTR
+  const ivaesctr=util.hexToU8a(enc.ivaesctr);
+  const keyaesctr= dpwd2.slice(0,32);
+  let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+  let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+  // decrypt AES-CFB
+  const ivaescfb=util.hexToU8a(enc.ivaescfb);
+  const keyaescfb= dpwd1.slice(0,32);
+  let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+  let decrypted = aesCfb.decrypt(encryptedaescfb);
+  let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
+  if(!mnemonicdecrypted){
+    return(false);
+  }else {
+    keyringv= new keyring.Keyring({ type: 'sr25519' });
+    try {
+      keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
+      return(mnemonicdecrypted);
+    }
+    catch(e){
+      console.log(e);
+      return(false);
+    }
+
+  }
+
+}
 // function to get the amount bonded for staking
 async function get_amount_bonded(address){
   const locks = await apiv.query.balances.locks(address);
@@ -2680,8 +3075,127 @@ async  function hexToString(hexString) {
   });
   return(stringOut);
 }
+function show_header() {
+    remove_notifications();
+    refresh_account();
+
+    let header_el = document.getElementById("header");
+
+    // refresh the identicon
+    let ic = jdenticon.toSvg(currentaccount, 30);
+
+    let n=''
+    n=n+'<div class="col-4 p-0">';
+        n=n+'<svg id="top_logo" class="click" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
+            n=n+'<path d="M10.6455 17.5305H2.35102V13.7836H10.6455C11.6806 13.7836 12.5196 14.6223 12.5196 15.657C12.5196 16.6916 11.6806 17.5305 10.6455 17.5305ZM2.35102 8.13969H10.6455C11.6806 8.13969 12.5196 8.97838 12.5196 10.0131C12.5196 11.0477 11.6806 11.8866 10.6455 11.8866H2.35102V8.13969ZM2.35102 2.49579H10.6455C11.6806 2.49579 12.5196 3.33448 12.5196 4.36923C12.5196 5.40382 11.6806 6.24266 10.6455 6.24266H2.35102V2.49579ZM14.984 4.36923C14.984 2.28687 13.2953 0.598755 11.2121 0.598755H0V6.24266V8.13969V11.8866V13.7836V19.4275H11.2121C13.2953 19.4275 14.984 17.7394 14.984 15.657C14.984 14.5338 14.492 13.5258 13.7125 12.8351C14.492 12.1443 14.984 11.1364 14.984 10.0131C14.984 8.88989 14.492 7.88192 13.7125 7.19118C14.492 6.50044 14.984 5.49247 14.984 4.36923Z" fill="white"/>';
+            n=n+'<path d="M17.5196 5.27044H19.7856V19.4274H17.5196V5.27044ZM17.208 0.598511H20.1255V2.94862H17.208V0.598511Z" fill="white"/>';
+            n=n+'<path d="M27.4669 19.4273C24.7477 19.4273 24.0396 18.3797 24.0396 16.1146V7.05406H21.3486V5.77999L24.2378 5.07215L25.0876 2.1275H26.3055V5.27033H30.9791V7.05406H26.3055V17.5869H30.8092V19.4273H27.4669Z" fill="white"/>';
+            n=n+'<path d="M43.524 11.9808C43.524 8.15843 41.7962 6.65775 38.7939 6.65775C35.5648 6.65775 34.0352 8.15843 34.0352 11.9808C34.0352 15.8031 35.5648 17.3321 38.7939 17.3321C41.7962 17.3321 43.524 15.8316 43.524 11.9808ZM43.524 5.27037H45.79V19.4558C45.79 23.2214 43.949 25.4015 38.7939 25.4015C34.5734 25.4015 32.3074 23.5612 32.0525 20.3333H34.2901C34.46 22.2021 35.6497 23.6177 38.7939 23.6177C42.1361 23.6177 43.524 22.4568 43.524 19.4273V16.3694C42.5611 18.2098 40.8048 19.116 38.2555 19.116C33.8087 19.116 31.7126 16.3411 31.7126 11.9808C31.7126 7.64877 33.8087 4.87387 38.2555 4.87387C40.8333 4.87387 42.5611 5.89334 43.524 7.70535V5.27037Z" fill="white"/>';
+            n=n+'<path d="M56.1287 5.07214V7.30896H55.5338C51.3418 7.16737 50.4354 10.2252 50.4354 14.2176V19.4274H48.1694V5.27032H50.4354V9.0927C51.2852 6.60097 52.9279 5.07214 55.6188 5.07214H56.1287Z" fill="white"/>';
+            n=n+'<path d="M58.536 11.1597H67.7133C67.6 7.90355 65.9288 6.54447 63.2946 6.54447C60.6037 6.54447 58.8476 7.81868 58.536 11.1597ZM67.8265 15.067H69.8942C69.6109 17.2188 67.968 19.8802 63.2661 19.8802C58.3943 19.8802 56.2417 16.5958 56.2417 12.3206C56.2417 8.10172 58.5643 4.81732 63.2661 4.81732C67.5149 4.81732 69.9225 7.73366 69.9225 11.8675C69.9225 12.2356 69.9225 12.5187 69.8658 12.8585H58.4794C58.6493 16.7376 60.5188 18.1531 63.3512 18.1531C66.127 18.1531 67.4016 16.8507 67.8265 15.067Z" fill="white"/>';
+            n=n+'<path d="M73.7999 11.1597H82.9771C82.8639 7.90355 81.1927 6.54447 78.5584 6.54447C75.8676 6.54447 74.1115 7.81868 73.7999 11.1597ZM83.0905 15.067H85.1582C84.8749 17.2188 83.232 19.8802 78.5301 19.8802C73.6581 19.8802 71.5056 16.5958 71.5056 12.3206C71.5056 8.10172 73.8282 4.81732 78.5301 4.81732C82.7789 4.81732 85.1863 7.73366 85.1863 11.8675C85.1863 12.2356 85.1863 12.5187 85.1297 12.8585H73.7431C73.9131 16.7376 75.7827 18.1531 78.615 18.1531C81.3909 18.1531 82.6655 16.8507 83.0905 15.067Z" fill="white"/>';
+            n=n+'<path d="M99.9999 10.3951V19.4274H97.7339V10.65C97.7339 7.62037 96.4026 6.71436 94.3349 6.71436C91.1908 6.71436 89.5196 9.14934 89.5196 14.0193V19.4274H87.2537V5.2704H89.5196V9.00774C90.426 6.28957 92.1823 4.81732 94.9581 4.81732C98.4986 4.81732 99.9999 6.74265 99.9999 10.3951Z" fill="white"/>';
+        n=n+'</svg>';
+    n=n+'</div>';
+    n=n+'<div class="col-8 p-0 d-flex flex-row-reverse align-items-center">';
+        n=n+'<span id="go_settings" class="icon-cog text-white click"></span>';
+        if(currentaccount) {
+            n=n+'<div id="current_wallet" class="d-flex align-items-center">';
+                n=n+'<div class="identicon">'+ic+'</div>';
+                n=n+'<div class="info"><span class="desc">'+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+'</span><span>'+currentaccount.substring(0,16)+'...</span></div>';
+                n=n+'<span class="icon icon-down-arrow"></span>';
+                n=n+'<div class="dropdown">';
+                    for(let i = 1; i <= 99; i++) {
+                        if(localStorage.getItem("webwalletaccount"+i)) {
+                            let account = localStorage.getItem("webwalletaccount"+i);
+                            let account_description = localStorage.getItem("webwalletdescription"+i);
+                            let is_active = parseInt(currentaccountid) === i;
+
+                            if(is_active) continue;
+
+                            n=n+'<div class="wallet d-flex align-items-center" data-id="'+i+'">';
+                                n=n+'<div class="identicon">'+jdenticon.toSvg(account, 56)+'</div>';
+                                n=n+'<div class="info"><span class="desc">'+(account_description.length > 14 ? account_description.substring(0,14)+'...' : account_description)+'</span><span>'+account.substring(0,16)+'...</span></div>';
+                            n=n+'</div>';
+                        }
+                    }
+                n=n+'</div>';
+            n=n+'</div>';
+        }
+    n=n+'</div>';
+
+    header_el.innerHTML = n;
+
+    if(!header_el.classList.contains('visible')) {
+        anime({
+            targets: '#header',
+            duration: 300,
+            translateY: [-60, 0],
+            opacity: 1,
+            easing: 'linear',
+            delay: !header_el.classList.contains('init') ? 1000 : 0
+        });
+    }
+
+    document.getElementById("go_settings").addEventListener("click", settings)
+    document.getElementById("top_logo").addEventListener("click", dashboard)
+    if(document.getElementById("current_wallet")) {
+        document.getElementById("current_wallet").addEventListener("click", function(e) {
+            e.stopPropagation();
+            if(document.getElementById("current_wallet").classList.contains('active')) {
+                document.getElementById("current_wallet").classList.remove('active')
+            } else {
+                document.getElementById("current_wallet").classList.add('active')
+            }
+        })
+        document.querySelectorAll("#current_wallet .wallet").forEach(w => {
+            w.addEventListener("click", function(e) {
+                e.stopPropagation();
+                set_account(this.dataset.id);
+                document.getElementById("current_wallet").classList.remove('active')
+            }, false)
+        })
+    }
+
+    // click anywhere, hide dropdown
+    document.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if(document.getElementById("current_wallet")) {
+            document.getElementById("current_wallet").classList.remove('active')
+        }
+    });
+
+    header_el.classList.add('visible')
+    header_el.classList.add('init')
+}
+function hide_header() {
+    remove_notifications();
+
+    let header_el = document.getElementById("header");
+
+    if(header_el.classList.contains('visible')) {
+        anime({
+            targets: '#header',
+            duration: 300,
+            translateY: [0, -60],
+            opacity: [1, 0],
+            easing: 'linear',
+            delay: 0
+        });
+    }
+
+    header_el.classList.remove('visible')
+}
 function show_footer(active = '', extend_delay = false) {
+    remove_notifications();
+
     let footer_el = document.getElementById("main_footer");
+
+    // hide footer if there is no account yet
+    if(!currentaccount) {
+        hide_footer();
+        return;
+    }
 
     let n='<div id="go_dashboard" class="item d-flex align-items-center justify-content-center '+ (active === "dashboard" ? "active" : '') +'"><span class="icon icon-b"></span></div>';
         n=n+'<div id="go_transactions" class="item d-flex align-items-center justify-content-center ms-2 me-2 '+ (active === "transactions" ? "active" : null) +'"><span class="icon icon-arrows"></span></div>';
@@ -2700,7 +3214,7 @@ function show_footer(active = '', extend_delay = false) {
         anime({
             targets: '#main_footer',
             duration: 300,
-            translateY: [120, 0],
+            translateY: [60, 0],
             opacity: 1,
             easing: 'linear',
             delay: extend_delay ? 800 : 0
@@ -2710,6 +3224,8 @@ function show_footer(active = '', extend_delay = false) {
     footer_el.classList.add('visible')
 }
 function hide_footer() {
+    remove_notifications();
+
     let footer_el = document.getElementById("main_footer");
 
     if(footer_el.classList.contains('visible')) {
@@ -2724,4 +3240,9 @@ function hide_footer() {
     }
 
     footer_el.classList.remove('visible')
+}
+function remove_notifications() {
+    document.querySelectorAll('.notification').forEach(n => {
+        n.remove()
+    });
 }
