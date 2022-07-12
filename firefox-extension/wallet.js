@@ -265,14 +265,15 @@ async function set_network(count = 1) {
         network = 'testnet' // default endpoint TODO: update once we go live
         localStorage.setItem("selected_network", network);
     }
-    let ws_provider = 'wss://testnet.bitgreen.org';
+    let ws_provider;
 
     if (network === 'mainnet') {
         ws_provider = 'wss://mainnet.bitgreen.org';
     } else if (network === 'testnet') {
         ws_provider = 'wss://testnet.bitgreen.org';
     } else {
-        // TODO: custom endpoints
+        let custom_network = JSON.parse(localStorage.getItem(network));
+        ws_provider = custom_network.url;
     }
 
     let error = false;
@@ -1701,10 +1702,16 @@ function settings() {
                 n=n+'<select id="change_network" class="form-select">';
                     n=n+'<option value="mainnet" '+ ((localStorage.getItem("selected_network") === "mainnet" || !localStorage.getItem("selected_network")) ? "selected" : "") +'>Mainnet</option>';
                     n=n+'<option value="testnet" '+ (localStorage.getItem("selected_network") === "testnet" ? "selected" : "") +'>Testnet</option>';
+                    for(let i = 1; i <= 99; i++) {
+                        let network = JSON.parse(localStorage.getItem("custom_rpc_network_"+i));
+                        if(network) {
+                            n=n+'<option value="custom_rpc_network_'+i+'" '+ (localStorage.getItem("selected_network") === "custom_rpc_network_"+i ? "selected" : "") +'>'+network.name+'</option>';
+                        }
+                    }
                 n=n+'</select>';
                 n=n+'</div>';
             n=n+'</div>';
-            n=n+'<div class="button-item settings-item d-flex align-items-center click">';
+            n=n+'<div id="manage_networks" class="button-item settings-item d-flex align-items-center click">';
                 n=n+'<div class="col"><h4 class="m-0">Manage Custom Networks</h4><p class="text-gray m-0">Add or remove other trusted networks.</p></div>';
                 n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
             n=n+'</div>';
@@ -1738,6 +1745,7 @@ function settings() {
     document.getElementById("root").innerHTML = n;
     document.getElementById("goback").addEventListener("click", dashboard);
     document.getElementById("change_network").addEventListener("change", change_network);
+    document.getElementById("manage_networks").addEventListener("click", manage_networks);
     document.getElementById("manage_wallets").addEventListener("click", manage_wallets);
     document.getElementById("backup_wallets").addEventListener("click", backup_wallets);
     document.getElementById("go_import").addEventListener("click", importkeys);
@@ -1846,6 +1854,166 @@ function manage_wallet(wallet_id) {
 
         manage_wallets();
     })
+}
+// Manage custom networks
+function manage_networks(){
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"></span>';
+            n=n+'<div class="col w-100 d-flex flex-row-reverse"><button id="add_custom_rpc_network" type="button" class="btn btn-primary btn-sm ps-2 pe-3"><span class="icon icon-plus me-2"></span> New</button></div>';
+        n=n+'</div>';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Manage custom networks</h1>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="wallet_list">';
+            for(let i = 1; i <= 99; i++) {
+                let network = JSON.parse(localStorage.getItem("custom_rpc_network_"+i));
+                if(network) {
+                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
+                        n=n+'<span class="icon icon-network text-center"></span>';
+                        n=n+'<div class="col"><h4 class="m-0">'+network.name+'</h4><p class="text-gray m-0 w-75">'+network.url+'</p></div>';
+                        n=n+'<span class="icon icon-right-arrow text-center"></span>';
+                    n=n+'</div>';
+                }
+            }
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", settings);
+    document.getElementById("add_custom_rpc_network").addEventListener("click", manage_network);
+    document.querySelectorAll("#bordered_content .button-item").forEach(w => {
+        w.addEventListener("click", function(e) {
+            manage_network(e, this.dataset.id);
+        }, false)
+    })
+}
+function manage_network(e, network_id = null) {
+    hide_header();
+    hide_footer();
+
+    let network = {
+        name: '',
+        url: ''
+    };
+
+    if(network_id) {
+        network = JSON.parse(localStorage.getItem("custom_rpc_network_"+network_id));
+    }
+
+    let n='<div id="full_page">';
+        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>'+(network_id ? "Edit Custom Network" : "Add Custom Network")+'</h3><button id="delete_network" type="button" class="btn btn-sm btn-danger '+(network_id ? "" : "opacity-0 disabled")+'"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button></div>';
+        n=n+'<div class="content">';
+            n=n+'<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Some networks are malicious and may be deceitful about the state of the blockchain, whilst also tracking your activity. Only add networks that you trust.</p></div>';
+            n=n+'<label class="label text-dark mt-3">Network name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-network"></span></span><input id="network_name" type="text" class="form-control" placeholder="Name" value="'+network.name+'"></div></div>';
+            n=n+'<label class="label text-dark mt-3">RPC URL</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-globe"></span></span><input id="network_url" type="text" class="form-control" placeholder="URL" value="'+network.url+'"></div></div>';
+            if(!network_id) {
+                n=n+'<div class="form-check form-switch d-flex align-items-center">';
+                    n=n+'<input class="form-check-input" type="checkbox" role="switch" id="switch_to_this" checked="checked">';
+                    n=n+'<label class="form-check-label d-flex align-items-center" for="switch_to_this"><h5 class="m-0">Switch to this network upon saving</h5></label>';
+                n=n+'</div>';
+            } else {
+                n=n+'<input type="hidden" id="switch_to_this" value="off">';
+            }
+            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_network" class="btn btn-sm disabled ps-3 pe-3 d-flex align-items-center">Save network <span class="icon icon-large icon-right-arrow"></span></button></div></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="modal" class="modal">';
+        n=n+'<div class="modal-dialog">';
+            n=n+'<div class="modal-content">';
+                n=n+'<div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>';
+                n=n+'<div class="modal-body">';
+                    n=n+'<h4 class="text-center">'+network.name+'</h4>';
+                    n=n+'<p class="text-center text-gray text-small mb-4">'+network.url+'</p>';
+                    n=n+'<p class="text-center text-gray text-small">This action cannot be undone.</p>';
+                n=n+'</div>';
+                n=n+'<div class="modal-footer justify-content-center">';
+                    n=n+'<button id="confirm_delete_network" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+network_id+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
+                    n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
+                n=n+'</div>';
+            n=n+'</div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+
+    check_network();
+
+    document.getElementById("goback").addEventListener("click", manage_networks);
+    document.getElementById("network_name").addEventListener("input", check_network);
+    document.getElementById("network_url").addEventListener("input", check_network);
+    document.getElementById("save_network").addEventListener("click", async function() {
+        if(!network_id) {
+            for (let i = 1; i <= 99; i++) {
+                if (!localStorage.getItem("custom_rpc_network_" + i)) {
+                    network_id = i;
+                    break;
+                }
+            }
+        }
+        network.name = DOMPurify.sanitize(document.getElementById("network_name").value)
+        network.url = DOMPurify.sanitize(document.getElementById("network_url").value)
+
+        localStorage.setItem("custom_rpc_network_" + network_id, JSON.stringify(network));
+
+        if(document.getElementById("switch_to_this").value === 'on') {
+            localStorage.setItem("selected_network", "custom_rpc_network_"+network_id);
+
+            await set_network();
+        }
+
+        manage_networks();
+    });
+    document.getElementById("delete_network").addEventListener("click", function() {
+        document.getElementById("modal").classList.add('fade')
+        document.getElementById("modal").classList.add('show')
+    });
+    document.getElementById("hide_modal").addEventListener("click", function() {
+        document.getElementById("modal").classList.remove('fade')
+        document.getElementById("modal").classList.remove('show')
+    });
+    document.getElementById("confirm_delete_network").addEventListener("click", function() {
+        let network_id = this.dataset.id;
+
+        localStorage.removeItem("custom_rpc_network_"+network_id)
+
+        manage_networks();
+    })
+
+    anime({
+        targets: '.icon-alert',
+        scale: [1, 0.8, 1.2, 1],
+        easing: 'easeInOutSine',
+        duration: 1600,
+        delay: 200,
+    });
+}
+function check_network() {
+    if(document.getElementById("network_name").value.length === 0 || document.getElementById("network_url").value.length === 0 || !isValidWssUrl(document.getElementById("network_url").value)) {
+        document.getElementById("save_network").classList.add('disabled')
+        document.getElementById("save_network").classList.remove('btn-primary')
+    } else {
+        document.getElementById("save_network").classList.add('btn-primary')
+        document.getElementById("save_network").classList.remove('disabled')
+    }
+}
+function isValidWssUrl(string) {
+    let url;
+
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
+
+    return url.protocol === "ws:" || url.protocol === "wss:";
 }
 // function to open a new tab to contact the support
 function contactsupport(){
