@@ -1872,15 +1872,21 @@ function manage_networks(){
 
     n=n+'<div id="bordered_content">';
         n=n+'<div id="wallet_list">';
+            let total_found = 0
             for(let i = 1; i <= 99; i++) {
                 let network = JSON.parse(localStorage.getItem("custom_rpc_network_"+i));
                 if(network) {
+                    total_found++;
+
                     n=n+'<div class="button-item d-flex align-items-center" data-id="'+i+'">';
                         n=n+'<span class="icon icon-network text-center"></span>';
                         n=n+'<div class="col"><h4 class="m-0">'+network.name+'</h4><p class="text-gray m-0 w-75">'+network.url+'</p></div>';
                         n=n+'<span class="icon icon-right-arrow text-center"></span>';
                     n=n+'</div>';
                 }
+            }
+            if(total_found === 0) {
+                n=n+'<h3>No custom networks created.</h3>'
             }
         n=n+'</div>';
     n=n+'</div>';
