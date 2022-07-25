@@ -37,7 +37,7 @@ if(localStorage.getItem("skip_intro")){
 async function refresh_account() {
     // get last used account id
     if (localStorage.getItem("current_account_id")) {
-        current_account_id = localStorage.getItem("current_account_id");
+        current_account_id = parseInt(localStorage.getItem("current_account_id"));
         if (!localStorage.getItem("account_" + current_account_id)) {
             current_account_id = 0;
         }
@@ -59,8 +59,6 @@ async function refresh_account() {
             total_accounts++;
         }
     }
-
-    console.log(total_accounts)
 }
 
 // add listeners for events (you cannot use onclick event in the extension)
@@ -221,6 +219,11 @@ function hide_init() {
     }, 1200)
 }
 async function wallet_create() {
+    if(current_account) {
+        await dashboard();
+        return;
+    }
+
     await show_header();
     show_footer();
 
@@ -228,7 +231,7 @@ async function wallet_create() {
 
     let n='<div id="heading">';
         n=n+'<div class="content row">';
-            n=n+'<h1 class="text-center text-white">'+(current_account ? "Create or Import Wallet" : "Get started")+'</h1>';
+            n=n+'<h1 class="text-center text-white">Get started</h1>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -246,9 +249,7 @@ async function wallet_create() {
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("newkeys").addEventListener("click", async function() {
-        await newkeys()
-    });
+    document.getElementById("newkeys").addEventListener("click", newkeys);
     document.getElementById("importkeys").addEventListener("click", importkeys);
 
     anime({
@@ -270,7 +271,7 @@ async function change_network() {
     await set_network();
 }
 // function to open connection to network
-async function set_network(count = 1) {
+async function set_network() {
     // TODO set a red light and switch to green when connected
     let network = localStorage.getItem("selected_network");
     if(!network) {
@@ -290,15 +291,22 @@ async function set_network(count = 1) {
 
     let error = false;
     const wsProvider = new api.WsProvider(ws_provider);
-    wsProvider.on('error', async function(e) {
-        if(count > 5) {
-            // after 5 tries, load default
-            localStorage.removeItem("selected_network")
-            window.top.location.reload();
-        }
+    wsProvider.on('error',async function(e) {
+        // if(count > 5) {
+        //     // after 5 tries, load default
+        //     localStorage.removeItem("selected_network")
+        //     window.top.location.reload();
+        // }
+        error = true;
         await wsProvider.disconnect()
-        return await set_network(++count);
+
+        // return await set_network();
     });
+
+    let is_ready = await apiv.isReady
+    if(!is_ready) {
+        return false;
+    }
 
     apiv = await api.ApiPromise.create({
         provider: wsProvider, types:
@@ -567,7 +575,11 @@ async function set_network(count = 1) {
     await get_balances();
 }
 async function get_balances() {
-    await apiv.isReady;
+    let is_ready = await apiv.isReady
+
+    if(!current_account || !is_ready) {
+        return;
+    }
 
     // TODO set a green light
     // get balance and show it
@@ -590,59 +602,6 @@ async function get_balances() {
 async function newkeys(obj, error) {
     hide_header();
     hide_footer();
-
-    // TODO: play around :)
-    // let mmmm = util_crypto.mnemonicGenerate(24)
-    let mmmm = 'same cherry vanish stereo tide detect divert current group cupboard devote clutch rapid million dizzy cube valve cargo oyster desk sunset bamboo utility anchor'
-    // console.log(mmmm)
-
-    // let keyring_uis = new keyring_ui.Keyring({type: 'sr25519'})
-
-    // await util_crypto.cryptoWaitReady()
-    // console.log(keyring_ui)
-
-
-    // keyring_uis.loadAll({ ss58Format: 42, type: 'sr25519' });
-    // let {pair} = keyring_uis.addUri(mmmm, 'test', { name: 'first pair' }, 'sr25519');
-    // console.log(pair)
-
-    // let derive = pair.derive('//vlada');
-    // keyring_uis.addPair(derive, 'test');
-
-    // console.log(keyring_uis.getAccounts())
-    // console.log(keyring_uis.getPairs())
-
-    // keyring_uis.getPairs().forEach((pair) => {
-    //         // if(pair.address === '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ') {
-    //             pair.unlock('test');
-    //         // }
-    //         console.log(pair);
-    // });
-
-
-    // let paird1 = k.addFromUri(mmmm + '//1///test', { name: 'first derivative' }, 'sr25519');
-    // k.addFromUri(mmmm + '//2', { name: 'second derivative' }, 'sr25519');
-
-    // const mnemonicMini = util_crypto.mnemonicToMiniSecret(mmmm);
-    // console.log(util.u8aToHex(mnemonicMini))
-    // k.addFromUri(util.u8aToHex(mnemonicMini), { name: 'first pairs' }, 'sr25519')
-    // console.log(pair.toJson('vlada'))
-    // let pair_d = pair.derive('//vlada///pass');
-    // k.addFromPair(pair_d)
-    // console.log(encc)
-
-    // console.log(paird1.toJson())
-
-    // pair_d.decodePkcs8('', pair_d.meta.encoded)
-
-    // console.log(k.toJson(pair.address, 'fuck'))
-    // // console.log(k.toJson(pair.address))
-    // console.log(pair.encodePkcs8('fuck'))
-    // pair.lock()
-    // console.log(pair)
-    // pair.unlock('fuck')
-    // console.log(pair)
-    // console.log(k.pairs)
 
     let k = new keyring.Keyring({type: 'sr25519'});
     if (typeof error == 'undefined') {
@@ -712,7 +671,7 @@ function backup_wallet() {
                 })
             n=n+'</div>';
             n=n+'<div id="password_input" class="footer d-flex align-items-sketch flex-row-reverse">';
-                n=n+'<div class="w-100"><label class="label text-dark">Enter your password to reveal secret phrase</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-primary">Reveal <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+                n=n+'<div class="w-100"><label class="label text-dark">Enter your password to reveal secret phrase</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-primary">Reveal <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
             n=n+'</div>';
         n=n+'</div>';
     n=n+'</div>';
@@ -747,50 +706,44 @@ async function reveal_mnemonics() {
         encrypted = localStorage.getItem("webwallet");
     }
 
-    if(password === '') {
-        notification_message = 'Password is wrong!';
-    } else if(encrypted.length === 0) {
-        notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
+    // try to decrypt and get mnemonic
+    let mnemonics = decrypt_main_account(password, true);
+    if(mnemonics) {
+        mnemonic_array = mnemonics.split(' ');
+        let n = '';
+        mnemonic_array.forEach(function(val, index) {
+            n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
+        })
+        document.getElementById("backup_mnemonics").innerHTML = n;
+        document.getElementById("backup_mnemonics").classList.remove('mnemonics-hidden');
+        document.getElementById("copy_seed").classList.remove('btn-hidden');
+
+        anime({
+            targets: '#password_input',
+            duration: 300,
+            translateY: [0, 60],
+            opacity: [1, 0],
+            easing: 'linear',
+            delay: 0
+        });
+
+        anime({
+            targets: '#copy_seed',
+            duration: 300,
+            opacity: [0, 1],
+            easing: 'linear',
+            delay: 1200
+        });
+
+        anime({
+            targets: '#backup_mnemonics .badge .text',
+            opacity: [0, 1],
+            easing: 'easeInOutSine',
+            duration: 250,
+            delay: function(el, i) { return i * 50 + 1200 },
+        });
     } else {
-        // try to decrypt and get keypairsv with the keys pair
-        let mnemonics = decrypt_webwallet_mnemonics(encrypted, password);
-        if(mnemonics) {
-            mnemonic_array = mnemonics.split(' ');
-            let n = '';
-            mnemonic_array.forEach(function(val, index) {
-                n=n+'<div class="word col-3 d-inline-block"><div class="badge bg-secondary"><span class="index">'+(index+1)+'</span><span class="text col">'+val+'</span></div></div>';
-            })
-            document.getElementById("backup_mnemonics").innerHTML = n;
-            document.getElementById("backup_mnemonics").classList.remove('mnemonics-hidden');
-            document.getElementById("copy_seed").classList.remove('btn-hidden');
-
-            anime({
-                targets: '#password_input',
-                duration: 300,
-                translateY: [0, 60],
-                opacity: [1, 0],
-                easing: 'linear',
-                delay: 0
-            });
-
-            anime({
-                targets: '#copy_seed',
-                duration: 300,
-                opacity: [0, 1],
-                easing: 'linear',
-                delay: 0
-            });
-
-            anime({
-                targets: '#backup_mnemonics .badge .text',
-                opacity: [0, 1],
-                easing: 'easeInOutSine',
-                duration: 250,
-                delay: function(el, i) { return i * 50 },
-            });
-        } else {
-            notification_message = 'Password is wrong!';
-        }
+        notification_message = 'Password is wrong!';
     }
 
     if(notification_message) {
@@ -1008,7 +961,7 @@ function set_password_screen() {
     document.getElementById("password").addEventListener("input", check_password);
     document.getElementById("password_repeat").addEventListener("input", check_password);
     document.getElementById("wallet_name").addEventListener("input", check_password);
-    document.getElementById("set_password").addEventListener("click", storekeys);
+    document.getElementById("set_password").addEventListener("click", store_keys);
 }
 function check_password() {
     let password = DOMPurify.sanitize(document.getElementById('password').value);
@@ -1137,8 +1090,6 @@ async function importkeys() {
         duration: 150,
         delay: function(el, i) { return i * 50 },
     });
-
-    sessionStorage.setItem('finish_message', 'imported');
 }
 function import_word() {
     let input = DOMPurify.sanitize(document.getElementById("keyword").value);
@@ -1224,97 +1175,22 @@ function importkeysvalidation() {
         mnemonic = m;
         set_password_screen()
     }
+
+    sessionStorage.setItem('finish_message', 'imported');
 }
 // function to encrypt and store the secret words
-function storekeys(obj, callback) {
-    // check for password fields
+async function store_keys() {
     const pwd = DOMPurify.sanitize(document.getElementById('password').value);
-    let description = DOMPurify.sanitize(document.getElementById('wallet_name').value);
-    if (typeof callback === 'undefined') {
-        callback = newkeys;
-    }
-    // get ascii value of first 2 chars
-    const vb1 = pwd.charCodeAt(0);
-    const vb2 = pwd.charCodeAt(1);
-    const p = vb1 * vb2; // position to derive other 3 passwords
-    // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-    let randomstring = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 32; i++) {
-        randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    let dpwd1 = '';
-    let dpwd2 = '';
-    let dpwd3 = '';
-    let h = util_crypto.keccakAsU8a(pwd + randomstring);
-    for (let i = 0; i < 100000; i++) {
-        h = util_crypto.keccakAsU8a(h);
-        if (i == p) {
-            dpwd1 = h;
-        }
-        h = util_crypto.sha512AsU8a(h);
-        if (i == p) {
-            dpwd2 = h;
-        }
-        h = util_crypto.blake2AsU8a(h);
-        if (i == p) {
-            dpwd3 = h;
-        }
-    }
+    const name = DOMPurify.sanitize(document.getElementById('wallet_name').value);
 
-    // 3 Layers encryption
-    // encrypt the secret words in AES256-CFB
-    let ivf = '';
-    for (let i = 0; i < 16; i++) {
-        ivf += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    const ivaescfb = aesjs.utils.utf8.toBytes(ivf);
-    const keyaescfb = dpwd1.slice(0, 32);
-    let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-    var mnemonicbytes = aesjs.utils.utf8.toBytes(mnemonic);
+    const encrypted_data = await encrypt_wallet(pwd, name);
 
-    let encryptedaescfb = aesCfb.encrypt(mnemonicbytes);
-    // encrypt the outoput of AES256-CFB in AES256-CTR
-    let ivs = '';
-    for (let i = 0; i < 16; i++) {
-        ivs += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    const ivaesctr = aesjs.utils.utf8.toBytes(ivs);
-    //const keyaes= aesjs.utils.utf8.toBytes(dpwd2.slice(0,32));
-    const keyaesctr = dpwd2.slice(0, 32);
-    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-    let encryptedaesctr = aesCtr.encrypt(encryptedaescfb);
-    // encrypt the outoput of AES256-CTR in AES256-OFB
-    let ivso = '';
-    for (let i = 0; i < 16; i++) {
-        ivso += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    const ivaesofb = aesjs.utils.utf8.toBytes(ivso);
-    const keyaesofb = dpwd3.slice(0, 32);
-    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-    let encryptedaesofb = aesOfb.encrypt(encryptedaesctr);
-    let encryptedhex = aesjs.utils.hex.fromBytes(encryptedaesofb);
-    //convert to Hex json
-    let value = '{"iv":"' + randomstring + '","ivaescfb":"' + util.u8aToHex(ivaescfb) + '","ivaesctr":"' + util.u8aToHex(ivaesctr) + '","ivaesofb":"' + util.u8aToHex(ivaesofb) + '","encrypted":"' + encryptedhex + '","address":"' + keyspairv.address + '","name":"' + description + '"}';
-
-    // get the next available accountid
-    for (let i = 0; i <= 99; i++) {
-        if (!localStorage.getItem("account_" + i)) {
-            current_account_id = i;
-            break;
-        }
-    }
-    if (current_account_id > 99) {
-        alert("Too many accounts already created");
-    } else {
-        // store encrypted data
-        localStorage.setItem("account_" + current_account_id, value);
-    }
+    // store encrypted data
+    localStorage.setItem("account_0", JSON.stringify(encrypted_data));
 
     finish_keys();
 }
-function finish_keys() {
+function finish_keys(extend_delay = false) {
     hide_header();
     hide_footer();
 
@@ -1329,16 +1205,16 @@ function finish_keys() {
     n = n + '<h1 id="heading_text" class="text-center">Successfully '+message+' wallet</h1>';
     n = n + '<p id="message_text" class="text-center text-gray">Congratulations, your new wallet is ready to use.</p>';
     if(message === 'created') {
-        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-plus me-2"></span>Create another wallet</button></p>';
-    } else {
-        n = n + '<p class="text-center"><button id="another_wallet" type="button" class="btn btn-text btn-sm"><span class="icon icon-import me-2"></span>Import another wallet</button></p>';
+        n = n + '<p class="text-center"><button id="new_account" type="button" class="btn btn-text btn-sm"><span class="icon icon-plus me-2"></span>Create another account</button></p>';
     }
     n = n + '<p class="text-center"><button id="gotodashboard" type="button" class="btn btn-primary mt-2">View Portfolio</button></p>';
     n = n + '</div>';
     n = n + '</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("another_wallet").addEventListener("click", wallet_create);
+    if(message === 'created') {
+        document.getElementById("new_account").addEventListener("click", new_account);
+    }
     document.getElementById("gotodashboard").addEventListener("click", dashboard);
 
     anime({
@@ -1347,7 +1223,7 @@ function finish_keys() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 900,
-        delay: 800,
+        delay: extend_delay ? 2000 : 800,
     });
 
     anime({
@@ -1356,7 +1232,7 @@ function finish_keys() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 900,
-        delay: 800,
+        delay: extend_delay ? 2000 : 800,
     });
 
     anime({
@@ -1364,16 +1240,16 @@ function finish_keys() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 900,
-        delay: 1600
+        delay: extend_delay ? 2600 : 1400
     });
 
     anime({
-        targets: '#another_wallet',
+        targets: '#new_account',
         translateX: [-40, 0],
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 600,
-        delay: 1600,
+        delay: extend_delay ? 2600 : 1400,
     });
 
     anime({
@@ -1382,7 +1258,7 @@ function finish_keys() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 600,
-        delay: 2000,
+        delay: extend_delay ? 3000 : 1800,
     });
 
     refresh_account().then(get_balances);
@@ -1390,7 +1266,7 @@ function finish_keys() {
 // Main Dashboard
 async function dashboard(extend_delay = false){
     if(!current_account) {
-        wallet_create();
+        await wallet_create();
         return;
     }
 
@@ -1747,12 +1623,12 @@ function settings() {
                     n=n+'<div class="col pe-3"><h4 class="m-0">Backup your wallet</h4><p class="text-gray m-0">Display your secret phrase, so you can back it up securely.</p></div>';
                     n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
                 n=n+'</div>';
+            } else {
+                n=n+'<div id="go_import" class="button-item settings-item d-flex align-items-center click">';
+                    n=n+'<div class="col"><h4 class="m-0">Restore a wallet</h4><p class="text-gray m-0">Import a wallet using an existing secret phrase.</p></div>';
+                    n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
+                n=n+'</div>';
             }
-
-            n=n+'<div id="go_import" class="button-item settings-item d-flex align-items-center click">';
-                n=n+'<div class="col"><h4 class="m-0">Restore a wallet</h4><p class="text-gray m-0">Import a wallet using an existing secret phrase.</p></div>';
-                n=n+'<span class="icon icon-arrow-right-2 text-center"></span>';
-            n=n+'</div>';
 
             n=n+'<div class="separator-line"></div>';
 
@@ -1778,8 +1654,9 @@ function settings() {
     if(current_account) {
         document.getElementById("manage_accounts").addEventListener("click", manage_accounts);
         document.getElementById("backup_wallet").addEventListener("click", backup_wallet);
+    } else {
+        document.getElementById("go_import").addEventListener("click", importkeys);
     }
-    document.getElementById("go_import").addEventListener("click", importkeys);
 }
 // Manage accounts (create/import/delete)
 function manage_accounts(){
@@ -1797,98 +1674,54 @@ function manage_accounts(){
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
-        if(k_ui.getPairs().length > 0) {
+        if(total_accounts > 0) {
             n=n+'<div id="wallet_list">';
-                k_ui.getPairs().forEach((pair) => {
-                    let is_active = pair.address.toLowerCase() === current_account.address.toLowerCase();
+            for(let i = 0; i <= 99; i++) {
+                if (localStorage.getItem("account_" + i)) {
+                    let account = JSON.parse(localStorage.getItem("account_" + i));
+                    let is_active = current_account_id === i;
 
-                    n=n+'<div class="button-item d-flex align-items-center" data-id="'+pair.address+'">';
-                    n=n+jdenticon.toSvg(pair.address, 56);
-                    n=n+'<div class="col"><h4 class="m-0">'+pair.meta.name+(is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "")+'</h4><p class="text-gray m-0 w-75">'+pair.address.substring(0, 28)+'...</p></div>';
-                    n=n+'<span class="icon icon-right-arrow text-center"></span>';
-                    n=n+'</div>';
-                });
+                    n = n + '<div class="button-item d-flex align-items-center" data-id="' + i + '">';
+                    n = n + jdenticon.toSvg(account.address, 56);
+                    n = n + '<div class="col"><h4 class="m-0">' + account.name + (is_active ? " <span class='text-gray text-very-small'>(current)</span>" : "") + '</h4><p class="text-gray m-0 w-75">' + account.address.substring(0, 28) + '...</p></div>';
+                    n = n + '<span class="icon icon-right-arrow text-center"></span>';
+                    n = n + '</div>';
+                }
+            }
             n=n+'</div>';
         } else {
             n=n+'<h3>No wallets created yet.</h3>';
         }
     n=n+'</div>';
 
-    n=n+'<div id="modal" class="modal">';
-        n=n+'<div class="modal-dialog">';
-            n=n+'<div class="modal-content">';
-                n=n+'<div class="modal-header"><h3 class="modal-title w-100 text-white text-center">Unlock Wallet</h3></div>';
-                n=n+'<div class="modal-body">';
-                    n=n+'<p class="text-center text-gray pt-3 pb-4">Enter your password to unlock main account.</p>';
-                    n=n+'<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"></div></div>';
-                n=n+'</div>';
-                n=n+'<div class="modal-footer justify-content-center">';
-                    n=n+'<button id="unlock_account" type="button" class="btn btn-sm btn-primary d-flex align-items-center"">Unlock <span class="icon icon-right-arrow"></span></button>';
-                    n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
-                n=n+'</div>';
-            n=n+'</div>';
-        n=n+'</div>';
-    n=n+'</div>';
-
     document.getElementById("root").innerHTML = n;
     document.getElementById("goback").addEventListener("click", settings);
-    document.getElementById("new_account").addEventListener("click", function() {
-        if(main_account.isLocked) {
-            document.getElementById("modal").classList.add('fade')
-            document.getElementById("modal").classList.add('show')
-            return;
-        }
-        new_account()
-    });
-    document.getElementById("unlock_account").addEventListener("click", function() {
-        let password = DOMPurify.sanitize(document.getElementById("password").value);
-
-        unlock_account(main_account.address, password)
-
-        if(main_account.isLocked) {
-            let notification = Toastify({
-                text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Password is wrong!</div></div>',
-                offset: {
-                    y: 48
-                },
-                duration: 3000,
-                className: 'notification notification-error',
-                close: false,
-                stopOnFocus: false,
-                gravity: "top", // `top` or `bottom`
-                position: "left", // `left`, `center` or `right`
-                escapeMarkup: false,
-                onClick: function(){
-                    notification.hideToast()
-                }
-            }).showToast();
-        } else {
-            new_account();
-        }
-    });
-    document.getElementById("hide_modal").addEventListener("click", function() {
-        document.getElementById("modal").classList.remove('fade')
-        document.getElementById("modal").classList.remove('show')
-    });
+    document.getElementById("new_account").addEventListener("click", new_account);
     document.querySelectorAll("#bordered_content .button-item").forEach(w => {
         w.addEventListener("click", function () {
             manage_account(this.dataset.id);
         }, false)
     })
 }
-function manage_account(account_address) {
+function manage_account(id) {
+    id = parseInt(id);
+
     hide_header();
     hide_footer();
 
-    let pair = k_ui.getPair(account_address)
+    let account = JSON.parse(localStorage.getItem("account_"+id));
 
     let n='<div id="full_page">';
-        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Manage Account</h3><button id="delete_wallet" type="button" class="btn btn-sm btn-danger"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button></div>';
+        n=n+'<div class="heading equal-padding d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Manage Account</h3>';
+            if(id !== 0) {
+                n=n+'<button id="delete_wallet" type="button" class="btn btn-sm btn-danger"><span class="icon icon-trash m-0 me-1 ms-1"></span></span></button>';
+            }
+        n=n+'</div>';
         n=n+'<div class="content">';
-            n=n+'<h2>'+pair.meta.name+'</h2>';
-            n=n+'<p class="text-gray text-small">'+pair.address+'</p>';
-            n=n+'<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name" value="'+pair.meta.name+'"></div></div>';
-            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_wallet" class="btn btn-sm btn-primary ps-3 pe-3 d-flex align-items-center"><span class="icon icon-left icon-large icon-save"></span> Save</button></div></div>';
+            n=n+'<h2>'+account.name+'</h2>';
+            n=n+'<p class="text-gray text-small">'+account.address+'</p>';
+            n=n+'<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Wallet Name" value="'+account.name+'"></div></div>';
+            n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse"><div class="d-flex"><button id="save_wallet" class="btn btn-sm btn-primary ps-3 pe-3 d-flex align-items-center" data-id="'+id+'"><span class="icon icon-left icon-large icon-save"></span> Save</button></div></div>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -1897,12 +1730,12 @@ function manage_account(account_address) {
             n=n+'<div class="modal-content">';
                 n=n+'<div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>';
                 n=n+'<div class="modal-body">';
-                    n=n+'<h4 class="text-center">'+pair.meta.name+'</h4>';
-                    n=n+'<p class="text-center text-gray text-small mb-4">'+pair.address+'</p>';
+                    n=n+'<h4 class="text-center">'+account.name+'</h4>';
+                    n=n+'<p class="text-center text-gray text-small mb-4">'+account.address+'</p>';
                     n=n+'<p class="text-center text-gray text-small">This action cannot be undone. Ensure you have the secret phrase for this wallet backed up securely.</p>';
                 n=n+'</div>';
                 n=n+'<div class="modal-footer justify-content-center">';
-                    n=n+'<button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+pair.address+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
+                    n=n+'<button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="'+id+'"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>';
                     n=n+'<button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>';
                 n=n+'</div>';
             n=n+'</div>';
@@ -1921,30 +1754,33 @@ function manage_account(account_address) {
         }
     });
     document.getElementById("save_wallet").addEventListener("click", function() {
-        let description = DOMPurify.sanitize(document.getElementById("wallet_name").value);
+        let id = this.dataset.id;
+        let name = DOMPurify.sanitize(document.getElementById("wallet_name").value);
 
-        // await util_crypto.cryptoWaitReady()
+        let account_data = JSON.parse(localStorage.getItem("account_" + id));
+        account_data.name = name;
 
-        let pair = k_ui.getPair(account_address)
-        k_ui.saveAccountMeta(pair, { name: description })
+        localStorage.setItem("account_" + id, JSON.stringify(account_data));
 
-        manage_account(account_address)
+        manage_account(id)
     });
-    document.getElementById("delete_wallet").addEventListener("click", function() {
-        document.getElementById("modal").classList.add('fade')
-        document.getElementById("modal").classList.add('show')
-    });
+    if(id !== 0) {
+        document.getElementById("delete_wallet").addEventListener("click", function () {
+            document.getElementById("modal").classList.add('fade')
+            document.getElementById("modal").classList.add('show')
+        });
+    }
     document.getElementById("hide_modal").addEventListener("click", function() {
         document.getElementById("modal").classList.remove('fade')
         document.getElementById("modal").classList.remove('show')
     });
-    document.getElementById("confirm_delete_wallet").addEventListener("click", function() {
-        let wallet_id = this.dataset.id;
+    document.getElementById("confirm_delete_wallet").addEventListener("click", async function() {
+        let id = this.dataset.id;
 
-        localStorage.removeItem("webwallet"+wallet_id)
-        localStorage.removeItem("account_"+wallet_id)
-        localStorage.removeItem("webwalletdescription"+wallet_id)
-        localStorage.removeItem("account_transactions_"+wallet_id)
+        localStorage.removeItem("account_"+id)
+        localStorage.removeItem("account_transactions_"+id)
+
+        await refresh_account()
 
         manage_accounts();
     })
@@ -1956,53 +1792,62 @@ function new_account() {
     let n='<div id="full_page">';
         n=n+'<div class="heading d-flex align-items-center"><span id="goback" class="icon icon-left-arrow click"></span><h3>Create Account</h3></div>';
         n=n+'<div class="content">';
-            n=n+'<h2>Set your account password</h2>';
-            n=n+'<p class="text-gray pb-2">Set a strong password to encrypt the private key on your computer. This password will allow you to unlock this account when you need to use it.</p>';
-            n=n+'<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Strong Password"></div></div>';
-            n=n+'<div class="info-messages mt-2 mb-4">';
-                n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close"></span></span>12 characters or more</div>';
-                n=n+'<div class="message d-flex align-items-center"><span id="lowercase_icon"><span class="icon icon-close"></span></span>At least 1 lowercase letter</div>';
-                n=n+'<div class="message d-flex align-items-center"><span id="uppercase_icon"><span class="icon icon-close"></span></span>At least 1 uppercase letter</div>';
-                n=n+'<div class="message d-flex align-items-center"><span id="digit_icon"><span class="icon icon-close"></span></span>At least 1 digit</div>';
-                n=n+'<div class="message d-flex align-items-center"><span id="symbol_icon"><span class="icon icon-close"></span></span>At least 1 special symbol</div>';
-            n=n+'</div>';
-            n=n+'<label class="label text-dark d-flex align-items-center"><div class="col">Repeat Password</div><div class="col d-flex flex-row-reverse align-items-center">Both match <div id="repeat_icon" class="me-2"><span class="icon icon-close"></span></div></div></label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password_repeat" type="password" class="form-control" placeholder="Repeat Password"></div></div>';
+            n=n+'<h2>Set up your new account</h2>';
+            n=n+'<p class="text-gray pb-2">Confirm your wallet password in order to create new account.</p>';
+            n=n+'<label class="label text-dark">Password</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"></div></div>';
             n=n+'<label class="label text-dark mt-3">Name</label><div class="form-group"><div class="input-group"><span class="input-group-text bigger"><span class="icon icon-pen"></span></span><input id="wallet_name" type="text" class="form-control" placeholder="Account Name"></div></div>';
             n=n+'<div class="footer d-flex align-items-sketch flex-row-reverse">';
-                n=n+'<div class="d-flex"><button id="set_password" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
+                n=n+'<div class="d-flex"><button id="store_account" class="btn btn-sm btn-primary ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>';
             n=n+'</div>';
         n=n+'</div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
     document.getElementById("goback").addEventListener("click", manage_accounts);
-    document.getElementById("password").addEventListener("input", check_password);
-    document.getElementById("password_repeat").addEventListener("input", check_password);
-    document.getElementById("wallet_name").addEventListener("input", check_password);
-    document.getElementById("set_password").addEventListener("click", store_account);
+    document.getElementById("store_account").addEventListener("click", store_account);
 }
-function store_account() {
-    if(!main_account.isLocked) {
-        let password = DOMPurify.sanitize(document.getElementById("password").value);
-        let description = DOMPurify.sanitize(document.getElementById('wallet_name').value);
+async function store_account() {
+    const password = DOMPurify.sanitize(document.getElementById("password").value);
+    const name = DOMPurify.sanitize(document.getElementById("wallet_name").value);
 
-        let derive = main_account.derive('//vlada', { name: description });
-        let { pair } = k_ui.addPair(derive, password);
+    // first decrypt main account
+    let mnemonic = await decrypt_main_account(password, true);
+    if(mnemonic) {
+        let k = new keyring.Keyring({type: 'sr25519'});
 
-        finish_keys();
+        for(let i = 1; i <= 99; i++) {
+            if (!localStorage.getItem("account_" + i)) {
+                current_account_id = i;
+                break;
+            }
+        }
+
+        keyspairv = k.addFromUri(mnemonic + '//' + current_account_id, {name: ''}, 'sr25519');
+
+        const encrypted_data = await encrypt_wallet(password, name);
+
+        // store encrypted data
+        localStorage.setItem("account_" + current_account_id, JSON.stringify(encrypted_data));
+
+        finish_keys(true);
+    } else {
+        let notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Password is wrong!</div></div>',
+            offset: {
+                y: 50
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
     }
-}
-function unlock_account(account_address, password) {
-    let pair = k_ui.getPair(account_address);
-    try {
-        pair.unlock(password);
-        // k_ui.saveAddress(pair.address)
-        // k_ui.saveAccount(pair)
-    } catch(e) {
-        console.log(e)
-    }
-
-    return pair.isLocked;
 }
 // Manage custom networks
 function manage_networks(){
@@ -2352,7 +2197,7 @@ function review_transaction() {
         n = n + '<div class="wallet w-100 d-flex align-items-center">';
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot dot-green"></span></div>';
             n = n + '<div class="right col-11">';
-                n = n + '<h3 class="mb-1">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h3>';
+                n = n + '<h3 class="mb-1">From ('+(current_account.name.length > 14 ? current_account.name.substring(0,14)+'...' : current_account.name)+')</h3>';
                 n = n + '<span class="address text-gray">'+current_account.address+'</span>';
             n = n + '</div>';
         n = n + '</div>';
@@ -2365,7 +2210,7 @@ function review_transaction() {
         n = n + '</div>';
     n = n + '</div>';
     n = n + '<div class="footer d-flex align-items-sketch flex-row-reverse">';
-        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+        n = n + '<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
     n = n + '</div>';
     n = n + '</div>';
 
@@ -2464,7 +2309,7 @@ function signin(domain){
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="wallet password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
+        n = n + '<label class="label text-dark">Enter your password to approve this requestsss</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
         n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
     n=n+'</div>';
 
@@ -2602,7 +2447,7 @@ async function bond(){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
   }else{
     // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
+    let r=await decrypt_wallet(encrypted,password);
     if(r==true){
       let n="Do you confirm the bonding of: "
       n=n+amount;
@@ -2650,7 +2495,7 @@ async function unbond(){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
   }else{
     // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
+    let r=await decrypt_wallet(encrypted,password);
     if(r==true){
       let n="Do you confirm the unbonding of: "
       n=n+(amount/1000000000000000000);
@@ -2698,7 +2543,7 @@ async function stake(){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
   }else{
     // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
+    let r=await decrypt_wallet(encrypted,password);
     if(r==true){
       let n="Do you confirm the nomination of validator: "+validator+" ?";
       let r=confirm(n);
@@ -2744,7 +2589,7 @@ async function unstake(){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
   }else{
     // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
+    let r=await decrypt_wallet(encrypted,password);
     if(r==true){
       let n="Do you confirm to removal of your staking ? It will be done within 1 hour (ERA time)";
       let r=confirm(n);
@@ -2795,7 +2640,7 @@ async function transferfunds() {
         n = n + '<div class="wallet w-100 d-flex align-items-center">';
             n = n + '<div class="col-1 d-flex justify-content-center"><span class="dot"></span></div>';
             n = n + '<div class="right col-11">';
-                n = n + '<h3 class="mb-1">From ('+(accountdescription.length > 14 ? accountdescription.substring(0,14)+'...' : accountdescription)+')</h3>';
+                n = n + '<h3 class="mb-1">From ('+(current_account.name.length > 14 ? current_account.name.substring(0,14)+'...' : current_account.name)+')</h3>';
                 n = n + '<span class="address text-gray">'+current_account.address+'</span>';
             n = n + '</div>';
         n = n + '</div>';
@@ -2812,9 +2657,8 @@ async function transferfunds() {
     n = n + '</div>';
 
     let encrypted = '';
-    // read the encrypted storage
-    if (localStorage.getItem("webwallet")) {
-        encrypted = localStorage.getItem("webwallet");
+    if(localStorage.getItem("account_"+current_account_id)) {
+        encrypted = localStorage.getItem("account_"+current_account_id);
     }
 
     if(password === '') {
@@ -2823,7 +2667,7 @@ async function transferfunds() {
         notification_message = 'The account has not a valid storage, please remove the extension and re-install it.';
     } else {
         // try to decrypt and get keypairsv with the keys pair
-        let r = await decrypt_webwallet(encrypted,password);
+        let r = await decrypt_wallet(encrypted, password);
         if(r === true){
             const amountb = BigInt(parseInt(parseFloat(amount)*10000))*100000000000000n;
             apiv.tx.balances.transfer(accountrecipient, amountb)
@@ -2955,7 +2799,7 @@ async function submitextrinsic(){
     alert("The account has not a valid storage, please remove the extension and re-install it.");
   }else{
     // try to decrypt and get keypairsv with the keys pair
-    let r=await decrypt_webwallet(encrypted,password);
+    let r=await decrypt_wallet(encrypted,password);
     if(r==true){
       // build the transactions using "spread" operator to pass the correct number of parameters
       apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
@@ -3001,7 +2845,7 @@ async function signinexecute() {
         notification_message = 'Password is wrong!';
     } else {
         // try to decrypt and get keypairsv with the keys pair
-        let r = await decrypt_webwallet(encrypted, password);
+        let r = await decrypt_wallet(encrypted, password);
         if (r === true) {
             // get current epoch time
             let dt = new Date();
@@ -3057,127 +2901,171 @@ async function signinexecute() {
         }).showToast();
     }
 }
+async function encrypt_wallet(pwd, name) {
+    // get ascii value of first 2 chars
+    const vb1 = pwd.charCodeAt(0);
+    const vb2 = pwd.charCodeAt(1);
+
+    // position to derive other 3 passwords
+    const p = vb1 * vb2;
+
+    // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+    let randomstring = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 32; i++) {
+        randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    let dpwd1 = '';
+    let dpwd2 = '';
+    let dpwd3 = '';
+    let h = util_crypto.keccakAsU8a(pwd + randomstring);
+    for (let i = 0; i < 100000; i++) {
+        h = util_crypto.keccakAsU8a(h);
+        if (i === p) {
+            dpwd1 = h;
+        }
+        h = util_crypto.sha512AsU8a(h);
+        if (i === p) {
+            dpwd2 = h;
+        }
+        h = util_crypto.blake2AsU8a(h);
+        if (i === p) {
+            dpwd3 = h;
+        }
+    }
+
+    // 3 Layers encryption
+    // encrypt the secret words in AES256-CFB
+    let ivf = '';
+    for (let i = 0; i < 16; i++) {
+        ivf += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const ivaescfb = aesjs.utils.utf8.toBytes(ivf);
+    const keyaescfb = dpwd1.slice(0, 32);
+    let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+    let mnemonicbytes = aesjs.utils.utf8.toBytes(mnemonic);
+
+    let encryptedaescfb = aesCfb.encrypt(mnemonicbytes);
+
+    // encrypt the output of AES256-CFB in AES256-CTR
+    let ivs = '';
+    for (let i = 0; i < 16; i++) {
+        ivs += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    const ivaesctr = aesjs.utils.utf8.toBytes(ivs);
+    //const keyaes= aesjs.utils.utf8.toBytes(dpwd2.slice(0,32));
+    const keyaesctr = dpwd2.slice(0, 32);
+    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+    let encryptedaesctr = aesCtr.encrypt(encryptedaescfb);
+
+    // encrypt the output of AES256-CTR in AES256-OFB
+    let ivso = '';
+    for (let i = 0; i < 16; i++) {
+        ivso += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const ivaesofb = aesjs.utils.utf8.toBytes(ivso);
+    const keyaesofb = dpwd3.slice(0, 32);
+    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+    let encryptedaesofb = aesOfb.encrypt(encryptedaesctr);
+    let encryptedhex = aesjs.utils.hex.fromBytes(encryptedaesofb);
+
+    // convert to Hex json
+    return {
+        "iv": randomstring,
+        "ivaescfb": util.u8aToHex(ivaescfb),
+        "ivaesctr": util.u8aToHex(ivaesctr),
+        "ivaesofb": util.u8aToHex(ivaesofb),
+        "encrypted": encryptedhex,
+        "address": keyspairv.address,
+        "name": name
+    };
+}
 // function to decrypt the web wallet and return a key pair
-async function decrypt_webwallet(encrypted,pwd){
-  // get ascii value of first 2 chars
-  const vb1=pwd.charCodeAt(0);
-  const vb2=pwd.charCodeAt(1);
-  const p=vb1*vb2; // position to derive other 3 passwords
-  // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-  const enc=JSON.parse(encrypted);
-  let randomstring = enc.iv;
-  let dpwd1='';
-  let dpwd2='';
-  let dpwd3='';
-  let h=util_crypto.keccakAsU8a(pwd+randomstring);
-  for (let i = 0; i < 100000; i++) {
-    h=util_crypto.keccakAsU8a(h);
-    if (i==p){
-      dpwd1=h;
+function decrypt_wallet(encrypted, pwd, mnemonic_only = false) {
+    if (pwd.length === 0) {
+        return false;
     }
-    h=util_crypto.sha512AsU8a(h);
-    if (i==p){
-      dpwd2=h;
-    }
-    h=util_crypto.blake2AsU8a(h);
-    if (i==p){
-      dpwd3=h;
-    }
-  }
-  // decrypt AES-OFB
-  const ivaesofb=util.hexToU8a(enc.ivaesofb);
-  const keyaesofb= dpwd3.slice(0,32);
-  let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-  const encryptedhex=enc.encrypted;
-  const encryptedaesofb=aesjs.utils.hex.toBytes(encryptedhex);
-  let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
-  // decrypt AES-CTR
-  const ivaesctr=util.hexToU8a(enc.ivaesctr);
-  const keyaesctr= dpwd2.slice(0,32);
-  let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-  let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
-  // decrypt AES-CFB
-  const ivaescfb=util.hexToU8a(enc.ivaescfb);
-  const keyaescfb= dpwd1.slice(0,32);
-  let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-  let decrypted = aesCfb.decrypt(encryptedaescfb);
-  let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
-  if(!mnemonicdecrypted){
-    return(false);
-  }else {
-    keyringv= new keyring.Keyring({ type: 'sr25519' });
-    try {
-      keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
-      return(true);
-    }
-    catch(e){
-      console.log(e);
-      return(false);
+
+    // get ascii value of first 2 chars
+    const vb1 = pwd.charCodeAt(0);
+    const vb2 = pwd.charCodeAt(1);
+
+    // position to derive other 3 passwords
+    const p = vb1 * vb2;
+
+    // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+    const enc = JSON.parse(encrypted);
+    let randomstring = enc.iv;
+    let dpwd1 = '';
+    let dpwd2 = '';
+    let dpwd3 = '';
+    let h = util_crypto.keccakAsU8a(pwd + randomstring);
+    for (let i = 0; i < 100000; i++) {
+        h = util_crypto.keccakAsU8a(h);
+        if (i === p) {
+            dpwd1 = h;
+        }
+        h = util_crypto.sha512AsU8a(h);
+        if (i === p) {
+            dpwd2 = h;
+        }
+        h = util_crypto.blake2AsU8a(h);
+        if (i === p) {
+            dpwd3 = h;
+        }
     }
     
-  }
+    // decrypt AES-OFB
+    const ivaesofb = util.hexToU8a(enc.ivaesofb);
+    const keyaesofb = dpwd3.slice(0, 32);
+    let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+    const encryptedhex = enc.encrypted;
+    const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
+    let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+    
+    // decrypt AES-CTR
+    const ivaesctr = util.hexToU8a(enc.ivaesctr);
+    const keyaesctr = dpwd2.slice(0, 32);
+    let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+    let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+    
+    // decrypt AES-CFB
+    const ivaescfb = util.hexToU8a(enc.ivaescfb);
+    const keyaescfb = dpwd1.slice(0, 32);
+    let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+    let decrypted = aesCfb.decrypt(encryptedaescfb);
+    let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
 
+    if (!decrypted_mnemonic) {
+        return false;
+    } else {
+        if(!util_crypto.mnemonicValidate(decrypted_mnemonic)) {
+            return false;
+        }
+
+        if(mnemonic_only) {
+            return decrypted_mnemonic;
+        }
+
+        keyringv = new keyring.Keyring({type: 'sr25519'});
+        try {
+            keyspairv = keyringv.addFromUri(decrypted_mnemonic, {name: ''}, 'sr25519');
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
 }
-// function to decrypt the web wallet and return a mnemonics
-function decrypt_webwallet_mnemonics(encrypted,pwd){
-  // get ascii value of first 2 chars
-  const vb1=pwd.charCodeAt(0);
-  const vb2=pwd.charCodeAt(1);
-  const p=vb1*vb2; // position to derive other 3 passwords
-  // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-  const enc=JSON.parse(encrypted);
-  let randomstring = enc.iv;
-  let dpwd1='';
-  let dpwd2='';
-  let dpwd3='';
-  let h=util_crypto.keccakAsU8a(pwd+randomstring);
-  for (let i = 0; i < 100000; i++) {
-    h=util_crypto.keccakAsU8a(h);
-    if (i==p){
-      dpwd1=h;
+function decrypt_main_account(pwd, mnemonic_only = false) {
+    let encrypted = '';
+    if(localStorage.getItem("account_0")) {
+        encrypted = localStorage.getItem("account_0");
     }
-    h=util_crypto.sha512AsU8a(h);
-    if (i==p){
-      dpwd2=h;
-    }
-    h=util_crypto.blake2AsU8a(h);
-    if (i==p){
-      dpwd3=h;
-    }
-  }
-  // decrypt AES-OFB
-  const ivaesofb=util.hexToU8a(enc.ivaesofb);
-  const keyaesofb= dpwd3.slice(0,32);
-  let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-  const encryptedhex=enc.encrypted;
-  const encryptedaesofb=aesjs.utils.hex.toBytes(encryptedhex);
-  let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
-  // decrypt AES-CTR
-  const ivaesctr=util.hexToU8a(enc.ivaesctr);
-  const keyaesctr= dpwd2.slice(0,32);
-  let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-  let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
-  // decrypt AES-CFB
-  const ivaescfb=util.hexToU8a(enc.ivaescfb);
-  const keyaescfb= dpwd1.slice(0,32);
-  let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-  let decrypted = aesCfb.decrypt(encryptedaescfb);
-  let mnemonicdecrypted = aesjs.utils.utf8.fromBytes(decrypted);
-  if(!mnemonicdecrypted){
-    return(false);
-  }else {
-    keyringv= new keyring.Keyring({ type: 'sr25519' });
-    try {
-      keyspairv = keyringv.addFromUri(mnemonicdecrypted, { name: '' }, 'sr25519');
-      return(mnemonicdecrypted);
-    }
-    catch(e){
-      console.log(e);
-      return(false);
-    }
-
-  }
-
+    
+    return decrypt_wallet(encrypted, pwd, mnemonic_only);
 }
 // function to get the amount bonded for staking
 async function get_amount_bonded(address){
@@ -3228,9 +3116,6 @@ async function show_header() {
 
     let header_el = document.getElementById("header");
 
-    // refresh the identicon
-    let ic = jdenticon.toSvg(current_account.address, 30);
-
     let n=''
     n=n+'<div class="col-4 p-0">';
         n=n+'<svg id="top_logo" class="click" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
@@ -3248,7 +3133,7 @@ async function show_header() {
         n=n+'<span id="go_settings" class="icon-cog text-white click"></span>';
         if(current_account) {
             n=n+'<div id="current_wallet" class="d-flex align-items-center">';
-                n=n+'<div class="identicon">'+ic+'</div>';
+                n=n+'<div class="identicon">'+jdenticon.toSvg(current_account.address, 30)+'</div>';
                 n=n+'<div class="info"><span class="desc d-flex align-items-center">'+(current_account_id === 0 ? '<span class="icon icon-circle"></span>' : '')+((current_account.name && current_account.name.length) > 14 ? current_account.name.substring(0,14)+'...' : current_account.name)+'</span><span>'+current_account.address.substring(0,16)+'...</span></div>';
                 if(total_accounts > 1) {
                     n=n+'<span class="icon icon-down-arrow"></span>';
@@ -3257,7 +3142,7 @@ async function show_header() {
                     for(let i = 0; i <= 99; i++) {
                         if(localStorage.getItem("account_"+i)) {
                             let account = JSON.parse(localStorage.getItem("account_"+i));
-                            let is_main = current_account_id === 0;
+                            let is_main = i === 0;
                             let is_active = current_account_id === i;
 
                             if(is_active) continue;
