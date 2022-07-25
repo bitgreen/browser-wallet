@@ -121,7 +121,7 @@ p {
     pointer-events: none;
 }
 .btn.btn-sm {
-    padding: 4px 8px;
+    padding: 4px 12px;
     font-size: 14px;
     line-height: 22px;
     min-height: 40px;
@@ -492,6 +492,7 @@ label.label {
     padding: 6px 10px;
     z-index: 999;
     cursor: pointer;
+    user-select: none !important;
 }
 #current_wallet:after {
     position: absolute;
@@ -542,6 +543,10 @@ label.label {
     margin-top: 2px;
     font-family: "Clash Grotesk Medium", sans-serif;
     font-weight: 500;
+}
+#current_wallet .info .desc .icon {
+    margin: 0 4px 0 0;
+    color: #9ECC00;
 }
 #current_wallet .icon {
     font-size: 6px;
@@ -1310,6 +1315,7 @@ label.label {
     border: none !important;
 }
 .modal .modal-header {
+    background-color: #061C00;
     border-radius: 0 !important;
 }
 .modal .modal-header.modal-header-danger {
