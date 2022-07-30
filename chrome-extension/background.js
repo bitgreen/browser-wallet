@@ -1,3 +1,9 @@
+const extension_id = chrome.runtime.id;
+
+let password = null;
+let password_expire = 60; // expire after X minutes
+let password_timeout = null;
+
 BWMessage="";
 timeout=0;
 chrome.runtime.onInstalled.addListener(() => {
@@ -10,6 +16,31 @@ chrome.runtime.onMessage.addListener(
         console.log(sender.tab ?
                     "[info] msg from a content script:" + sender.tab.url :
                     "[info] msg from the extension");
+        if (request.command === "save_password") {
+            password = request.password
+            password_timeout = setTimeout(function() {
+                password = null;
+            }, 1000 * 60 * password_expire)
+        }
+        if (request.command === "request_password") {
+            sendResponse(password)
+            return true;
+        }
+        if (request.command === "refresh_password") {
+            // reset timer
+            clearTimeout(password_timeout);
+            password_timeout = setTimeout(function() {
+                password = null;
+            }, 1000 * 60 * password_expire)
+            sendResponse(true)
+            return true;
+        }
+        if (request.command === "lock_wallet") {
+            password = null
+            clearTimeout(password_timeout);
+            sendResponse(true)
+            return true;
+        }
         // manage transfer command
         if (request.command === "transfer"){
             if(request.recipient!== null && request.amount!==null){
