@@ -1,27 +1,38 @@
 @font-face {
-    font-family: 'Clash Display';
-    src: url('assets/fonts/ClashDisplay/ClashDisplay-Variable.ttf') format('truetype');
-    font-weight: 500;
-    font-display: swap;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Clash Grotesk Medium';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url('assets/fonts/clash-grotesk/ClashGrotesk-Medium.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Clash Grotesk Regular';
+    font-family: 'Neue Haas Unica Pro';
     font-style: normal;
     font-weight: 300;
     font-display: swap;
-    src: url('assets/fonts/clash-grotesk/ClashGrotesk-Regular.ttf') format('truetype');
+    src: url('assets/fonts/Neue-Haas-Unica-Pro/NeueHaasUnicaPro-Light.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Neue Haas Unica Pro';
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+    src: url('assets/fonts/Neue-Haas-Unica-Pro/NeueHaasUnicaPro-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Neue Haas Unica Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('assets/fonts/Neue-Haas-Unica-Pro/NeueHaasUnicaPro-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Neue Haas Unica Pro';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('assets/fonts/Neue-Haas-Unica-Pro/NeueHaasUnicaPro-Medium.ttf') format('truetype');
+}
+
+* {
+    font-family: "Neue Haas Unica Pro", sans-serif !important;
 }
 
 body {
-    font-family: 'Clash Grotesk Regular', sans-serif;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
     width: 400px;
     min-height: 600px;
     height: 100%;
@@ -33,44 +44,37 @@ body {
     background-image: url('assets/bg-darker.png');
 }
 h1 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 24px;
     color: #061C00;
 }
 h2 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 22px;
     color: #061C00;
 }
 h3 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 20px;
     color: #061C00;
 }
 h3 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 18px;
     color: #061C00;
 }
 h4 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 16px;
     color: #061C00;
 }
 h5 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 14px;
     color: #061C00;
 }
 h6 {
-    font-family: "Clash Display", sans-serif;
-    font-weight: 400;
+        font-weight: 400;
     font-size: 12px;
     color: #061C00;
 }
@@ -94,22 +98,19 @@ p {
     font-size: 11px;
 }
 .text-grotesk {
-    font-family: "Clash Grotesk Regular", sans-serif;
-    font-weight: 300;
+        font-weight: 300;
 }
 .text-bold {
     font-weight: 500;
 }
 .text-grotesk.text-bold {
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
 }
 .select-none {
     user-select: none;
 }
 .btn {
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-style: normal;
+        font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
@@ -226,13 +227,12 @@ p {
     font-size: 26px;
 }
 label.label {
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     font-size: 16px;
     margin: 6px 0 10px 0;
 }
 .form-group {
-    border: 1px solid #D5D6DA !important;
+    border: 1px solid #D5D6DA;
     border-radius: 0;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
 }
@@ -242,9 +242,13 @@ label.label {
     box-shadow: none !important;
     padding-left: 0;
     background-color: #FFFFFF !important;
+    font-size: 14px;
+}
+.form-group .form-control.form-control-sm {
+    font-size: 13px;
 }
 .form-group .input-group-text {
-    background-color: transparent;
+    background-color: #ffffff;
     border-radius: 0;
     border: 0;
     font-size: 12px;
@@ -279,6 +283,12 @@ label.label {
 .form-switch .form-check-input:checked {
     background-color: #C0FF00 !important;
 }
+.form-switch .form-check-input.darker {
+    background-color: #D5D6DA !important;
+}
+.form-switch .form-check-input.darker:checked {
+    background-color: #A9E208 !important;
+}
 .form-switch .form-check-label {
     height: 24px;
     line-height: 24px;
@@ -287,6 +297,23 @@ label.label {
 .form-switch .form-check-label h4 {
     height: 24px;
     line-height: 24px;
+}
+.badge {
+    font-weight: 500;
+}
+.badge.badge-rounded {
+    height: 18px;
+    line-height: 16px;
+    border-radius: 8px;
+    padding: 0 8px;
+}
+.badge.badge-primary {
+    background-color: #C0FF00;
+    color: #263300;
+}
+.badge.badge-secondary {
+    background-color: #224851;
+    color: #FFFFFF;
 }
 #header {
     position: fixed;
@@ -306,6 +333,28 @@ label.label {
 #header #go_settings:hover {
     transform: rotate(60deg);
 }
+#login_screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/bg-darker.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+
+    z-index: 9999;
+}
+#login_screen.fade-out {
+    opacity: 0;
+    transition: all ease-in 0.3s;
+}
+#login_screen.inactive {
+    display: none !important;
+    z-index: -1;
+}
 #init_screen {
     position: absolute;
     top: 0;
@@ -316,8 +365,13 @@ label.label {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    opacity: 1;
 
     z-index: 9999;
+}
+#init_screen.fade-out {
+    opacity: 0;
+    transition: all ease-in 0.3s;
 }
 #init_screen.inactive {
     display: none !important;
@@ -338,6 +392,10 @@ label.label {
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
+}
+#init_screen.fade-out .init-logo {
+    transform: scale(30);
+    transition: all linear 1.5s;
 }
 
 #root {
@@ -378,15 +436,21 @@ label.label {
     left: 0;
     right: 0;
     margin: auto;
-    font-family: "Clash Display", sans-serif;
-    color: #ffffff;
+        color: #ffffff;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0;
     text-align: center;
+    user-select: none !important;
 }
-
+.animated {
+    transition: all linear 0.2s;
+}
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
 #getstarted {
     position: absolute;
     top: 380px;
@@ -428,6 +492,11 @@ label.label {
     width: 40px;
     text-align: center;
     font-size: 18px;
+    transition: all linear 0.2s;
+}
+#heading.custom-header .heading #goback:hover,
+#full_page .heading #goback:hover {
+    transform: translateX(-4px);
 }
 #heading.custom-header .heading h3 {
     width: 100%;
@@ -478,9 +547,10 @@ label.label {
     width: 144px;
     border-radius: 4px;
     height: 36px;
-    line-height: 36px;
+    line-height: 20px;
     padding: 0;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+    font-size: 14px;
 }
 #bordered_content #top_items button .icon {
     font-size: 12px;
@@ -541,8 +611,7 @@ label.label {
     font-size: 14px;
     width: 100%;
     margin-top: 2px;
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
 }
 #current_wallet .info .desc .icon {
     margin: 0 4px 0 0;
@@ -686,7 +755,7 @@ label.label {
     width: 100%;
     height: 30px;
     text-align: center;
-    font-family: "Clash Grotesk Medium", sans-serif;
+        font-size: 12px;
     font-weight: 500;
     padding: 0 8px 4px 8px;
 }
@@ -757,15 +826,14 @@ label.label {
     color: #CC2400;
 }
 #transactions .transaction-info .amount {
-    font-family: "Clash Grotesk Regular", sans-serif;
-    font-size: 20px;
+        font-size: 20px;
 }
 #transactions .transaction-info .amount .digits {
     font-size: 14px;
     padding-top: 4px;
 }
 #transactions .transaction-info .desc {
-    font-family: "Clash Grotesk Medium", sans-serif;
+        font-weight: 500;
     font-size: 12px;
 }
 #transactions .button-item .icon.icon-small {
@@ -781,7 +849,7 @@ label.label {
     width: 100%;
     height: 60px;
     padding: 12px 64px 12px 24px;
-    background-color: #061C00;
+    background-color: #224851;
     color: #ffffff;
 }
 #full_page .heading.equal-padding {
@@ -929,8 +997,7 @@ label.label {
 }
 #full_page .content #mnemonics_info {
     font-size: 14px;
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     padding: 10px 12px;
     user-select: none;
 }
@@ -996,6 +1063,9 @@ label.label {
     background-color: rgba(192, 255, 0, 0.1);
     color: #C0FF00;
 }
+.footer-only {
+    padding: 16px;
+}
 .footer {
     position: fixed;
     width: 370px;
@@ -1012,8 +1082,7 @@ label.label {
 }
 
 .info-messages {
-    font-family: "Clash Grotesk Medium", sans-serif;
-    font-weight: 500;
+        font-weight: 500;
     color: #061C00;
 }
 .info-messages.bigger {
@@ -1165,19 +1234,21 @@ label.label {
     padding-right: 32px;
 }
 #review_transaction .amount {
-    font-family: 'Clash Grotesk Medium', sans-serif;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
     font-size: 26px;
 
     padding: 0 1px 4px;
 }
 #review_transaction .decimals {
-    font-family: 'Clash Grotesk Regular', sans-serif;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
     font-size: 14px;
 
     letter-spacing: -0.05em;
 }
 #review_transaction .dollar {
-    font-family: 'Clash Grotesk Medium', sans-serif;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
     font-size: 14px;
     padding-top: 2px;
 
@@ -1185,7 +1256,8 @@ label.label {
 }
 #review_transaction .title {
     margin-top: 6px;
-    font-family: 'Clash Grotesk Medium', sans-serif;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
     color: #667085;
 }
 #transaction_info .wallet {
@@ -1272,7 +1344,7 @@ label.label {
     box-shadow: 0 3px 4px rgb(17 20 30 / 0.18), 0 2px 3px rgb(17 20 30 / 0.08) !important;
     border-radius: 8px !important;
     max-width: 100% !important;
-    width: calc(100% - 24px) !important;
+    width: calc(100% - 28px) !important;
     color: #061C00 !important;
     padding: 24px 12px !important;
     font-size: 16px !important;
@@ -1296,6 +1368,9 @@ label.label {
     pointer-events: none;
     z-index: -1;
     transition: all linear 0.2s;
+    height: auto;
+    max-height: 540px;
+    box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
 }
 .modal.show {
     opacity: 1;
@@ -1315,14 +1390,89 @@ label.label {
     border: none !important;
 }
 .modal .modal-header {
+    position: relative;
     background-color: #061C00;
     border-radius: 0 !important;
+    border-bottom: 0 !important;
+}
+.modal .modal-header.equal-padding {
+    padding: 6px 12px;
 }
 .modal .modal-header.modal-header-danger {
     background-color: #661100;
 }
+.modal .modal-header.modal-header-primary {
+    background-color: #224851;
+}
+.modal .modal-body {
+    margin-top: -2px;
+}
+.modal .modal-body.small-padding {
+    padding: 6px 10px;
+}
+.modal .modal-body.modal-body-primary {
+    background-color: #224851;
+}
 .modal .modal-footer {
-    box-shadow: 0 12px 16px -4px rgba(17, 20, 30, 0.1), 0px 4px 6px -2px rgba(17, 20, 30, 0.05);
+    box-shadow: 0 12px 16px -4px rgba(17, 20, 30, 0.1), 0 4px 6px -2px rgba(17, 20, 30, 0.05);
     border-radius: 0 0 8px 8px;
     border: none !important;
+}
+#accounts_modal {
+    width: calc(100% - 16px);
+    top: 0;
+    left: 8px;
+    padding-top: 8px;
+}
+#accounts_modal:after {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1200px;
+    background-color: rgba(17, 20, 30, 0.66);
+    content: " ";
+    z-index: -1;
+}
+#accounts_modal .modal-content {
+    border-radius: 10px !important;
+}
+#accounts_modal .modal-header {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+#accounts_modal #hide_accounts_modal {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    padding: 0;
+    color: #FFFFFF;
+    transition: all linear 0.1s;
+}
+#accounts_modal #hide_accounts_modal:hover {
+    font-size: 16px;
+}
+#accounts_modal .current-wallet .address {
+    font-size: 14px;
+}
+#accounts_modal .current-wallet .address .icon {
+    font-size: 16px;
+}
+#accounts_modal .modal-body {
+    padding-right: 8px;
+}
+#accounts_modal .modal-body .button-item {
+    min-height: 60px;
+}
+#accounts_modal .modal-body .button-item .icon {
+    font-size: 14px;
+    width: 40px;
+}
+#accounts_modal #wallet_list {
+    max-height: 290px;
 }
