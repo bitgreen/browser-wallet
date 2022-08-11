@@ -1,0 +1,42 @@
+{
+  "manifest_version": 2,
+  "name": "BitgreenWallet",
+  "description": "Bitgreen Browser Wallet",
+  "version": "0.22",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "window.html"
+  },
+  "icons":{
+    "16":"icons/16.png",
+    "32":"icons/32.png",
+    "64":"icons/64.png",
+    "128":"icons/128.png",
+    "256":"icons/256.png",
+    "512":"icons/512.png"
+  },
+  "permissions": [
+    "clipboardRead",
+    "clipboardWrite",
+    "storage",
+    "tabs",
+    "https://testnet.bitgreen.org:9443/",
+    "https://mainnet.bitgreen.org:9443/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentscript.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "webextension@bitgreen.org"
+    }
+  }
+}
