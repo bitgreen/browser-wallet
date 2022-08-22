@@ -26,7 +26,6 @@ let user_mnemonic_sortable = [];
 let import_mnemonic_array=[];
 let import_mnemonic_sortable=[];
 let apiv='';
-let currentaccount=null;
 let balancev=0;
 let balancevf='0.00';
 
@@ -2446,7 +2445,7 @@ function signin(domain) {
 }
 // function to show the form to submit an extrisinc
 async function extrinsic(pallet,call,parameters,domain){
-  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+current_account.address.substring(0,4)+"..."+current_account.address.substring(current_account.address.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
@@ -2454,7 +2453,7 @@ async function extrinsic(pallet,call,parameters,domain){
     n=n+'<div class="alert alert-warning" role="alert">Originated from: '+domain+'</div>';
     n=n+'<input type="hidden" name="domain" id="domain" value="'+domain+'">';
   }
-  n=n+"<h3>"+pallet+" - "+call+"</H3>"  
+  n=n+"<h3>"+pallet+" - "+call+"</H3>"
   // insert the fields received
   n=n+'<input type="hidden" id="pallet" value="'+pallet+'">';
   n=n+'<input type="hidden" id="call" value="'+call+'">';
@@ -2476,16 +2475,16 @@ async function extrinsic(pallet,call,parameters,domain){
 }
 // function to manage the staking of funds
 async function staking(){
-  let n='<br><center><h3>Main Account</h3>'+currentaccount.substring(0,4)+"..."+currentaccount.substring(currentaccount.length-4)+'<br>';
+  let n='<br><center><h3>Main Account</h3>'+current_account.address.substring(0,4)+"..."+current_account.address.substring(current_account.length-4)+'<br>';
   n=n+'<hr>'
   n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
   n=n+"<hr>";
   //n=n+"<h3>Staking</h3>"
   // get amount bonded
-  let bondamount= await get_amount_bonded(currentaccount);
+  let bondamount= await get_amount_bonded(current_account);
   let nominator='';
   if(bondamount>0){
-    nominator= await get_nominator(currentaccount);
+    nominator= await get_nominator(current_account);
   }
   if(bondamount>0){
     const bondamountv=bondamount/1000000000000000000;
@@ -2590,7 +2589,7 @@ async function bond(){
                 // Other, CannotLookup, BadOrigin, no extra info
                 alert(`Error in transaction: ${dispatchError.toString()}`);
               }
-            } 
+            }
           }
         });
         alert("The bonding has been submitted to the blockchain, please check the result in the transaction history.");
@@ -2606,7 +2605,7 @@ async function bond(){
 }
 // function to unbond the current fund
 async function unbond(){
-  let amount= await get_amount_bonded(currentaccount);
+  let amount= await get_amount_bonded(current_account);
   let password=document.getElementById("inputPassword").value;
   let encrypted='';
   // read the encrypted storage
@@ -2638,7 +2637,7 @@ async function unbond(){
                 // Other, CannotLookup, BadOrigin, no extra info
                 alert(`Error in transaction: ${dispatchError.toString()}`);
               }
-            } 
+            }
           }
         });
         alert("The unbonding has been submitted to the blockchain, please check the result in the transaction history and expect the effect after 1 hour.");
@@ -2685,7 +2684,7 @@ async function stake(){
                 // Other, CannotLookup, BadOrigin, no extra info
                 alert(`Error in transaction: ${dispatchError.toString()}`);
               }
-            } 
+            }
           }
         });
         alert("The staking has been submitted to the blockchain, please check the result in the transaction history.");
@@ -2729,7 +2728,7 @@ async function unstake(){
                 // Other, CannotLookup, BadOrigin, no extra info
                 alert(`Error in transaction: ${dispatchError.toString()}`);
               }
-            } 
+            }
           }
         });
         alert("The unstaking has been submitted to the blockchain, please check the result in the transaction history.");
@@ -3131,7 +3130,7 @@ async function decrypt_wallet(pwd, mnemonic_only = false) {
             dpwd3 = h;
         }
     }
-    
+
     // decrypt AES-OFB
     const ivaesofb = util.hexToU8a(enc.ivaesofb);
     const keyaesofb = dpwd3.slice(0, 32);
@@ -3139,13 +3138,13 @@ async function decrypt_wallet(pwd, mnemonic_only = false) {
     const encryptedhex = enc.encrypted;
     const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
     let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
-    
+
     // decrypt AES-CTR
     const ivaesctr = util.hexToU8a(enc.ivaesctr);
     const keyaesctr = dpwd2.slice(0, 32);
     let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
     let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
-    
+
     // decrypt AES-CFB
     const ivaescfb = util.hexToU8a(enc.ivaescfb);
     const keyaescfb = dpwd1.slice(0, 32);
