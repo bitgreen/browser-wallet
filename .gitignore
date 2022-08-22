@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # extension manifest
-./extension/manifest.json
+extension/manifest.json
