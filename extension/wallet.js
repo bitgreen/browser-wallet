@@ -115,11 +115,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             // tx command to submit any kind of extrinsic
             if (command == "tx" && params.has("pallet") && params.has("call") && params.has("parameters") && params.get("domain")) {
-              const pallet=DOMPurify.sanitize(params.get("pallet"));
-              const call=DOMPurify.sanitize(params.get("call"));
-              const parameters=DOMPurify.sanitize(params.get("parameters"));
-              const domain=DOMPurify.sanitize(params.get("domain"));
-              extrinsic(pallet, call, parameters, domain);
+                const pallet=DOMPurify.sanitize(params.get("pallet"));
+                const call=DOMPurify.sanitize(params.get("call"));
+                const parameters=DOMPurify.sanitize(params.get("parameters"));
+                const domain=DOMPurify.sanitize(params.get("domain"));
+                await extrinsic(pallet, call, parameters, domain);
+                hide_login(true);
             }
             // portfolio
             if (command == "portfolio") {
@@ -1917,7 +1918,7 @@ async function store_account() {
 async function load_account(password = false) {
     let stored_password = await get_password();
 
-    password = password ? password : stored_password;
+    password = password !== false ? password : stored_password;
 
     if(!password) {
         return false;
@@ -2430,48 +2431,123 @@ function signin(domain) {
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-check"></span></span>Suggest future transactions</div>';
             n=n+'<div class="message d-flex align-items-center"><span id="length_icon"><span class="icon icon-close icon-error"></span></span>Not allowed to transfer assets</div>';
         n=n+'</div>';
-        n = n + '<label class="label text-dark">Enter your password to approve this request</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="signin" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div>';
-        n = n + '<div class="w-100 text-center"><button id="backmain" type="button" class="btn btn-error"><span class="icon icon-close"></span> Deny request</button></div>';
+        n=n+'<div class="footer flex-row-reverse">';
+            n=n+'<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="execute_sign_in" type="button" class="btn btn-sm btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+            n=n+'<div class="w-100"><div class="w-100 text-center"><button id="deny_sign_in" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Deny request</button></div></div>';
+        n=n+'</div>';
     n=n+'</div>';
 
     document.getElementById("root").innerHTML = n;
-    document.getElementById("signin").addEventListener("click", signinexecute);
-    document.getElementById("backmain").addEventListener("click", dashboard);
+    document.getElementById("execute_sign_in").addEventListener("click", signinexecute);
+    document.getElementById("deny_sign_in").addEventListener("click", dashboard);
     document.getElementById("password").addEventListener("keypress", async function(e) {
         if (e.key === "Enter") {
             await signinexecute()
         }
     });
 }
-// function to show the form to submit an extrisinc
-async function extrinsic(pallet,call,parameters,domain){
-  let n='<br><center><h3>Main Account</h3>'+current_account.address.substring(0,4)+"..."+current_account.address.substring(current_account.address.length-4)+'<br>';
-  n=n+'<hr>'
-  n=n+'<div id="balance"><h1>'+balancevf+' BBB</h1></div>';
-  n=n+"<hr>";
-  if(typeof domain!=='undefined'){
-    n=n+'<div class="alert alert-warning" role="alert">Originated from: '+domain+'</div>';
-    n=n+'<input type="hidden" name="domain" id="domain" value="'+domain+'">';
-  }
-  n=n+"<h3>"+pallet+" - "+call+"</H3>"
-  // insert the fields received
-  n=n+'<input type="hidden" id="pallet" value="'+pallet+'">';
-  n=n+'<input type="hidden" id="call" value="'+call+'">';
-  const p= await stringToHex(parameters);
-  n=n+'<input type="hidden" id="parameters" value="'+p+'">';
-  // TODO SHOW THE PARAMETERS?
-  n=n+'<div class="mb-3 row">';
-  n=n+'<div class="col-sm-10">';
-  n=n+'<input type="password" class="form-control" id="inputPassword" required placeholder="password">';
-  n=n+'</div>';
-  n=n+'</div>';
-  n=n+'<div class="row"> <div class="col"><button type="button" class="btn btn-primary" id="submit">Submit</button></div>';
-  n=n+'<div class="col"><button type="button" class="btn btn-secondary" id="backmain">Back</button></div>';
-  n=n+'</div>';
-  n=n+'</center>';
-  document.getElementById("root").innerHTML = n;
-  document.getElementById("submit").addEventListener("click", submitextrinsic);
-  document.getElementById("backmain").addEventListener("click", dashboard);
+// function to show the form to submit an extrinsic
+async function extrinsic(pallet, call, parameters, domain) {
+    let parameters_hex = await stringToHex(parameters);
+
+    await show_header('extrinsic', {
+        parameters: parameters,
+        domain: domain
+    });
+    hide_footer();
+
+    let n='<div id="heading">';
+        n=n+'<div class="content row">';
+            n=n+'<h1 class="text-center text-white">Submit Extrinsic</h1>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content">';
+        n=n+'<div id="app_info" class="d-flex align-items-center">';
+            n=n+'<div class="left align-items-center">';
+                n=n+'<span class="icon icon-known"></span>';
+                n=n+'<div class="message">Known App</div>';
+            n=n+'</div>';
+            n=n+'<div class="middle">';
+                n=n+'<span class="icon-carbon"></span>';
+            n=n+'</div>';
+            n=n+'<div class="right align-items-center">';
+                n=n+'<div class="app-name"><h3>Ecosystem Services Marketplace</h3></div>';
+                n=n+'<p class="app-name">'+domain+'<input id="domain" type="hidden" value="'+domain+'"></p>';
+            n=n+'</div>';
+        n=n+'</div>';
+        n=n+'<div class="align-items-center pt-3">';
+            n=n+'<h3>Pallet: ' + pallet + '</h3>';
+            n=n+'<h3>Call: ' + call + '</h3>';
+        n=n+'</div>';
+        n=n+'<div class="footer flex-row-reverse">';
+            n=n+'<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_extrinsic" type="button" class="btn btn-sm btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
+            n=n+'<div class="w-100"><div class="w-100 text-center"><button id="deny_extrinsic" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Deny request</button></div></div>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("approve_extrinsic").addEventListener("click", async function(e) {
+        await approve_extrinsic(pallet, call, parameters);
+    });
+    document.getElementById("deny_extrinsic").addEventListener("click", async function(e) {
+        // TODO: change extrinsic status
+    });
+    document.getElementById("password").addEventListener("keypress", async function(e) {
+        if (e.key === "Enter") {
+            await approve_extrinsic(pallet, call, parameters);
+        }
+    });
+}
+// function to submit the extrinsic
+async function approve_extrinsic(pallet, call, parameters) {
+    const password = DOMPurify.sanitize(document.getElementById("password").value);
+    parameters = JSON.parse(parameters);
+
+    // try to decrypt and get keypairsv with the keys pair
+    let r = await load_account(password);
+    if(r === true) {
+        // build the transactions using "spread" operator to pass the correct number of parameters
+        apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
+            // status would still be set, but in the case of error we can shortcut
+            // to just check it (so an error would indicate InBlock or Finalized)
+            if (dispatchError) {
+                if (dispatchError.isModule) {
+                    // for module errors, we have the section indexed, lookup
+                    const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                    const { docs, name, section } = decoded;
+                    const e=`${section}.${name}: ${docs.join(' ')}`;
+                    console.log("Transaction Error: ",e);
+                    alert("Transaction Error: "+e);
+                } else {
+                    // Other, CannotLookup, BadOrigin, no extra info
+                    console.log(dispatchError.toString());
+                    alert("Transaction Error: "+dispatchError.toString());
+                }
+            }
+        });
+        alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
+        await dashboard();
+    } else {
+        if(notification) {
+            notification.hideToast()
+        }
+        notification = Toastify({
+            text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Password is wrong!</div></div>',            offset: {
+                y: 40
+            },
+            duration: 3000,
+            className: 'notification notification-error',
+            close: false,
+            stopOnFocus: false,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            escapeMarkup: false,
+            onClick: function(){
+                notification.hideToast()
+            }
+        }).showToast();
+    }
 }
 // function to manage the staking of funds
 async function staking(){
@@ -2895,54 +2971,6 @@ async function transferfunds() {
             }
         }).showToast();
     }
-}
-// function to submit the extrinsic
-async function submitextrinsic(){
-  const pallet=document.getElementById("pallet").value;
-  const call=document.getElementById("call").value;
-  const password=document.getElementById("inputPassword").value;
-  const parametershex=document.getElementById("parameters").value;
-  const parameterstxt= await hexToString(parametershex);
-  console.log("parameterstxt:",parameterstxt);
-  const parameters=JSON.parse(parameterstxt);
-  console.log("parameters:",parameters);
-  let encrypted='';
-  // read the encrypted storage
-  if(localStorage.getItem("webwallet"+current_account_id)){
-    encrypted=localStorage.getItem("webwallet"+current_account_id);
-  }
-  if(encrypted.length==0){
-    alert("The account has not a valid storage, please remove the extension and re-install it.");
-  }else{
-    // try to decrypt and get keypairsv with the keys pair
-    let r=decrypt_wallet(encrypted,password);
-    if(r==true){
-      // build the transactions using "spread" operator to pass the correct number of parameters
-      apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
-          // status would still be set, but in the case of error we can shortcut
-          // to just check it (so an error would indicate InBlock or Finalized)
-          if (dispatchError) {
-            if (dispatchError.isModule) {
-              // for module errors, we have the section indexed, lookup
-              const decoded = apiv.registry.findMetaError(dispatchError.asModule);
-              const { docs, name, section } = decoded;
-              const e=`${section}.${name}: ${docs.join(' ')}`;
-              console.log("Transaction Error: ",e);
-              alert("Transaction Error: "+e);
-            } else {
-              // Other, CannotLookup, BadOrigin, no extra info
-              console.log(dispatchError.toString());
-              alert("Transaction Error: "+dispatchError.toString());
-            }
-          }
-        });
-      alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
-      await dashboard();
-    }else {
-      alert("Password is wrong!")
-      return;
-    }
-  }
 }
 // function to execute the signin
 async function signinexecute() {
