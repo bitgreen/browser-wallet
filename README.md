@@ -82,10 +82,24 @@ The message content is the timestamp of the token generation. The server side sh
 The token is stored in the permanent browser storage, for increased security the calling script should move it to a session cookie to let it disappear after the browser is closed. An expiring date and time may be set in the cookie.
 
 ## Build Safari
-To build the safari version execute from command line from the project folder:
+To build the safari version execute from command line from the project folder:  
 ```bash
 ./setup-safari.sh
 ```
 The command will prepare the project to be built with Xcode.
 Open the project with Xcode and click on "Build".
 
+## Build Chrome/Edge/Brave
+To build the Chrome version (compatible for Edge and Brave browsers), execute from command line from the project folder:  
+```bash
+./setup-chrome.sh
+```
+The command will prepare the project to be built built from the developer console of Chrome.  
+
+
+## Build Firefox
+To build the Firefox version, execute from command line from the project folder:  
+```bash
+./setup-firefox.sh
+```
+The command will prepare the project to be built built from the developer console of Firefox.  
