@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "BitgreenWallet",
+  "name": "Bitgreen Wallet",
   "description": "Bitgreen Browser Wallet",
   "version": "0.22",
   "browser_action": {
@@ -16,6 +16,7 @@
         "512":"icons/512.png"
   },
   "permissions": [
+      "alarms",
       "clipboardRead",
       "clipboardWrite",
       "storage",

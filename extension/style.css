@@ -54,12 +54,7 @@ h2 {
     color: #061C00;
 }
 h3 {
-        font-weight: 500;
-    font-size: 20px;
-    color: #061C00;
-}
-h3 {
-        font-weight: 500;
+    font-weight: 500;
     font-size: 18px;
     color: #061C00;
 }
@@ -1039,10 +1034,12 @@ label.label {
     padding: 8px;
     opacity: 0;
     z-index: 99;
+    pointer-events: none;
 }
 #main_footer.visible {
     display: block;
     opacity: 1;
+    pointer-events: auto;
 }
 #main_footer .item {
     width: 44px;
@@ -1144,35 +1141,43 @@ label.label {
     margin-right: 8px;
 }
 #app_info {
-    border: 1px solid #061C00;
-    border-radius: 4px;
+    border: 1px solid #224851;
+    border-radius: 8px;
     height: 90px;
 }
 #app_info .left {
-    width: 90px;
+    width: 80px;
     height: 90px;
-    background-color: #061C00;
+    background-color: #224851;
     padding: 16px 4px 16px 4px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 #app_info .icon {
+    display: block;
+    width: 100%;
+    text-align: center;
     color: #ffffff;
-    font-size: 32px;
-    padding: 0 30px;
+    font-size: 26px;
+    padding: 0 25px;
 }
 #app_info .message {
     text-transform: uppercase;
     color: #ffffff;
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
     text-align: center;
-    padding-top: 10px;
-}
-#app_info .middle {
-    padding: 8px 16px 36px 16px;
-    color: #9ECC00;
-    font-size: 22px;
+    padding: 6px 6px 10px 6px;
 }
 #app_info .right {
-    padding: 8px 16px 8px 0;
+    height: 100%;
+    color: #224851 !important;
+    padding: 8px 12px;
+}
+#app_info h3 {
+    font-size: 16px;
+    color: #224851 !important;
 }
 #choose_token {
     padding: 16px;

@@ -16,9 +16,15 @@
             window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: recipient,amount: amount }, window.location.href);
         }
         // submit any kind of Extrinsic without transferring funds
-        tx(pallet,call,parameters) {
+        tx(pallet, call, parameters) {
             // call Extension for the extrinsic submission
-            window.postMessage({ type: "BROWSER-WALLET", command: "tx",pallet: pallet,call: call,parameters:parameters }, window.location.href);
+            window.postMessage({
+                type: "BROWSER-WALLET",
+                command: "tx",
+                pallet: pallet,
+                call: call,
+                parameters: parameters
+            }, window.location.href);
         }
         // authenticate for login,it generate a random message to be signed because signing a text received from the web page can be used for social engineering attacks
         authenticate(callback) {
@@ -47,7 +53,7 @@
             //check if the session variable has been set, the server side should verify the signature at evevery call.
             if(sessionStorage.getItem("BrowserWalletToken")===null) {
                 //wait 1 second and check again
-                setTimeout(() => { this.waitforsignature();},5000);//wait 1 second and check again
+                setTimeout(() => { this.waitforsignature();},1000);//wait 1 second and check again
                  this.BWtimeout=this.BWtimeout+1;
                 return;
             }else {

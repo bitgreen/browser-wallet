@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "BitgreenWallet",
+  "name": "Bitgreen Wallet",
   "description": "Bitgreen Browser Wallet",
   "version": "0.2",
   "action": {
@@ -8,6 +8,7 @@
     "default_popup": "window.html"
   },
   "permissions": [
+    "alarms",
     "clipboardRead",
     "clipboardWrite",
     "storage",

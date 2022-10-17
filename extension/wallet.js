@@ -36,6 +36,7 @@ let current_account_id = 0;
 let current_account = null;
 let current_account_transactions = [];
 let total_accounts = 0;
+let current_extrinsic_id = null;
 
 let skip_intro = false;
 
@@ -119,7 +120,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const call=DOMPurify.sanitize(params.get("call"));
                 const parameters=DOMPurify.sanitize(params.get("parameters"));
                 const domain=DOMPurify.sanitize(params.get("domain"));
-                await extrinsic(pallet, call, parameters, domain);
+                const id=DOMPurify.sanitize(params.get("id"));
+                await extrinsic(pallet, call, parameters, domain, id);
                 hide_login(true);
             }
             // portfolio
@@ -1622,7 +1624,7 @@ function timeSince(date) {
     return "moment ago";
 }
 function settings(go_back = '', data = {}) {
-    hide_header();
+    hide_header(go_back);
     show_footer();
 
     let n='<div id="full_page">';
@@ -1696,6 +1698,8 @@ function settings(go_back = '', data = {}) {
             await receive()
         } else if(go_back === 'signin') {
             await signin(data.domain)
+        } else if(go_back === 'extrinsic') {
+            await extrinsic(data.pallet, data.call, data.parameters, data.domain, data.id)
         } else {
             await dashboard();
         }
@@ -2416,9 +2420,6 @@ function signin(domain) {
                 n=n+'<span class="icon icon-known"></span>';
                 n=n+'<div class="message">Known App</div>';
             n=n+'</div>';
-            n=n+'<div class="middle">';
-                n=n+'<span class="icon-carbon"></span>';
-            n=n+'</div>';
             n=n+'<div class="right align-items-center">';
                 n=n+'<div class="app-name"><h3>Ecosystem Services Marketplace</h3></div>';
                 n=n+'<p class="app-name">'+domain+'<input id="domain" type="hidden" value="'+domain+'"></p>';
@@ -2447,12 +2448,15 @@ function signin(domain) {
     });
 }
 // function to show the form to submit an extrinsic
-async function extrinsic(pallet, call, parameters, domain) {
+async function extrinsic(pallet, call, parameters, domain, id) {
     let parameters_hex = await stringToHex(parameters);
 
     await show_header('extrinsic', {
+        pallet: pallet,
+        call: call,
         parameters: parameters,
-        domain: domain
+        domain: domain,
+        id: id
     });
     hide_footer();
 
@@ -2468,9 +2472,6 @@ async function extrinsic(pallet, call, parameters, domain) {
                 n=n+'<span class="icon icon-known"></span>';
                 n=n+'<div class="message">Known App</div>';
             n=n+'</div>';
-            n=n+'<div class="middle">';
-                n=n+'<span class="icon-carbon"></span>';
-            n=n+'</div>';
             n=n+'<div class="right align-items-center">';
                 n=n+'<div class="app-name"><h3>Ecosystem Services Marketplace</h3></div>';
                 n=n+'<p class="app-name">'+domain+'<input id="domain" type="hidden" value="'+domain+'"></p>';
@@ -2479,19 +2480,24 @@ async function extrinsic(pallet, call, parameters, domain) {
         n=n+'<div class="align-items-center pt-3">';
             n=n+'<h3>Pallet: ' + pallet + '</h3>';
             n=n+'<h3>Call: ' + call + '</h3>';
+            n=n+'<h3>Parameters: ' + parameters + '</h3>';
         n=n+'</div>';
-        n=n+'<div class="footer flex-row-reverse">';
+        n=n+'<div class="footer flex-row-reverse pt-0 pb-0">';
             n=n+'<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_extrinsic" type="button" class="btn btn-sm btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
             n=n+'<div class="w-100"><div class="w-100 text-center"><button id="deny_extrinsic" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Deny request</button></div></div>';
         n=n+'</div>';
     n=n+'</div>';
+
+    current_extrinsic_id = id
+    await refresh_extrinsic_status()
 
     document.getElementById("root").innerHTML = n;
     document.getElementById("approve_extrinsic").addEventListener("click", async function(e) {
         await approve_extrinsic(pallet, call, parameters);
     });
     document.getElementById("deny_extrinsic").addEventListener("click", async function(e) {
-        // TODO: change extrinsic status
+        await deny_extrinsic('denied');
+        await dashboard();
     });
     document.getElementById("password").addEventListener("keypress", async function(e) {
         if (e.key === "Enter") {
@@ -2526,6 +2532,16 @@ async function approve_extrinsic(pallet, call, parameters) {
                 }
             }
         });
+
+        await current_browser.runtime.sendMessage({
+            type: "BROWSER-WALLET",
+            command: "refresh_extrinsic",
+            id: current_extrinsic_id,
+            status: 'submitted'
+        });
+
+        current_extrinsic_id = null
+
         alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
         await dashboard();
     } else {
@@ -2548,6 +2564,35 @@ async function approve_extrinsic(pallet, call, parameters) {
             }
         }).showToast();
     }
+}
+async function refresh_extrinsic_status() {
+    if(!current_extrinsic_id) {
+        return false;
+    }
+
+    const result = await current_browser.runtime.sendMessage({
+        type: "BROWSER-WALLET",
+        command: "refresh_extrinsic",
+        id: current_extrinsic_id
+    });
+
+    if(result) {
+        setTimeout(async function() {
+            await refresh_extrinsic_status()
+        }, 350);
+    }
+}
+async function deny_extrinsic(status = 'expired') {
+    if(current_extrinsic_id) {
+        await current_browser.runtime.sendMessage({
+            type: "BROWSER-WALLET",
+            command: "refresh_extrinsic",
+            id: current_extrinsic_id,
+            status: status
+        });
+    }
+
+    window.close();
 }
 // function to manage the staking of funds
 async function staking(){
@@ -3244,6 +3289,8 @@ async function show_header(active = '', data = {}) {
     let header_el = document.getElementById("header");
     let accounts_modal_el = document.getElementById("accounts_modal");
 
+    current_extrinsic_id = null
+
     let n=''
     n=n+'<div class="col-4 p-0">';
         n=n+'<svg id="top_logo" class="click" width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">';
@@ -3396,8 +3443,12 @@ async function show_header(active = '', data = {}) {
     header_el.classList.add('visible')
     header_el.classList.add('init')
 }
-function hide_header() {
+function hide_header(active = '') {
     remove_notifications();
+
+    if(active !== 'extrinsic') {
+        current_extrinsic_id = null
+    }
 
     let header_el = document.getElementById("header");
 

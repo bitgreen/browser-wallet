@@ -1,14 +1,39 @@
 const extension_id = chrome.runtime.id;
 
 let password = null;
-let password_expire = 60; // expire after X minutes
+let password_expire = 30; // expire after X minutes
 let password_timeout = null;
+
+let pending_extrinsics = []
+let pending_extrinsics_timeout = null;
 
 BWMessage = "";
 timeout = 0;
 chrome.runtime.onInstalled.addListener(() => {
     console.log("background");
 });
+
+if(get_browser() !== 'firefox') {
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+        if(alarm.name === 'password_reset') {
+            chrome.storage.session.remove(['password'])
+        }
+
+        if(alarm.name === 'check_extrinsics') {
+            chrome.storage.local.get(['pending_extrinsics'], function(result) {
+                let new_pending_extrinsics = result.pending_extrinsics
+
+                // stop alarm if no pending extrinsics
+                if(!new_pending_extrinsics || new_pending_extrinsics.length === 0) {
+                    chrome.alarms.clear('check_extrinsics')
+                    return;
+                }
+
+                parse_extrinsics(new_pending_extrinsics)
+            });
+        }
+    });
+}
 
 function get_browser() {
     let userAgent = navigator.userAgent;
@@ -72,6 +97,89 @@ function show_popup(url) {
         });
     }
 }
+function parse_extrinsics(extrinsics) {
+    const current_timestamp = Date.now()
+
+    for(let ex in extrinsics) {
+        if(get_browser() === 'firefox') {
+            const extrinsic = extrinsics[ex]
+
+            // expired after 0.5 sec
+            if((current_timestamp - extrinsic.last_refresh) >= 500 || !extrinsic.last_refresh) {
+                send_extrinsic_message(extrinsic.id, 'expired')
+            }
+        } else {
+            const extrinsic_id = extrinsics[ex]
+
+            chrome.storage.local.get([String(extrinsic_id)], function(result) {
+                const extrinsic = result[String(extrinsic_id)]
+
+                // expired after 0.5 sec
+                if((current_timestamp - extrinsic.last_refresh) >= 500 || !extrinsic.last_refresh) {
+                    send_extrinsic_message(extrinsic_id, 'expired')
+                }
+            });
+        }
+    }
+}
+function send_extrinsic_message(extrinsic_id, status = 'pending') {
+    if(get_browser() === 'firefox') {
+        let extrinsics = pending_extrinsics.filter(function(ex) {
+            return ex.id === extrinsic_id
+        })
+        let extrinsic = extrinsics[0]
+
+        browser.tabs.get(extrinsic.tab_id).then(function() {
+            if (!browser.runtime.lastError && extrinsic) {
+                browser.tabs.sendMessage(extrinsic.tab_id, {
+                    type: 'EXTRINSIC',
+                    pallet: extrinsic.pallet,
+                    call: extrinsic.call,
+                    status: status,
+                    id: extrinsic_id
+                });
+            }
+        });
+    } else {
+        chrome.storage.local.get([String(extrinsic_id)], function(result) {
+            const extrinsic = result[String(extrinsic_id)]
+
+            if(!extrinsic) {
+                return;
+            }
+
+            chrome.tabs.get(extrinsic.tab_id, function() {
+                if (!chrome.runtime.lastError && extrinsic) {
+                    chrome.tabs.sendMessage(extrinsic.tab_id, {
+                        type: 'EXTRINSIC',
+                        pallet: extrinsic.pallet,
+                        call: extrinsic.call,
+                        status: status,
+                        id: extrinsic_id
+                    });
+                }
+            });
+        });
+    }
+
+    if(status !== 'pending') {
+        // remove from the list
+        if(get_browser() === 'firefox') {
+            pending_extrinsics = pending_extrinsics.filter(function(ex) {
+                return ex.id !== extrinsic_id
+            })
+        } else {
+            chrome.storage.local.get(['pending_extrinsics'], function(result) {
+                const new_pending_extrinsics = result.pending_extrinsics.filter(function(ex) {
+                    return ex !== extrinsic_id
+                })
+
+                chrome.storage.local.set({ pending_extrinsics: new_pending_extrinsics })
+                chrome.storage.local.remove(extrinsic_id)
+            });
+        }
+    }
+}
 
 // it uses a chrome messaging listener
 chrome.runtime.onMessage.addListener(
@@ -81,34 +189,60 @@ chrome.runtime.onMessage.addListener(
             "[info] msg from the extension");
 
         if (request.command === "save_password") {
-            password = request.password
-            password_timeout = setTimeout(function () {
-                password = null;
-            }, 1000 * 60 * password_expire)
+            if(get_browser() === 'firefox') {
+                password = request.password
+                password_timeout = setTimeout(function () {
+                    password = null;
+                }, 1000 * 60 * password_expire)
+            } else {
+                chrome.storage.session.set({ password: request.password })
+            }
+
+            // set timer
+            chrome.alarms.create('password_reset', { delayInMinutes: password_expire });
+
             return true;
         }
 
         if (request.command === "request_password") {
-            sendResponse(password)
             if(get_browser() === 'firefox') {
-                return password;
+                sendResponse(password)
+                return password
+            } else {
+                chrome.storage.session.get(['password'], function(result) {
+                    sendResponse(result.password)
+                })
             }
+
             return true;
         }
 
         if (request.command === "refresh_password") {
             // reset timer
-            clearTimeout(password_timeout);
-            password_timeout = setTimeout(function () {
-                password = null;
-            }, 1000 * 60 * password_expire)
+            if(get_browser() === 'firefox') {
+                clearTimeout(password_timeout);
+                password_timeout = setTimeout(function () {
+                    password = null;
+                }, 1000 * 60 * password_expire)
+            } else {
+                chrome.alarms.clear('password_reset', function() {
+                    chrome.alarms.create('password_reset', { delayInMinutes: password_expire })
+                })
+            }
+
             sendResponse(true)
             return true;
         }
 
         if (request.command === "lock_wallet") {
-            password = null
-            clearTimeout(password_timeout);
+            if(get_browser() === 'firefox') {
+                password = null
+                clearTimeout(password_timeout)
+            } else {
+                chrome.alarms.clear('password_reset')
+                chrome.storage.session.remove(['password'])
+            }
+
             sendResponse(true)
             return true;
         }
@@ -125,11 +259,120 @@ chrome.runtime.onMessage.addListener(
         // manage tx command used to submit extrinsics
         if (request.command === "tx") {
             if (request.pallet !== null && request.call !== null && request.parameters !== null) {
+                const current_timestamp = Date.now();
+                const extrinsic_id = current_timestamp;
+
                 // create new windows for the extrinsic
-                let url = 'window.html?command=tx&recipient=' + encodeURI(request.recipient) + '&pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=' + encodeURI(request.domain);
+                let url = 'window.html?command=tx&recipient=' + encodeURI(request.recipient) + '&pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=' + encodeURI(request.domain) + '&id=' + extrinsic_id;
                 show_popup(url);
+
+                // fire init event
+                if(get_browser() === 'firefox') {
+                    browser.tabs.query({active: true, currentWindow:true}).then(function(tabs) {
+                        const tab_id = tabs[0].id
+
+                        pending_extrinsics.push({
+                            id: extrinsic_id,
+                            tab_id: tab_id,
+                            pallet: request.pallet,
+                            call: request.call,
+                            status: 'pending',
+                            last_refresh: current_timestamp,
+                        })
+
+                        send_extrinsic_message(extrinsic_id, 'pending')
+
+                        clearTimeout(pending_extrinsics_timeout)
+                        pending_extrinsics_timeout = setInterval(function () {
+                            parse_extrinsics(pending_extrinsics)
+                        }, 1000)
+                    })
+                } else {
+                    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+                        const tab_id = tabs[0].id
+
+                        chrome.storage.local.get(['pending_extrinsics'], function (result) {
+                            let new_pending_extrinsics = result.pending_extrinsics ? result.pending_extrinsics : []
+
+                            new_pending_extrinsics.push(extrinsic_id)
+
+                            chrome.storage.local.set({pending_extrinsics: new_pending_extrinsics})
+
+                            chrome.storage.local.set({
+                                [extrinsic_id]: {
+                                    tab_id: tab_id,
+                                    pallet: request.pallet,
+                                    call: request.call,
+                                    status: 'pending',
+                                    last_refresh: current_timestamp
+                                }
+                            })
+
+                            send_extrinsic_message(extrinsic_id, 'pending')
+
+                            // set alarm if is not set
+                            chrome.alarms.get('check_extrinsics', function (result) {
+                                if (!result) {
+                                    chrome.alarms.create('check_extrinsics', {periodInMinutes: 0.016}) // every ~1 seconds
+                                }
+                            });
+                        })
+                    });
+                }
+
+                sendResponse(true)
+                return true;
+            }
+        }
+
+        if (request.command === "refresh_extrinsic") {
+            let current_timestamp = Date.now()
+            let extrinsic_refreshed = false
+
+            if(get_browser() === 'firefox') {
+                for(let extrinsic in pending_extrinsics) {
+                    extrinsic = pending_extrinsics[extrinsic]
+
+                    if(extrinsic.id === parseInt(request.id)) {
+                        if(request.status === 'submitted') {
+                            send_extrinsic_message(extrinsic.id, 'submitted')
+                        } else if(request.status === 'denied') {
+                            send_extrinsic_message(extrinsic.id, 'denied')
+                        } else {
+                            extrinsic_refreshed = true
+                            extrinsic.last_refresh = current_timestamp
+                        }
+                    }
+                }
+
+                sendResponse(extrinsic_refreshed)
+            } else {
+                chrome.storage.local.get(['pending_extrinsics'], function(result) {
+                    for(let extrinsic in result.pending_extrinsics) {
+                        const extrinsic_id = result.pending_extrinsics[extrinsic]
+
+                        if(parseInt(extrinsic_id) === parseInt(request.id)) {
+                            if(request.status === 'submitted') {
+                                send_extrinsic_message(extrinsic_id, 'submitted')
+                            } else if(request.status === 'denied') {
+                                send_extrinsic_message(extrinsic_id, 'denied')
+                            } else {
+                                extrinsic_refreshed = true
+
+                                chrome.storage.local.get([String(extrinsic_id)], function(result) {
+                                    let data = result[String(extrinsic_id)]
+                                    data.last_refresh = current_timestamp
+                                    chrome.storage.local.set({ [String(extrinsic_id)]: data })
+                                });
+                            }
+                        }
+                    }
+
+                    sendResponse(extrinsic_refreshed)
+                });
             }
 
+            return true;
         }
 
         // manage sign-in command
