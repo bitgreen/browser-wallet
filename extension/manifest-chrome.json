@@ -4,8 +4,15 @@
   "description": "Bitgreen Browser Wallet",
   "version": "0.2",
   "action": {
-    "default_icon": "icon.png",
+    "default_icon": "assets/icons/48x48.png",
     "default_popup": "window.html"
+  },
+  "icons": {
+    "16": "assets/icons/16x16.png",
+    "32": "assets/icons/32x32.png",
+    "48": "assets/icons/48x48.png",
+    "64": "assets/icons/64x64.png",
+    "128": "assets/icons/128x128.png"
   },
   "permissions": [
     "alarms",

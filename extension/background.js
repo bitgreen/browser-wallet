@@ -253,6 +253,9 @@ chrome.runtime.onMessage.addListener(
                 // create new windows for the transfer funds
                 let url = 'window.html?command=transfer&recipient=' + encodeURI(request.recipient) + '&amount=' + encodeURI(request.amount) + '&domain=' + encodeURI(request.domain);
                 show_popup(url);
+
+                sendResponse(true)
+                return true;
             }
         }
 
@@ -330,8 +333,8 @@ chrome.runtime.onMessage.addListener(
             let extrinsic_refreshed = false
 
             if(get_browser() === 'firefox') {
-                for(let extrinsic in pending_extrinsics) {
-                    extrinsic = pending_extrinsics[extrinsic]
+                for(let ex in pending_extrinsics) {
+                    const extrinsic = pending_extrinsics[ex]
 
                     if(extrinsic.id === parseInt(request.id)) {
                         if(request.status === 'submitted') {
@@ -340,7 +343,7 @@ chrome.runtime.onMessage.addListener(
                             send_extrinsic_message(extrinsic.id, 'denied')
                         } else {
                             extrinsic_refreshed = true
-                            extrinsic.last_refresh = current_timestamp
+                            pending_extrinsics[ex].last_refresh = current_timestamp
                         }
                     }
                 }
