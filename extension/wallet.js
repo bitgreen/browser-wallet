@@ -1442,7 +1442,7 @@ async function transactions_history() {
 
     let n='<div id="heading">';
         n=n+'<div class="content row">';
-            n=n+'<h1 class="text-center text-white">Transaction history</h1>';
+            n=n+'<h1 class="text-center text-white">Transaction History</h1>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -2481,6 +2481,16 @@ async function extrinsic(pallet, call, parameters, domain, id) {
                 n=n+'<div class="app-name"><h3>Ecosystem Services Marketplace</h3></div>';
                 n=n+'<p class="app-name">'+domain+'<input id="domain" type="hidden" value="'+domain+'"></p>';
             n=n+'</div>';
+        n=n+'</div>';
+        n=n+'<div class="button-item transaction-item d-flex align-items-center">';
+            n=n+'<span class="status">1</span>';
+            n=n+'<div class="transaction-info d-flex align-items-center">';
+                n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">Action</span></div>';
+                n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">Create</span></div>';
+                n=n+'<div class="col align-items-center"><span class="d-block w-100 amount">1</span><span class="desc d-block w-100">Project</span></div>';
+            n=n+'</div>';
+            // n=n+'<div class="col"><h4 class="m-0">Hello</h4><p class="text-gray m-0 w-75">there</p></div>';
+            n=n+'<span class="icon icon-right icon-down-arrow"></span>';
         n=n+'</div>';
         n=n+'<div class="align-items-center pt-3">';
             n=n+'<h3>Pallet: ' + pallet + '</h3>';
