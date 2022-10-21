@@ -54,45 +54,45 @@ function get_browser() {
     return browserName;
 }
 
-function show_popup(url) {
-    let top = 0;
-    let left = 0;
-    let width = 0;
-    let height = 0;
-    // get windows properties
-    chrome.windows.getCurrent(function (win) {
-        width = win.width;
-        height = win.height;
-        top = win.top;
-        left = win.left;
-        // adjust position
-        left = left + width - 400;
-        top = top + 80;
-    });
-
+function show_popup(url, popup_height = 600) {
     if(get_browser() === 'safari') {
         chrome.windows.create({
             url: url,
             type: 'popup',
             focused: true,
             width: 400,
-            height: 600
+            height: popup_height
         });
     } else {
-        chrome.tabs.create({
-            url: chrome.runtime.getURL(url),
-            active: false
-        }, function (tab) {
-            // After the tab has been created, open a window to inject the tab
-            chrome.windows.create({
-                tabId: tab.id,
-                type: 'popup',
-                focused: true,
-                width: 400,
-                height: 600,
-                left,
-                top
-                // incognito, top, left, ...
+        chrome.windows.getCurrent(function (win) {
+            let width = win.width;
+            let height = win.height;
+            let top = win.top;
+            let left = win.left;
+
+            chrome.tabs.create({
+                url: chrome.runtime.getURL(url),
+                active: false
+            }, function (tab) {
+                // get windows properties
+
+                    // adjust position
+                    top = top + 80;
+                    left = left + width - 400 - 100;
+
+                    // After the tab has been created, open a window to inject the tab
+                    chrome.windows.create({
+                        tabId: tab.id,
+                        type: 'popup',
+                        focused: true,
+                        width: 400,
+                        height: popup_height,
+                        left,
+                        top
+                        // incognito, top, left, ...
+                    });
+
+
             });
         });
     }
@@ -175,7 +175,9 @@ function send_extrinsic_message(extrinsic_id, status = 'pending') {
                 })
 
                 chrome.storage.local.set({ pending_extrinsics: new_pending_extrinsics })
-                chrome.storage.local.remove(extrinsic_id)
+                chrome.storage.local.get([String(extrinsic_id)], function(result) {
+                    chrome.storage.local.remove(extrinsic_id)
+                });
             });
         }
     }
@@ -267,7 +269,7 @@ chrome.runtime.onMessage.addListener(
 
                 // create new windows for the extrinsic
                 let url = 'window.html?command=tx&recipient=' + encodeURI(request.recipient) + '&pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=' + encodeURI(request.domain) + '&id=' + extrinsic_id;
-                show_popup(url);
+                show_popup(url, 700);
 
                 // fire init event
                 if(get_browser() === 'firefox') {

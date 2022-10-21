@@ -41,7 +41,7 @@ body {
     line-height: 14px;
     overflow: hidden;
 
-    background-image: url('assets/bg-darker.png');
+    background-image: url('assets/bg.png');
 }
 h1 {
         font-weight: 500;
@@ -210,12 +210,21 @@ p {
     border-color: #991900;
     color: #991900;
 }
+.alert-warning {
+    background-color: #ffffff;
+    border-color: #DC6803;
+    color: #DC6803;
+}
 .alert .icon {
     width: 60px;
-    background-color: #991900;
     color: #ffffff;
     text-align: center;
-
+}
+.alert.alert-danger .icon {
+    background-color: #991900;
+}
+.alert.alert-warning .icon {
+    background-color: #DC6803;
 }
 .alert .icon span {
     width: 100%;
@@ -315,7 +324,7 @@ label.label {
     top: 0;
     left: 0;
     height: 56px;
-    padding: 8px 16px;
+    padding: 8px 8px 8px 16px;
     z-index: 999;
     opacity: 0;
 }
@@ -323,6 +332,10 @@ label.label {
     opacity: 1;
 }
 #header #go_settings {
+    font-size: 18px;
+    margin-left: 8px;
+    margin-right: 4px;
+
     transition: all linear 0.2s;
 }
 #header #go_settings:hover {
@@ -334,7 +347,7 @@ label.label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('assets/bg-darker.png');
+    background-image: url('assets/bg.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -356,7 +369,7 @@ label.label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('assets/bg-darker.png');
+    background-image: url('assets/bg.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -552,9 +565,9 @@ label.label {
 }
 #current_wallet {
     position: relative;
-    width: 212px;
-    margin-right: 8px;
-    padding: 6px 10px;
+    width: 216px;
+    margin-right: 4px;
+    padding: 6px 0 6px 10px;
     z-index: 999;
     cursor: pointer;
     user-select: none !important;
@@ -599,14 +612,14 @@ label.label {
 #current_wallet .info {
     color: #ffffff;
     font-size: 12px;
-    width: 130px;
+    width: 140px;
 }
 #current_wallet .info .desc {
     display: block;
     font-size: 14px;
     width: 100%;
     margin-top: 2px;
-        font-weight: 500;
+    font-weight: 500;
 }
 #current_wallet .info .desc .icon {
     margin: 0 4px 0 0;
@@ -614,14 +627,14 @@ label.label {
 }
 #current_wallet .icon {
     font-size: 6px;
-    margin-left: 10px;
+    margin-left: 4px;
     margin-right: 4px;
     color: #B1B4BD;
 }
 #current_wallet .icon.icon-down-arrow {
     width: 20px;
+    margin: 0 3px 0 0;
     text-align: center;
-    margin: 0;
     transition: all linear 0.2s;
 }
 #current_wallet.active .icon.icon-down-arrow {
@@ -677,10 +690,6 @@ label.label {
 }
 #current_wallet .dropdown .wallet:hover {
     background: linear-gradient(to right, #16161638 0%, #16161638 70%, transparent 90%, transparent 100%);
-}
-#go_settings {
-    font-size: 18px;
-    margin-left: 5px;
 }
 .button-item {
     width: 100%;
@@ -750,9 +759,122 @@ label.label {
     width: 100%;
     height: 30px;
     text-align: center;
-        font-size: 12px;
+    font-size: 12px;
     font-weight: 500;
     padding: 0 8px 4px 8px;
+}
+.button-item.transaction-item {
+    min-height: 65px;
+    height: 65px;
+    overflow: hidden;
+
+    transition: all ease-in-out 0.2s;
+}
+.button-item.transaction-item.active {
+    min-height: 265px;
+}
+.button-item.transaction-item .status {
+    text-align: center;
+    min-width: 32px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #F8F8F9;
+    color: #4F586E;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 16px;
+    padding-left: 2px;
+    margin: 0 8px 0 16px;
+
+    transition: all ease-in-out 0.1s;
+}
+.button-item.transaction-item .transaction-info {
+    width: 90%;
+    padding-right: 40px;
+    min-height: 65px;
+}
+.button-item.transaction-item .transaction-info .icon,
+.button-item.transaction-item .transaction-info .amount,
+.button-item.transaction-item .transaction-info .amount .digits {
+    text-align: center;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    margin-bottom: 2px;
+}
+.button-item.transaction-item .transaction-info .icon {
+    padding: 0;
+    text-align: center;
+    font-size: 18px;
+    color: #039855;
+}
+.button-item.transaction-item .transaction-info .desc {
+    color: #667085;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 12px;
+    text-align: center;
+}
+.button-item.transaction-item .transaction-info .token-amount {
+    width: 100px;
+}
+.button-item.transaction-item .transaction-info .col {
+    padding: 0 2px;
+    max-width: 64px;
+}
+.button-item.transaction-item .transaction-info .icon.icon-success {
+    color: #039855;
+}
+.button-item.transaction-item .transaction-info .icon.icon-error {
+    color: #CC2400;
+}
+.button-item.transaction-item .transaction-info .amount {
+    font-size: 20px;
+}
+.button-item.transaction-item .transaction-info .amount .digits {
+    font-size: 14px;
+    padding-top: 4px;
+}
+.button-item.transaction-item .icon.icon-right {
+    transition: all linear 0.1s;
+    transform: translateX(-4px);
+    min-width: 40px;
+    width: 40px;
+    font-size: 8px;
+    text-align: center;
+}
+.button-item.transaction-item.active .icon.icon-right {
+    transform: scaleY(-1) translateX(-4px);
+}
+.button-item.transaction-item.click:hover .icon.icon-right {
+    transform: translateX(0px);
+}
+.button-item.transaction-item .transaction-details {
+    background: #F8F8F9;
+    height: 200px;
+    padding: 16px;
+    overflow: hidden;
+    cursor: default;
+    transition: all 0.3s;
+}
+.button-item.transaction-item .transaction-details h4 {
+    margin: 0;
+    color: #224851;
+}
+.button-item.transaction-item .transaction-details .text-small {
+    word-break: break-all;
+}
+.button-item.transaction-item .transaction-details .element {
+    margin-bottom: 4px;
+}
+.button-item.transaction-item .transaction-details .element .icon {
+    color: #039855;
+}
+.button-item.transaction-item .transaction-details .element .icon.icon-cog {
+    font-size: 18px;
+}
+.button-item.transaction-item .transaction-details .element .icon.icon-code {
+    font-size: 26px;
 }
 #transactions {
     height: 345px;
@@ -795,41 +917,6 @@ label.label {
     padding-right: 40px;
     text-align: center;
     text-transform: uppercase;
-}
-#transactions .transaction-info .token-amount {
-    width: 100px;
-}
-#transactions .transaction-info .col {
-    padding: 0 8px;
-}
-#transactions .transaction-info .icon,
-#transactions .transaction-info .amount,
-#transactions .transaction-info .amount .digits {
-    min-width: 24px;
-    height: 24px;
-    line-height: 24px;
-    margin-bottom: 6px;
-}
-#transactions .transaction-info .icon {
-    font-size: 18px;
-    color: #039855;
-}
-#transactions .transaction-info .icon.icon-success {
-    color: #039855;
-}
-#transactions .transaction-info .icon.icon-error {
-    color: #CC2400;
-}
-#transactions .transaction-info .amount {
-        font-size: 20px;
-}
-#transactions .transaction-info .amount .digits {
-    font-size: 14px;
-    padding-top: 4px;
-}
-#transactions .transaction-info .desc {
-        font-weight: 500;
-    font-size: 12px;
 }
 #transactions .button-item .icon.icon-small {
     width: 10%;
@@ -1144,6 +1231,7 @@ label.label {
     border: 1px solid #224851;
     border-radius: 8px;
     height: 90px;
+    margin-bottom: 8px;
 }
 #app_info .left {
     width: 80px;
