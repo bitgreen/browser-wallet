@@ -181,7 +181,6 @@ function welcome_screen() {
         n=n+'<path d="M272.065 59.0509H280.358C279.208 67.6465 272.671 78.3003 253.845 78.3003C234.353 78.3003 225.758 65.1647 225.758 48.0339C225.758 31.1453 235.08 18.0097 253.845 18.0097C270.855 18.0097 280.479 29.6925 280.479 46.2179C280.54 47.5497 280.419 48.8814 280.237 50.2131H234.656C235.322 65.7095 242.828 71.3995 254.148 71.3995C265.286 71.3995 270.37 66.1937 272.065 59.0509ZM234.898 43.4334H271.581C271.157 30.4189 264.438 24.971 253.906 24.971C243.191 24.971 236.169 30.0557 234.898 43.4334Z" fill="white" fill-opacity="0"/>';
         n=n+'<path d="M333.082 59.0509H341.375C340.225 67.6465 333.688 78.3003 314.862 78.3003C295.371 78.3003 286.775 65.1647 286.775 48.0339C286.775 31.1453 296.097 18.0097 314.862 18.0097C331.872 18.0097 341.496 29.6925 341.496 46.2179C341.557 47.5497 341.436 48.8814 341.254 50.2131H295.734C296.4 65.7095 303.906 71.3995 315.225 71.3995C326.303 71.3995 331.387 66.1937 333.082 59.0509ZM295.976 43.4334H332.659C332.235 30.4189 325.516 24.971 314.983 24.971C304.208 24.971 297.187 30.0557 295.976 43.4334Z" fill="white" fill-opacity="0"/>';
         n=n+'<path d="M400.758 40.4068V76.5448H391.678V41.4358C391.678 29.3293 386.351 25.6973 378.058 25.6973C365.468 25.6973 358.809 35.4431 358.809 54.9346V76.5448H349.729V19.8862H358.809V34.8378C362.441 23.9419 369.463 18.0702 380.54 18.0702C394.765 18.0702 400.758 25.7579 400.758 40.4068Z" fill="white" fill-opacity="0"/>';
-
     n=n+'</svg>';
     n=n+'<div class="separator"></div>';
     n=n+'<div class="browser-wallet">BROWSER WALLET</div>';
@@ -2467,7 +2466,7 @@ async function extrinsic(pallet, call, parameters, domain, id) {
 
     let n='<div id="heading">';
         n=n+'<div class="content row">';
-            n=n+'<h1 class="text-center text-white">Submit Extrinsic</h1>';
+            n=n+'<h1 class="text-center text-white">Confirm Transaction</h1>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -2482,24 +2481,29 @@ async function extrinsic(pallet, call, parameters, domain, id) {
                 n=n+'<p class="app-name">'+domain+'<input id="domain" type="hidden" value="'+domain+'"></p>';
             n=n+'</div>';
         n=n+'</div>';
-        n=n+'<div class="button-item transaction-item d-flex align-items-center">';
-            n=n+'<span class="status">1</span>';
-            n=n+'<div class="transaction-info d-flex align-items-center">';
-                n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">Action</span></div>';
-                n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">Create</span></div>';
-                n=n+'<div class="col align-items-center"><span class="d-block w-100 amount">1</span><span class="desc d-block w-100">Project</span></div>';
+        n=n+'<div class="button-item transaction-item" data-id="1">';
+            n=n+'<div class="d-flex align-items-center">';
+                n=n+'<span class="status">1</span>';
+                n=n+'<div class="transaction-info d-flex align-items-center">';
+                    n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">'+pallet+'</span></div>';
+                    n=n+'<div class="col align-items-center"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">'+call+'</span></div>';
+                    // n=n+'<div class="col align-items-center"><span class="d-block w-100 amount">1</span><span class="desc d-block w-100">Project</span></div>';
+                n=n+'</div>';
+                n=n+'<span class="icon icon-right icon-down-arrow"></span>';
+            n=n+'</div>';
+            n=n+'<div class="transaction-details d-block w-100">';
+                n=n+'<h4>'+call+'</h4>';
+                n=n+'<p class="text-gray mt-2 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam massa consectetur elementum nullam morbi phasellus.</p>';
+                // n=n+'<div class="element d-flex align-items-center"><div class="col-2 pe-3 text-center"><span class="icon icon-cog"></span></div><div class="col-7"><h4>Contract Interaction</h4></div></div>';
+                n=n+'<div class="element d-flex align-items-center"><div class="col-2 pe-3 text-center"><span class="icon icon-code"></span></div><div class="col-7"><h4>Raw Request</h4></div></div>';
+                n=n+'<div class="parameters d-flex text-gray text-small"><div class="col-2"></div><div class="col-10">'+parameters.substring(0,150)+'...</div></div>';
             n=n+'</div>';
             // n=n+'<div class="col"><h4 class="m-0">Hello</h4><p class="text-gray m-0 w-75">there</p></div>';
-            n=n+'<span class="icon icon-right icon-down-arrow"></span>';
-        n=n+'</div>';
-        n=n+'<div class="align-items-center pt-3">';
-            n=n+'<h3>Pallet: ' + pallet + '</h3>';
-            n=n+'<h3>Call: ' + call + '</h3>';
-            n=n+'<h3>Parameters: ' + parameters + '</h3>';
         n=n+'</div>';
         n=n+'<div class="footer flex-row-reverse pt-0 pb-0">';
+            n=n+'<div class="alert alert-warning d-flex align-items-stretch mb-0"><div class="icon d-flex align-items-center"><span class="icon-warning"></span></div><p class="w-100 m-0 p-2">Review all queued transactions carefully as they will be executed automatically and sequentially.</p></div>';
             n=n+'<div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_extrinsic" type="button" class="btn btn-sm btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>';
-            n=n+'<div class="w-100"><div class="w-100 text-center"><button id="deny_extrinsic" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Deny request</button></div></div>';
+            n=n+'<div class="w-100"><div class="w-100 text-center"><button id="deny_extrinsic" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Cancel</button></div></div>';
         n=n+'</div>';
     n=n+'</div>';
 
@@ -2507,6 +2511,17 @@ async function extrinsic(pallet, call, parameters, domain, id) {
     await refresh_extrinsic_status()
 
     document.getElementById("root").innerHTML = n;
+
+    document.querySelectorAll("#bordered_content .transaction-item .transaction-info").forEach(t => {
+        t.addEventListener("click", function(e) {
+            if(t.parentElement.parentElement.classList.contains('active')) {
+                t.parentElement.parentElement.classList.remove('active')
+            } else {
+                t.parentElement.parentElement.classList.add('active')
+            }
+        })
+    })
+
     document.getElementById("approve_extrinsic").addEventListener("click", async function(e) {
         await approve_extrinsic(pallet, call, parameters);
     });
@@ -3549,15 +3564,15 @@ function show_login(instant = false) {
     hide_init();
 
     if(!login_init) {
-        let n='<svg class="bitgreen-svg" width="220" height="55" viewBox="0 0 220 55" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">';
-        n=n+'<path d="M23.4201 37.25H5.17224V29.0069H23.4201C25.6974 29.0069 27.5432 30.852 27.5432 33.1285C27.5432 35.4046 25.6974 37.25 23.4201 37.25ZM5.17224 16.5903H23.4201C25.6974 16.5903 27.5432 18.4354 27.5432 20.7119C27.5432 22.988 25.6974 24.8334 23.4201 24.8334H5.17224V16.5903ZM5.17224 4.17372H23.4201C25.6974 4.17372 27.5432 6.01884 27.5432 8.29528C27.5432 10.5714 25.6974 12.4168 23.4201 12.4168H5.17224V4.17372ZM32.9648 8.29528C32.9648 3.71411 29.2495 0.000244141 24.6666 0.000244141H0V12.4168V16.5903V24.8334V29.0069V41.4235H24.6666C29.2495 41.4235 32.9648 37.7096 32.9648 33.1285C32.9648 30.6573 31.8824 28.4398 30.1675 26.9202C31.8824 25.4005 32.9648 23.183 32.9648 20.7119C32.9648 18.2407 31.8824 16.0232 30.1675 14.5036C31.8824 12.9839 32.9648 10.7664 32.9648 8.29528Z" fill="white"/>';
-        n=n+'<path d="M38.5429 10.2782H43.5281V41.4235H38.5429V10.2782ZM37.8574 0H44.2758V5.17024H37.8574V0Z" fill="white" />';
-        n=n+'<path d="M60.4272 41.4234C54.4449 41.4234 52.8871 39.1187 52.8871 34.1354V14.2022H46.967V11.3993L53.3232 9.84202L55.1927 3.3638H57.8722V10.278H68.1541V14.2022H57.8722V37.3744H67.7802V41.4234H60.4272Z" fill="white"/>';
-        n=n+'<path d="M95.753 25.0409C95.753 16.6318 91.9518 13.3303 85.3466 13.3303C78.2426 13.3303 74.8776 16.6318 74.8776 25.0409C74.8776 33.4501 78.2426 36.8139 85.3466 36.8139C91.9518 36.8139 95.753 33.5127 95.753 25.0409ZM95.753 10.278H100.738V41.4859C100.738 49.7703 96.6879 54.5664 85.3466 54.5664C76.0615 54.5664 71.0764 50.5178 70.5157 43.4165H75.4383C75.8122 47.5278 78.4294 50.6422 85.3466 50.6422C92.6996 50.6422 95.753 48.0882 95.753 41.4233V34.6958C93.6345 38.7448 89.7707 40.7384 84.1623 40.7384C74.3792 40.7384 69.7679 34.6336 69.7679 25.0409C69.7679 15.5105 74.3792 9.40573 84.1623 9.40573C89.8333 9.40573 93.6345 11.6486 95.753 15.635V10.278Z" fill="white"/>';
-        n=n+'<path d="M123.483 9.84195V14.763H122.174C112.952 14.4514 110.958 21.1786 110.958 29.9619V41.4234H105.973V10.2779H110.958V18.6872C112.827 13.2054 116.441 9.84195 122.361 9.84195H123.483Z" fill="white"/>';
-        n=n+'<path d="M128.779 23.2346H148.969C148.72 16.0711 145.043 13.0812 139.248 13.0812C133.328 13.0812 129.465 15.8844 128.779 23.2346ZM149.218 31.8308H153.767C153.144 36.5647 149.53 42.4199 139.186 42.4199C128.467 42.4199 123.732 35.1942 123.732 25.7886C123.732 16.5071 128.841 9.28143 139.186 9.28143C148.533 9.28143 153.83 15.6974 153.83 24.7918C153.83 25.6015 153.83 26.2246 153.705 26.9721H128.655C129.029 35.506 133.141 38.6201 139.373 38.6201C145.479 38.6201 148.283 35.755 149.218 31.8308Z" fill="white"/>';
-        n=n+'<path d="M162.36 23.2346H182.55C182.301 16.0711 178.624 13.0812 172.828 13.0812C166.909 13.0812 163.045 15.8844 162.36 23.2346ZM182.799 31.8308H187.348C186.725 36.5647 183.11 42.4199 172.766 42.4199C162.048 42.4199 157.312 35.1942 157.312 25.7886C157.312 16.5071 162.422 9.28143 172.766 9.28143C182.113 9.28143 187.41 15.6974 187.41 24.7918C187.41 25.6015 187.41 26.2246 187.285 26.9721H162.235C162.609 35.506 166.722 38.6201 172.953 38.6201C179.06 38.6201 181.864 35.755 182.799 31.8308Z" fill="white"/>';
-        n=n+'<path d="M220 21.5526V41.4235H215.015V22.1133C215.015 15.4481 212.086 13.4549 207.537 13.4549C200.62 13.4549 196.943 18.8118 196.943 29.5258V41.4235H191.958V10.2782H196.943V18.5003C198.937 12.5203 202.801 9.2814 208.908 9.2814C216.697 9.2814 220 13.5171 220 21.5526Z" fill="white"/>';
+        let n='<svg class="bitgreen-svg" width="220" height="55" viewBox="0 0 400 100" fill="white" xmlns="http://www.w3.org/2000/svg">';
+        n=n+'<path d="M60.6852 16.2542C60.6852 7.90071 53.9055 1.18158 45.6125 1.18158H0.757812V76.5448H45.6125C53.966 76.5448 60.6852 69.7651 60.6852 61.4721C60.6852 57.1743 58.8087 53.0581 55.6004 50.1525C58.8087 47.3075 60.6852 43.1913 60.6852 38.8329C60.6852 34.5351 58.8087 30.4189 55.6004 27.5738C58.8692 24.6683 60.6852 20.6126 60.6852 16.2542ZM10.1404 8.74817H43.3123C47.4285 8.6271 50.8789 11.8959 50.9999 16.0121C51.121 20.1283 47.8522 23.5787 43.736 23.6997C43.615 23.6997 43.4334 23.6997 43.3123 23.6997H10.1404V8.74817ZM10.1404 31.3269H43.3123C47.4285 31.2058 50.8789 34.4746 50.9999 38.5908C51.121 42.707 47.8522 46.1574 43.736 46.2784C43.615 46.2784 43.4334 46.2784 43.3123 46.2784H10.1404V31.3269ZM43.3123 68.9177H10.1404V53.9661H43.3123C47.4285 53.9661 50.8183 57.2954 50.8183 61.4721C50.8183 65.5884 47.4891 68.9177 43.3123 68.9177Z" fill="white"/>';
+        n=n+'<path d="M70.8545 10.9879V1.60535H80.116V10.9274H70.8545V10.9879ZM70.8545 76.5448V20.2494H80.116V76.5448H70.8545Z" fill="white"/>';
+        n=n+'<path d="M110.382 76.5448C99.3049 76.5448 96.3993 72.3681 96.3993 63.3487V27.2712H85.4429V20.1889H97.4283L97.6099 1.60535H105.6V20.1889H124.668V27.2712H105.6V69.1598H123.942V76.4843L110.382 76.5448Z" fill="white"/>';
+        n=n+'<path d="M174.85 19.8862H183.93V76.6659C183.93 91.7385 176.545 100.455 155.964 100.455C139.075 100.455 129.995 93.0702 129.027 80.1768H137.985C138.651 87.6828 143.433 93.3123 156.024 93.3123C169.402 93.3123 174.971 88.6513 174.971 76.5448V64.3172C171.097 71.7022 164.075 75.3341 153.906 75.3341C136.109 75.3341 127.755 64.2567 127.755 46.7627C127.755 29.4504 136.169 18.3123 153.906 18.3123C164.196 18.3123 171.157 22.368 174.971 29.632L174.85 19.8862ZM174.85 46.7022C174.85 31.3874 167.949 25.3947 155.903 25.3947C143.01 25.3947 136.896 31.4479 136.896 46.7022C136.896 61.9564 143.01 68.1308 155.903 68.1308C167.949 68.1308 174.85 62.138 174.85 46.7022Z" fill="white"/>';
+        n=n+'<path d="M225.274 19.0993V28.0581H222.913C206.145 27.5133 202.513 39.7409 202.513 55.7216V76.5448H193.434V19.8862H202.513V35.201C205.903 25.2131 212.501 19.0993 223.276 19.0993H225.274Z" fill="white"/>';
+        n=n+'<path d="M272.065 59.0509H280.358C279.208 67.6465 272.671 78.3003 253.845 78.3003C234.353 78.3003 225.758 65.1647 225.758 48.0339C225.758 31.1453 235.08 18.0097 253.845 18.0097C270.855 18.0097 280.479 29.6925 280.479 46.2179C280.54 47.5497 280.419 48.8814 280.237 50.2131H234.656C235.322 65.7095 242.828 71.3995 254.148 71.3995C265.286 71.3995 270.37 66.1937 272.065 59.0509ZM234.898 43.4334H271.581C271.157 30.4189 264.438 24.971 253.906 24.971C243.191 24.971 236.169 30.0557 234.898 43.4334Z" fill="white"/>';
+        n=n+'<path d="M333.082 59.0509H341.375C340.225 67.6465 333.688 78.3003 314.862 78.3003C295.371 78.3003 286.775 65.1647 286.775 48.0339C286.775 31.1453 296.097 18.0097 314.862 18.0097C331.872 18.0097 341.496 29.6925 341.496 46.2179C341.557 47.5497 341.436 48.8814 341.254 50.2131H295.734C296.4 65.7095 303.906 71.3995 315.225 71.3995C326.303 71.3995 331.387 66.1937 333.082 59.0509ZM295.976 43.4334H332.659C332.235 30.4189 325.516 24.971 314.983 24.971C304.208 24.971 297.187 30.0557 295.976 43.4334Z" fill="white"/>';
+        n=n+'<path d="M400.758 40.4068V76.5448H391.678V41.4358C391.678 29.3293 386.351 25.6973 378.058 25.6973C365.468 25.6973 358.809 35.4431 358.809 54.9346V76.5448H349.729V19.8862H358.809V34.8378C362.441 23.9419 369.463 18.0702 380.54 18.0702C394.765 18.0702 400.758 25.7579 400.758 40.4068Z" fill="white"/>';
         n=n+'</svg>';
         n=n+'<div class="separator"></div>';
         n=n+'<div class="browser-wallet">BROWSER WALLET</div>';
