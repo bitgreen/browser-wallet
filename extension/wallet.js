@@ -1342,13 +1342,13 @@ async function dashboard(extend_delay = false) {
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">BBB TOKEN</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
-            n=n+'<div class="col-4 ps-1 pe-1">';
+            n=n+'<div id="nature_based_credits" class="col-4 ps-1 pe-1">';
                 n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-co2-circle" style="color: #9ECC00;"></span>';
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">NATURE-BASED CREDITS</span></div>';
                 n=n+'</div>';
             n=n+'</div>';
-            n=n+'<div class="col-4 ps-2">';
+            n=n+'<div id="retired_credits" class="col-4 ps-2">';
                 n=n+'<div class="button-item button-gray tab-item">';
                 n=n+'<span class="icon icon-retired-outline" style="color: #D5D6DA;"></span>';
                 n=n+'<div class="title d-flex align-items-center"><span class="w-100">RETIRED CREDITS</span></div>';
@@ -1430,6 +1430,60 @@ async function dashboard(extend_delay = false) {
 
     document.getElementById("send").addEventListener("click", send);
     document.getElementById("receive").addEventListener("click", receive);
+    document.getElementById("nature_based_credits").addEventListener("click", nature_based_credits);
+    document.getElementById("retired_credits").addEventListener("click", retired_credits);
+}
+async function nature_based_credits() {
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header medium">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"><span class="text">Portfolio</span></span>';
+        n=n+'</div>';
+        n=n+'<div class="content row pt-0">';
+            n=n+'<h2 class="text-center text-white amount-wrapper"><span class="dollar">$</span><span class="amount">0</span><span class="decimals">.00</span></h2>';
+            n=n+'<h2 class="text-center text-white fixed-title">Nature-Based Credits</h2>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content" class="medium">';
+        n=n+'<div id="loading_content">';
+            n=n+'<svg class="icon" width="50" height="60" viewBox="0 0 103 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M72.7507 115.104H16.0667V89.6321H72.7507C79.8249 89.6321 85.5586 95.3336 85.5586 102.368C85.5586 109.401 79.8249 115.104 72.7507 115.104ZM16.0667 51.2642H72.7507C79.8249 51.2642 85.5586 56.9657 85.5586 64C85.5586 71.0333 79.8249 76.7358 72.7507 76.7358H16.0667V51.2642ZM16.0667 12.8963H72.7507C79.8249 12.8963 85.5586 18.5978 85.5586 25.6321C85.5586 32.6654 79.8249 38.3679 72.7507 38.3679H16.0667V12.8963ZM102.4 25.6321C102.4 11.476 90.8591 0 76.6229 0H0V38.3679V51.2642V76.7358V89.6321V128H76.6229C90.8591 128 102.4 116.524 102.4 102.368C102.4 94.732 99.0377 87.8797 93.7104 83.1839C99.0377 78.4882 102.4 71.6359 102.4 64C102.4 56.3641 99.0377 49.5118 93.7104 44.816C99.0377 40.1203 102.4 33.268 102.4 25.6321Z"></svg>';
+            n=n+'<div class="text">Under construction</div>';
+        n=n+'</div>';
+        n=n+'<div id="transactions" class="smaller"></div>';
+        n=n+'<div id="transactions_end"></div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", dashboard);
+}
+async function retired_credits() {
+    hide_header();
+    show_footer();
+
+    let n='<div id="heading" class="custom-header medium">';
+        n=n+'<div class="heading d-flex align-items-center">';
+            n=n+'<span id="goback" class="icon icon-left-arrow click"><span class="text">Portfolio</span></span>';
+        n=n+'</div>';
+        n=n+'<div class="content row pt-0">';
+            n=n+'<h2 class="text-center text-white fixed-title">Retired Credits</h2>';
+        n=n+'</div>';
+    n=n+'</div>';
+
+    n=n+'<div id="bordered_content" class="medium">';
+        n=n+'<div id="loading_content">';
+            n=n+'<svg class="icon" width="50" height="60" viewBox="0 0 103 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M72.7507 115.104H16.0667V89.6321H72.7507C79.8249 89.6321 85.5586 95.3336 85.5586 102.368C85.5586 109.401 79.8249 115.104 72.7507 115.104ZM16.0667 51.2642H72.7507C79.8249 51.2642 85.5586 56.9657 85.5586 64C85.5586 71.0333 79.8249 76.7358 72.7507 76.7358H16.0667V51.2642ZM16.0667 12.8963H72.7507C79.8249 12.8963 85.5586 18.5978 85.5586 25.6321C85.5586 32.6654 79.8249 38.3679 72.7507 38.3679H16.0667V12.8963ZM102.4 25.6321C102.4 11.476 90.8591 0 76.6229 0H0V38.3679V51.2642V76.7358V89.6321V128H76.6229C90.8591 128 102.4 116.524 102.4 102.368C102.4 94.732 99.0377 87.8797 93.7104 83.1839C99.0377 78.4882 102.4 71.6359 102.4 64C102.4 56.3641 99.0377 49.5118 93.7104 44.816C99.0377 40.1203 102.4 33.268 102.4 25.6321Z"></svg>';
+            n=n+'<div class="text">Under construction</div>';
+        n=n+'</div>';
+        n=n+'<div id="transactions" class="smaller"></div>';
+        n=n+'<div id="transactions_end"></div>';
+    n=n+'</div>';
+
+    document.getElementById("root").innerHTML = n;
+    document.getElementById("goback").addEventListener("click", dashboard);
+
 }
 async function transactions_history() {
     await show_header('transactions_history');
@@ -1446,6 +1500,10 @@ async function transactions_history() {
     n=n+'</div>';
 
     n=n+'<div id="bordered_content">';
+        n=n+'<div id="loading_content">';
+            n=n+'<svg class="icon" width="50" height="60" viewBox="0 0 103 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M72.7507 115.104H16.0667V89.6321H72.7507C79.8249 89.6321 85.5586 95.3336 85.5586 102.368C85.5586 109.401 79.8249 115.104 72.7507 115.104ZM16.0667 51.2642H72.7507C79.8249 51.2642 85.5586 56.9657 85.5586 64C85.5586 71.0333 79.8249 76.7358 72.7507 76.7358H16.0667V51.2642ZM16.0667 12.8963H72.7507C79.8249 12.8963 85.5586 18.5978 85.5586 25.6321C85.5586 32.6654 79.8249 38.3679 72.7507 38.3679H16.0667V12.8963ZM102.4 25.6321C102.4 11.476 90.8591 0 76.6229 0H0V38.3679V51.2642V76.7358V89.6321V128H76.6229C90.8591 128 102.4 116.524 102.4 102.368C102.4 94.732 99.0377 87.8797 93.7104 83.1839C99.0377 78.4882 102.4 71.6359 102.4 64C102.4 56.3641 99.0377 49.5118 93.7104 44.816C99.0377 40.1203 102.4 33.268 102.4 25.6321Z"></svg>';
+            n=n+'<div class="text">Loading</div>';
+        n=n+'</div>';
         n=n+'<div id="transactions"></div>';
         n=n+'<div id="transactions_end"></div>';
     n=n+'</div>';
@@ -1493,6 +1551,7 @@ async function transactions_history() {
     }
 
     document.getElementById("transactions").innerHTML = n;
+    document.getElementById("loading_content").classList.add('loaded');
     document.querySelectorAll("#transactions .button-item").forEach(t => {
         t.addEventListener("click", transaction)
     })
@@ -1525,6 +1584,8 @@ async function get_transactions() {
             localStorage.setItem("account_transactions_" + current_account_id, JSON.stringify(current_account_transactions));
 
             return current_account_transactions;
+        }).catch(function() {
+            return false;
         });
 }
 function transaction(e) {
@@ -2176,7 +2237,7 @@ async function send(recipient = '', amount = 0) {
         n=n+'<h4 class="mb-0">From ('+((current_account.name && current_account.name.length > 14) ? current_account.name.substring(0,14)+'...' : current_account.name)+')</h4>';
         n=n+'<p class="text-gray" style="font-size: 13px;">'+current_account.address+'</p>';
         n = n + '<div id="choose_token" class="d-flex align-items-sketch"><span class="icon icon-b-circle"></span><div class="col d-flex align-items-center"><span class="name">BBB Token</span></div></div>';
-        n = n + '<label class="label text-dark">Amount</label><div id="choose_quantity" class="d-flex mb-3"><div class="col-4"><div class="form-group"><input id="amount" type="number" class="form-control" value="'+amount+'"></div></div><div class="col-8"><div class="w-100 text-gray d-flex flex-row-reverse"><span>'+balancevf+' Available</span></div><input id="range" type="range" min="0" max="'+balancevf+'" step="0.0001" value="'+amount+'"></div></div>';
+        n = n + '<label class="label text-dark">Amount</label><div id="choose_quantity" class="d-flex mb-3"><div class="col-4"><div class="form-group"><input id="amount" type="number" class="form-control" value="'+amount+'"></div></div><div class="col-8"><div class="w-100 text-gray d-flex flex-row-reverse"><span>'+balancevf+' Available</span></div><input id="range" type="range" min="0" max="'+balancev+'" step="0.0001" value="'+amount+'"></div></div>';
         n = n + '<label class="label text-dark">Recipient</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input id="recipient" type="text" class="form-control" placeholder="Address" value="'+recipient+'"><span class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span class="icon icon-copy m-0"></span></button></span></div></div>';
         n = n + '<div class="footer double-footer d-flex align-items-sketch flex-row-reverse">';
             n = n + '<div class="d-flex"><button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span class="icon icon-right-arrow"></span></button></div>';
@@ -2200,7 +2261,7 @@ function sync_amount(e) {
 
     if(e && e.path[0].id === 'range') {
         amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(range_el.value);
-        amount_el.value = amount
+        amount_el.value = amount.replace(',', '')
     } else {
         amount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}).format(amount_el.value);
         range_el.value = amount
@@ -2213,7 +2274,7 @@ function sync_amount(e) {
     }
 
     // update color
-    let value = (range_el.value-range_el.min)/(range_el.max-range_el.min)*100
+    let value = (range_el.value-range_el.min)/(parseFloat(range_el.max.replace(',', ''))-range_el.min)*100
     range_el.style.background = 'linear-gradient(to right, #C0FF00 0%, #C0FF00 ' + value + '%, #F8F8F9 ' + value + '%, #F8F8F9 100%)'
 
     check_address()
@@ -3656,6 +3717,8 @@ function show_login(instant = false) {
 async function do_login() {
     const password = DOMPurify.sanitize(document.getElementById("login_password").value);
     const keep_me_signed_in = document.getElementById("login_keep_me_signed_in").checked;
+
+    localStorage.setItem("keep_me_signed_in", keep_me_signed_in);
 
     if(await load_account(password)) {
         hide_login();

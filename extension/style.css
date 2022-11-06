@@ -27,6 +27,24 @@
     src: url('assets/fonts/Neue-Haas-Unica-Pro/NeueHaasUnicaPro-Medium.ttf') format('truetype');
 }
 
+@keyframes beat-fade {
+    0%, to {
+        color: #FFFFFF;
+        fill: #FFFFFF;
+        transform: scale(1)
+    }
+    50% {
+        color: #F8F8F9;
+        fill: #F8F8F9;
+        transform: scale(1.125)
+    }
+}
+@keyframes dash {
+    to {
+        stroke-dashoffset: 1000;
+    }
+}
+
 * {
     font-family: "Neue Haas Unica Pro", sans-serif !important;
 }
@@ -44,12 +62,12 @@ body {
     background-image: url('assets/bg.png');
 }
 h1 {
-        font-weight: 500;
+    font-weight: 500;
     font-size: 24px;
     color: #061C00;
 }
 h2 {
-        font-weight: 500;
+    font-weight: 500;
     font-size: 22px;
     color: #061C00;
 }
@@ -59,17 +77,17 @@ h3 {
     color: #061C00;
 }
 h4 {
-        font-weight: 500;
+    font-weight: 500;
     font-size: 16px;
     color: #061C00;
 }
 h5 {
-        font-weight: 500;
+    font-weight: 500;
     font-size: 14px;
     color: #061C00;
 }
 h6 {
-        font-weight: 400;
+    font-weight: 400;
     font-size: 12px;
     color: #061C00;
 }
@@ -93,19 +111,19 @@ p {
     font-size: 11px;
 }
 .text-grotesk {
-        font-weight: 300;
+    font-weight: 300;
 }
 .text-bold {
     font-weight: 500;
 }
 .text-grotesk.text-bold {
-        font-weight: 500;
+    font-weight: 500;
 }
 .select-none {
     user-select: none;
 }
 .btn {
-        font-style: normal;
+    font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
@@ -405,6 +423,53 @@ label.label {
     transform: scale(30);
     transition: all linear 1.5s;
 }
+#loading_content {
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 80px;
+    background-color: #FFFFFF;
+    transition: all linear 0.2s;
+    opacity: 1;
+
+    z-index: 98;
+}
+#loading_content.loaded {
+    visibility: hidden;
+    opacity: 0;
+}
+#loading_content .icon {
+    font-size: 42px;
+    animation-name: beat-fade;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+    animation-duration: 2s;
+
+    fill: #F8F8F9;
+}
+#loading_content .icon path {
+    stroke: #C0FF00;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+
+    animation-name: dash;
+    animation-iteration-count: infinite;
+    animation-duration: 20s;
+}
+#loading_content .text {
+    width: 100%;
+    text-transform: uppercase;
+    color: #667085;
+    font-weight: 500;
+    font-size: 10px;
+    text-align: center;
+    padding-top: 16px;
+}
 
 #root {
     width: 100%;
@@ -470,6 +535,7 @@ label.label {
 }
 
 #heading {
+    position: relative;
     display: block;
     width: 100%;
     height: 140px;
@@ -480,6 +546,9 @@ label.label {
 }
 #heading.bigger {
     height: 240px;
+}
+#heading.medium {
+    height: 165px;
 }
 #heading #logo {
     display: inline-block;
@@ -495,16 +564,29 @@ label.label {
     background-color: transparent;
     color: #ffffff;
 }
-#heading.custom-header .heading #goback,
-#full_page .heading #goback {
-    width: 40px;
+#heading.custom-header .fixed-title {
+    position: absolute;
+    left: 0;
+    bottom: 22px;
+}
+#goback {
+    min-width: 40px;
     text-align: center;
     font-size: 18px;
     transition: all linear 0.2s;
 }
-#heading.custom-header .heading #goback:hover,
-#full_page .heading #goback:hover {
+#goback:hover {
     transform: translateX(-4px);
+}
+#goback .text {
+    display: inline-block;
+    margin-left: 12px;
+    font-weight: 500;
+    transition: all linear 0.2s;
+    user-select: none;
+}
+#goback:hover .text {
+    transform: translateX(4px);
 }
 #heading.custom-header .heading h3 {
     width: 100%;
@@ -530,6 +612,11 @@ label.label {
     top: 270px;
     height: calc(100% - 270px);
     padding-top: 38px;
+}
+#bordered_content.medium {
+    top: 165px;
+    height: calc(100% - 165px);
+    padding-top: 20px;
 }
 #wallet_list {
     height: 100%;
@@ -883,6 +970,9 @@ label.label {
     padding-right: 8px;
     padding-bottom: 8px;
 }
+#transactions.smaller {
+    height: 320px;
+}
 #transactions_end {
     position: absolute;
     margin-top: -45px;
@@ -891,6 +981,8 @@ label.label {
     height: 45px;
     background: linear-gradient(to bottom, transparent 0%, transparent 10%, #FFFFFF 80%, #FFFFFF 100%);
     pointer-events: none;
+
+    z-index: 55;
 }
 ::-webkit-scrollbar {
     width: 10px;
@@ -1326,20 +1418,29 @@ label.label {
 #review_transaction .estimated_fees {
     padding-right: 32px;
 }
-#review_transaction .amount {
+#review_transaction .title {
+    margin-top: 6px;
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
+    color: #667085;
+}
+#review_transaction .amount,
+.amount-wrapper .amount {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     font-size: 26px;
 
     padding: 0 1px 4px;
 }
-#review_transaction .decimals {
+#review_transaction .decimals,
+.amount-wrapper .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-size: 14px;
 
     letter-spacing: -0.05em;
 }
-#review_transaction .dollar {
+#review_transaction .dollar,
+.amount-wrapper .dollar {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     font-size: 14px;
@@ -1347,11 +1448,20 @@ label.label {
 
     letter-spacing: -0.05em;
 }
-#review_transaction .title {
-    margin-top: 6px;
-    font-family: 'Neue Haas Unica Pro', sans-serif;
-    font-weight: 500;
-    color: #667085;
+.amount-wrapper .amount {
+    font-size: 32px;
+}
+.amount-wrapper .decimals {
+    position: relative;
+    font-size: 16px;
+    top: -6px;
+    font-weight: 300;
+}
+.amount-wrapper .dollar {
+    position: relative;
+    font-size: 16px;
+    top: -4px;
+    font-weight: 300;
 }
 #transaction_info .wallet {
     height: 40px;
