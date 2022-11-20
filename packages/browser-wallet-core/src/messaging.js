@@ -1,0 +1,7 @@
+const sendToExtension = () => {
+
+}
+
+export {
+    sendToExtension
+}
