@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Bitgreen Wallet",
+  "description": "Bitgreen Browser Wallet",
+  "version": "1.0.0",
+  "action": {
+    "default_icon": "assets/icons/48x48.png",
+    "default_popup": "index.html"
+  },
+  "icons": {
+    "16": "assets/icons/16x16.png",
+    "32": "assets/icons/32x32.png",
+    "48": "assets/icons/48x48.png",
+    "64": "assets/icons/64x64.png",
+    "128": "assets/icons/128x128.png"
+  },
+  "permissions": [
+    "alarms",
+    "clipboardRead",
+    "clipboardWrite",
+    "storage",
+    "tabs",
+    "scripting",
+    "system.display"
+  ],
+  "host_permissions": [
+    "https://testnet.bitgreen.org:9443/",
+    "https://mainnet.bitgreen.org:9443/"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "page.js",
+        "inject.js"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
