@@ -29,6 +29,11 @@ The wallet extension is available for the following browsers:
 - Brave (compatible with Chrome extension)
 - Other Browsers based on Chrome Engine
 
+## Project Structure
+- **packages/browser-wallet-base** - Extension base structure.
+- **packages/browser-wallet-core** - Main features mostly used for background tasks, stores, API messaging.
+- **packages/browser-wallet-ui** - The UI components for the extension.
+- **packages/browser-wallet-utils** - Helpers and utilities for both UI and background.
 
 ## BrowserWallet.js
 A library to facilitate the usage of the extension has been created. Currently it supports the following functions callable from a web page.  
