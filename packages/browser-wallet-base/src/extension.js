@@ -3,13 +3,9 @@ import { databaseService } from '@bitgreen/browser-wallet-core'
 
 const db = new databaseService()
 const ui = new userInterface(db)
-console.log('asfasf')
 
 const extension = async() => {
-    console.log('here')
     await ui.initUi()
-    console.log('here')
-
 
     if(await db.stores.accounts.exists()) {
         await ui.goToScreen('portfolioScreen')
