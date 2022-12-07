@@ -23,8 +23,8 @@
   "main": "./src/extension.js",
   "sideEffects": false,
   "dependencies": {
-    "@bitgreen/browser-wallet-ui": "^1.0.0",
     "@bitgreen/browser-wallet-core": "^1.0.0",
+    "@bitgreen/browser-wallet-ui": "^1.0.0",
     "@bitgreen/browser-wallet-utils": "^1.0.0",
     "@polkadot/api": "^9.7.1",
     "@polkadot/keyring": "^10.1.11",
@@ -34,7 +34,7 @@
     "@polkadot/x-global": "^10.1.12"
   },
   "devDependencies": {
-    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
     "copy-webpack-plugin": "^11.0.0",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.7.1",
@@ -44,6 +44,7 @@
     "mini-css-extract-plugin": "^2.6.1",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "terser-webpack-plugin": "^5.3.6",

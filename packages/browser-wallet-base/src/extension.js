@@ -1,22 +1,28 @@
-import { initUi, goToScreen } from '@bitgreen/browser-wallet-ui'
+import userInterface from '@bitgreen/browser-wallet-ui'
 import { databaseService } from '@bitgreen/browser-wallet-core'
 
 const db = new databaseService()
+const ui = new userInterface(db)
+console.log('asfasf')
 
 const extension = async() => {
-    await initUi()
+    console.log('here')
+    await ui.initUi()
+    console.log('here')
+
 
     if(await db.stores.accounts.exists()) {
-        await goToScreen('portfolioScreen')
+        await ui.goToScreen('portfolioScreen')
     } else {
         if(await db.stores.settings.asyncGet('skip_intro')) {
-            await goToScreen('walletScreen')
+            await ui.goToScreen('walletScreen')
         } else {
-            await goToScreen('welcomeScreen')
+            await ui.goToScreen('welcomeScreen')
         }
     }
 }
 
-extension().then(response => {
-    // console.log('welcome')
-})
+extension().then()
+// document.addEventListener('DOMContentLoaded', async function () {
+//     await extension()
+// })

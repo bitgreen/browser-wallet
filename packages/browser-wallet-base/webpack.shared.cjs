@@ -31,7 +31,7 @@ const packages = [
 ];
 
 module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') => {
-    if(browser !== 'chrome' && browser !== 'firefox' && browser !== 'safari') {
+    if(!['chrome', 'firefox', 'safari'].includes(browser)) {
         browser = 'chrome'
     }
 
@@ -41,7 +41,9 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
     let plugins = [
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer'],
-            process: 'process/browser.js'
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser.js',
         }),
         new webpack.IgnorePlugin({
             contextRegExp: /moment$/,
@@ -85,13 +87,16 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
                 }
             }
         }),
-        new HtmlWebpackPlugin({
+        new MiniCssExtractPlugin()
+    ]
+
+    if(useSplitChunk) {
+        plugins.push(new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'public/index.html',
             chunks: ['extension']
-        }),
-        new MiniCssExtractPlugin()
-    ]
+        }))
+    }
 
     if(browser === 'safari') {
         // change output directory
@@ -147,7 +152,7 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
                 ...alias,
                 [`@bitgreen/${p}`]: path.resolve(__dirname, `../${p}/src`)
             })),
-            extensions: ['.js'],
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             fallback: {
                 crypto: require.resolve('crypto-browserify'),
                 path: require.resolve('path-browserify'),
@@ -156,6 +161,8 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
                 http: require.resolve('stream-http'),
                 https: require.resolve('https-browserify'),
                 assert: require.resolve('assert'),
+                process: require.resolve("process"),
+                buffer: require.resolve("buffer"),
                 zlib: false,
                 url: false
                 // http: false,
