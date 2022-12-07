@@ -36,11 +36,23 @@ const generateMessageId = () => {
     return `${Date.now()}.${++messageIdCounter}`;
 }
 
+const shuffleArray = (array) => {
+    let cloned_array = [...array];
+    for (let i = cloned_array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = cloned_array[i];
+        cloned_array[i] = cloned_array[j];
+        cloned_array[j] = temp;
+    }
+    return cloned_array
+}
+
 export {
     getBrowser,
     isChrome,
     isFirefox,
     isSafari,
     sleep,
-    generateMessageId
+    generateMessageId,
+    shuffleArray
 }
