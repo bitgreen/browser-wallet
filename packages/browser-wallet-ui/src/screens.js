@@ -22,12 +22,12 @@ const loadTemplate = async(template) => {
 }
 
 const interpolate = (template_data, params) => {
-    let output_data = template_data.toString()
+    let output_data = template_data?.toString()
     let param_values = Object.entries(params)
 
     for(let param of param_values) {
-        let name = param[0].toString()
-        let value = param[1].toString()
+        let name = param[0]?.toString()
+        let value = param[1]?.toString()
 
         output_data = output_data.replaceAll('${'+name+'}', value)
     }
@@ -35,8 +35,8 @@ const interpolate = (template_data, params) => {
     return output_data
 }
 
-const updateElement = async(element, template_name, params = {}, append = true) => {
-    const template_data = await renderTemplate(template_name, params)
+const updateElement = async(element, template_name = false, params = {}, append = true) => {
+    const template_data = template_name ? await renderTemplate(template_name, params) : ''
 
     let el = document.querySelector('#root') // default element
     if(element === 'body') {

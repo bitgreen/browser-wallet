@@ -70,7 +70,7 @@ export default async function welcomeScreen() {
     });
 
     setTimeout(function() {
-        document.getElementById("init_screen").classList.add("inactive")
+        document.querySelector("#init_screen").classList.add("inactive")
     }, 3000)
 
     screen.setListeners([

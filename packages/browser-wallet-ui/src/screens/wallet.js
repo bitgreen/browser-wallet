@@ -6,8 +6,9 @@ import { sendMessage } from "../messaging.js";
 export default async function walletScreen() {
     const screen = new Screen({
         template_name: 'layouts/default',
+        header: true,
         login: false,
-        smooth_load: true
+        smooth_load: true,
     })
     await screen.init()
 
@@ -28,14 +29,15 @@ export default async function walletScreen() {
         {
             element: '#new_wallet',
             listener: async() => {
-                const data = await sendMessage('new_wallet')
-                console.log(data)
-                await goToScreen('walletScreen')
+                const mnemonic = await sendMessage('new_wallet')
+                await goToScreen('walletCreateScreen', {
+                    mnemonic
+                })
             }
         },
         {
             element: '#import_wallet',
-            listener: () => goToScreen('walletScreen')
+            listener: () => goToScreen('walletImportScreen')
         }
     ])
 }

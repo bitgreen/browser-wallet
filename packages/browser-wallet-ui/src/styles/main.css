@@ -187,6 +187,9 @@ p {
 }
 .btn.disabled {
     background-color: #F8F8F9;
+    pointer-events: none;
+    opacity: .65;
+    border-color: transparent !important;
 }
 .btn .icon {
     font-size: 14px;
@@ -576,23 +579,23 @@ label.label {
     left: 0;
     bottom: 22px;
 }
-#goback {
+#go_back {
     min-width: 40px;
     text-align: center;
     font-size: 18px;
     transition: all linear 0.2s;
 }
-#goback:hover {
+#go_back:hover {
     transform: translateX(-4px);
 }
-#goback .text {
+#go_back .text {
     display: inline-block;
     margin-left: 12px;
     font-weight: 500;
     transition: all linear 0.2s;
     user-select: none;
 }
-#goback:hover .text {
+#go_back:hover .text {
     transform: translateX(4px);
 }
 #heading.custom-header .heading h3 {
