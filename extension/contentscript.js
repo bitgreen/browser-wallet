@@ -30,12 +30,14 @@
             // send the message to the extension
             current_browser.runtime.sendMessage(j, (response) => {
                 // Got an asynchronous response with the data from the background
-                // set the session variable "BrowserWalletToken" with the answer
+                // set the session variable "BrowserWalletXXXX" with the answer
                 // it used as the only communication way from the extension to the web page
                 if(j.command === 'check') {
                     sessionStorage.setItem("BrowserWalletInstalled", response.status === 'OK');
-                } else if(j.command === 'signin') {
+                } else if(j.command === 'signinanswer') {
                     sessionStorage.setItem("BrowserWalletToken", response);
+                } else if(j.command === 'transfer') {
+                        sessionStorage.setItem("BrowserWalletTransfer", response);
                 }
             });
         }
@@ -55,7 +57,7 @@
             window.dispatchEvent(event);
         }
     });
-
+    // function to get the browser type in use
     function get_browser() {
         let userAgent = navigator.userAgent;
         let browserName = '';

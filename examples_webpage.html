@@ -16,7 +16,7 @@
   <button id="kyc">Bond - Submit KYC</button>
   <button id="portfolio">Porfolio</button>
   <button id="project">Create Project</button>
-  <!-- include hte BitgreenWallet library-->
+  <!-- include the BitgreenWallet library-->
   <script type="text/javascript" src="BrowserWallet.js"></script>
   <script>
     // remove previous signin session
@@ -26,7 +26,7 @@
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // send 1 BBB to a recipient
-       BW.send("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1);
+      BW.transfer("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1,transferCallback);
     }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
@@ -49,13 +49,14 @@
         // send extrinsic
         BW.tx("vcu","create",'["2222",{"name":"Smith and Wesson Inc","description":"Test Description","images":["image 1","image 2"]}]', false);
     }, false);
+
     // function called after the signing
     function callbackauthentication(){
-        // the token is stored in the session variable "bitgreen".
+        // the token is stored in the session variable.
         console.log("Authentication token: ",sessionStorage.getItem("BrowserWalletToken"));
     }
-    function txCallback() {
-
+    function transferCallback() {
+        console.log("Transfer Result: ",sessionStorage.getItem("BrowserWalletTransfer"));
     }
     window.addEventListener('EXTRINSIC', function(e) {
       console.log(e.detail)

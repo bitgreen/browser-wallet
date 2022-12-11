@@ -255,8 +255,12 @@ chrome.runtime.onMessage.addListener(
                 // create new windows for the transfer funds
                 let url = 'window.html?command=transfer&recipient=' + encodeURI(request.recipient) + '&amount=' + encodeURI(request.amount) + '&domain=' + encodeURI(request.domain);
                 show_popup(url);
-
-                sendResponse(true)
+                // Will be called asynchronously 
+                sendAnswerTransfer(function (msg) {
+                    console.log("sending data back to web page", msg);
+                    sendResponse(msg);
+                });
+                // to keep open the channel for the answer we returns true
                 return true;
             }
         }
@@ -386,15 +390,16 @@ chrome.runtime.onMessage.addListener(
             // create new windows for authentication
             let url = 'window.html?command=signin&domain=' + encodeURI(request.domain);
             show_popup(url);
-
             // Will be called asynchronously from sendAnswerBW()
             sendAnswerBW(function (msg) {
                 console.log("sending data back to web page", msg);
                 sendResponse(msg);
             });
+            //sendAnswerBW(function (msg));
             // to keep open the channel for the answer we returns true
             return true;
         }
+        
 
         if (request.command === "portfolio") {
             // create new windows for the extrinsic
@@ -414,7 +419,7 @@ chrome.runtime.onMessage.addListener(
             BWMessage = request.message;
         }
 
-        // callback function to send the answer from the extension to the web page. It's quite complicated but it's the only way.
+        // callback function to send the answer from the extension for the signing to the web page. It's quite complicated but it's the only way.
         function sendAnswerBW(callback) {
             // wait for signature with a timeout of 60 seconds
             function waitforSignature() {
@@ -439,6 +444,32 @@ chrome.runtime.onMessage.addListener(
 
             // call the waiting function for the signature
             waitforSignature();
+        }
+        // callback function to send the answer from the extension for the transfer to the web page.
+        function sendAnswerTransfer(callback) {
+            // wait for signature with a timeout of 60 seconds
+            function waitforTransfer() {
+                // exit for timeout of 1 minute
+                if (timeout >= 120) {
+                    BWMessage = "";
+                    timeout = 0;
+                    return;
+                }
+                if (BWMessage === "") {
+                    setTimeout(waitforTransfer, 1000); //wait 1 second and check again
+                    timeout = timeout + 1;
+                    return;
+                } else {
+                    // execute the call back sending the message
+                    console.log("Sending BWMessage from background.js:", BWMessage);
+                    callback(BWMessage);
+                    BWMessage = "";
+                    timeout = 0;
+                }
+            }
+
+            // call the waiting function for the transfer
+            waitforTransfer();
         }
     }
 );
