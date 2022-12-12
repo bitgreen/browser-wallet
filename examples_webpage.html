@@ -13,6 +13,7 @@
   <hr>
   <button id="transferbutton">Transfer 1 Bitgreen</button>
   <button id="signinbutton">Sign In</button>
+  <button id="newasset">New Asset</button>
   <button id="kyc">Bond - Submit KYC</button>
   <button id="portfolio">Porfolio</button>
   <button id="project">Create Project</button>
@@ -37,7 +38,7 @@
     button3.addEventListener("click", () =>{
         // send extrinsic
         //BW.tx("bonds","createChangeKyc",'{"accountid":"5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","info":"{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"}',false);
-        BW.tx("bonds","createChangeKyc",'["5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"]',txCallback);
+        BW.txpallet("bonds","createChangeKyc",'["5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"]',txCallback);
     },false);
     let button4 = document.getElementById("portfolio");
     button4.addEventListener("click", () =>{
@@ -49,6 +50,11 @@
         // send extrinsic
         BW.tx("vcu","create",'["2222",{"name":"Smith and Wesson Inc","description":"Test Description","images":["image 1","image 2"]}]', false);
     }, false);
+    let button6 = document.getElementById("newasset");
+    button6.addEventListener("click", () =>{
+        // send extrinsic
+        BW.txpallet("assets","create",'[1005,"5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj",1]',txCallback);
+    },false);
 
     // function called after the signing
     function callbackauthentication(){
@@ -57,6 +63,9 @@
     }
     function transferCallback() {
         console.log("Transfer Result: ",sessionStorage.getItem("BrowserWalletTransfer"));
+    }
+     function txCallback() {
+        console.log("Pallet Call Result: ",sessionStorage.getItem("BrowserWalletTxPallet"));
     }
     window.addEventListener('EXTRINSIC', function(e) {
       console.log(e.detail)

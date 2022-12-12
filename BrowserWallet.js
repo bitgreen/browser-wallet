@@ -30,7 +30,7 @@
             // call Extension for the transfer
             window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: recipient,amount: amount }, window.location.href);
         }
-        // submit any kind of Extrinsic without transferring funds
+        // submit any kind of Extrinsic without transferring funds and no answer (legacy version)
         tx(pallet, call, parameters) {
             // call Extension for the extrinsic submission
             window.postMessage({
@@ -48,11 +48,11 @@
             this.BWtimeout=0;   
             this.BWcallback=callback;
             // remove session
-            sessionStorage.removeItem("BrowserWalletTx");
+            sessionStorage.removeItem("BrowserWalletTxPallet");
             // call Extension for the extrinsic submission
             window.postMessage({
                 type: "BROWSER-WALLET",
-                command: "tx",
+                command: "txpallet",
                 pallet: pallet,
                 call: call,
                 parameters: parameters
@@ -136,14 +136,14 @@
                 return;            
             }
             //check if the session variable has been set
-            if(sessionStorage.getItem("BrowserWalletTx")===null) {
+            if(sessionStorage.getItem("BrowserWalletTxPallet")===null) {
                 //wait 1 second and check again
                 setTimeout(() => { this.waitfortx();},1000);//wait 1 second and check again
                  this.BWtimeout=this.BWtimeout+1;
                 return;
             }else {
                 // execute the call back function
-                let t=sessionStorage.getItem("BrowserWalletTx");
+                let t=sessionStorage.getItem("BrowserWalletTxPallet");
                 //console.log("Signup complete - Token",t);
                 this.BWtimeout=0;
                 // execute call back

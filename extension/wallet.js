@@ -2639,16 +2639,28 @@ async function approve_extrinsic(pallet, call, parameters) {
                         current_browser.runtime.sendMessage({
                             type: "BROWSER-WALLET",
                             command: "txpalletanswer",
-                            message: JSON.stringify({"errror":err})
+                            message: JSON.stringify({"error":err})
                         }, (response) => {
                             console.log('Received web page data', response);
-                            //window.close();
                         });
                         
                     }
-                  });
-                  alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
-                  await dashboard();    
+            }).catch(err => {
+                current_browser.runtime.sendMessage({
+                    type: "BROWSER-WALLET",
+                    command: "txpalletanswer",
+                    message: JSON.stringify({"error":err.message})
+                }, (response) => {
+                    console.log('Received web page data', response);
+                });
+                alert("The transaction has generated an error: "+err.message);
+                    //window.close();
+                    dashboard();    
+            });
+            // transaction di not raise errors
+            alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
+            //window.close();
+            await dashboard();    
         }
         else{
             // build the transactions using "spread" operator to pass the correct number of parameters
@@ -2669,6 +2681,9 @@ async function approve_extrinsic(pallet, call, parameters) {
                         alert("Transaction Error: "+dispatchError.toString());
                     }
                 }
+            }).catch(err => {
+                alert("The transaction has generated an error: "+err.message);
+                dashboard();    
             });
             await current_browser.runtime.sendMessage({
                 type: "BROWSER-WALLET",
@@ -3057,7 +3072,7 @@ async function transferfunds() {
         }*/
         if(command=="transfer"){
             txhash= await apiv.tx.balances.transfer(accountrecipient, amountb)
-            .signAndSend(keyspairv, { nonce: -1 }, ({ events = [], status }) => {
+            .signAndSend(keyspairv, { nonce: -1 }, ({ events = [], status,dispatchError }) => {
                     console.log('Transaction status:', status.type);
                     if (status.isInBlock) {
                         // send answer back to the web app.
@@ -3078,7 +3093,38 @@ async function transferfunds() {
                         console.log('Finalized block hash', status.asFinalized.toHex());
                         
                     }
-                  });         
+                    if (dispatchError) {
+                        let err="";
+                        const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                        const { docs, name, section } = decoded;
+                        if (dispatchError.isModule) {
+                            err=`${section}.${name}: ${docs.join(' ')}`;
+                        }
+                        else{
+                            err={"txerror": dispatchError.toString()};
+                        }
+                        // send answer back to the web app.
+                        current_browser.runtime.sendMessage({
+                            type: "BROWSER-WALLET",
+                            command: "transferanswer",
+                            message: JSON.stringify({"error":err})
+                        }, (response) => {
+                            console.log('Received web page data', response);
+                        });
+                        
+                    }
+                  }).catch(err => {
+                    current_browser.runtime.sendMessage({
+                        type: "BROWSER-WALLET",
+                        command: "transferanswer",
+                        message: JSON.stringify({"error":err.message})
+                    }, (response) => {
+                        console.log('Received web page data', response);
+                    });
+                    alert("The transaction has generated an error: "+err.message);
+                        //window.close();
+                        dashboard();    
+                });         
         }
         else{
             apiv.tx.balances.transfer(accountrecipient, amountb)
