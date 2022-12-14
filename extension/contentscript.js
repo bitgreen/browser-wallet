@@ -40,6 +40,8 @@
                         sessionStorage.setItem("BrowserWalletTransfer", response);
                 } else if(j.command === 'txpallet') {
                     sessionStorage.setItem("BrowserWalletTxPallet", response);
+                } else if(j.command === 'querypallet') {
+                    sessionStorage.setItem("BrowserWalletQuery", response);
                 }
             });
         }

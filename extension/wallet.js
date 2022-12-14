@@ -1,7 +1,4 @@
-//TODO:  change account description, remove account, copy account without hidden field, improve support link
-// TODO set a red light and switch to green when connected
-// evaluate the encryption of account description and account code (better privacy)
-// ask for access password initially to decrypt the data above and keep it open for the session till the browser is open
+// main application body of the wallet
 
 window.api = polkadotApi
 window.util = polkadotUtil;
@@ -3055,21 +3052,6 @@ async function transferfunds() {
     if(r === true) {
         const amountb = BigInt(parseInt(parseFloat(amount)*10000))*100000000000000n;
         let txhash="";
-        /*
-        if(command=="transfer"){
-            txhash= await apiv.tx.balances.transfer(accountrecipient, amountb)
-            .signAndSend(keyspairv, { nonce: -1 });
-            // send message back to the background.js
-            // send txhash back to the caller
-            current_browser.runtime.sendMessage({
-                type: "BROWSER-WALLET",
-                command: "transferanswer",
-                message: '{"txhash":"'+txhash+'"}',
-            }, (response) => {
-                console.log('Received web page data', response);
-                //window.close();
-            });
-        }*/
         if(command=="transfer"){
             txhash= await apiv.tx.balances.transfer(accountrecipient, amountb)
             .signAndSend(keyspairv, { nonce: -1 }, ({ events = [], status,dispatchError }) => {
@@ -3153,8 +3135,6 @@ async function transferfunds() {
             );
         }
         
-        
-
         // unloads account if password not saved
         await load_account();
 

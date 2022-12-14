@@ -97,6 +97,50 @@ function show_popup(url, popup_height = 600) {
         });
     }
 }
+// function to load and hidden page for executing a query with no user interaction
+function open_hidden_page(url) {
+    if(get_browser() === 'safari') {
+        chrome.windows.create({
+            url: url,
+            type: 'popup',
+            focused: false,
+            width: 1,
+            height: 1
+        });
+    } else {
+        chrome.windows.getCurrent(function (win) {
+            let width = win.width;
+            let height = win.height;
+            let top = win.top;
+            let left = win.left;
+
+            chrome.tabs.create({
+                url: chrome.runtime.getURL(url),
+                active: false
+            }, function (tab) {
+                // get windows properties
+
+                    // adjust position
+                    top = top + 80;
+                    left = left + width - 400 - 100;
+
+                    // After the tab has been created, open a window to inject the tab
+                    chrome.windows.create({
+                        tabId: tab.id,
+                        type: 'popup',
+                        focused: false,
+                        width: 1,
+                        height: 1,
+                        left,
+                        top
+                        // incognito, top, left, ...
+                    });
+
+
+            });
+        });
+    }
+}
 function parse_extrinsics(extrinsics) {
     const current_timestamp = Date.now()
 
@@ -247,6 +291,23 @@ chrome.runtime.onMessage.addListener(
 
             sendResponse(true)
             return true;
+        }
+        // query command
+        if (request.command === "querypallet") {
+            if (request.pallet !== null && request.call !== null && request.parameters !== null) {
+                console.log("query call");
+                let url = 'query.html?pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=';
+                open_hidden_page(url);
+                // Will be called asynchronously 
+                sendAnswerBWQueryPallet(function (msg) {
+                    console.log("sending query data back to web page", msg);
+                    sendResponse(msg);
+                });
+                // to keep open the channel for the answer we returns true
+                return true;
+            }else {
+                console.log("query call failed");
+            }
         }
 
         // manage tx command used to submit extrinsics
@@ -442,6 +503,11 @@ chrome.runtime.onMessage.addListener(
             console.log("txpalletanswer", request.message); //here is to be checked
             BWMessage = request.message;
         }
+        // manage answer to tx pallet command
+        if (request.command === "querypalletanswer") {
+            console.log("querypalletanswer", request.message); //here is to be checked
+            BWMessage = request.message;
+        }
 
         // callback function to send the answer from the extension to the web page. It's quite complicated but it's the only way.
         function sendAnswerBW(callback) {
@@ -517,9 +583,34 @@ chrome.runtime.onMessage.addListener(
                     timeout = 0;
                 }
             }
-
             // call the waiting function 
             waitforTxPallet();
+        }
+        // callback function to send the answer from the extension to the web page for a query. It's quite complicated but it's the only way.
+        function sendAnswerBWQueryPallet(callback) {
+            // wait for answer with a timeout of 60 seconds
+            function waitforQueryPallet() {
+                // exit for timeout of 2 minutes
+                if (timeout >= 120) {
+                    BWMessage = "";
+                    timeout = 0;
+                    return;
+                }
+                if (BWMessage === "") {
+                    setTimeout(waitforQueryPallet, 1000); //wait 1 second and check again
+                    timeout = timeout + 1;
+                    return;
+                } else {
+                    // execute the call back sending the message
+                    console.log("Sending BWMessage from background.js:", BWMessage);
+                    callback(BWMessage);
+                    BWMessage = "";
+                    timeout = 0;
+                }
+            }
+
+            // call the waiting function 
+            waitforQueryPallet();
         }
     }
 );

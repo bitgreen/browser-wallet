@@ -41,7 +41,23 @@
                 parameters: parameters
             }, window.location.href);
         }
-
+        // make a qquery to any pallet on chain
+        querypallet(pallet, call, parameters,callback) {
+            //set to zero the timeout
+            this.BWtimeout=0;   
+            this.BWcallback=callback;
+            // remove session
+            sessionStorage.removeItem("BrowserWalletQuery");
+            window.postMessage({
+                type: "BROWSER-WALLET",
+                command: "querypallet",
+                pallet: pallet,
+                call: call,
+                parameters: parameters
+            }, window.location.href);
+            
+            this.waitforquery();
+        }
         // submit any kind of Extrinsic without transferring funds and getting a call back to a function for the result
         txpallet(pallet, call, parameters,callback) {
         // set to zero the timeout
@@ -93,8 +109,6 @@
                 return;
             }else {
                 // execute the call back function
-                let t=sessionStorage.getItem("BrowserWalletToken");
-                //console.log("Signup complete - Token",t);
                 this.BWtimeout=0;
                 // execute call back
                 if( this.BWcallback && typeof this.BWcallback == "function" )
@@ -102,6 +116,8 @@
                 return;
             }
         }
+        // we use a session variable because of security constraint to read it from the library code.
+        // we would have preferred to pass it back as parameters but not possible.
         // private function to wait for transfer result
         waitfortransfer() {
             // exit for timeout of 60 seconds
@@ -118,8 +134,6 @@
                 return;
             }else {
                 // execute the call back function
-                let t=sessionStorage.getItem("BrowserWalletTransfer");
-                //console.log("Signup complete - Token",t);
                 this.BWtimeout=0;
                 // execute call back
                 if( this.BWcallback && typeof this.BWcallback == "function" )
@@ -143,8 +157,6 @@
                 return;
             }else {
                 // execute the call back function
-                let t=sessionStorage.getItem("BrowserWalletTxPallet");
-                //console.log("Signup complete - Token",t);
                 this.BWtimeout=0;
                 // execute call back
                 if( this.BWcallback && typeof this.BWcallback == "function" )
@@ -152,5 +164,29 @@
                 return;
             }
         }
+        // private function to wait for pallet extrinsic result
+        waitforquery() {
+            // exit for timeout of xx seconds
+            if(this.BWtimeout>=120){
+                this.BWtimeout=0;
+                console.log("Query Call Back - Timeout error");
+                return;            
+            }
+            //check if the session variable has been set
+            if(sessionStorage.getItem("BrowserWalletQuery")===null) {
+                //wait 1 second and check again
+                setTimeout(() => { this.waitforquery();},1000);//wait 1 second and check again
+                 this.BWtimeout=this.BWtimeout+1;
+                return;
+            }else {
+                // execute the call back function
+                this.BWtimeout=0;
+                // execute call back
+                if( this.BWcallback && typeof this.BWcallback == "function" )
+                    this.BWcallback.call();
+                return;
+            }
+        }
+
     }
     // end class BitgreenWallet
