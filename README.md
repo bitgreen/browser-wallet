@@ -30,29 +30,6 @@ The wallet extension is available for the following browsers:
 - Other Browsers based on Chrome Engine
 
 
-## BrowserWallet.js
-A library to facilitate the usage of the extension has been created. Currently it supports the following functions callable from a web page.  
-From a web page you can request to :  
-- Transfer Funds.
-- Sign an authentication (and get a security token).
-
-For example:
-```html
-<!-- include the library before using it -->
-<script type="text/javascript" src="BrowserWallet.js"></script>
-```
-```js
-// create the class object
-let BW= new BrowserWallet();
-// send 1 BBB to a recipient 5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN
-BW.send("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1);
- // authenticate signing a random message and calling back 
- // a function once the authentication token is available 
- // in the sessionvariable "BrowserWalletToken"
-BW.authenticate(callbackauthentication);
-```
-
-For a working page, please check [examples_webpage.html](examples_webpage.html)
 
 ## Authentication Server
 
@@ -180,7 +157,6 @@ or a the hash of the block where the transactions has been written:
 {"inBlock":"0x2cbec7cd195c50c89fbc0a610f26d26b8653ab9aa942c35fec8ac01bea14ac03"}
 ```
 Please consider that in Substrate the transaction hash is not unique and only the block hash is unique.
-
 
 ### Transfer Funds (Extrinsic)  
 You can submit a funds transfer to the blockchain and get back a call back with the answer in json format.
