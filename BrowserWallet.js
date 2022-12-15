@@ -3,7 +3,7 @@
     // function with # are private 
     // vers. 1.0
     //**************************************************************
-    class BitgreenWallet{
+    class BrowserWallet{
         // constructor definition
         BWtimeout;
         BWcallback;
@@ -23,23 +23,7 @@
                 command: "transfer",
                 recipient: recipient,
                 amount: amount }, window.location.href);
-            this.waitfortransfer();
-        }
-        // send BBB old version
-        send(recipient,amount) {
-            // call Extension for the transfer
-            window.postMessage({ type: "BROWSER-WALLET", command: "transfer",recipient: recipient,amount: amount }, window.location.href);
-        }
-        // submit any kind of Extrinsic without transferring funds and no answer (legacy version)
-        tx(pallet, call, parameters) {
-            // call Extension for the extrinsic submission
-            window.postMessage({
-                type: "BROWSER-WALLET",
-                command: "tx",
-                pallet: pallet,
-                call: call,
-                parameters: parameters
-            }, window.location.href);
+            this.waitforanswer("BrowserWalletTransfer");
         }
         // make a qquery to any pallet on chain
         querypallet(pallet, call, parameters,callback) {
@@ -55,8 +39,7 @@
                 call: call,
                 parameters: parameters
             }, window.location.href);
-            
-            this.waitforquery();
+            this.waitforanswer("BrowserWalletQuery");
         }
         // submit any kind of Extrinsic without transferring funds and getting a call back to a function for the result
         txpallet(pallet, call, parameters,callback) {
@@ -73,120 +56,56 @@
                 call: call,
                 parameters: parameters
             }, window.location.href);
-            this.waitfortx();
+            this.waitforanswer("BrowserWalletTxPallet");
         }
         
         // authenticate for login,it generate a random message to be signed because signing a text received from the web page can be used for social engineering attacks
         authenticate(callback) {
             // remove session
-            //sessionStorage.removeItem("bitgreenwallet");
             sessionStorage.removeItem("BrowserWalletToken");
             // set to zero the timeout
             this.BWtimeout=0;   
             this.BWcallback=callback;
             // call the extension to confirm the signature
-            window.postMessage({ type: "BROWSER-WALLET", command: "signin"}, window.location.href);
-            this.waitforsignature();
+            window.postMessage(
+                { type: "BROWSER-WALLET", 
+                  command: "signin"
+                }, window.location.href);
+            this.waitforanswer("BrowserWalletToken");
         }
         // open portfolio
         portfolio() {
-            // call Extension for the transfer
+            // call Extension to open the portfolio
             window.postMessage({ type: "BROWSER-WALLET", command: "portfolio" }, window.location.href);
         }
-        // private function to wait for signature
-        waitforsignature() {
-            // exit for timeout of 60 seconds
-            if(this.BWtimeout>=60){
+        
+        // private function to wait for blockchain answer
+        waitforanswer(varname) {
+            let answer='';
+            // exit for timeout of 120 seconds
+            if(this.BWtimeout>=1200){
                 this.BWtimeout=0;
-                console.log("Timeout in signing");
-                return;            
-            }
-            //check if the session variable has been set, the server side should verify the signature at evevery call.
-            if(sessionStorage.getItem("BrowserWalletToken")===null) {
-                //wait 1 second and check again
-                setTimeout(() => { this.waitforsignature();},1000);//wait 1 second and check again
-                 this.BWtimeout=this.BWtimeout+1;
-                return;
-            }else {
-                // execute the call back function
-                this.BWtimeout=0;
-                // execute call back
-                if( this.BWcallback && typeof this.BWcallback == "function" )
-                    this.BWcallback.call();
-                return;
-            }
-        }
-        // we use a session variable because of security constraint to read it from the library code.
-        // we would have preferred to pass it back as parameters but not possible.
-        // private function to wait for transfer result
-        waitfortransfer() {
-            // exit for timeout of 60 seconds
-            if(this.BWtimeout>=60){
-                this.BWtimeout=0;
-                console.log("Timeout in transaction");
+                console.log("Blockain answer in timeout error");
+                this.BWcallback('{"error":"Timeout error in answer"}');
                 return;            
             }
             //check if the session variable has been set
-            if(sessionStorage.getItem("BrowserWalletTransfer")===null) {
+            if(sessionStorage.getItem(varname)===null) {
                 //wait 1 second and check again
-                setTimeout(() => { this.waitfortransfer();},1000);//wait 1 second and check again
-                 this.BWtimeout=this.BWtimeout+1;
+                setTimeout(() => { this.waitforanswer(varname);},100);//wait 0.100 second and check again
+                this.BWtimeout=this.BWtimeout+1;
                 return;
             }else {
                 // execute the call back function
-                this.BWtimeout=0;
+                this.BWtimeout=0;	
                 // execute call back
-                if( this.BWcallback && typeof this.BWcallback == "function" )
-                    this.BWcallback.call();
-                return;
-            }
-        }
-        // private function to wait for pallet extrinsic result
-        waitfortx() {
-            // exit for timeout of xx seconds
-            if(this.BWtimeout>=120){
-                this.BWtimeout=0;
-                console.log("Timeout in transaction");
-                return;            
-            }
-            //check if the session variable has been set
-            if(sessionStorage.getItem("BrowserWalletTxPallet")===null) {
-                //wait 1 second and check again
-                setTimeout(() => { this.waitfortx();},1000);//wait 1 second and check again
-                 this.BWtimeout=this.BWtimeout+1;
-                return;
-            }else {
-                // execute the call back function
-                this.BWtimeout=0;
-                // execute call back
-                if( this.BWcallback && typeof this.BWcallback == "function" )
-                    this.BWcallback.call();
-                return;
-            }
-        }
-        // private function to wait for pallet extrinsic result
-        waitforquery() {
-            // exit for timeout of xx seconds
-            if(this.BWtimeout>=120){
-                this.BWtimeout=0;
-                console.log("Query Call Back - Timeout error");
-                return;            
-            }
-            //check if the session variable has been set
-            if(sessionStorage.getItem("BrowserWalletQuery")===null) {
-                //wait 1 second and check again
-                setTimeout(() => { this.waitforquery();},1000);//wait 1 second and check again
-                 this.BWtimeout=this.BWtimeout+1;
-                return;
-            }else {
-                // execute the call back function
-                this.BWtimeout=0;
-                // execute call back
-                if( this.BWcallback && typeof this.BWcallback == "function" )
-                    this.BWcallback.call();
+                if( this.BWcallback && typeof this.BWcallback == "function" ){
+                    answer=sessionStorage.getItem(varname);
+                    this.BWcallback(answer);
+                }
                 return;
             }
         }
 
     }
-    // end class BitgreenWallet
+// end class BrowserWallet

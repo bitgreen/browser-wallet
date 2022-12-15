@@ -2648,7 +2648,7 @@ async function approve_extrinsic(pallet, call, parameters) {
                     command: "txpalletanswer",
                     message: JSON.stringify({"error":err.message})
                 }, (response) => {
-                    console.log('Received web page data', response);
+                    console.log('Received web page data',response);
                 });
                 alert("The transaction has generated an error: "+err.message);
                     //window.close();

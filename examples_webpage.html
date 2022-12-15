@@ -15,52 +15,49 @@
   <button id="signinbutton">Sign In</button>
   <button id="newasset">New Asset</button>
   <button id="balance">Query Balance</button>
-  <!-- include the BitgreenWallet library-->
+  <!-- include the BrowserWallet library-->
   <script type="text/javascript" src="BrowserWallet.js"></script>
   <script>
     // remove previous signin session
     sessionStorage.removeItem("BrowserWalletToken");
-    // create class object for BitGreen Wallet
-    let BW= new BitgreenWallet();
+    // create class object for BrowserWallet
+    let BW= new BrowserWallet();
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // send 1 BBB to a recipient
-      BW.transfer("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1,transferCallback);
+      BW.transfer("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1,answerCallback);
     }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
         // authenticate signing a random message
-        BW.authenticate(callbackauthentication);
+        BW.authenticate(answerCallback);
     }, false);
-    let button4 = document.getElementById("portfolio");
-    button4.addEventListener("click", () =>{
-      BW.portfolio();
-    }, false);
-    let button6 = document.getElementById("newasset");
-    button6.addEventListener("click", () =>{
+    let button3 = document.getElementById("newasset");
+    button3.addEventListener("click", () =>{
         // send extrinsic
-        BW.txpallet("assets","create",'[1005,"5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj",1]',txCallback);
+        BW.txpallet("assets","create",'[1005,"5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj",1]',answerCallback);
     },false);
-    let button7 = document.getElementById("balance");
-    button7.addEventListener("click", () =>{
+    let button4 = document.getElementById("balance");
+    button4.addEventListener("click", () =>{
         // send extrinsic
-        BW.querypallet("balances","account",'["5HpZcMvM6bJgoVvC5iBeyctZ3YggsBA9J6T8KAngLomUpotU"]',queryCallback);
+        console.log("Sending Query");
+        BW.querypallet("balances","account",'["5HpZcMvM6bJgoVvC5iBeyctZ3YggsBA9J6T8KAngLomUpotU"]',answerCallback);
     },false);
 
     // function called after the signing
     function callbackauthentication(answer){
         // the token is stored in the session variable.
-        console.log("Authentication token: ",sessionStorage.getItem("BrowserWalletToken"));
-        console.log("Authentication token from answer: ",answer);
+        console.log("Authentication token: ",answer);
     }
-    function transferCallback() {
-        console.log("Transfer Result: ",sessionStorage.getItem("BrowserWalletTransfer"));
+    function transferCallback(answer) {
+        console.log("Transfer Result: ",answer);
     }
-     function txCallback() {
-        console.log("Pallet Call Result: ",sessionStorage.getItem("BrowserWalletTxPallet"));
+     function txCallback(answer) {
+        console.log("Pallet Call Result: ",answer);
     }
-    function queryCallback() {
-        console.log("Pallet Query Answer: ",sessionStorage.getItem("BrowserWalletQuery"));
+    // call back function to receive the answer from the wallet
+    function answerCallback(answer) {
+        console.log("Wallet answer: ",answer);
     }
   </script>
   
