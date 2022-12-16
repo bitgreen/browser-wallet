@@ -123,7 +123,7 @@ and receive back an answer like this:
 The authentication token should be submitted to the server side for authentication as from the example in:  
 [authentication-server](authentication-server)  
 
-## Query Blockchain State  
+### Query Blockchain State  
 You can query any pallet of the blochain with the following function:  
 ```javascript
 BW.querypallet("palletname","function_name",parameters_array,callback_function);  
@@ -156,7 +156,7 @@ or a the hash of the block where the transactions has been written:
 ```json
 {"inBlock":"0x2cbec7cd195c50c89fbc0a610f26d26b8653ab9aa942c35fec8ac01bea14ac03"}
 ```
-Please consider that in Substrate the transaction hash is not unique and only the block hash is unique.
+Please consider that in Substrate, the transaction hash is not unique only the block hash is unique and can be used to read back the transaction iterating it.
 
 ### Transfer Funds (Extrinsic)  
 You can submit a funds transfer to the blockchain and get back a call back with the answer in json format.
@@ -179,4 +179,4 @@ or a the hash of the block where the transactions has been written:
 {"inBlock":"0x2cbec7cd195c50c89fbc0a610f26d26b8653ab9aa942c35fec8ac01bea14ac03"}
 ```
 
-Please consider that in Substrate the transaction hash is not unique and only the block hash is unique.
+Please consider that in Substrate, the transaction hash is not unique only the block hash is unique and can be used to read back the transaction iterating it.
