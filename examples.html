@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+    <title>Bitgreen Browser Wallet Examples</title>
+</head>
+<body>
+<h1>Bitgreen Browser Wallet Examples</h1>
+<h4>Wallet Status: <span class="wallet-status"></span></h4>
+<a href="https://bitgreen.org" title="Bitgreen">Bitgreen</a>
+<hr>
+<button id="sign_in">Sign In</button>
+<button id="send">Send 1 BBB</button>
+<button id="create_asset">Create Asset</button>
+<button id="query_balance">Query Balance</button>
+<script>
+    window.addEventListener('load', async() => {
+        const bitgreen_wallet = window.injectedWeb3?.['bitgreen-wallet-js']
+
+        // check if wallet code is injected
+        if(!bitgreen_wallet) {
+            document.querySelector('.wallet-status').innerHTML = 'not installed'
+            document.querySelector('.wallet-status').classList.add('red-text')
+        } else {
+            document.querySelector('.wallet-status').innerHTML = 'installed'
+            document.querySelector('.wallet-status').classList.add('green-text')
+        }
+
+        document.querySelector('#sign_in').addEventListener('click', () => {
+            bitgreen_wallet.signIn().then(({ success, status, message, signature, address }) => {
+                if(success) {
+                    alert(`Successful sign in from address ${address}`)
+                } else if(status) {
+                    alert(`Sign in failed. Status: ${status}`)
+                } else {
+                    alert('Sign in failed. Communication lost.')
+                }
+            })
+        })
+
+        document.querySelector('#send').addEventListener('click', () => {
+            bitgreen_wallet.send(1, '5EUBUgvGccFJrcqxkrifU9GbDvtvzVC6iftXZNPSZwdUJNnn').then(({ success, status, error }) => {
+                if(success) {
+                    alert(`Successfully sent transaction.`)
+                } else if(status) {
+                    alert(`Transaction failed. Status: ${status} - ${error}`)
+                } else {
+                    alert('Transaction failed. Communication lost.')
+                }
+            })
+        })
+
+        document.querySelector('#query_balance').addEventListener('click', () => {
+            bitgreen_wallet.query('balances', 'account', ['5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ']).then((response) => {
+                if(response.free !== undefined) {
+                    alert('Balance for this address is: ' + response.free)
+                }
+            })
+        })
+
+        document.querySelector('#create_asset').addEventListener('click', () => {
+            bitgreen_wallet.extrinsic('assets', 'create', [
+                100000,
+                '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
+                1
+            ]).then(({ success, status, error }) => {
+                if(success) {
+                    alert(`Successfully sent transaction.`)
+                } else if(status) {
+                    alert(`Transaction failed. Status: ${status} - ${error}`)
+                } else {
+                    alert('Transaction failed. Communication lost.')
+                }
+            })
+        })
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        if(params.deposit_habbits) {
+            bitgreen_wallet.send(256, '5EUBUgvGccFJrcqxkrifU9GbDvtvzVC6iftXZNPSZwdUJNnn', false)
+        }
+    })
+</script>
+
+<style>
+    .green-text {
+        color: #2dc72d;
+    }
+
+    .red-text {
+        color: #e11e1e;
+    }
+</style>
+</body>
+</html>
