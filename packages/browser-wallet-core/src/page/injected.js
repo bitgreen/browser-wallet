@@ -1,10 +1,10 @@
-import PostMessageProvider from "./messaging.js";
+// import PostMessageProvider from "./messaging.js";
 
 class Injected {
     provider;
 
     constructor(sendRequest) {
-        this.provider = new PostMessageProvider(sendRequest);
+        // this.provider = new PostMessageProvider(sendRequest);
     }
 }
 

@@ -1,3 +1,7 @@
+import { isFirefox } from "@bitgreen/browser-wallet-utils";
+
+const current_browser = isFirefox() ? browser : chrome
+
 class BaseStore {
     #prefix = '';
 
@@ -8,7 +12,7 @@ class BaseStore {
     get(_key, update) {
         const key = `${this.#prefix}${_key}`;
 
-        chrome.storage.local.get([key], (result) => {
+        current_browser.storage.local.get([key], (result) => {
             lastError('get');
 
             update(result[key]);
@@ -24,7 +28,7 @@ class BaseStore {
     remove(_key, update) {
         const key = `${this.#prefix}${_key}`;
 
-        chrome.storage.local.remove(key, () => {
+        current_browser.storage.local.remove(key, () => {
             lastError('remove');
 
             update && update();
@@ -34,18 +38,28 @@ class BaseStore {
     set(_key, value, update) {
         const key = `${this.#prefix}${_key}`;
 
-        chrome.storage.local.set({ [key]: value }, () => {
+        current_browser.storage.local.set({ [key]: value }, () => {
             lastError('set');
 
             update && update();
         });
     }
 
-    all(update) {
+    async asyncSet(_key, value) {
+        return new Promise((resolve) => {
+            this.set(_key, value, resolve);
+        });
+    }
+
+    all(update, exclude = []) {
         this.allMap((map) => {
-            Object.entries(map).forEach(([key, value]) => {
-                update(key, value);
-            });
+            let items = []
+
+            for(const [key, value] of Object.entries(map)) {
+                if(!exclude.includes(key)) items.push({key, value})
+            }
+
+            update(items)
         });
     }
 
@@ -56,7 +70,7 @@ class BaseStore {
     }
 
     allMap(update) {
-        chrome.storage.local.get(null, (result) => {
+        current_browser.storage.local.get(null, (result) => {
             lastError('all');
 
             const entries = Object.entries(result);
@@ -94,7 +108,7 @@ class BaseStore {
 }
 
 const lastError = (type) => {
-    const error = chrome.runtime.lastError;
+    const error = current_browser.runtime.lastError;
 
     if(error) {
         console.error(`BaseStore.${type}:: runtime.lastError:`, error);
