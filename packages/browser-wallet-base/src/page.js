@@ -1,4 +1,4 @@
-import { enablePage, pageMessageResponseHandler } from "@bitgreen/browser-wallet-core";
+import { enablePage, signIn, send, query, extrinsic, pageMessageResponseHandler } from "@bitgreen/browser-wallet-core";
 
 const version = process.env.PKG_VERSION
 
@@ -8,7 +8,11 @@ async function injectExtension(enable, { name, version }) {
 
     // add our enable function
     window.injectedWeb3[name] = {
-        enable: (origin) => enable(origin),
+        enable: () => enable(),
+        signIn: () => signIn(),
+        send: (amount = 0, recipient = false, kill_popup = true) => send(amount, recipient, kill_popup),
+        extrinsic: (pallet, call, call_parameters, kill_popup = true) => extrinsic(pallet, call, call_parameters, kill_popup),
+        query: (pallet, call, call_parameters) => query(pallet, call, call_parameters),
         version
     }
 }
@@ -22,7 +26,7 @@ function inject() {
     });
 }
 
-window.addEventListener("message", function(event) {
+window.addEventListener("message", (event) => {
     if(event.source !== window || event.data.origin !== 'MESSAGE_ORIGIN_CONTENT') {
         return;
     }

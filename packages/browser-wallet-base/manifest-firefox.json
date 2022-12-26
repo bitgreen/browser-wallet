@@ -28,16 +28,15 @@
       "matches": [
         "<all_urls>"
       ],
+      "run_at": "document_start",
       "js": [
         "content.js"
       ]
     }
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "scripts": ["background.js"],
+    "persistent": true
   },
   "web_accessible_resources": [
     "page.js",
