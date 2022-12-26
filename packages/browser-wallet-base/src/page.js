@@ -8,7 +8,7 @@ async function injectExtension(enable, { name, version }) {
 
     // add our enable function
     window.injectedWeb3[name] = {
-        enable: () => enable(),
+        // enable: () => enable(), // Temp disable
         signIn: () => signIn(),
         send: (amount = 0, recipient = false, kill_popup = true) => send(amount, recipient, kill_popup),
         extrinsic: (pallet, call, call_parameters, kill_popup = true) => extrinsic(pallet, call, call_parameters, kill_popup),
