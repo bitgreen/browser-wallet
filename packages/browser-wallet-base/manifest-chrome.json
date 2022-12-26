@@ -15,7 +15,6 @@
     "128": "assets/icons/128x128.png"
   },
   "permissions": [
-    "alarms",
     "clipboardRead",
     "clipboardWrite",
     "storage",
