@@ -2,7 +2,7 @@
   "name": "@bitgreen/browser-wallet-ui",
   "author": "Bitgreen",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/bitgreen/browser-wallet#readme",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -27,6 +27,8 @@
     "animejs": "^3.2.1",
     "bootstrap": "^5.2.2",
     "dompurify": "^2.4.1",
+    "jdenticon": "^3.2.0",
+    "qrcode": "^1.5.1",
     "sortablejs": "^1.15.0",
     "toastify-js": "^1.12.0"
   }

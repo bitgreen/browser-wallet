@@ -1,0 +1,24 @@
+<div id="loading_content" class="circle select-none" style="top: ${top}; padding-top: ${padding_top};">
+    <svg id="loading_circle" width="130" height="130" viewBox="0 0 42 42">
+        <circle class="hole" cx="21" cy="21" r="15.91549430918954" fill="transparent"></circle>
+        <circle id="gray" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#D5D6DA"
+                stroke-width="1.8" stroke-dasharray="25 75" stroke-dashoffset="25"></circle>
+        <circle id="dark" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#224851"
+                stroke-width="1.8" stroke-dasharray="75 25" stroke-dashoffset="0"></circle>
+    </svg>
+
+    <svg id="checkmark" style="top: ${checkmark_top};" width="46" height="37" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.1626 23.2667L3.26664 14.3707L0.237305 17.3787L12.1626 29.304L37.7626 3.704L34.7546 0.695999L12.1626 23.2667Z" fill="#224851"/>
+    </svg>
+
+    <div id="content">
+        <div class="init">
+            <div class="text">${title}</div>
+            <div class="desc">${desc}</div>
+        </div>
+        <div class="done">
+            <div class="text"></div>
+            <div class="desc"></div>
+        </div>
+    </div>
+</div>

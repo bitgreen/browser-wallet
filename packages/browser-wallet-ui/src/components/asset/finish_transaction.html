@@ -1,0 +1,20 @@
+<div id="success_icon" class="text-center w-100 text-green mt-3"><span class="icon-huge icon-success"></span></div>
+<h1 id="heading_text" class="text-center">Successfully Sent</h1>
+<p id="message_text" class="text-center text-gray mb-5">Your transaction has been sent to the network.</p>
+<div id="transaction_info">
+    <div class="wallet w-100 d-flex align-items-center">
+        <div class="col-1 d-flex justify-content-center"><span class="dot"></span></div>
+        <div class="right col-11">
+            <h3 class="mb-1">From (${account_name})</h3>
+            <span class="address text-gray">${account_address}</span>
+            </div>
+        </div>
+    <div class="wallet w-100 d-flex align-items-center">
+        <div class="col-1 d-flex justify-content-center"><span class="dot dot-green"><span class="dot-line"></span></span></div>
+        <div class="right col-11">
+            <h3 class="mb-1">Recipient</h3>
+            <span class="address text-gray">${recipient_address}</span>
+            </div>
+        </div>
+    </div>
+<p class="text-center mt-5"><button id="another_transaction" type="button" class="btn btn-secondary me-2">New transaction</button><button id="go_to_dashboard" type="button" class="btn btn-primary">Finish</button></p>

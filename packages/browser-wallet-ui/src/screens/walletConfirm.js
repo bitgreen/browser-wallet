@@ -74,7 +74,7 @@ export default async function walletConfirmScreen(params) {
 
     screen.setListeners([
         {
-            element: '#go_back',
+            element: '.heading #go_back',
             listener: () => goBackScreen()
         },
         {
@@ -87,7 +87,7 @@ export default async function walletConfirmScreen(params) {
         },
         {
             element: '#continue_new_key',
-            listener: () => goToScreen('walletPasswordScreen')
+            listener: () => goToScreen('walletPasswordScreen', params)
         }
     ])
 }

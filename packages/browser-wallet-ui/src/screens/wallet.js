@@ -2,6 +2,7 @@ import anime from 'animejs';
 
 import Screen, { goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
+import { WalletStore } from "@bitgreen/browser-wallet-core";
 
 export default async function walletScreen() {
     const screen = new Screen({
@@ -29,10 +30,7 @@ export default async function walletScreen() {
         {
             element: '#new_wallet',
             listener: async() => {
-                const mnemonic = await sendMessage('new_wallet')
-                await goToScreen('walletCreateScreen', {
-                    mnemonic
-                })
+                await goToScreen('walletCreateScreen')
             }
         },
         {

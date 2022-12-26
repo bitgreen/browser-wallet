@@ -1,0 +1,33 @@
+<div id="review_transaction" class="d-flex">
+    <div class="token col-4 align-items-center justify-content-center">
+        <div class="w-100 d-flex align-items-center justify-content-center"><span class="amount">${asset_amount}</span><span class="decimals">.${asset_decimals}</span></div>
+        <div class="title w-100 text-center">BBB</div>
+        </div>
+    <div class="col-4 align-items-center justify-content-center">
+        <div class="w-100 d-flex align-items-center justify-content-center"><span class="dollar">$</span><span class="amount">${usd_amount}</span><span class="decimals">.${usd_decimals}</span></div>
+        <div class="title w-100 text-center">TOTAL VALUE</div>
+        </div>
+    <div class="estimated_fees col-4 align-items-center justify-content-center">
+        <div class="w-100 d-flex align-items-center justify-content-center"><span class="dollar">$</span><span class="amount">${fee_amount}</span><span class="decimals">.${fee_decimals}</span></div>
+        <div class="title w-100 text-center">EST. FEES</div>
+        </div>
+    </div>
+<div id="transaction_info">
+    <div class="wallet w-100 d-flex align-items-center">
+        <div class="col-1 d-flex justify-content-center"><span class="dot dot-green"></span></div>
+        <div class="right col-11">
+            <h3 class="mb-1">From (${account_name})</h3>
+            <span class="address text-gray">${account_address}</span>
+            </div>
+        </div>
+    <div class="wallet w-100 d-flex align-items-center">
+        <div class="col-1 d-flex justify-content-center"><span class="dot"><span class="dot-line"></span></span></div>
+        <div class="right col-11">
+            <h3 class="mb-1">Recipient</h3>
+            <span class="address text-gray">${recipient_address}</span>
+            </div>
+        </div>
+    </div>
+<div class="footer d-flex align-items-sketch flex-row-reverse">
+    <div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_transaction" type="button" class="btn btn-primary">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>
+</div>

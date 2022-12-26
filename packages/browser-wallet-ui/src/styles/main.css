@@ -46,6 +46,11 @@
     }
 }
 
+@keyframes rotation {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 * {
     font-family: "Neue Haas Unica Pro", sans-serif !important;
 }
@@ -96,6 +101,9 @@ p {
     line-height: 18px;
     margin-bottom: 0;
 }
+.text-white {
+    color: #ffffff !important;
+}
 .text-gray {
     color: #667085;
 }
@@ -132,6 +140,9 @@ p {
     padding: 10px 18px;
     box-shadow: none !important;
 }
+.btn * {
+    pointer-events: none !important;
+}
 .btn.btn-hidden {
     pointer-events: none;
 }
@@ -146,7 +157,7 @@ p {
     border-color: #C0FF00;
     color: #061C00;
 }
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+.btn-primary:hover, .btn-primary:active {
     background-color: #A9E208 !important;
     border-color: #A9E208 !important;
     color: #061C00 !important;
@@ -156,17 +167,27 @@ p {
     border-color: #F53400;
     color: #FFFFFF;
 }
-.btn-danger:hover, .btn-danger:active, .btn-danger:focus {
+.btn-danger:hover, .btn-danger:active {
     background-color: #e12e00 !important;
     border-color: #e12e00 !important;
     color: #FFFFFF !important;
+}
+.btn-dark {
+    background-color: #224851;
+    border-color: #224851;
+    color: #ffffff;
+}
+.btn-dark:hover, .btn-dark:active {
+    background-color: #19363d !important;
+    border-color: #19363d !important;
+    color: #ffffff !important;
 }
 .btn-secondary {
     background-color: #061C00;
     border-color: #061C00;
     color: #ffffff;
 }
-.btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus {
+.btn-secondary:hover, .btn-secondary:active {
     background-color: #041100 !important;
     border-color: #041100 !important;
     color: #ffffff !important;
@@ -176,20 +197,24 @@ p {
     border: none !important;
     color: #061C00;
 }
-.btn-text:hover, .btn-text:active, .btn-text:focus {
-    color: #041100 !important;
+.btn-text:hover, .btn-text:active {
+    color: #041100;
 }
 .btn-text.btn-bordered {
     border: 1px solid #D5D6DA !important;
 }
-.btn-text.btn-bordered:hover, .btn-text.btn-bordered:active, .btn-text.btn-bordered:focus {
+.btn-text.btn-bordered:hover, .btn-text.btn-bordered:active {
     border: 1px solid #B1B4BD !important;
 }
 .btn.disabled {
-    background-color: #F8F8F9;
+    background-color: #F8F8F9 !important;
     pointer-events: none;
     opacity: .65;
     border-color: transparent !important;
+    color: #061C00 !important;
+}
+.btn.btn-rounded {
+    border-radius: 4px;
 }
 .btn .icon {
     font-size: 14px;
@@ -218,8 +243,8 @@ p {
 .btn-error {
     color: #F53400;
 }
-.btn-error:hover {
-    color: #d22e03;
+.btn-error:hover, .btn-error:active {
+    color: #d22e03 !important;
 }
 .click {
     cursor: pointer !important;
@@ -326,6 +351,9 @@ label.label {
 }
 .badge {
     font-weight: 500;
+}
+.badge.hidden {
+    display: none !important;
 }
 .badge.badge-rounded {
     height: 18px;
@@ -437,15 +465,18 @@ label.label {
     padding-top: 80px;
     background-color: #FFFFFF;
     transition: all linear 0.2s;
-    opacity: 1;
+    visibility: hidden;
+    opacity: 0;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
 
     z-index: 98;
 }
-#loading_content.loaded {
-    visibility: hidden;
-    opacity: 0;
+#loading_content.active {
+    opacity: 1;
+    visibility: visible;
 }
-#loading_content .icon {
+#loading_content .bbb-icon {
     font-size: 42px;
     animation-name: beat-fade;
     animation-iteration-count: infinite;
@@ -454,7 +485,7 @@ label.label {
 
     fill: #F8F8F9;
 }
-#loading_content .icon path {
+#loading_content .bbb-icon path {
     stroke: #C0FF00;
     stroke-width: 3px;
     stroke-linecap: round;
@@ -465,6 +496,35 @@ label.label {
     animation-iteration-count: infinite;
     animation-duration: 20s;
 }
+#loading_content #content {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 200px;
+}
+#loading_content #content .init {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    transition: all ease-in-out 0.4s;
+}
+#loading_content #content .done {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    transition: all ease-in-out 0.4s;
+
+    opacity: 0;
+}
+#loading_content #content .done.active {
+    opacity: 1;
+}
 #loading_content .text {
     width: 100%;
     text-transform: uppercase;
@@ -474,6 +534,34 @@ label.label {
     text-align: center;
     padding-top: 16px;
 }
+#loading_content.circle .text {
+    color: #224851;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+#loading_content .desc {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 12px 56px;
+    color: #667085;
+}
+#loading_content #loading_circle {
+    animation: rotation 3.333s linear infinite;
+}
+#loading_content #checkmark {
+    position: absolute;
+    top: 148px;
+    left: calc(50% - 22px);
+    opacity: 0;
+
+    transition: all ease-in-out 0.4s;
+}
+#loading_content.done #loading_circle {
+    animation: none;
+}
+#loading_content #checkmark.show {
+    opacity: 1;
+}
 
 #root {
     width: 100%;
@@ -481,6 +569,9 @@ label.label {
     padding: 0;
     overflow: hidden;
     opacity: 0;
+}
+#root.freeze * {
+    pointer-events: none !important;
 }
 #root.init {
     opacity: 1;
@@ -550,6 +641,7 @@ label.label {
     width: 100%;
     height: 140px;
     padding: 60px 16px 16px 16px;
+    user-select: none;
 }
 #heading.custom-header {
     padding: 0;
@@ -656,6 +748,7 @@ label.label {
     padding: 0;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
     font-size: 14px;
+    opacity: 0;
 }
 #bordered_content #top_items button .icon {
     font-size: 12px;
@@ -684,22 +777,27 @@ label.label {
     opacity: 0.8;
     z-index: -1;
     transition: all linear 0.2s;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
 }
 #current_wallet.active:after {
     border-radius: 8px 8px 0 0;
 }
-#current_wallet .identicon,
-#current_wallet .identicon svg {
+#current_wallet .jdenticon,
+#current_wallet .jdenticon svg {
     width: 32px;
     height: 32px;
 }
-#current_wallet .identicon {
+#current_wallet .jdenticon {
     position: relative;
     margin-right: 8px;
     border-radius: 16px;
     background-color: #ffffff;
 }
-#current_wallet .identicon svg {
+#current_wallet .jdenticon svg {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -754,6 +852,11 @@ label.label {
     border-radius: 0 0 4px 4px;
 
     transition: all linear 0.2s;
+
+    -webkit-transform: translateY(-30px);
+    -moz-transform: translateY(-30px);
+    -ms-transform: translateY(-30px);
+    -o-transform: translateY(-30px);
     transform: translateY(-30px);
 
     z-index: -1;
@@ -799,6 +902,9 @@ label.label {
     cursor: pointer;
     transition: all linear 0.3s;
     user-select: none;
+}
+.button-item.click-only * {
+    pointer-events: none !important;
 }
 .button-item:hover {
     box-shadow: 0 3px 4px rgb(17 20 30 / 18%), 0 2px 3px rgb(17 20 30 / 8%);
@@ -871,6 +977,7 @@ label.label {
     min-height: 265px;
 }
 .button-item.transaction-item .status {
+    position: relative;
     text-align: center;
     min-width: 32px;
     height: 32px;
@@ -884,6 +991,18 @@ label.label {
     margin: 0 8px 0 16px;
 
     transition: all ease-in-out 0.1s;
+}
+.button-item.transaction-item .status.success {
+    background-color: #039855;
+    color: #ffffff;
+}
+.button-item.transaction-item .status.success .icon {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
 }
 .button-item.transaction-item .transaction-info {
     width: 90%;
@@ -1035,6 +1154,7 @@ label.label {
     padding: 12px 64px 12px 24px;
     background-color: #224851;
     color: #ffffff;
+    user-select: none;
 }
 #full_page .heading.equal-padding {
     padding: 12px 24px;
@@ -1236,7 +1356,7 @@ label.label {
     border-radius: 4px;
     color: #E9F2D9;
     font-size: 18px;
-    transition: color linear 0.3s;
+    transition: all linear 0.15s;
     cursor: pointer;
 }
 #main_footer .item:hover,
@@ -1244,6 +1364,8 @@ label.label {
 #main_footer .item:active {
     background-color: rgba(192, 255, 0, 0.05);
     color: #C0FF00;
+    transition: color linear 0.3s;
+
 }
 #main_footer .item.active {
     background-color: rgba(192, 255, 0, 0.1);
@@ -1262,6 +1384,7 @@ label.label {
     padding-top: 8px;
     padding-bottom: 16px;
     z-index: 99;
+    user-select: none;
 }
 .footer.double-footer {
     bottom: 62px;
@@ -1306,6 +1429,7 @@ label.label {
     height: 180px;
     color: #ffffff;
     padding: 12px;
+    opacity: 0;
 }
 #portfolio:after {
     position: absolute;
@@ -1325,33 +1449,108 @@ label.label {
 #portfolio .info {
     padding-left: 12px;
 }
+#portfolio .info h1,
+#portfolio .info p {
+    opacity: 0;
+}
 #portfolio .info .icon {
     display: inline-block;
     margin-right: 8px;
 }
+#chart .chart-text {
+    fill: #FFF;
+    -moz-transform: translateY(0.25em);
+    -ms-transform: translateY(0.25em);
+    -webkit-transform: translateY(0.25em);
+    transform: translateY(0.25em);
+}
+#chart .chart-amount {
+    font-size: 0.4343em;
+    line-height: 1;
+    text-anchor: middle;
+    -moz-transform: translateY(-0.25em);
+    -ms-transform: translateY(-0.25em);
+    -webkit-transform: translateY(-0.25em);
+    transform: translateY(-0.25em);
+}
+#chart .chart-amount .amount {
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
+
+    padding: 0 1px 4px;
+}
+#chart .chart-amount .decimals {
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
+    font-size: 0.5em;
+
+    letter-spacing: -0.05em;
+}
+#chart .chart-amount .dollar {
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
+    font-size: 0.6em;
+
+    letter-spacing: -0.05em;
+}
+#chart .chart-label {
+    font-size: 0.18em;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-anchor: middle;
+    -moz-transform: translateY(0.7em);
+    -ms-transform: translateY(0.7em);
+    -webkit-transform: translateY(0.7em);
+    transform: translateY(0.7em);
+}
 #app_info {
-    border: 1px solid #224851;
+    border: 1px solid #991900;
     border-radius: 8px;
     height: 90px;
     margin-bottom: 8px;
 }
+#app_info.known {
+    border: 1px solid #224851;
+}
 #app_info .left {
     width: 80px;
     height: 90px;
-    background-color: #224851;
+    background-color: #991900;
     padding: 16px 4px 16px 4px;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
+    user-select: none;
+}
+#app_info.known .left {
+    background-color: #224851;
 }
 #app_info .icon {
-    display: block;
+    display: none;
     width: 100%;
     text-align: center;
     color: #ffffff;
     font-size: 26px;
     padding: 0 25px;
+    opacity: 0;
+    visibility: hidden;
+}
+#app_info .icon-unknown {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+#app_info.known .icon-known {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+#app_info.known .icon-unknown {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
 }
 #app_info .message {
+    display: none;
     text-transform: uppercase;
     color: #ffffff;
     font-weight: 500;
@@ -1359,13 +1558,37 @@ label.label {
     line-height: 16px;
     text-align: center;
     padding: 6px 6px 10px 6px;
+    opacity: 0;
+    visibility: hidden;
+}
+#app_info .message.unknown {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+#app_info.known .message.known {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+#app_info.known .message.unknown {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
 }
 #app_info .right {
     height: 100%;
-    color: #224851 !important;
+    color: #991900 !important;
     padding: 8px 12px;
 }
+#app_info.known .right {
+    color: #224851 !important;
+}
 #app_info h3 {
+    font-size: 16px;
+    color: #991900 !important;
+}
+#app_info.known h3 {
     font-size: 16px;
     color: #224851 !important;
 }
@@ -1395,7 +1618,7 @@ label.label {
 #choose_quantity #amount {
     text-align: center;
     width: 100%;
-    padding: .375rem .75rem;
+    padding: 12px 6px;
 }
 #choose_quantity #amount::-webkit-outer-spin-button,
 #choose_quantity #amount::-webkit-inner-spin-button {
@@ -1421,6 +1644,8 @@ label.label {
     padding: 16px;
     margin-bottom: 32px;
     color: #061C00;
+
+    user-select: none;
 }
 #review_transaction .token {
     padding-left: 32px;
@@ -1636,6 +1861,7 @@ label.label {
     top: 0;
     left: 8px;
     padding-top: 8px;
+    user-select: none;
 }
 #accounts_modal:after {
     position: fixed;
@@ -1664,7 +1890,7 @@ label.label {
     line-height: 30px;
     text-align: center;
     padding: 0;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     transition: all linear 0.1s;
 }
 #accounts_modal #hide_accounts_modal:hover {

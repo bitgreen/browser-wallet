@@ -13,6 +13,8 @@ export default async function welcomeScreen() {
     })
     await screen.init()
 
+    await screen.set()
+
     anime({
         targets: '#init_screen',
         opacity: 0,
@@ -21,15 +23,13 @@ export default async function welcomeScreen() {
     });
     anime({
         targets: '#init_screen .init-logo',
-        delay: 700,
+        delay: 600,
         easing: 'linear',
         keyframes: [
-            { translateY: -100, scale: 0.32, duration: 800 },
-            { translateX: -290, duration: 500 },
+            { translateY: -100, scale: 0.323232, duration: 800 },
+            { translateX: -290, duration: 600 },
         ]
     });
-
-    await screen.set()
 
     anime({
         targets: '.bitgreen-svg path',
@@ -37,12 +37,13 @@ export default async function welcomeScreen() {
         easing: 'easeInOutSine',
         "fill-opacity": "1",
         "stroke-width": "0",
-        duration: 500,
+        duration: 400,
         // duration: function(el, i) { return 1000 - i * 100 },
         delay: function(el, i) {
-            return i*200 + 1600
+            return i*200 + 300
         },
     });
+
     anime({
         targets: '.separator',
         easing: 'linear',
@@ -51,6 +52,7 @@ export default async function welcomeScreen() {
         translateY: [-20, 0],
         opacity: [0, 1]
     });
+
     anime({
         targets: '.browser-wallet',
         easing: 'linear',
@@ -71,7 +73,7 @@ export default async function welcomeScreen() {
 
     setTimeout(function() {
         document.querySelector("#init_screen").classList.add("inactive")
-    }, 3000)
+    }, 4000)
 
     screen.setListeners([
         {

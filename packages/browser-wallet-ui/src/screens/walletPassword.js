@@ -1,6 +1,7 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
 
 import DOMPurify from 'dompurify';
+import { sendMessage } from "../messaging.js";
 
 export default async function walletPasswordScreen(params) {
     const screen = new Screen({
@@ -18,7 +19,7 @@ export default async function walletPasswordScreen(params) {
 
     screen.setListeners([
         {
-            element: '#go_back',
+            element: '.heading #go_back',
             listener: () => goBackScreen()
         },
         {
@@ -39,6 +40,12 @@ export default async function walletPasswordScreen(params) {
         {
             element: '#set_password',
             listener: async() => {
+                // TODO: set loading screen?
+                await sendMessage('save_wallet', {
+                    mnemonic: params.mnemonic,
+                    password: DOMPurify.sanitize(document.querySelector('#root #password')?.value),
+                    name: DOMPurify.sanitize(document.querySelector('#root #wallet_name')?.value)
+                })
                 await goToScreen('walletFinishScreen', params)
             }
         }
@@ -46,10 +53,18 @@ export default async function walletPasswordScreen(params) {
 }
 
 function checkPassword() {
-    let password = DOMPurify.sanitize(document.querySelector('#password').value);
-    let password_repeat = DOMPurify.sanitize(document.querySelector('#password_repeat').value);
-    let wallet_name = DOMPurify.sanitize(document.querySelector('#wallet_name').value);
+    const password_el = document.querySelector('#root #password')
+    const password_repeat_el = document.querySelector('#root #password_repeat')
+    const wallet_name_el = document.querySelector('#root #wallet_name')
+
+    let password = DOMPurify.sanitize(password_el?.value);
+    let password_repeat = DOMPurify.sanitize(password_repeat_el?.value);
+    let wallet_name = DOMPurify.sanitize(wallet_name_el?.value);
     let success = true;
+
+    if(!password_el) {
+        return false
+    }
 
     if(password.length >= 12) {
         // has 12+ chars

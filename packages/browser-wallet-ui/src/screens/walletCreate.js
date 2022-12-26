@@ -1,8 +1,8 @@
-import Screen, { goBackScreen, goToScreen } from './index.js'
+import Screen, { goBackScreen, goToScreen, updateCurrentParams } from './index.js'
+import { showNotification } from "../notifications.js";
 
 import anime from 'animejs';
-import Toastify from 'toastify-js';
-import 'toastify-js/src/toastify.css'
+import { sendMessage } from "../messaging.js";
 
 export default async function walletCreateScreen(params) {
     const screen = new Screen({
@@ -18,14 +18,19 @@ export default async function walletCreateScreen(params) {
 
     await screen.set('.content', 'wallet/create')
 
-    if(params.mnemonic) {
-        for(const value of params.mnemonic) {
-            const index = params.mnemonic.indexOf(value);
-            await screen.append('#mnemonics', 'wallet/partial/word', {
-                value, index: index+1
-            })
+    let mnemonic = params?.mnemonic
+    if(!mnemonic) {
+        mnemonic = await sendMessage('new_wallet')
+        updateCurrentParams({
+            mnemonic
+        })
+    }
 
-        }
+    for(const value of mnemonic) {
+        const index = mnemonic.indexOf(value);
+        await screen.append('#mnemonics', 'wallet/partial/word', {
+            value, index: index+1
+        })
     }
 
     anime({
@@ -53,7 +58,7 @@ export default async function walletCreateScreen(params) {
 
     screen.setListeners([
         {
-            element: '#go_back',
+            element: '.heading #go_back',
             listener: () => goBackScreen()
         },
         {
@@ -67,11 +72,13 @@ export default async function walletCreateScreen(params) {
         },
         {
             element: '#continue_new_key',
-            listener: () => goToScreen('walletConfirmScreen', params)
+            listener: () => goToScreen('walletConfirmScreen', {
+                mnemonic
+            })
         },
         {
             element: '#copy_seed',
-            listener: () => copySeed(params.mnemonic)
+            listener: () => copySeed(mnemonic)
         }
     ])
 }
@@ -89,27 +96,8 @@ function agreeNewKey() {
     }
 }
 
-let notification = false
 async function copySeed(mnemonic_array) {
     await navigator.clipboard.writeText(mnemonic_array.join(' '));
 
-    if(notification) {
-        notification.hideToast()
-    }
-    notification = Toastify({
-        text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="icon icon-alert"></span></div><div class="col-10">Secret phrase copied to your clipboard! Keep it safe!</div></div>',
-        offset: {
-            y: 40
-        },
-        duration: 3000,
-        className: 'notification notification-info',
-        close: false,
-        stopOnFocus: false,
-        gravity: "top", // `top` or `bottom`
-        position: "left", // `left`, `center` or `right`
-        escapeMarkup: false,
-        onClick: function(){
-            notification.hideToast()
-        }
-    }).showToast();
+    await showNotification('Secret phrase copied to your clipboard! Keep it safe!', 'info')
 }

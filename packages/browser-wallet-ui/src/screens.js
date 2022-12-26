@@ -27,7 +27,13 @@ const interpolate = (template_data, params) => {
 
     for(let param of param_values) {
         let name = param[0]?.toString()
-        let value = param[1]?.toString()
+        let value = param[1]
+
+        if(value === undefined || value === null) {
+            value = ''
+        } else {
+            value = value.toString()
+        }
 
         output_data = output_data.replaceAll('${'+name+'}', value)
     }
@@ -60,6 +66,11 @@ const updateElement = async(element, template_name = false, params = {}, append 
     return true
 }
 
+const resetElement = async(element) => {
+    return updateElement(element, '', false, false)
+}
+
 export {
-    updateElement
+    updateElement,
+    resetElement
 }

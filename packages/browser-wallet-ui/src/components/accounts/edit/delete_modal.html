@@ -1,0 +1,16 @@
+<div id="delete_modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>
+            <div class="modal-body">
+                <h4 class="text-center">${account_name}</h4>
+                <p class="text-center text-gray text-small mb-4">${account_address}</p>
+                <p class="text-center text-gray text-small">This action cannot be undone. Ensure you have the secret phrase for this wallet backed up securely.</p>
+                </div>
+            <div class="modal-footer justify-content-center">
+                <button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-danger d-flex align-items-center" data-id="${account_id}"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>
+                <button id="hide_modal" type="button" class="btn btn-sm btn-text btn-bordered">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

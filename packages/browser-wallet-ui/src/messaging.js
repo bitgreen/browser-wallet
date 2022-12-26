@@ -3,10 +3,20 @@ import { generateMessageId, isFirefox } from "@bitgreen/browser-wallet-utils";
 const current_browser = isFirefox() ? browser : chrome
 const port = current_browser.runtime.connect({ name: 'PORT_EXTENSION' });
 const handlers = {};
+let kill_popup = true
 
 // setup a listener for messages, any incoming resolves the promise
 port.onMessage.addListener((data) => {
     const handler = handlers[data.id];
+
+    // receives this signal from background page, triggered when origin tab was changed/closed
+    if(data.command === 'kill_popup') {
+        if(port) port.disconnect()
+
+        if(kill_popup) window.close()
+
+        return;
+    }
 
     if(!handler) {
         console.error(`Unknown response: ${JSON.stringify(data)}`);
@@ -25,26 +35,38 @@ port.onMessage.addListener((data) => {
     }
 });
 
-port.onDisconnect.addListener(obj => {
-    console.log('disconnected port');
-})
+// port.onDisconnect.addListener((obj) => {
+//     console.log('disconnected port');
+// })
 
-const sendMessage = (command, data = {}) => {
+const sendMessage = (command, params = {}, message_id = null) => {
     return new Promise((resolve, reject) => {
-        const id = generateMessageId()
+        if(!message_id) {
+            message_id = generateMessageId()
+        }
 
-        handlers[id] = { reject, resolve };
+        handlers[message_id] = { reject, resolve };
 
-        if(port.name) {
-            port.postMessage({
-                id: id,
-                type: "BITGREEN-BROWSER-WALLET",
-                command: command,
-            });
+        try {
+            if(port.name) {
+                port.postMessage({
+                    id: message_id,
+                    type: "BITGREEN-BROWSER-WALLET",
+                    command: command,
+                    params: params
+                });
+            }
+        } catch(e) {
+            resolve({})
         }
     })
 }
 
+const disableKillPopup = async() => {
+    kill_popup = false
+}
+
 export {
-    sendMessage
+    sendMessage,
+    disableKillPopup
 }

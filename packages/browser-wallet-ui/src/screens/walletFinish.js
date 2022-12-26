@@ -1,18 +1,12 @@
-import Screen, { goToScreen, clearHistory } from './index.js'
+import Screen, { goToScreen, clearHistory, updateAccounts } from './index.js'
 
 import anime from 'animejs';
-import { updateElement } from "../screens.js";
 
 export default async function walletFinishScreen(params) {
     const screen = new Screen({
         template_name: 'layouts/full_page_content',
-        template_params: {
-            title: 'Create Wallet',
-            imported: params?.imported
-        },
         login: false,
         header: false
-        // smooth_load: true
     })
     await screen.init()
 
@@ -29,8 +23,8 @@ export default async function walletFinishScreen(params) {
         })
     }
 
-    clearHistory()
-    // TODO: set account and refresh balances?
+    await clearHistory()
+    await updateAccounts()
 
     anime({
         targets: '#success_icon',

@@ -5,7 +5,6 @@ import { mnemonicValidate } from "@polkadot/util-crypto";
 import anime from 'animejs';
 import Sortable from 'sortablejs';
 import DOMPurify from 'dompurify';
-import { updateElement } from "../screens.js";
 
 let import_mnemonic_array = [];
 let import_mnemonic_sortable = [];
@@ -66,7 +65,7 @@ export default async function walletImportScreen(params = {}) {
 
     screen.setListeners([
         {
-            element: '#go_back',
+            element: '.heading #go_back',
             listener: () => goBackScreen()
         },
         {

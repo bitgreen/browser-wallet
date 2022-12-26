@@ -22,15 +22,12 @@
 </div>
 <div class="col-8 p-0 d-flex flex-row-reverse align-items-center">
     <span id="go_settings" class="icon-cog text-white click"></span>
-<!--    if(current_account) {-->
-<!--    <div id="current_wallet" class="d-flex align-items-center">-->
-<!--        <div class="identicon">'+jdenticon.toSvg(current_account.address, 30)+'</div>-->
-<!--        <div class="info"><span class="desc d-flex align-items-center">'+((current_account.name && current_account.name.length) > 14 ? current_account.name.substring(0,14)+'...' : current_account.name)+'</span><span><span-->
-<!--                class="icon-wallet-outline me-1"></span>'+current_account.address.substring(0,8)+'...'+current_account.address.substring(current_account.address.length-8)+'</span>-->
-<!--        </div>-->
-<!--        if(total_accounts > 1) {-->
-<!--        <span class="icon icon-down-arrow"></span>-->
-<!--        }-->
-<!--    </div>-->
-<!--    }-->
+    <div id="current_wallet" class="d-flex align-items-center">
+        <div class="jdenticon">${account_jdenticon}</div>
+        <div class="info">
+            <span class="desc d-flex align-items-center name">${account_name}</span>
+            <span><span class="icon-wallet-outline me-1"></span><span class="address">${account_address}</span></span>
+        </div>
+        <span class="icon icon-down-arrow"></span>
+    </div>
 </div>
