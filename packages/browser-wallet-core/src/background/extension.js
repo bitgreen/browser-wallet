@@ -16,15 +16,16 @@ import { humanToBalance } from "@bitgreen/browser-wallet-utils";
 import { passwordTimeout } from "../constants.js";
 
 class Extension {
+    #password
+
     constructor() {
         this.accounts_store = new AccountStore()
         this.networks_store = new NetworkStore()
         this.wallets_store = new WalletStore()
         this.settings_store = new SettingsStore()
 
-        this.password = null
+        this.#password = null
         this.password_timer = null
-
     }
 
     async handle(data, from, port) {
@@ -65,23 +66,23 @@ class Extension {
     }
 
     async savePassword(password) {
-        this.password = password
+        this.#password = password
 
         // remove password after password_time
         clearTimeout(this.password_timer)
         this.password_timer = setTimeout(() => {
-            this.password = null;
+            this.#password = null;
         }, passwordTimeout)
     }
 
     async refreshPassword() {
-        if(!this.password) return false
+        if(!this.#password) return false
 
         // refresh password - extend its time
         clearTimeout(this.password_timer);
-        if(this.password) {
+        if(this.#password) {
             this.password_timer = setTimeout(() => {
-                this.password = null;
+                this.#password = null;
             }, passwordTimeout)
         }
     }
@@ -129,7 +130,7 @@ class Extension {
     }
 
     async lockWallet() {
-        this.password = null
+        this.#password = null
         clearTimeout(this.password_timer)
     }
 
@@ -197,7 +198,7 @@ class Extension {
     }
 
     async checkLogin() {
-        return await this.decryptWallet(this.password)
+        return await this.decryptWallet(this.#password)
     }
 
     async encryptWallet(mnemonic, password) {
@@ -541,7 +542,7 @@ class Extension {
             // remove saved password
             if(key === 'keep_me_signed_in' && value === false) {
                 clearTimeout(this.password_timer);
-                this.password = null
+                this.#password = null
             }
         }
     }

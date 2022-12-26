@@ -1,4 +1,4 @@
-import { backgroundMessageHandler, findTab, idleTime, polkadotApi, reconnectTime } from '@bitgreen/browser-wallet-core'
+import { backgroundMessageHandler, findTab, polkadotApi, idleTime, reconnectTime } from '@bitgreen/browser-wallet-core'
 import { isFirefox } from "@bitgreen/browser-wallet-utils";
 
 let waiting_to_stop = false
