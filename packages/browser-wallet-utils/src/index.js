@@ -1,3 +1,6 @@
+import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
+import { hexToU8a, isHex } from "@polkadot/util";
+
 const getBrowser = () => {
     let userAgent = navigator.userAgent;
     let browserName = '';
@@ -47,6 +50,52 @@ const shuffleArray = (array) => {
     return cloned_array
 }
 
+const randomString = (len) => {
+    let text = "";
+
+    let charset = "abcdefghijklmnopqrstuvwxyz";
+
+    for (let i = 0; i < len; i++)
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+    return text;
+}
+
+const randomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+const balanceToHuman = (balance, decimals = 4) => {
+    return (parseInt(balance) / 1000000000000000000).toFixed(decimals)
+}
+
+const humanToBalance = (amount) => {
+    return BigInt(parseInt((parseFloat(amount)*10000).toString()))*100000000000000n
+}
+
+const getAmountDecimal = (amount, decimals = 4) => {
+    const amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
+
+    return {
+        amount: amount_info[0],
+        decimals: amount_info[1]
+    }
+}
+
+const addressValid = (address) => {
+    try {
+        encodeAddress(
+            isHex(address)
+                ? hexToU8a(address)
+                : decodeAddress(address)
+        );
+
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 export {
     getBrowser,
     isChrome,
@@ -54,5 +103,11 @@ export {
     isSafari,
     sleep,
     generateMessageId,
-    shuffleArray
+    shuffleArray,
+    randomString,
+    randomNumber,
+    balanceToHuman,
+    humanToBalance,
+    getAmountDecimal,
+    addressValid
 }
