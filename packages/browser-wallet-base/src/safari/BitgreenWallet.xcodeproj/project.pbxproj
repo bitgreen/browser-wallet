@@ -37,40 +37,32 @@
 		8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
 		8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
 		8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
-		8E8684A82872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
 		8E8684A92872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
 		8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
 		8E8684AB2872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
 		8E8684AC2872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
 		8E8684AD2872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
 		8E8684AE2872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
-		8E8684AF2872B3510037E6C9 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849A2872B3510037E6C9 /* logo.png */; };
 		8E8684B02872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
 		8E8684B12872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
 		8E8684B22872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
-		8E8684B32872B3510037E6C9 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849E2872B3510037E6C9 /* options.html */; };
 		8E8684B42872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
-		8E8684B52872B3510037E6C9 /* polkadot-6.8.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */; };
 		8E8684B62872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
 		8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
 		8E8684B82872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
 		8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
 		8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
 		8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
-		8E8684BD2872B3510037E6C9 /* iconmoon in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684932872B3510037E6C9 /* iconmoon */; };
 		8E8684BE2872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
 		8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
 		8E8684C02872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
 		8E8684C12872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
 		8E8684C22872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
 		8E8684C32872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
-		8E8684C42872B3510037E6C9 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849A2872B3510037E6C9 /* logo.png */; };
 		8E8684C52872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
 		8E8684C62872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
 		8E8684C72872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
-		8E8684C82872B3510037E6C9 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849E2872B3510037E6C9 /* options.html */; };
 		8E8684C92872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
-		8E8684CA2872B3510037E6C9 /* polkadot-6.8.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */; };
 		8E8684CB2872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
 		8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
 		8E8684CD2872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
@@ -147,20 +139,16 @@
 		8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E8684712872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
-		8E8684932872B3510037E6C9 /* iconmoon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iconmoon; path = ../javascript/iconmoon; sourceTree = "<group>"; };
 		8E8684942872B3510037E6C9 /* window.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = window.html; path = ../javascript/window.html; sourceTree = "<group>"; };
 		8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "jdenticon-3.1.1"; path = "../javascript/jdenticon-3.1.1"; sourceTree = "<group>"; };
 		8E8684962872B3510037E6C9 /* toastify-1.11.2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "toastify-1.11.2"; path = "../javascript/toastify-1.11.2"; sourceTree = "<group>"; };
 		8E8684972872B3510037E6C9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../javascript/background.js; sourceTree = "<group>"; };
 		8E8684982872B3510037E6C9 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = ../javascript/tests; sourceTree = "<group>"; };
 		8E8684992872B3510037E6C9 /* domppurify-2.3.8 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "domppurify-2.3.8"; path = "../javascript/domppurify-2.3.8"; sourceTree = "<group>"; };
-		8E86849A2872B3510037E6C9 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "../../chrome-extension/logo.png"; sourceTree = "<group>"; };
 		8E86849B2872B3510037E6C9 /* wallet.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = wallet.js; path = ../javascript/wallet.js; sourceTree = "<group>"; };
 		8E86849C2872B3510037E6C9 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../javascript/style.css; sourceTree = "<group>"; };
 		8E86849D2872B3510037E6C9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../javascript/manifest.json; sourceTree = "<group>"; };
-		8E86849E2872B3510037E6C9 /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = ../javascript/options.html; sourceTree = "<group>"; };
 		8E86849F2872B3510037E6C9 /* aesjs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = aesjs.js; path = ../javascript/aesjs.js; sourceTree = "<group>"; };
-		8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "polkadot-6.8.1"; path = "../javascript/polkadot-6.8.1"; sourceTree = "<group>"; };
 		8E8684A12872B3510037E6C9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../javascript/assets; sourceTree = "<group>"; };
 		8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bootstrap-5.1.3"; path = "../javascript/bootstrap-5.1.3"; sourceTree = "<group>"; };
 		8E8684A32872B3510037E6C9 /* anime-3.2.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anime-3.2.1"; path = "../javascript/anime-3.2.1"; sourceTree = "<group>"; };
@@ -298,22 +286,18 @@
 		8E8684912872B3510037E6C9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8E8684932872B3510037E6C9 /* iconmoon */,
 				8E8684942872B3510037E6C9 /* window.html */,
 				8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */,
 				8E8684962872B3510037E6C9 /* toastify-1.11.2 */,
 				8E8684972872B3510037E6C9 /* background.js */,
 				8E8684982872B3510037E6C9 /* tests */,
 				8E8684992872B3510037E6C9 /* domppurify-2.3.8 */,
-				8E86849A2872B3510037E6C9 /* logo.png */,
 				8E86849B2872B3510037E6C9 /* wallet.js */,
 				8E77E4412875495C0020A55D /* icon.png */,
 				8E77E44628754AA80020A55D /* icons */,
 				8E86849C2872B3510037E6C9 /* style.css */,
 				8E86849D2872B3510037E6C9 /* manifest.json */,
-				8E86849E2872B3510037E6C9 /* options.html */,
 				8E86849F2872B3510037E6C9 /* aesjs.js */,
-				8E8684A02872B3510037E6C9 /* polkadot-6.8.1 */,
 				8E8684A12872B3510037E6C9 /* assets */,
 				8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */,
 				8E8684A32872B3510037E6C9 /* anime-3.2.1 */,
@@ -482,13 +466,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E8684BD2872B3510037E6C9 /* iconmoon in Resources */,
 				8E8684D02872B3510037E6C9 /* contentscript.js in Resources */,
-				8E8684CA2872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
 				8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
 				8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */,
-				8E8684C82872B3510037E6C9 /* options.html in Resources */,
-				8E8684C42872B3510037E6C9 /* logo.png in Resources */,
 				8E8684BE2872B3510037E6C9 /* window.html in Resources */,
 				8E77E4442875495C0020A55D /* icon.png in Resources */,
 				8E8684C72872B3510037E6C9 /* manifest.json in Resources */,
@@ -511,13 +491,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E8684A82872B3510037E6C9 /* iconmoon in Resources */,
 				8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */,
-				8E8684B52872B3510037E6C9 /* polkadot-6.8.1 in Resources */,
 				8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
 				8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */,
-				8E8684B32872B3510037E6C9 /* options.html in Resources */,
-				8E8684AF2872B3510037E6C9 /* logo.png in Resources */,
 				8E8684A92872B3510037E6C9 /* window.html in Resources */,
 				8E77E4452875495C0020A55D /* icon.png in Resources */,
 				8E8684B22872B3510037E6C9 /* manifest.json in Resources */,

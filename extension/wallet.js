@@ -1,7 +1,4 @@
-//TODO:  change account description, remove account, copy account without hidden field, improve support link
-// TODO set a red light and switch to green when connected
-// evaluate the encryption of account description and account code (better privacy)
-// ask for access password initially to decrypt the data above and keep it open for the session till the browser is open
+// main application body of the wallet
 
 window.api = polkadotApi
 window.util = polkadotUtil;
@@ -39,6 +36,7 @@ let total_accounts = 0;
 let current_extrinsic_id = null;
 
 let skip_intro = false;
+let command="";
 
 if(localStorage.getItem("skip_intro")){
     skip_intro=localStorage.getItem("skip_intro");
@@ -81,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // open connection
     await set_network();
+    command="";
 
     // if at the least one account is available, we show it
     if (current_account) {
@@ -96,7 +95,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         const params = new URLSearchParams(window.location.search)
-        let command = "";
         // evaluate possible actions
         if (params.has("command")) {
             command = params.get('command');
@@ -115,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 hide_login(true);
             }
             // tx command to submit any kind of extrinsic
-            if (command == "tx" && params.has("pallet") && params.has("call") && params.has("parameters") && params.get("domain")) {
+            if (command == "tx"  && params.has("pallet") && params.has("call") && params.has("parameters") && params.get("domain")) {
                 const pallet=DOMPurify.sanitize(params.get("pallet"));
                 const call=DOMPurify.sanitize(params.get("call"));
                 const parameters=DOMPurify.sanitize(params.get("parameters"));
@@ -2600,41 +2598,101 @@ async function extrinsic(pallet, call, parameters, domain, id) {
 async function approve_extrinsic(pallet, call, parameters) {
     const password = DOMPurify.sanitize(document.getElementById("password").value);
     parameters = JSON.parse(parameters);
-
     // try to decrypt and get keypairsv with the keys pair
     let r = await load_account(password);
     if(r === true) {
-        // build the transactions using "spread" operator to pass the correct number of parameters
-        apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
-            // status would still be set, but in the case of error we can shortcut
-            // to just check it (so an error would indicate InBlock or Finalized)
-            if (dispatchError) {
-                if (dispatchError.isModule) {
-                    // for module errors, we have the section indexed, lookup
-                    const decoded = apiv.registry.findMetaError(dispatchError.asModule);
-                    const { docs, name, section } = decoded;
-                    const e=`${section}.${name}: ${docs.join(' ')}`;
-                    console.log("Transaction Error: ",e);
-                    alert("Transaction Error: "+e);
-                } else {
-                    // Other, CannotLookup, BadOrigin, no extra info
-                    console.log(dispatchError.toString());
-                    alert("Transaction Error: "+dispatchError.toString());
+        if(command=="tx"){
+            apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
+                    console.log('Transaction status:', status.type);
+                    if (status.isInBlock) {
+                        // send answer back to the web app.
+                        current_browser.runtime.sendMessage({
+                            type: "BROWSER-WALLET",
+                            command: "txpalletanswer",
+                            message: JSON.stringify(status)
+                        }, (response) => {
+                            console.log('Txpallet - Sent Status', status);
+                            //window.close();
+                        });
+                        console.log('Txpallet - Included at block hash', status.asInBlock.toHex());
+                        console.log('Txpallet -Events:');
+                        events.forEach(({ event: { data, method, section }, phase }) => {
+                        console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+                      });
+                    } else if (status.isFinalized) {
+                        console.log('Txpallet - Finalized block hash', status.asFinalized.toHex());
+                    }
+                    if (dispatchError) {
+                        let err="";
+                        const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                        const { docs, name, section } = decoded;
+                        if (dispatchError.isModule) {
+                            err=`${section}.${name}: ${docs.join(' ')}`;
+                        }
+                        else{
+                            err={"txerror": dispatchError.toString()};
+                        }
+                        // send answer back to the web app.
+                        current_browser.runtime.sendMessage({
+                            type: "BROWSER-WALLET",
+                            command: "txpalletanswer",
+                            message: JSON.stringify({"error":err})
+                        }, (response) => {
+                            console.log('Received web page data', response);
+                        });
+                        
+                    }
+            }).catch(err => {
+                current_browser.runtime.sendMessage({
+                    type: "BROWSER-WALLET",
+                    command: "txpalletanswer",
+                    message: JSON.stringify({"error":err.message})
+                }, (response) => {
+                    console.log('Received web page data',response);
+                });
+                alert("The transaction has generated an error: "+err.message);
+                    //window.close();
+                    dashboard();    
+            });
+            // transaction di not raise errors
+            alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
+            //window.close();
+            await dashboard();    
+        }
+        else{
+            // build the transactions using "spread" operator to pass the correct number of parameters
+            apiv.tx[pallet][call](...parameters).signAndSend(keyspairv, ({ status, events,dispatchError }) => {
+                // status would still be set, but in the case of error we can shortcut
+                // to just check it (so an error would indicate InBlock or Finalized)
+                if (dispatchError) {
+                    if (dispatchError.isModule) {
+                        // for module errors, we have the section indexed, lookup
+                        const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                        const { docs, name, section } = decoded;
+                        const e=`${section}.${name}: ${docs.join(' ')}`;
+                        console.log("Transaction Error: ",e);
+                        alert("Transaction Error: "+e);
+                    } else {
+                        // Other, CannotLookup, BadOrigin, no extra info
+                        console.log(dispatchError.toString());
+                        alert("Transaction Error: "+dispatchError.toString());
+                    }
                 }
-            }
-        });
+            }).catch(err => {
+                alert("The transaction has generated an error: "+err.message);
+                dashboard();    
+            });
+            await current_browser.runtime.sendMessage({
+                type: "BROWSER-WALLET",
+                command: "refresh_extrinsic",
+                id: current_extrinsic_id,
+                status: 'submitted'
+            });
+            current_extrinsic_id = null
 
-        await current_browser.runtime.sendMessage({
-            type: "BROWSER-WALLET",
-            command: "refresh_extrinsic",
-            id: current_extrinsic_id,
-            status: 'submitted'
-        });
-
-        current_extrinsic_id = null
-
-        alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
-        await dashboard();
+            alert("The Transactions has been submitted to the blockchain, please check the result in the transaction history.");
+            await dashboard();
+        }
     } else {
         if(notification) {
             notification.hideToast()
@@ -2993,31 +3051,90 @@ async function transferfunds() {
     let r = await load_account(password);
     if(r === true) {
         const amountb = BigInt(parseInt(parseFloat(amount)*10000))*100000000000000n;
-        apiv.tx.balances.transfer(accountrecipient, amountb)
-            .signAndSend(keyspairv, ({ status, events }) => {
-                if (status.isInBlock || status.isFinalized) {
-                    events
-                    // find/filter for failed events
-                    .filter(({ event }) =>
-                        apiv.events.system.ExtrinsicFailed.is(event)
-                    )
-                    // we know that data for system.ExtrinsicFailed is
-                    .forEach(({ event: { data: [error, info] } }) => {
-                        if (error.isModule) {
-                            // for module errors, we have the section indexed, lookup
-                            const decoded = apiv.registry.findMetaError(error.asModule);
-                            const { docs, method, section } = decoded;
-
-                            notification_message = `Error in transaction: ${section}.${method}: ${docs.join(' ')}`;
-                        } else {
-                            // Other, CannotLookup, BadOrigin, no extra info
-                            notification_message = 'Error in transaction:'+error.toString();
+        let txhash="";
+        if(command=="transfer"){
+            txhash= await apiv.tx.balances.transfer(accountrecipient, amountb)
+            .signAndSend(keyspairv, { nonce: -1 }, ({ events = [], status,dispatchError }) => {
+                    console.log('Transaction status:', status.type);
+                    if (status.isInBlock) {
+                        // send answer back to the web app.
+                        current_browser.runtime.sendMessage({
+                            type: "BROWSER-WALLET",
+                            command: "transferanswer",
+                            message: JSON.stringify(status)
+                        }, (response) => {
+                            console.log('Received web page data', response);
+                            //window.close();
+                        });
+                      console.log('Included at block hash', status.asInBlock.toHex());
+                      console.log('Events:');
+                      events.forEach(({ event: { data, method, section }, phase }) => {
+                        console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+                      });
+                    } else if (status.isFinalized) {
+                        console.log('Finalized block hash', status.asFinalized.toHex());
+                        
+                    }
+                    if (dispatchError) {
+                        let err="";
+                        const decoded = apiv.registry.findMetaError(dispatchError.asModule);
+                        const { docs, name, section } = decoded;
+                        if (dispatchError.isModule) {
+                            err=`${section}.${name}: ${docs.join(' ')}`;
                         }
+                        else{
+                            err={"txerror": dispatchError.toString()};
+                        }
+                        // send answer back to the web app.
+                        current_browser.runtime.sendMessage({
+                            type: "BROWSER-WALLET",
+                            command: "transferanswer",
+                            message: JSON.stringify({"error":err})
+                        }, (response) => {
+                            console.log('Received web page data', response);
+                        });
+                        
+                    }
+                  }).catch(err => {
+                    current_browser.runtime.sendMessage({
+                        type: "BROWSER-WALLET",
+                        command: "transferanswer",
+                        message: JSON.stringify({"error":err.message})
+                    }, (response) => {
+                        console.log('Received web page data', response);
                     });
-                }
-            }
-        );
+                    alert("The transaction has generated an error: "+err.message);
+                        //window.close();
+                        dashboard();    
+                });         
+        }
+        else{
+            apiv.tx.balances.transfer(accountrecipient, amountb)
+                .signAndSend(keyspairv, ({ status, events }) => {
+                    if (status.isInBlock || status.isFinalized) {
+                        events
+                        // find/filter for failed events
+                        .filter(({ event }) =>
+                            apiv.events.system.ExtrinsicFailed.is(event)
+                        )
+                        // we know that data for system.ExtrinsicFailed is
+                        .forEach(({ event: { data: [error, info] } }) => {
+                            if (error.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = apiv.registry.findMetaError(error.asModule);
+                                const { docs, method, section } = decoded;
 
+                                notification_message = `Error in transaction: ${section}.${method}: ${docs.join(' ')}`;
+                            } else {
+                                // Other, CannotLookup, BadOrigin, no extra info
+                                notification_message = 'Error in transaction:'+error.toString();
+                            }
+                        });
+                    }
+                }
+            );
+        }
+        
         // unloads account if password not saved
         await load_account();
 

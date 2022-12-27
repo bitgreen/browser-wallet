@@ -30,12 +30,18 @@
             // send the message to the extension
             current_browser.runtime.sendMessage(j, (response) => {
                 // Got an asynchronous response with the data from the background
-                // set the session variable "BrowserWalletToken" with the answer
+                // set the session variable "xxxxxxxx" with the answer
                 // it used as the only communication way from the extension to the web page
                 if(j.command === 'check') {
                     sessionStorage.setItem("BrowserWalletInstalled", response.status === 'OK');
                 } else if(j.command === 'signin') {
                     sessionStorage.setItem("BrowserWalletToken", response);
+                } else if(j.command === 'transfer') {
+                        sessionStorage.setItem("BrowserWalletTransfer", response);
+                } else if(j.command === 'txpallet') {
+                    sessionStorage.setItem("BrowserWalletTxPallet", response);
+                } else if(j.command === 'querypallet') {
+                    sessionStorage.setItem("BrowserWalletQuery", response);
                 }
             });
         }

@@ -13,55 +13,52 @@
   <hr>
   <button id="transferbutton">Transfer 1 Bitgreen</button>
   <button id="signinbutton">Sign In</button>
-  <button id="kyc">Bond - Submit KYC</button>
-  <button id="portfolio">Porfolio</button>
-  <button id="project">Create Project</button>
-  <!-- include hte BitgreenWallet library-->
+  <button id="newasset">New Asset</button>
+  <button id="balance">Query Balance</button>
+  <!-- include the BrowserWallet library-->
   <script type="text/javascript" src="BrowserWallet.js"></script>
   <script>
     // remove previous signin session
     sessionStorage.removeItem("BrowserWalletToken");
-    // create class object for BitGreen Wallet
-    let BW= new BitgreenWallet();
+    // create class object for BrowserWallet
+    let BW= new BrowserWallet();
     let button = document.getElementById("transferbutton");
     button.addEventListener("click", () =>{
       // send 1 BBB to a recipient
-       BW.send("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1);
+      BW.transfer("5HVfcSujPyT2hisdLDQhHXzCDx2e37UBM3h9fW65qkHx4FbN",1,answerCallback);
     }, false);
     let button2 = document.getElementById("signinbutton");
     button2.addEventListener("click", () =>{
         // authenticate signing a random message
-        BW.authenticate(callbackauthentication);
+        BW.authenticate(answerCallback);
     }, false);
-    let button3 = document.getElementById("kyc");
+    let button3 = document.getElementById("newasset");
     button3.addEventListener("click", () =>{
         // send extrinsic
-        //BW.tx("bonds","createChangeKyc",'{"accountid":"5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","info":"{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"}',false);
-        BW.tx("bonds","createChangeKyc",'["5GebatEBGmXsQoVyQ2mjsodKWs2eUM3Sm8o2LMSU6uFc42FD","{\\"name\\":\\"Smith and Wesson Inc\\",\\"address\\":\\"103, Paris Boulevard\\",\\"city\\":\\"London\\",\\"zip\\":\\"00100\\",\\"state\\":\\"England\\",\\"country\\":\\"Great Britain\\",\\"phone\\":\\"+441232322332\\",\\"website\\":\\"https://www.smith.co.uk\\",\\"ipfsdocs\\":[{\\"description\\":\\"Balance Sheet 2020\\",\\"ipfsaddress\\":\\"42ff96731ce1f53aa014c55662a3964b61422c2c9c3f38c11b2cf3ee45440c7c\\"},{\\"description\\":\\"Revenue Report 2021\\",\\"ipfsaddress\\":\\"b26707691ce34a738fa5dab526e800be831bcc63a199a7d83414f5d6b0a8836c\\"}]}"]',txCallback);
+        BW.txpallet("assets","create",'[1005,"5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj",1]',answerCallback);
     },false);
-    let button4 = document.getElementById("portfolio");
+    let button4 = document.getElementById("balance");
     button4.addEventListener("click", () =>{
-      // send 1 BBB to a recipient
-      BW.portfolio();
-    }, false);
-    let button5 = document.getElementById("project");
-    button5.addEventListener("click", () =>{
         // send extrinsic
-        BW.tx("vcu","create",'["2222",{"name":"Smith and Wesson Inc","description":"Test Description","images":["image 1","image 2"]}]', false);
-    }, false);
+        console.log("Sending Query");
+        BW.querypallet("balances","account",'["5HpZcMvM6bJgoVvC5iBeyctZ3YggsBA9J6T8KAngLomUpotU"]',answerCallback);
+    },false);
+
     // function called after the signing
-    function callbackauthentication(){
-        // the token is stored in the session variable "bitgreen".
-        console.log("Authentication token: ",sessionStorage.getItem("BrowserWalletToken"));
+    function callbackauthentication(answer){
+        // the token is stored in the session variable.
+        console.log("Authentication token: ",answer);
     }
-    function txCallback() {
-
+    function transferCallback(answer) {
+        console.log("Transfer Result: ",answer);
     }
-    window.addEventListener('EXTRINSIC', function(e) {
-      console.log(e.detail)
-
-      // alert(`Extrinsic with ID ${e.detail.id} status: ${e.detail.status}`)
-    });
+     function txCallback(answer) {
+        console.log("Pallet Call Result: ",answer);
+    }
+    // call back function to receive the answer from the wallet
+    function answerCallback(answer) {
+        console.log("Wallet answer: ",answer);
+    }
   </script>
   
 </html>

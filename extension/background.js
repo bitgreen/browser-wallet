@@ -97,6 +97,50 @@ function show_popup(url, popup_height = 600) {
         });
     }
 }
+// function to load and hidden page for executing a query with no user interaction
+function open_hidden_page(url) {
+    if(get_browser() === 'safari') {
+        chrome.windows.create({
+            url: url,
+            type: 'popup',
+            focused: false,
+            width: 1,
+            height: 1
+        });
+    } else {
+        chrome.windows.getCurrent(function (win) {
+            let width = win.width;
+            let height = win.height;
+            let top = win.top;
+            let left = win.left;
+
+            chrome.tabs.create({
+                url: chrome.runtime.getURL(url),
+                active: false
+            }, function (tab) {
+                // get windows properties
+
+                    // adjust position
+                    top = top + 80;
+                    left = left + width - 400 - 100;
+
+                    // After the tab has been created, open a window to inject the tab
+                    chrome.windows.create({
+                        tabId: tab.id,
+                        type: 'popup',
+                        focused: false,
+                        width: 1,
+                        height: 1,
+                        left,
+                        top
+                        // incognito, top, left, ...
+                    });
+
+
+            });
+        });
+    }
+}
 function parse_extrinsics(extrinsics) {
     const current_timestamp = Date.now()
 
@@ -248,16 +292,21 @@ chrome.runtime.onMessage.addListener(
             sendResponse(true)
             return true;
         }
-
-        // manage transfer command
-        if (request.command === "transfer") {
-            if (request.recipient !== null && request.amount !== null) {
-                // create new windows for the transfer funds
-                let url = 'window.html?command=transfer&recipient=' + encodeURI(request.recipient) + '&amount=' + encodeURI(request.amount) + '&domain=' + encodeURI(request.domain);
-                show_popup(url);
-
-                sendResponse(true)
+        // query command
+        if (request.command === "querypallet") {
+            if (request.pallet !== null && request.call !== null && request.parameters !== null) {
+                console.log("query call");
+                let url = 'query.html?pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=';
+                open_hidden_page(url);
+                // Will be called asynchronously 
+                sendAnswerBWQueryPallet(function (msg) {
+                    console.log("sending query data back to web page", msg);
+                    sendResponse(msg);
+                });
+                // to keep open the channel for the answer we returns true
                 return true;
+            }else {
+                console.log("query call failed");
             }
         }
 
@@ -379,7 +428,39 @@ chrome.runtime.onMessage.addListener(
 
             return true;
         }
-
+        // manage the extrinsic call to any pallet
+        if (request.command === "txpallet") {
+            if (request.pallet !== null && request.call !== null && request.parameters !== null) {
+                const current_timestamp = Date.now();
+                const extrinsic_id = current_timestamp;
+                // create new windows for the extrinsic
+                let url = 'window.html?command=tx&recipient=' + encodeURI(request.recipient) + '&pallet=' + encodeURI(request.pallet) + '&call=' + encodeURI(request.call) + '&parameters=' + encodeURI(request.parameters) + '&domain=' + encodeURI(request.domain) + '&id=' + extrinsic_id;
+                show_popup(url, 700);
+                // Will be called asynchronously 
+                sendAnswerBWTxPallet(function (msg) {
+                    console.log("sending transfer data back to web page", msg);
+                    sendResponse(msg);
+                });
+                // to keep open the channel for the answer we returns true
+                return true;
+            }
+        }
+        // manage transfer command
+        if (request.command === "transfer") {
+            if (request.recipient !== null && request.amount !== null) {
+                // create new windows for the transfer funds
+                let url = 'window.html?command=transfer&recipient=' + encodeURI(request.recipient) + '&amount=' + encodeURI(request.amount) + '&domain=' + encodeURI(request.domain);
+                show_popup(url);
+                // Will be called asynchronously from sendAnswerBW()
+                sendAnswerBWTransfer(function (msg) {
+                    console.log("sending transfer data back to web page", msg);
+                    sendResponse(msg);
+                });
+                // to keep open the channel for the answer we returns true
+                return true;
+            }
+        }
+    
         // manage sign-in command
         if (request.command === "signin") {
             //sendResponse({answer: "OK"});
@@ -395,7 +476,6 @@ chrome.runtime.onMessage.addListener(
             // to keep open the channel for the answer we returns true
             return true;
         }
-
         if (request.command === "portfolio") {
             // create new windows for the extrinsic
             let url = 'window.html?command=portfolio';
@@ -413,13 +493,28 @@ chrome.runtime.onMessage.addListener(
             console.log("signinanswer", request.message);
             BWMessage = request.message;
         }
+        // manage answer to transfer command
+         if (request.command === "transferanswer") {
+            console.log("transferanswer", request.message);
+            BWMessage = request.message;
+        }
+        // manage answer to tx pallet command
+        if (request.command === "txpalletanswer") {
+            console.log("txpalletanswer", request.message); //here is to be checked
+            BWMessage = request.message;
+        }
+        // manage answer to tx pallet command
+        if (request.command === "querypalletanswer") {
+            console.log("querypalletanswer", request.message); //here is to be checked
+            BWMessage = request.message;
+        }
 
         // callback function to send the answer from the extension to the web page. It's quite complicated but it's the only way.
         function sendAnswerBW(callback) {
             // wait for signature with a timeout of 60 seconds
             function waitforSignature() {
                 // exit for timeout of 1 minute
-                if (timeout >= 60) {
+                if (timeout >= 120) {
                     BWMessage = "";
                     timeout = 0;
                     return;
@@ -439,6 +534,83 @@ chrome.runtime.onMessage.addListener(
 
             // call the waiting function for the signature
             waitforSignature();
+        }
+        // callback function to send the answer from the extension to the web page. It's quite complicated but it's the only way.
+        function sendAnswerBWTransfer(callback) {
+            // wait for signature with a timeout of 60 seconds
+            function waitforTransfer() {
+                // exit for timeout of 1 minute
+                if (timeout >= 120) {
+                    BWMessage = "";
+                    timeout = 0;
+                    return;
+                }
+                if (BWMessage === "") {
+                    setTimeout(waitforTransfer, 1000); //wait 1 second and check again
+                    timeout = timeout + 1;
+                    return;
+                } else {
+                    // execute the call back sending the message
+                    console.log("Sending BWMessage from background.js:", BWMessage);
+                    callback(BWMessage);
+                    BWMessage = "";
+                    timeout = 0;
+                }
+            }
+
+            // call the waiting function 
+            waitforTransfer();
+        }
+        // callback function to send the answer from the extension to the web page. It's quite complicated but it's the only way.
+        function sendAnswerBWTxPallet(callback) {
+            // wait for signature with a timeout of 60 seconds
+            function waitforTxPallet() {
+                // exit for timeout of 2 minutes
+                if (timeout >= 120) {
+                    BWMessage = "";
+                    timeout = 0;
+                    return;
+                }
+                if (BWMessage === "") {
+                    setTimeout(waitforTxPallet, 1000); //wait 1 second and check again
+                    timeout = timeout + 1;
+                    return;
+                } else {
+                    // execute the call back sending the message
+                    console.log("Sending BWMessage from background.js:", BWMessage);
+                    callback(BWMessage);
+                    BWMessage = "";
+                    timeout = 0;
+                }
+            }
+            // call the waiting function 
+            waitforTxPallet();
+        }
+        // callback function to send the answer from the extension to the web page for a query. It's quite complicated but it's the only way.
+        function sendAnswerBWQueryPallet(callback) {
+            // wait for answer with a timeout of 60 seconds
+            function waitforQueryPallet() {
+                // exit for timeout of 2 minutes
+                if (timeout >= 120) {
+                    BWMessage = "";
+                    timeout = 0;
+                    return;
+                }
+                if (BWMessage === "") {
+                    setTimeout(waitforQueryPallet, 1000); //wait 1 second and check again
+                    timeout = timeout + 1;
+                    return;
+                } else {
+                    // execute the call back sending the message
+                    console.log("Sending BWMessage from background.js:", BWMessage);
+                    callback(BWMessage);
+                    BWMessage = "";
+                    timeout = 0;
+                }
+            }
+
+            // call the waiting function 
+            waitforQueryPallet();
         }
     }
 );
