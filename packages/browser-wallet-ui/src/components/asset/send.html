@@ -1,0 +1,28 @@
+<h4 class="mb-0">From (${from_name})</h4>
+<p class="text-gray" style="font-size: 13px;">${from_address}</p>
+<div id="choose_token" class="d-flex align-items-sketch select-none"><span class="icon icon-b-circle"></span>
+    <div class="col d-flex align-items-center"><span class="name">BBB Token</span></div>
+</div>
+<label class="label text-dark">Amount</label>
+<div id="choose_quantity" class="d-flex mb-3">
+    <div class="col-4">
+        <div class="form-group"><input id="amount" type="number" class="form-control" value="${amount}"></div>
+    </div>
+    <div class="col-8">
+        <div class="w-100 text-gray d-flex flex-row-reverse"><span>${balance} Available</span></div>
+        <input id="range" type="range" min="0" max="${balance}" step="0.0001" value="${amount}"></div>
+</div>
+<label class="label text-dark">Recipient</label>
+<div class="form-group">
+    <div class="input-group"><span class="input-group-text"><span class="icon icon-wallet"
+                                                                  style="font-size: 18px;"></span></span><input
+            id="recipient" type="text" class="form-control" placeholder="Address" value="${recipient}" autocomplete="off" spellcheck="false"><span
+            class="input-group-text p-0"><button id="paste" type="button" class="btn btn-secondary"><span
+            class="icon icon-copy m-0"></span></button></span></div>
+</div>
+<div class="footer double-footer d-flex align-items-sketch flex-row-reverse">
+    <div class="d-flex">
+        <button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span
+                class="icon icon-right-arrow"></span></button>
+    </div>
+</div>

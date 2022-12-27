@@ -1,0 +1,11 @@
+<h2>Save your secret phrase</h2>
+<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>
+<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>
+<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>
+<div id="mnemonics" class="mnemonics d-block mt-2" style="opacity: 0;">
+
+</div>
+<div class="footer d-flex align-items-sketch align-items-center">
+<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key" class="text-small">I have safely stored my secret phrase<br><span class="text-gray fw-light">You must confirm in order to proceed.</span></label></p></div>
+<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>
+</div>

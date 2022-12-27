@@ -1,0 +1,30 @@
+{
+  "name": "@bitgreen/browser-wallet-core",
+  "author": "Bitgreen",
+  "description": "",
+  "version": "1.1.0",
+  "homepage": "https://github.com/bitgreen/browser-wallet#readme",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/bitgreen/browser-wallet/issues"
+  },
+  "repository": {
+    "directory": "packages/browser-wallet-core",
+    "type": "git",
+    "url": "git+https://github.com/bitgreen/browser-wallet.git"
+  },
+  "keywords": [
+    "bitgreen",
+    "browser",
+    "wallet",
+    "crypto"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "./src/index.js",
+  "dependencies": {
+    "@bitgreen/browser-wallet-utils": "^1.0.0",
+    "aes-js": "^3.1.2",
+    "eventemitter3": "^4.0.7"
+  }
+}
