@@ -1,24 +1,25 @@
-# Browser-Wallet
-BitGreen Browser extension with wallet functionalities.
+# Bitgreen Browser Wallet
+Bitgreen Browser extension with wallet functionalities.
 
 The Bitgreen Browser Wallet is a browser extension that allows users to create wallets, send and receive funds, and make disbursements to the Bitgreen ecosystem in order to create, sell, purchase and retire Verified Carbon Credits (VCUs). To incorporate this functionality into your own project, please see the technical description below. If you require any assistance using these features, or this repo, please contact us at [contact], we are happy to assist.
 
-Features:
+### Features:
 - New Account creation with 24 secret words (also defined secret seed).  
 - Stores the secret words in an encrypted structure in the permanent storage of the browser.  
 - 1 layer encryption by AES256-OFB with a first key of 256 bit.
 - 1 layer encryption by AES256-CRT with a different key of 256 bit.
 - 1 layer encryption by AES256-OFB with a different key of 256 bit.
-- Total key lenght is 768 bit derived from the password by thousands of nested hashes of Sha512, Blake2  and Kekkak.  
+- Total key length is 768 bit derived from the password by thousands of nested hashes of Sha512, Blake2  and Kekkak.  
 - Derives the encryption password by random init vector and 900,000 recurring hashing with sha2,kekkak and blake2 algorithms.  
 - Shows current balance from the blockchain.  
-- Transfers Funds by signing the transaction.
+- Transfer Funds by signing the transaction.
 - Shows account address to receive funds.
 - Import of an existing secret seed
 - Creation of additional Accounts
-- Programmatically calls to any pallet with signed transations
+- Programmatically calls to any pallet with signed transactions
 - Stakes/Unstakes funds
 - Authentication by signing a random token
+___
 
 ## Browser Compatibility
 The wallet extension is available for the following browsers:  
@@ -26,88 +27,84 @@ The wallet extension is available for the following browsers:
 - Firefox 
 - Safari (Desktop and Mobile version)
 - Edge (compatible with Chrome Extension)
-- Brave (compatible with Chrome extension)
+- Brave (compatible with Chrome Extension)
 - Other Browsers based on Chrome Engine
+___
 
 ## Project Structure
 - **packages/browser-wallet-base** - Extension base structure.
 - **packages/browser-wallet-core** - Main features mostly used for background tasks, stores, API messaging.
 - **packages/browser-wallet-ui** - The UI components for the extension.
 - **packages/browser-wallet-utils** - Helpers and utilities for both UI and background.
+___
 
+## Developing & Building
 
-## Authentication Server
-
-The server side should authenticate the token verifiyng the address against the signature/message.  
-There is a an authentication server based on nodejs/express to show how to verify the signature:
-[Authentication Server](authentication-server/)  
-
-The server requires Nodejs > 16.x and npm utility installed.  
-
-to install the dependencies launch:  
+First install required dependencies from root for this repo, by running the following command:
 ```bash
 npm install
 ```
-from the same folder where the file BrowserWallet-Authentication-Server.js is located.
-to run the server:
+### Production Build
+You can build all versions of extensions, and output will be located at `/build` directory, where each sub folder represents each browser extension type:
 ```bash
-nodejs BrowserWallet-Authentication-Server.js
+npm build
 ```
-
-The server will answer on port 3001 and does expect a variable "BrowserWalletToken" with POST method.  
-You can test the server with the utility CURL with the server running in your local machine:
+You can also specify which version to build. There is 3 possible versions of this extension: `chrome`, `firefox` and `safari`.
 ```bash
-curl -X POST -H "application/x-www-form-urlencoded" -d BrowserWalletToken='{"message":"1651209684994","signature":"0xfaca8deff055379324d6d172eefb48c9f53a78b6d1612c2e7e43effd3967b4344ffc486a9dc9afa08a1a15f5f46cb2d2317a31aab3ada5be866bb49599d7458d","address":"5EEdVDNbCB6jYKSzxH1puaGrhd2WWk1Xs3uoxrPAqJfkrnVs","publickey":"0x600a35e55307f1afc1379bb9e32bd10f5278554e97c7dfd4d6f43559f0fdd906"}' http://localhost:3001  
+npm build:chrome
 ```
-The message content is the timestamp of the token generation. The server side should consider expired the token after some time from its generation.  
-  
-The token is stored in the permanent browser storage, for increased security the calling script should move it to a session cookie to let it disappear after the browser is closed. An expiring date and time may be set in the cookie.
+___
+### Development
+Also, you can use the `npm run dev:chrome` to start the local development of the extension. Please keep in mind that in this case, you need to specify browser type.
+Webpack will be running with `--watch` flag set to true. Output directory is the same (read above).
+___
 
-## Build Safari
-To build the safari version execute from command line from the project folder:  
-```bash
-./setup-safari.sh
-```
-The command will prepare the project to be built with Xcode.
-Open the project with Xcode and click on "Build".
+## Wallet Docs
+#### Check out set of [examples](examples.html).
+Wallet automatically injects into a webpage when installed within the browser.
+All Supported functions are listed below.
+___
+### Authenticate wallet account by signing a message
+````javascript
+// No params
+signIn()
+````
+Check how to setup your own [authentication server](authentication-server/readme.md).
+___
+### Transfer funds to another address
+````javascript
+// amount: number = amount to send, in human-readable format
+// recipient: substrateAddress = address of a recipient
+// kill_popup: boolean = should popup be closed in case origin tab was closed 
+send(amount = 0, recipient = false, kill_popup = true)
+````
+___
+### Submit a transaction to the blockchain (extrinsic)
+````javascript
+// pallet: string = name of the pallet
+// call: string = function to execute on this pallet
+// call_parameters: array = parameters for this call
+// kill_popup: boolean = should popup be closed in case origin tab was closed
+extrinsic(pallet, call, call_parameters, kill_popup = true)
+````
+___
+### Query any pallet/contract in the blockchain
+````javascript
+// same params as for extrinsic(), without kill_popup
+query(pallet, call, call_parameters)
+````
+___
 
-## Build Chrome/Edge/Brave
-To build the Chrome version (compatible for Edge and Brave browsers), execute from command line from the project folder:  
-```bash
-./setup-chrome.sh
-```
-The command will prepare the project to be built built from the developer console of Chrome.  
-
-
-## Build Firefox
-To build the Firefox version, execute from command line from the project folder:  
-```bash
-./setup-firefox.sh
-```
-The command will prepare the project to be built built from the developer console of Firefox.  
-
-
-## Library BrowserWallet.js
-
-The library is built to be used from a web app and it allows the following functions:
-
-1) Authenticate  
-2) Query any pallet/contract in the blockchain  
-3) Transfer Funds   
-3) Submit a transaction to the blockchain (extrinsic)  
-There is a set of examples in: [example_webpage.html](example_webpage.html)  
-
-You should embed the library in your web page with:  
-```html
-<script type="text/javascript" src="BrowserWallet.js"></script>
-```
-You should create an instance of the class with:  
+### Check if the wallet is installed
+After window object load, you can check if the wallet injection code is there.
+That way we can know if the user has the extension installed or not.
 ```javascript
-let BW= new BrowserWallet();
+window.addEventListener('load', async() => {
+    // undefined if wallet extension is not installed
+    const bitgreen_wallet = window.injectedWeb3?.['bitgreen-wallet-js']
+});
 ```
-
-and then you can call the following functions:
-
+___
 
 ### Authenticate  
 You can authenticate a wallet calling the following function:  
