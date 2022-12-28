@@ -70,6 +70,22 @@ ___
 signIn()
 ````
 Check how to setup your own [authentication server](authentication-server/readme.md).
+
+*Example successful response:*
+````
+success: true,
+data: {
+  message: '1672235549170#https://bitgreen.org',
+  signature: '0x0261c1a49ce818269acedc695b1fa71366aaa99d2e1615a0201aa532a7bc7a2d3af75df98bb3daf8973f9c8999c9dce4fb826e0974ef777e6743fdb721a53085',
+  address: '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ'
+}
+````
+*Example unsuccessful response:*
+````
+success: false,
+status: 'closed' // possible values: failed || denied || closed,
+error: 'Communication to the popup has been lost.'
+````
 ___
 ### Transfer funds to another address
 ````javascript
@@ -77,6 +93,19 @@ ___
 // recipient: substrateAddress = address of a recipient
 // kill_popup: boolean = should popup be closed in case origin tab was closed 
 send(amount = 0, recipient = false, kill_popup = true)
+````
+*Example successful response:*
+````
+success: true,
+data: {
+  block_hash: '0x8b1703831c17a3950764f585197a6f8454fa7cf08f1da4ad4ceea34766ac5d9d' // block hash at which this transaction was recorded
+}
+````
+*Example unsuccessful response:*
+````
+success: false,
+status: 'failed' // possible values: failed || denied || closed,
+error: 'Error message.'
 ````
 ___
 ### Submit a transaction to the blockchain (extrinsic)
@@ -87,11 +116,36 @@ ___
 // kill_popup: boolean = should popup be closed in case origin tab was closed
 extrinsic(pallet, call, call_parameters, kill_popup = true)
 ````
+*Example successful response:*
+````
+success: true,
+data: {
+  block_hash: '0x8b1703831c17a3950764f585197a6f8454fa7cf08f1da4ad4ceea34766ac5d9d' // block hash at which this transaction was recorded
+}
+````
+*Example unsuccessful response:*
+````
+success: false,
+status: 'failed' // possible values: failed || denied || closed,
+error: 'Error message.'
+````
 ___
 ### Query any pallet/contract in the blockchain
 ````javascript
 // same params as for extrinsic(), without kill_popup
 query(pallet, call, call_parameters)
+````
+*Example successful response:*
+````
+success: true,
+data: {
+  ... // data will warry depending on the pallet call
+}
+````
+*Example unsuccessful response:*
+````
+success: false,
+error: 'Error message.'
 ````
 ___
 
