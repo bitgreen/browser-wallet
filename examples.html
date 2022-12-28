@@ -25,33 +25,29 @@
         }
 
         document.querySelector('#sign_in').addEventListener('click', () => {
-            bitgreen_wallet.signIn().then(({ success, status, message, signature, address }) => {
-                if(success) {
-                    alert(`Successful sign in from address ${address}`)
-                } else if(status) {
-                    alert(`Sign in failed. Status: ${status}`)
+            bitgreen_wallet.signIn().then((response) => {
+                if(response.success) {
+                    alert(`Successful sign in from address ${response.data.address}`)
                 } else {
-                    alert('Sign in failed. Communication lost.')
+                    alert(`Sign in failed. Status: ${response.status}. Error: ${response.error}`)
                 }
             })
         })
 
         document.querySelector('#send').addEventListener('click', () => {
-            bitgreen_wallet.send(1, '5EUBUgvGccFJrcqxkrifU9GbDvtvzVC6iftXZNPSZwdUJNnn').then(({ success, status, error }) => {
-                if(success) {
-                    alert(`Successfully sent transaction.`)
-                } else if(status) {
-                    alert(`Transaction failed. Status: ${status} - ${error}`)
+            bitgreen_wallet.send(1, '5EUBUgvGccFJrcqxkrifU9GbDvtvzVC6iftXZNPSZwdUJNnn').then((response) => {
+                if(response.success) {
+                    alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
                 } else {
-                    alert('Transaction failed. Communication lost.')
+                    alert(`Transaction failed. Status: ${response.status}. Error: ${response.error}`)
                 }
             })
         })
 
         document.querySelector('#query_balance').addEventListener('click', () => {
             bitgreen_wallet.query('balances', 'account', ['5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ']).then((response) => {
-                if(response.free !== undefined) {
-                    alert('Balance for this address is: ' + response.free)
+                if(response.data.free !== undefined) {
+                    alert('Balance for this address is: ' + response.data.free)
                 }
             })
         })
@@ -61,13 +57,11 @@
                 100000,
                 '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
                 1
-            ]).then(({ success, status, error }) => {
-                if(success) {
-                    alert(`Successfully sent transaction.`)
-                } else if(status) {
-                    alert(`Transaction failed. Status: ${status} - ${error}`)
+            ]).then((response) => {
+                if(response.success) {
+                    alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
                 } else {
-                    alert('Transaction failed. Communication lost.')
+                    alert(`Transaction failed. Status: ${response.status}. Error: ${response.error}`)
                 }
             })
         })
