@@ -39,7 +39,7 @@ ___
 ___
 
 ## Developing & Building
-
+Install [node.js >18.12](https://nodejs.org)
 First install required dependencies from root for this repo, by running the following command:
 ```bash
 npm install
