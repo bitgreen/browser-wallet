@@ -35,7 +35,7 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
     }
 
     const manifest = require(`./manifest-${browser}.json`)
-    let output_dir = path.join(__dirname, `build/${browser}`)
+    let output_dir = path.join(__dirname, `../../build/${browser}`)
 
     let plugins = [
         new webpack.ProvidePlugin({
@@ -99,7 +99,7 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
 
     if(browser === 'safari') {
         // change output directory
-        output_dir = path.join(__dirname, `build/${browser}/javascript`)
+        output_dir = path.join(__dirname, `../../build/${browser}/javascript`)
 
         // copy necessary files
         plugins.push(new CopyPlugin({
