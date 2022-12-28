@@ -426,7 +426,9 @@ const clearHistory = async() => {
                 tab.postMessage({
                     id: screen.params.message_id,
                     response: {
-                        status: 'expired'
+                        success: false,
+                        status: 'expired',
+                        error: 'Request expired.'
                     }
                 })
             } catch(e) {

@@ -56,7 +56,7 @@ current_browser.runtime.onConnect.addListener((port) => {
             // extract message id from port name
             const message_id = port.name.split('=')[1]
 
-            window.postMessage({ id: message_id, response: false, origin: 'MESSAGE_ORIGIN_CONTENT', resolve: true }, '*');
+            window.postMessage({ id: message_id, response: { success: false, status: 'closed', error: 'Communication to the popup has been lost.' }, origin: 'MESSAGE_ORIGIN_CONTENT', resolve: true }, '*');
         }
     });
 });

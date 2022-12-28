@@ -405,7 +405,7 @@ class Extension {
     }
 
     async signIn(message_id, params) {
-        let response = {}
+        let data = {}
 
         const account = await this.loadAccount(params?.password, params?.account_id)
         if(account) {
@@ -414,7 +414,7 @@ class Extension {
             const message = timestamp.toString() + "#" + params?.domain
             const signature = account.sign(stringToU8a(message))
 
-            response = {
+            data = {
                 message,
                 signature: u8aToHex(signature),
                 address: account.address
@@ -423,7 +423,7 @@ class Extension {
             return false
         }
 
-        return response
+        return data
     }
 
     async transfer(message_id, params) {
@@ -448,16 +448,20 @@ class Extension {
 
                         if(dispatchError.isModule) {
                             response = {
-                                section,
-                                method,
+                                success: false,
                                 status: 'failed',
-                                error: 'Transaction failed: ' + docs.join(' ')
+                                error: docs.join(' '),
+                                data: {
+                                    section,
+                                    method
+                                }
                             }
                         } else {
                             // Other, CannotLookup, BadOrigin, no extra info
                             response = {
+                                success: false,
                                 status: 'failed',
-                                error: 'Error in transaction: ' + dispatchError.toString()
+                                error: dispatchError.toString()
                             }
                         }
 
@@ -467,11 +471,15 @@ class Extension {
                     if(status.isInBlock || status.isFinalized) {
                         // return result as soon as successfully submitted to the chain
                         resolve({
-                            status: 'success'
+                            success: true,
+                            data: {
+                                block_hash: status.asInBlock.toHex()
+                            }
                         })
                     }
                 }).catch(err => {
                     resolve({
+                        success: false,
                         status: 'failed',
                         error: err.message
                     })
@@ -495,6 +503,22 @@ class Extension {
         }
 
         return new Promise(async(resolve) => {
+            if(!polkadot_api.tx[pallet]) {
+                 response = {
+                    success: false,
+                    status: 'failed',
+                    error: 'Pallet not found.'
+                }
+                return resolve(response)
+            }
+            if(!polkadot_api.tx[pallet][call]) {
+                response = {
+                    success: false,
+                    status: 'failed',
+                    error: 'Pallet call not found.'
+                }
+                return resolve(response)
+            }
             await polkadot_api.tx[pallet][call](...call_parameters)
                 .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
                     if(dispatchError) {
@@ -504,16 +528,20 @@ class Extension {
 
                         if(dispatchError.isModule) {
                             response = {
-                                section,
-                                method,
+                                success: false,
                                 status: 'failed',
-                                error: 'Transaction failed: ' + docs.join(' ')
+                                error: docs.join(' '),
+                                data: {
+                                    section,
+                                    method
+                                }
                             }
                         } else {
                             // Other, CannotLookup, BadOrigin, no extra info
                             response = {
+                                success: false,
                                 status: 'failed',
-                                error: 'Error in transaction: ' + dispatchError.toString()
+                                error: dispatchError.toString()
                             }
                         }
 
@@ -523,11 +551,15 @@ class Extension {
                     if(status.isInBlock || status.isFinalized) {
                         // return result as soon as successfully submitted to the chain
                         resolve({
-                            status: 'success'
+                            success: true,
+                            data: {
+                                block_hash: status.asInBlock.toHex()
+                            }
                         })
                     }
                 }).catch(err => {
                     resolve({
+                        success: false,
                         status: 'failed',
                         error: err.message
                     })

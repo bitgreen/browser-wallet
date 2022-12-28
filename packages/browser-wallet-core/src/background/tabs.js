@@ -50,9 +50,15 @@ class Tabs {
         let result
 
         try {
-            result = await polkadot_api.query[pallet][call](...call_parameters)
+            result = {
+                success: true,
+                data: await polkadot_api.query[pallet][call](...call_parameters)
+            }
         } catch(err) {
-            result = JSON.stringify({ "error": err.message });
+            result = {
+                success: false,
+                error: err.message
+            };
         }
 
         await sendMessageToTab(await getCurrentTabId(), params.id, result)

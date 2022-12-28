@@ -70,7 +70,9 @@ export default async function signInScreen(params) {
             element: '#deny_sign_in',
             listener: async() => {
                 screen.sendMessageToTab({
-                    status: 'denied'
+                    success: false,
+                    status: 'denied',
+                    error: 'User has denied this request.'
                 })
 
                 window.close()
@@ -91,18 +93,18 @@ export default async function signInScreen(params) {
     const doSignIn = async() => {
         showProcessing()
 
-        const response = await sendMessage('sign_in', {
+        const data = await sendMessage('sign_in', {
             password: DOMPurify.sanitize(document.querySelector('#root #password')?.value),
             account_id: current_account.id,
             domain: params?.domain,
             tab_id: params?.tab_id
         }, params?.message_id)
 
-        if(response) {
+        if(data) {
             // send message to tab if response is successful
             screen.sendMessageToTab({
                 success: true,
-                ...response
+                data
             })
 
             showProcessingDone()

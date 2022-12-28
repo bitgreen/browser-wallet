@@ -79,7 +79,9 @@ export default async function extrinsicSendScreen(params) {
             element: '#deny_extrinsic',
             listener: async() => {
                 screen.sendMessageToTab({
-                    status: 'denied'
+                    success: false,
+                    status: 'denied',
+                    error: 'User has denied this request.'
                 })
 
                 window.close()
@@ -101,10 +103,9 @@ export default async function extrinsicSendScreen(params) {
             tab_id: params?.tab_id
         }, params?.message_id)
 
-        if(response?.status === 'success') {
+        if(response?.success) {
             // send message to tab if response is successful
             screen.sendMessageToTab({
-                success: true,
                 ...response
             })
 
