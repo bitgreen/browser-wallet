@@ -18,9 +18,7 @@
     "clipboardRead",
     "clipboardWrite",
     "storage",
-    "tabs",
-    "scripting",
-    "system.display"
+    "tabs"
   ],
   "host_permissions": [
     "https://testnet.bitgreen.org:9443/",
