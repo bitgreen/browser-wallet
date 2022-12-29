@@ -20,10 +20,6 @@
     "storage",
     "tabs"
   ],
-  "host_permissions": [
-    "https://testnet.bitgreen.org:9443/",
-    "https://mainnet.bitgreen.org:9443/"
-  ],
   "content_scripts": [
     {
       "matches": [

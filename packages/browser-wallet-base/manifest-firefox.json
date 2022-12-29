@@ -18,9 +18,7 @@
     "clipboardRead",
     "clipboardWrite",
     "storage",
-    "tabs",
-    "https://testnet.bitgreen.org:9443/",
-    "https://mainnet.bitgreen.org:9443/"
+    "tabs"
   ],
   "content_scripts": [
     {
