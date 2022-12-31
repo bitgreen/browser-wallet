@@ -148,7 +148,7 @@ send(amount = 0, recipient = false, kill_popup = true)
 
 *Example unsuccessful response:*
 
-````jsonc
+````json5
 {
   "success": false,
   "status": "failed", // possible values: failed || denied || closed
