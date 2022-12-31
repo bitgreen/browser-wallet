@@ -139,7 +139,7 @@ query(pallet, call, call_parameters)
 ````
 success: true,
 data: {
-  ... // data will warry depending on the pallet call
+  ... // data will vary depending on the pallet call
 }
 ````
 *Example unsuccessful response:*
