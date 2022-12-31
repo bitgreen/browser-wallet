@@ -102,7 +102,7 @@ Check how to setup your own [authentication server](authentication-server/readme
 
 *Example successful response:*
 
-````json
+````json5
 {
   "success": true,
   "data": {
@@ -115,7 +115,7 @@ Check how to setup your own [authentication server](authentication-server/readme
 
 *Example unsuccessful response:*
 
-````json
+````json5
 {
   "success": false,
   "status": "closed", // possible values: failed || denied || closed
@@ -136,7 +136,7 @@ send(amount = 0, recipient = false, kill_popup = true)
 
 *Example successful response:*
 
-````json
+````json5
 {
   "success": true,
   "data": {
@@ -171,7 +171,7 @@ extrinsic(pallet, call, call_parameters, kill_popup = true)
 
 *Example successful response:*
 
-````json
+````json5
 {
   "success": true,
   "data": {
@@ -184,7 +184,7 @@ extrinsic(pallet, call, call_parameters, kill_popup = true)
 
 *Example unsuccessful response:*
 
-````json
+````json5
 {
   "success": false,
   "status": "failed", // possible values: failed || denied || closed
@@ -204,7 +204,7 @@ query(pallet, call, call_parameters)
 
 *Example successful response:*
 
-````json
+````json5
 {
   "success": true,
   "data": {
@@ -215,7 +215,7 @@ query(pallet, call, call_parameters)
 
 *Example unsuccessful response:*
 
-````json
+````json5
 {
   "success": false,
   "error": "Error message."
