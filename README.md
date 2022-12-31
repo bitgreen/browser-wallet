@@ -148,11 +148,11 @@ send(amount = 0, recipient = false, kill_popup = true)
 
 *Example unsuccessful response:*
 
-````json
+````jsonc
 {
   "success": false,
   "status": "failed", // possible values: failed || denied || closed
-  error: "Error message."
+  "error": "Error message."
 }
 
 ````
