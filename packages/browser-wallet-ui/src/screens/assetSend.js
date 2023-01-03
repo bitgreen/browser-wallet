@@ -172,6 +172,11 @@ export default async function assetSendScreen(params) {
     syncAmount()
 
     const pasteRecipient = async() => {
+        const permission = await navigator.permissions.query({ name: 'clipboard-read' })
+        if(permission.state !== 'granted') {
+            return await showNotification('Clipboard permission not granted.', 'info')
+        }
+
         const address = await navigator.clipboard.readText()
 
         if(addressValid(address)) {

@@ -8,7 +8,7 @@ import {
     mnemonicValidate,
     sha512AsU8a
 } from '@polkadot/util-crypto'
-import { AccountStore, NetworkStore, SettingsStore, WalletStore } from "../stores/index.js"
+import { AccountStore, NetworkStore, SettingsStore, WalletStore, TransactionStore } from "../stores/index.js"
 import { Keyring } from "@polkadot/keyring"
 import { polkadotApi } from "../polkadotApi.js";
 import { humanToBalance } from "@bitgreen/browser-wallet-utils";
@@ -23,7 +23,6 @@ class Extension {
         this.networks_store = new NetworkStore()
         this.wallets_store = new WalletStore()
         this.settings_store = new SettingsStore()
-
         this.#password = null
         this.password_timer = null
     }
@@ -48,6 +47,8 @@ class Extension {
                 return await this.changeNetwork(data?.params)
             case 'get_balance':
                 return await this.getBalance()
+            case 'get_transactions':
+                return await this.getTransactions()
             case 'reveal_mnemonic':
                 return await this.revealMnemonic(data?.params)
             case 'check_login':
@@ -187,6 +188,28 @@ class Extension {
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
 
         return balance.free.toString()
+    }
+
+    async initTransactionsStore() {
+        const current_network = await this.networks_store.current()
+        const current_account = await this.accounts_store.current()
+
+        this.transactions_store = new TransactionStore(current_network, current_account)
+    }
+
+    async getTransactions() {
+        await this.initTransactionsStore()
+
+        await this.transactions_store.fetch()
+
+        let transactions = await this.transactions_store.asyncAll()
+
+        // Sort by date by default
+        transactions.sort((a, b) => {
+            return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+        })
+
+        return transactions
     }
 
     async revealMnemonic(params) {
@@ -473,7 +496,7 @@ class Extension {
                         resolve({
                             success: true,
                             data: {
-                                block_hash: status.asInBlock.toHex()
+                                block_hash: status?.asInBlock?.toHex()
                             }
                         })
                     }

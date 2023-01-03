@@ -24,7 +24,8 @@ export default async function assetReceiveScreen() {
 
     await QRCode.toCanvas(document.querySelector("#qrcode"), current_account.address, {
         width: 210,
-        margin: 1,
+        quality: 1,
+        margin: 0,
         colorDark : "#061C00",
         colorLight : "#ffffff",
         errorCorrectionLevel: 'L'

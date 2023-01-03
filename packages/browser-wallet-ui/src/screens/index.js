@@ -27,8 +27,11 @@ import assetTransactionReviewScreen from "./assetTransactionReview.js";
 import assetTransactionFinishScreen from "./assetTransactionFinish.js";
 import networkManageScreen from "./networkManage.js";
 import networkCreateScreen from "./networkCreate.js";
-import { hideNotification } from "../notifications.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
+import transactionHistoryScreen from "./transactionHistory.js";
+import transactionDetailsScreen from "./transactionDetails.js";
+
+import { hideNotification } from "../notifications.js";
 
 const current_browser = isFirefox() ? browser : chrome
 
@@ -348,6 +351,8 @@ const screens = {
     assetReceiveScreen,
     assetTransactionReviewScreen,
     assetTransactionFinishScreen,
+    transactionHistoryScreen,
+    transactionDetailsScreen,
     settingsScreen,
     networkManageScreen,
     networkCreateScreen,

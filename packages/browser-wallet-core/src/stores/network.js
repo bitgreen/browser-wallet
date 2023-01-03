@@ -21,12 +21,14 @@ class NetworkStore extends BaseStore {
         if(current_id === 'mainnet') {
             network = {
                 name: 'Mainnet',
-                url: 'wss://mainnet.bitgreen.org'
+                url: 'wss://mainnet.bitgreen.org',
+                api_endpoint: 'https://api-mainnet.bitgreen.org'
             }
         } else if(current_id === 'testnet') {
             network = {
                 name: 'Testnet',
-                url: 'wss://testnet.bitgreen.org'
+                url: 'wss://testnet.bitgreen.org',
+                api_endpoint: 'https://api-testnet.bitgreen.org'
             }
         } else {
             network = await this.asyncGet(current_id)

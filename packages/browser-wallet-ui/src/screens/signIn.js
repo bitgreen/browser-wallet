@@ -40,7 +40,7 @@ export default async function signInScreen(params) {
     await screen.append('#bordered_content', 'global/loading', {
         title: 'Approving sign in',
         desc: 'Hold tight while we get confirmation of this sign in request.',
-        top: '16px;',
+        top: '16px',
         padding_top: '40px',
         checkmark_top: '88px'
     });

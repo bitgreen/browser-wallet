@@ -66,11 +66,12 @@ const randomNumber = (min, max) => {
 }
 
 const balanceToHuman = (balance, decimals = 4) => {
-    return (parseInt(balance) / 1000000000000000000).toFixed(decimals)
+    const calc_decimals = Math.pow(10, decimals)
+    return (Math.floor(balance / 1000000000000000000 * calc_decimals) / calc_decimals).toFixed(decimals);
 }
 
 const humanToBalance = (amount) => {
-    return BigInt(parseInt((parseFloat(amount)*10000).toString()))*100000000000000n
+    return BigInt(parseInt((parseFloat(amount) * 1000000000000000000).toString()))*1n
 }
 
 const getAmountDecimal = (amount, decimals = 4) => {
