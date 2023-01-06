@@ -68,6 +68,7 @@ export default async function settingsScreen(params) {
         },
         {
             element: '#change_network',
+            type: 'change',
             listener: async() => {
                 const network_id = DOMPurify.sanitize(document.querySelector("#change_network").value);
 
