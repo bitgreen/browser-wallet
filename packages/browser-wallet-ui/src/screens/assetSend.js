@@ -80,10 +80,6 @@ export default async function assetSendScreen(params) {
             listener: () => checkAddress()
         },
         {
-            element: '#root #paste',
-            listener: () => pasteRecipient()
-        },
-        {
             element: '#go_review_transaction',
             listener: async() => {
                 updateCurrentParams({
@@ -170,23 +166,4 @@ export default async function assetSendScreen(params) {
         checkAddress()
     }
     syncAmount()
-
-    const pasteRecipient = async() => {
-        const permission = await navigator.permissions.query({ name: 'clipboard-read' })
-        if(permission.state !== 'granted') {
-            return await showNotification('Clipboard permission not granted.', 'info')
-        }
-
-        const address = await navigator.clipboard.readText()
-
-        if(addressValid(address)) {
-            recipient_el.value = DOMPurify.sanitize(address)
-
-            await showNotification('Recipient\'s address pasted successfully.', 'success')
-        } else {
-            await showNotification('Please enter a valid recipient address.', 'error')
-        }
-
-        checkAddress()
-    }
 }

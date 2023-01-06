@@ -1640,6 +1640,9 @@ label.label {
     box-shadow: 0 4px 8px -2px rgba(17, 20, 30, 0.1), 0 2px 4px -2px rgba(17, 20, 30, 0.06);
     border-radius: 12px;
 }
+#recipient.form-control {
+    padding: 12px 6px;
+}
 #review_transaction {
     padding: 16px;
     margin-bottom: 32px;
