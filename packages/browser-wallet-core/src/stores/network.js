@@ -35,7 +35,7 @@ class NetworkStore extends BaseStore {
         }
 
         if(!network) {
-            current_id = 'testnet'
+            current_id = 'mainnet'
             await this.asyncSet('current', current_id)
         }
 
@@ -54,7 +54,7 @@ class NetworkStore extends BaseStore {
     }
 
     async nextId() {
-        let next_id = null
+        let next_id = 1
         for(const network of await this.asyncAll()) {
             if(parseInt(network?.key) >= next_id) {
                 next_id = parseInt(network?.key) + 1
