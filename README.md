@@ -65,14 +65,14 @@ You can build all versions of extensions, and output will be located at `/build`
 represents each browser extension type:
 
 ```bash
-npm build
+npm run build
 ```
 
 You can also specify which version to build. There is 3 possible versions of this extension: `chrome`, `firefox`
 and `safari`.
 
 ```bash
-npm build:chrome
+npm run build:chrome
 ```
 
 ___
