@@ -85,7 +85,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 1400 : 800
+        delay: params.extend_delay ? 1200 : 600
     });
 
     anime({
@@ -94,7 +94,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 1400 : 800
+        delay: params.extend_delay ? 1200 : 600
     });
 
     anime({
@@ -103,7 +103,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 200,
-        delay: params.extend_delay ? 1600 : 1000
+        delay: params.extend_delay ? 1400 : 800
     });
 
     anime({
@@ -112,7 +112,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 200,
-        delay: params.extend_delay ? 1600 : 1000
+        delay: params.extend_delay ? 1400 : 800
     });
 
     anime({
