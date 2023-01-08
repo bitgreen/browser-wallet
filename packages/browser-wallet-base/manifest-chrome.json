@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "Bitgreen Wallet",
   "description": "Bitgreen Browser Wallet",
+  "homepage_url": "https://bitgreen.org",
   "version": "1.0.0",
   "action": {
     "default_icon": "assets/icons/48x48.png",

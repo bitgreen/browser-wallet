@@ -2,6 +2,7 @@
   "manifest_version": 2,
   "name": "Bitgreen Wallet",
   "description": "Bitgreen Browser Wallet",
+  "homepage_url": "https://bitgreen.org",
   "version": "1.0.0",
   "browser_action": {
     "default_icon": "icon.png",
@@ -39,7 +40,7 @@
   "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
   "browser_specific_settings": {
     "gecko": {
-      "id": "webextension@bitgreen.org"
+      "id": "wallet@bitgreen.org"
     }
   }
 }
