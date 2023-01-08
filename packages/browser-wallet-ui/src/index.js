@@ -117,9 +117,7 @@ class userInterface {
     }
 
     initLogin = async() => {
-        await updateElement('#login_screen', 'login', {
-            checked: await this.db.stores.settings.asyncGet('keep_me_signed_in') ? 'checked' : ''
-        }, false)
+        await updateElement('#login_screen', 'login', {}, false)
 
         document.querySelector("#login_screen #do_login").addEventListener("click", () => this.doLoginEvent())
         document.querySelector("#login_screen #password").addEventListener("keypress", async(e) => {
@@ -132,9 +130,8 @@ class userInterface {
     doLoginEvent = async() => {
         const current_screen = currentScreen()
         const password = DOMPurify.sanitize(document.querySelector("#login_screen #password").value);
-        const keep_me_signed_in = document.querySelector("#login_screen #keep_me_signed_in").checked;
 
-        const result = await doLogin(password, keep_me_signed_in)
+        const result = await doLogin(password)
 
         if(result) {
             hideNotification()

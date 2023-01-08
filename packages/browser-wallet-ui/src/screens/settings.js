@@ -26,10 +26,6 @@ export default async function settingsScreen(params) {
 
     if(current_account) {
         await screen.set('#wallet_settings', 'settings/partial/wallet_settings')
-
-        await screen.set('#keep_me_signed_in_wrapper', 'settings/partial/keep_me_signed_in', {
-            checked: await settings_store.asyncGet('keep_me_signed_in') === true ? 'checked' : false
-        })
     } else {
         await screen.set('#wallet_settings', 'settings/partial/wallet_create')
     }
@@ -108,17 +104,6 @@ export default async function settingsScreen(params) {
         {
             element: '#go_new',
             listener: () => goToScreen('walletCreateScreen')
-        },
-        {
-            element: '#keep_me_signed_in',
-            type: 'change',
-            listener: async() => {
-                const keep_me_signed_in = document.querySelector("#root #keep_me_signed_in").checked
-
-                await sendMessage('change_setting', {
-                    keep_me_signed_in
-                })
-            }
-        },
+        }
     ])
 }

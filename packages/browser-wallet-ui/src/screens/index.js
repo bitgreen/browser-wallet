@@ -305,10 +305,9 @@ const showLogin = async(instant = false, force = false) => {
     }
 }
 
-const doLogin = async(password, keep_me_signed_in) => {
+const doLogin = async(password) => {
     const result = await sendMessage('unlock_wallet', {
-        password,
-        keep_me_signed_in
+        password
     })
 
     if(result) {
