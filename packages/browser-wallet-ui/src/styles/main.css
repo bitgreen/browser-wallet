@@ -67,6 +67,7 @@ body {
 
     background-image: url('../assets/bg.png');
     background-size: cover;
+    background-position: center;
 }
 h1 {
     font-weight: 500;
