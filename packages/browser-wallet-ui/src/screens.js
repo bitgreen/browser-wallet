@@ -41,8 +41,8 @@ const interpolate = (template_data, params) => {
     return output_data
 }
 
-const updateElement = async(element, template_name = false, params = {}, append = true) => {
-    const template_data = template_name ? await renderTemplate(template_name, params) : ''
+const updateElement = async(element, template_name = 'false', params = {}, append = true) => {
+    const template_data = template_name !== '' ? await renderTemplate(template_name, params) : ''
 
     let el = document.querySelector('#root') // default element
     if(element === 'body') {

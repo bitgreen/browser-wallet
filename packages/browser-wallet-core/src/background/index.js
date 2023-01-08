@@ -43,7 +43,7 @@ const showPopup = async(command, params, popup_height = 600) => {
             url: url,
             type: 'popup',
             focused: true,
-            width: 400,
+            width: 430,
             height: popup_height
         });
     } else {
@@ -61,14 +61,14 @@ const showPopup = async(command, params, popup_height = 600) => {
 
                 // adjust position
                 top = top + 80;
-                left = left + width - 400 - 100;
+                left = left + width - 430 - 100;
 
                 // After the tab has been created, open a window to inject the tab
                 current_browser.windows.create({
                     tabId: tab.id,
                     type: 'popup',
                     focused: true,
-                    width: 400,
+                    width: 430,
                     height: popup_height,
                     left,
                     top

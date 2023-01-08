@@ -363,7 +363,7 @@ let screen_history = []
 let active_screen = null
 let transitioning = false
 
-const goToScreen = async(name, params, go_back = false, force = false) => {
+const goToScreen = async(name, params = {}, go_back = false, force = false) => {
     hideNotification()
 
     // pause if still changing screen
@@ -474,7 +474,7 @@ const updateAccounts = async(current_account_id = null) => {
         current_account_el.classList.remove('hidden')
     }
 
-    accounts_modal_el.querySelector('.address').innerHTML = current_account?.address?.substring(0,12)+'...'+current_account?.address?.substring(current_account?.address?.length-8)
+    accounts_modal_el.querySelector('.address').innerHTML = current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account?.address?.length-8)
 
     setTimeout(async() => {
         await resetElement('#accounts_modal #wallet_list')
@@ -489,13 +489,21 @@ const updateAccounts = async(current_account_id = null) => {
                 current_account_el.querySelector('.jdenticon').innerHTML = account_jdenticon
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 current_account_el.querySelector('.address').innerHTML = account?.address?.substring(0,8)+'...'+account?.address?.substring(account?.address.length-8)
+
+                accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
+                accounts_modal_el.querySelector('.address').innerHTML = account?.address?.substring(0,12)+'...'+account?.address?.substring(account?.address.length-8)
+                if(account_id?.toString() === '0') {
+                    accounts_modal_el.querySelector('.badge-primary').classList.remove('hidden')
+                } else {
+                    accounts_modal_el.querySelector('.badge-primary').classList.add('hidden')
+                }
             }
 
             await updateElement('#accounts_modal #wallet_list', 'accounts/modal_item', {
                 account_id,
                 account_jdenticon,
                 account_name: (account.name && account.name.length > 10) ? account.name.substring(0,10)+'...' : account.name,
-                account_address: account?.address?.substring(0,12)+'...'+account?.address?.substring(account?.address.length-8),
+                account_address: account?.address?.substring(0,16)+'...'+account?.address?.substring(account?.address.length-8),
                 is_main: account_id?.toString() === '0' ? '' : 'hidden',
                 is_current: is_current ? '' : 'hidden'
             }, true)

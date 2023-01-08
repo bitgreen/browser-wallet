@@ -66,7 +66,6 @@ export default async function transactionHistoryScreen() {
         {
             element: '#root #transactions .button-item',
             listener: async(e) => {
-                console.log(e)
                 return await goToScreen('transactionDetailsScreen', {
                     hash: e.target.dataset?.hash
                 })
