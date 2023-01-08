@@ -26,17 +26,16 @@ export default async function dashboardScreen(params = {
     await screen.init()
 
     const balance = await sendMessage('get_balance')
-    const balance_human = balanceToHuman(balance, 18)
 
     await screen.set('#heading', 'dashboard/heading', {
-        token_balance: balanceToHuman(balance, 6),
+        token_balance: balanceToHuman(balance, 2),
         token_price: bbbTokenPrice
     })
     await screen.set('#bordered_content', 'dashboard/content')
 
     await screen.set('#chart', 'dashboard/chart')
     initChart({
-        bbb_token_amount: balance_human
+        bbb_token_amount: balanceToHuman(balance, 18)
     })
 
     await clearHistory()
