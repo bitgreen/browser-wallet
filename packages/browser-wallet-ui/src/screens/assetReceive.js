@@ -15,7 +15,7 @@ export default async function assetReceiveScreen() {
     const current_account = await accounts_store.current()
 
     await screen.set('#heading', 'shared/heading', {
-        title: 'Receive or Deposit'
+        title: 'Receive'
     })
 
     await screen.set('#bordered_content', 'asset/receive', {

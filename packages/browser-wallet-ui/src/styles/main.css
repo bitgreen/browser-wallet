@@ -104,6 +104,9 @@ p {
 .text-white {
     color: #ffffff !important;
 }
+.text-light-gray {
+    color: #d5d6da;
+}
 .text-gray {
     color: #667085;
 }
@@ -116,6 +119,9 @@ p {
 .text-small {
     font-size: 13px;
 }
+.text-bigger {
+    font-size: 15px;
+}
 .text-very-small {
     font-size: 11px;
 }
@@ -127,6 +133,9 @@ p {
 }
 .text-grotesk.text-bold {
     font-weight: 500;
+}
+.text-right {
+    text-align: right;
 }
 .select-none {
     user-select: none;
@@ -1428,7 +1437,7 @@ label.label {
     width: 100%;
     height: 180px;
     color: #ffffff;
-    padding: 12px;
+    padding: 12px 22px 12px 12px;
     opacity: 0;
 }
 #portfolio:after {
