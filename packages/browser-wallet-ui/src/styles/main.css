@@ -913,6 +913,31 @@ label.label {
     cursor: pointer;
     transition: all linear 0.3s;
     user-select: none;
+    overflow: hidden;
+}
+.button-item .under-development {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: rgba(248, 248, 249, 0.8);
+    opacity: 0;
+    transition: all linear 0.2s;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    transform: scale(0.5);
+}
+.button-item:hover .under-development {
+    transform: scale(1);
+    top: 0;
+    opacity: 1;
+}
+.button-item .under-development span {
+    position: relative;
+    width: 100%;
 }
 .button-item.click-only * {
     pointer-events: none !important;
