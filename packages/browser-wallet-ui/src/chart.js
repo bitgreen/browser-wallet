@@ -1,4 +1,5 @@
-import { getAmountDecimal, randomNumber } from "@bitgreen/browser-wallet-utils";
+import {getAmountDecimal, randomNumber} from "@bitgreen/browser-wallet-utils";
+import {bbbTokenPrice} from "@bitgreen/browser-wallet-core";
 
 let bbb_token_amount, nature_based_token_amount, impact_bonds_amount, other_amount
 let total_amount = 0
@@ -17,7 +18,7 @@ const initChart = (amounts) => {
     }
 
     // TODO: calc in usd all values
-    bbb_token_amount = amounts.bbb_token_amount * randomNumber(340000, 365000) / 1000000 // TODO get current price
+    bbb_token_amount = amounts.bbb_token_amount * bbbTokenPrice
     nature_based_token_amount = amounts.nature_based_token_amount
     impact_bonds_amount = amounts.impact_bonds_amount
     other_amount = amounts.other_amount
@@ -29,7 +30,7 @@ const initChart = (amounts) => {
     per_3 = impact_bonds_amount / total_amount * 100
     per_4 = other_amount / total_amount * 100
 
-    if(total_amount === 0) {
+    if (total_amount === 0) {
         per_4 = 100
     }
 
@@ -49,7 +50,7 @@ const renderChart = (init_render = false) => {
     const amount_info = getAmountDecimal(total_amount, 2)
 
     amount_el.innerHTML = amount_info.amount
-    decimal_el.innerHTML = '.'+amount_info.decimals
+    decimal_el.innerHTML = '.' + amount_info.decimals
 
     bbb_token_el.style.transition = "stroke-dasharray, stroke-dashoffset";
     bbb_token_el.style.strokeDasharray = "0 100";
@@ -70,23 +71,23 @@ const renderChart = (init_render = false) => {
     text_el.style.transition = "fill-opacity";
     text_el.style.fillOpacity = "0";
 
-    if(!init_render) {
+    if (!init_render) {
         setTimeout(() => {
             bbb_token_el.style.transition = "stroke-dasharray 0.8s ease-in-out, stroke-dashoffset 0.8s ease-in-out";
-            bbb_token_el.style.strokeDasharray = per_1+" "+(100-per_1);
+            bbb_token_el.style.strokeDasharray = per_1 + " " + (100 - per_1);
             bbb_token_el.style.strokeDashoffset = offset;
 
             nature_based_el.style.transition = "stroke-dasharray 0.8s ease-in-out, stroke-dashoffset 0.8s ease-in-out";
-            nature_based_el.style.strokeDasharray = per_2+" "+(100-per_2);
-            nature_based_el.style.strokeDashoffset = 100-per_1+offset;
+            nature_based_el.style.strokeDasharray = per_2 + " " + (100 - per_2);
+            nature_based_el.style.strokeDashoffset = 100 - per_1 + offset;
 
             impact_bonds_el.style.transition = "stroke-dasharray 0.8s ease-in-out, stroke-dashoffset 0.8s ease-in-out";
-            impact_bonds_el.style.strokeDasharray = per_3+" "+(100-per_3);
-            impact_bonds_el.style.strokeDashoffset = 100-(per_1+per_2)+offset;
+            impact_bonds_el.style.strokeDasharray = per_3 + " " + (100 - per_3);
+            impact_bonds_el.style.strokeDashoffset = 100 - (per_1 + per_2) + offset;
 
             other_el.style.transition = "stroke-dasharray 0.8s ease-in-out, stroke-dashoffset 0.8s ease-in-out";
-            other_el.style.strokeDasharray = per_4+" "+(100-per_4);
-            other_el.style.strokeDashoffset = 100-(per_1+per_2+per_3)+offset;
+            other_el.style.strokeDasharray = per_4 + " " + (100 - per_4);
+            other_el.style.strokeDashoffset = 100 - (per_1 + per_2 + per_3) + offset;
 
             text_el.style.transition = "fill-opacity 0.5s ease-in-out 0.3s";
             text_el.style.fillOpacity = "1";

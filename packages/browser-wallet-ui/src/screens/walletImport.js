@@ -79,9 +79,9 @@ export default async function walletImportScreen(params = {}) {
         {
             element: '#keyword',
             type: 'keypress',
-            listener: async(e) => {
+            listener: (e) => {
                 if(e.key === "Enter") {
-                    importWord()
+                    importWord(false)
                 }
             }
         },

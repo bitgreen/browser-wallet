@@ -3,8 +3,16 @@
     <div class="col-6 info">
         <h1 class="text-white">Portfolio</h1>
         <p><span class="icon icon-circle" style="color: #9ECC00"></span> BBB Token</p>
-        <p><span class="icon icon-circle" style="color: #02A238"></span> Nature Based Credits</p>
-        <p><span class="icon icon-circle" style="color: #026AA2"></span> Impact Bonds</p>
+        <div id="bbb_token" class="mt-1 mb-2">
+            <div class="row d-flex">
+                <div class="col-4 price text-small text-light-gray text-bold">Price</div>
+                <div class="col-8 balance text-small text-light-gray text-bold text-right">Balance Available</div>
+            </div>
+            <div class="row d-flex">
+                <div class="col-3 price_amount">$${token_price}</div>
+                <div class="col-9 balance_amount text-right">${token_balance} BBB</div>
+            </div>
+        </div>
         <p><span class="icon icon-circle" style="color: #D5D6DA"></span> Other</p>
     </div>
 </div>

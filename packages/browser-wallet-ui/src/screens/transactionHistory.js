@@ -28,6 +28,8 @@ export default async function transactionHistoryScreen() {
         padding_top: '40px',
     });
 
+    showLoading()
+
     const transactions = await sendMessage('get_transactions')
     for(const transaction of transactions) {
         const asset_info = getAmountDecimal(balanceToHuman(transaction.value.amount), 4)
@@ -64,7 +66,6 @@ export default async function transactionHistoryScreen() {
         {
             element: '#root #transactions .button-item',
             listener: async(e) => {
-                console.log(e)
                 return await goToScreen('transactionDetailsScreen', {
                     hash: e.target.dataset?.hash
                 })
@@ -72,12 +73,11 @@ export default async function transactionHistoryScreen() {
         }
     ])
 
-    const showLoading = () => {
+    function showLoading() {
         const loading_el = document.querySelector("#loading_content")
 
         loading_el.classList.add('active')
 
         screen.freezeRoot()
     }
-    showLoading()
 }

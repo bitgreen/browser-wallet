@@ -1,4 +1,4 @@
-import { WalletStore } from "@bitgreen/browser-wallet-core";
+import {bbbTokenPrice, WalletStore} from "@bitgreen/browser-wallet-core";
 import Screen, { clearHistory, goToScreen } from './index.js'
 
 import anime from 'animejs';
@@ -25,15 +25,17 @@ export default async function dashboardScreen(params = {
     })
     await screen.init()
 
-    await screen.set('#heading', 'dashboard/heading')
-    await screen.set('#bordered_content', 'dashboard/content')
-
     const balance = await sendMessage('get_balance')
-    const balance_human = balanceToHuman(balance, 18)
+
+    await screen.set('#heading', 'dashboard/heading', {
+        token_balance: balanceToHuman(balance, 2),
+        token_price: bbbTokenPrice
+    })
+    await screen.set('#bordered_content', 'dashboard/content')
 
     await screen.set('#chart', 'dashboard/chart')
     initChart({
-        bbb_token_amount: balance_human
+        bbb_token_amount: balanceToHuman(balance, 18)
     })
 
     await clearHistory()
@@ -62,7 +64,7 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*200 + (params.extend_delay ? 1200 : 400)
+            return i*600 + (params.extend_delay ? 1200 : 400)
         },
     });
 
@@ -73,8 +75,44 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*200 + (params.extend_delay ? 1200 : 400)
+            return i*600 + (params.extend_delay ? 1200 : 400)
         },
+    });
+
+    anime({
+        targets: '#portfolio #bbb_token .price',
+        translateX: [20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 400,
+        delay: params.extend_delay ? 1200 : 600
+    });
+
+    anime({
+        targets: '#portfolio #bbb_token .balance',
+        translateX: [-20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 400,
+        delay: params.extend_delay ? 1200 : 600
+    });
+
+    anime({
+        targets: '#portfolio #bbb_token .price_amount',
+        translateX: [-20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 200,
+        delay: params.extend_delay ? 1400 : 800
+    });
+
+    anime({
+        targets: '#portfolio #bbb_token .balance_amount',
+        translateX: [20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 200,
+        delay: params.extend_delay ? 1400 : 800
     });
 
     anime({

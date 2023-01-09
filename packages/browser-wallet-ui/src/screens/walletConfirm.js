@@ -26,10 +26,11 @@ export default async function walletConfirmScreen(params) {
     if(params.mnemonic) {
         mnemonic_array = params.mnemonic
         shuffled_mnemonic_array = shuffleArray(params.mnemonic);
+        let index = 0
         for(const value of shuffled_mnemonic_array) {
-            const index = params.mnemonic.indexOf(value);
+            // const index = params.mnemonic.indexOf(value);
             await screen.append('#shuffled_mnemonics', 'wallet/partial/word-no-index', {
-                value, index: index + 1
+                value, index: index++
             })
         }
     }

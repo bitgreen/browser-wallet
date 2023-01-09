@@ -15,7 +15,7 @@ export default async function assetReceiveScreen() {
     const current_account = await accounts_store.current()
 
     await screen.set('#heading', 'shared/heading', {
-        title: 'Receive or Deposit'
+        title: 'Receive'
     })
 
     await screen.set('#bordered_content', 'asset/receive', {
@@ -36,7 +36,7 @@ export default async function assetReceiveScreen() {
             element: '#copy_qrcode, #copy_address',
             listener: async() => {
                 await copyText(current_account.address)
-                await showNotification('Account copied to clipboard.', 'info')
+                await showNotification('Account address copied to clipboard.', 'info')
             }
         }
     ])

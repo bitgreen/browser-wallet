@@ -4,6 +4,7 @@ import { sendMessage } from "../messaging.js";
 
 import DOMPurify from "dompurify";
 import { showNotification } from "../notifications.js";
+import {isFirefox} from "@bitgreen/browser-wallet-utils";
 
 export default async function settingsScreen(params) {
     const screen = new Screen({
@@ -26,10 +27,6 @@ export default async function settingsScreen(params) {
 
     if(current_account) {
         await screen.set('#wallet_settings', 'settings/partial/wallet_settings')
-
-        await screen.set('#keep_me_signed_in_wrapper', 'settings/partial/keep_me_signed_in', {
-            checked: await settings_store.asyncGet('keep_me_signed_in') === true ? 'checked' : false
-        })
     } else {
         await screen.set('#wallet_settings', 'settings/partial/wallet_create')
     }
@@ -110,15 +107,11 @@ export default async function settingsScreen(params) {
             listener: () => goToScreen('walletCreateScreen')
         },
         {
-            element: '#keep_me_signed_in',
-            type: 'change',
-            listener: async() => {
-                const keep_me_signed_in = document.querySelector("#root #keep_me_signed_in").checked
-
-                await sendMessage('change_setting', {
-                    keep_me_signed_in
-                })
+            element: '#go_support',
+            listener: () => {
+                const current_browser = isFirefox() ? browser : chrome
+                current_browser.tabs.create({ url: 'https://bitgreen.org/contact' })
             }
-        },
+        }
     ])
 }

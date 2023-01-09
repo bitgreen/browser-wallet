@@ -117,15 +117,12 @@ class Extension {
 
     async unlockWallet(params) {
         const password = params?.password
-        const keep_me_signed_in = params?.keep_me_signed_in
 
         const result = await this.decryptWallet(password)
 
         if(!result) return false
 
-        if(keep_me_signed_in) await this.savePassword(password)
-
-        await this.settings_store.asyncSet('keep_me_signed_in', keep_me_signed_in)
+        await this.savePassword(password)
 
         return true
     }
@@ -593,12 +590,6 @@ class Extension {
     async changeSetting(params) {
         for(const [key, value] of Object.entries(params)) {
             await this.settings_store.asyncSet(key, value)
-
-            // remove saved password
-            if(key === 'keep_me_signed_in' && value === false) {
-                clearTimeout(this.password_timer);
-                this.#password = null
-            }
         }
     }
 }

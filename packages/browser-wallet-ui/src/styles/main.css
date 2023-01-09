@@ -57,15 +57,17 @@
 
 body {
     font-family: 'Neue Haas Unica Pro', sans-serif;
-    width: 400px;
+    width: 430px;
     min-height: 600px;
     height: 100%;
     color: #061C00;
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 15px;
+    line-height: 15px;
     overflow: hidden;
 
     background-image: url('../assets/bg.png');
+    background-size: cover;
+    background-position: center;
 }
 h1 {
     font-weight: 500;
@@ -79,22 +81,22 @@ h2 {
 }
 h3 {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 20px;
     color: #061C00;
 }
 h4 {
     font-weight: 500;
-    font-size: 16px;
+    font-size: 18px;
     color: #061C00;
 }
 h5 {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     color: #061C00;
 }
 h6 {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     color: #061C00;
 }
 p {
@@ -103,6 +105,9 @@ p {
 }
 .text-white {
     color: #ffffff !important;
+}
+.text-light-gray {
+    color: #d5d6da;
 }
 .text-gray {
     color: #667085;
@@ -116,6 +121,9 @@ p {
 .text-small {
     font-size: 13px;
 }
+.text-bigger {
+    font-size: 15px;
+}
 .text-very-small {
     font-size: 11px;
 }
@@ -127,6 +135,9 @@ p {
 }
 .text-grotesk.text-bold {
     font-weight: 500;
+}
+.text-right {
+    text-align: right;
 }
 .select-none {
     user-select: none;
@@ -148,7 +159,7 @@ p {
 }
 .btn.btn-sm {
     padding: 4px 12px;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 22px;
     min-height: 40px;
 }
@@ -217,7 +228,7 @@ p {
     border-radius: 4px;
 }
 .btn .icon {
-    font-size: 14px;
+    font-size: 15px;
     margin-left: 8px;
     min-width: 20px;
 }
@@ -293,10 +304,10 @@ label.label {
     box-shadow: none !important;
     padding-left: 0;
     background-color: #FFFFFF !important;
-    font-size: 14px;
+    font-size: 15px;
 }
 .form-group .form-control.form-control-sm {
-    font-size: 13px;
+    font-size: 14px;
 }
 .form-group .input-group-text {
     background-color: #ffffff;
@@ -747,15 +758,15 @@ label.label {
     line-height: 20px;
     padding: 0;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
-    font-size: 14px;
+    font-size: 16px;
     opacity: 0;
 }
 #bordered_content #top_items button .icon {
-    font-size: 12px;
+    font-size: 14px;
 }
 #current_wallet {
     position: relative;
-    width: 216px;
+    width: 230px;
     margin-right: 4px;
     padding: 6px 0 6px 10px;
     z-index: 999;
@@ -807,7 +818,7 @@ label.label {
 #current_wallet .info {
     color: #ffffff;
     font-size: 12px;
-    width: 140px;
+    width: 150px;
 }
 #current_wallet .info .desc {
     display: block;
@@ -1376,7 +1387,7 @@ label.label {
 }
 .footer {
     position: fixed;
-    width: 370px;
+    width: 400px;
     min-height: 65px;
     bottom: 0;
     left: auto;
@@ -1428,7 +1439,7 @@ label.label {
     width: 100%;
     height: 180px;
     color: #ffffff;
-    padding: 12px;
+    padding: 12px 22px 12px 12px;
     opacity: 0;
 }
 #portfolio:after {
@@ -1661,6 +1672,7 @@ label.label {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     color: #667085;
+    font-size: 14px;
 }
 #review_transaction .amount,
 .amount-wrapper .amount {
@@ -1673,7 +1685,7 @@ label.label {
 #review_transaction .decimals,
 .amount-wrapper .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
 
     letter-spacing: -0.05em;
 }
@@ -1681,7 +1693,7 @@ label.label {
 .amount-wrapper .dollar {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 15px;
     padding-top: 2px;
 
     letter-spacing: -0.05em;
@@ -1709,7 +1721,7 @@ label.label {
     padding-left: 8px;
 }
 #transaction_info .wallet .right .address {
-    font-size: 12px;
+    font-size: 13px;
 }
 #transaction_info .dot {
     display: block;
@@ -1900,7 +1912,7 @@ label.label {
     font-size: 16px;
 }
 #accounts_modal .current-wallet .address {
-    font-size: 14px;
+    font-size: 15px;
 }
 #accounts_modal .current-wallet .address .icon {
     font-size: 16px;

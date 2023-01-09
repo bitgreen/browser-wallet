@@ -1,7 +1,7 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import {AccountStore, bbbTokenPrice} from "@bitgreen/browser-wallet-core";
 import { getAmountDecimal } from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
@@ -25,7 +25,7 @@ export default async function assetTransactionReviewScreen(params) {
     const recipient = params?.recipient
     const asset_amount = params?.amount
     const asset_info = getAmountDecimal(asset_amount, 6)
-    const usd_info = getAmountDecimal(asset_amount * 0.35, 2) // TODO: update price!
+    const usd_info = getAmountDecimal(asset_amount * bbbTokenPrice, 2) // TODO: update price!
     const fee_info = getAmountDecimal(0.27, 2) // TODO: calculate fees!
 
     await screen.set('.content', 'asset/review_transaction', {

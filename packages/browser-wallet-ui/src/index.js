@@ -7,7 +7,7 @@ import {
     updateAccounts,
     showLogin,
     currentScreen,
-    clearHistory
+    clearHistory, reloadScreen
 } from './screens/index.js'
 import { renderChart } from "./chart.js";
 import { sendMessage } from "./messaging.js";
@@ -69,7 +69,7 @@ class userInterface {
             const current_account = await accounts_store.current()
 
             await copyText(current_account.address)
-            await showNotification('Account copied to clipboard.', 'info')
+            await showNotification('Account address copied to clipboard.', 'info')
         });
         document.querySelector("#accounts_modal #lock_wallet").addEventListener("click", async(e) => {
             accounts_modal_el.classList.remove('fade')
@@ -95,7 +95,7 @@ class userInterface {
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
-            current_account_address: current_account?.address?.substring(0,12)+'...'+current_account?.address?.substring(current_account.address.length-8),
+            current_account_address: current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account.address.length-8),
             is_primary: current_account?.id === '0' ? '' : 'hidden'
         }, false)
 
@@ -117,9 +117,7 @@ class userInterface {
     }
 
     initLogin = async() => {
-        await updateElement('#login_screen', 'login', {
-            checked: await this.db.stores.settings.asyncGet('keep_me_signed_in') ? 'checked' : ''
-        }, false)
+        await updateElement('#login_screen', 'login', {}, false)
 
         document.querySelector("#login_screen #do_login").addEventListener("click", () => this.doLoginEvent())
         document.querySelector("#login_screen #password").addEventListener("keypress", async(e) => {
@@ -132,14 +130,13 @@ class userInterface {
     doLoginEvent = async() => {
         const current_screen = currentScreen()
         const password = DOMPurify.sanitize(document.querySelector("#login_screen #password").value);
-        const keep_me_signed_in = document.querySelector("#login_screen #keep_me_signed_in").checked;
 
-        const result = await doLogin(password, keep_me_signed_in)
+        const result = await doLogin(password)
 
         if(result) {
             hideNotification()
             await hideLogin()
-            if(current_screen.name === 'dashboardScreen') await renderChart()
+            if(current_screen.name === 'dashboardScreen') await reloadScreen()
         } else {
             await showNotification('Password is wrong!', 'error')
         }
