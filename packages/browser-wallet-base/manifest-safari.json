@@ -17,7 +17,6 @@
     "512":"icons/512.png"
   },
   "permissions": [
-    "clipboardRead",
     "clipboardWrite",
     "storage",
     "tabs"

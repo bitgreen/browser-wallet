@@ -113,6 +113,11 @@ export default async function extrinsicSendScreen(params) {
 
             hideProcessing(2200)
         } else if(response?.status === 'failed' && response.error) {
+            // send message to tab if response is successful
+            screen.sendMessageToTab({
+                ...response
+            })
+
             hideProcessing()
             await showNotification(response.error, 'error', 3200)
         } else {
