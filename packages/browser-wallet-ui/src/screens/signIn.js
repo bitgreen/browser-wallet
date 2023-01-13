@@ -37,6 +37,10 @@ export default async function signInScreen(params) {
         document.querySelector('#app_info').classList.add('known')
     }
 
+    setTimeout(() => {
+        document.querySelector("#root #password").focus();
+    }, 100)
+
     await screen.append('#bordered_content', 'global/loading', {
         title: 'Approving sign in',
         desc: 'Hold tight while we get confirmation of this sign in request.',
