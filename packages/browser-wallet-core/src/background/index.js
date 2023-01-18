@@ -31,7 +31,7 @@ const backgroundMessageHandler = (data, port) => {
     });
 }
 
-const showPopup = async(command, params, popup_height = 600) => {
+const showPopup = async(command, params = {}) => {
     let url = 'index.html?' + new URLSearchParams({
         tab_id: await getCurrentTabId(),
         command,
@@ -44,7 +44,7 @@ const showPopup = async(command, params, popup_height = 600) => {
             type: 'popup',
             focused: true,
             width: 400,
-            height: popup_height
+            height: 600
         });
     } else {
         current_browser.windows.getCurrent((win) => {
@@ -69,7 +69,7 @@ const showPopup = async(command, params, popup_height = 600) => {
                     type: 'popup',
                     focused: true,
                     width: 400,
-                    height: popup_height,
+                    height: 600,
                     left,
                     top
                     // incognito, top, left, ...
