@@ -94,7 +94,6 @@ class userInterface {
 
     initAccounts = async() => {
         const current_account = await this.db.stores.accounts.current()
-        const accounts = await this.db.stores.accounts.asyncAll()
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,

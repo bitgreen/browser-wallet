@@ -4,7 +4,7 @@ import Screen, { clearHistory, goToScreen } from './index.js'
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
 import { initChart, renderChart } from "../chart.js";
-import { balanceToHuman } from "@bitgreen/browser-wallet-utils";
+import { balanceToHuman, formatAmount } from "@bitgreen/browser-wallet-utils";
 
 export default async function dashboardScreen(params = {
     imported: false,
@@ -31,7 +31,10 @@ export default async function dashboardScreen(params = {
         token_balance: balanceToHuman(balance, 2),
         token_price: bbbTokenPrice
     })
-    await screen.set('#bordered_content', 'dashboard/content')
+    await screen.set('#bordered_content', 'dashboard/content', {
+        all_balance: formatAmount(balanceToHuman(balance, 4)),
+        bbb_balance: formatAmount(balanceToHuman(balance, 4))
+    })
 
     await screen.set('#chart', 'dashboard/chart')
     initChart({

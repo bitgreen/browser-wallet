@@ -1,11 +1,18 @@
-import Screen, { goToScreen } from './index.js'
-import { AccountStore, NetworkStore } from "@bitgreen/browser-wallet-core";
+import Screen, {clearHistory, goToScreen} from './index.js'
+import {AccountStore, NetworkStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 import { sendMessage } from "../messaging.js";
 import { balanceToHuman, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
 import anime from "animejs";
 
 export default async function transactionHistoryScreen() {
+    const wallet_store = new WalletStore()
+    if(!await wallet_store.exists()) {
+        await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
+        await clearHistory()
+        return await goToScreen('walletScreen', {}, false, true)
+    }
+
     const screen = new Screen({
         template_name: 'layouts/default',
         header: true,

@@ -109,6 +109,9 @@ p {
 .text-gray {
     color: #667085;
 }
+.text-disabled {
+    color: #8C92A1 !important;
+}
 .text-green {
     color: #9ECC00;
 }
@@ -160,6 +163,12 @@ p {
     line-height: 22px;
     min-height: 40px;
 }
+.btn.btn-xs {
+    padding: 4px 6px;
+    font-size: 12px;
+    line-height: 22px;
+    min-height: 30px;
+}
 .btn-primary {
     background-color: #C0FF00;
     border-color: #C0FF00;
@@ -189,6 +198,16 @@ p {
     background-color: #19363d !important;
     border-color: #19363d !important;
     color: #ffffff !important;
+}
+.btn-secondary-outline {
+    background-color: #F8F8F9;
+    border-color: #224851;
+    color: #181818;
+}
+.btn-secondary-outline:hover, .btn-secondary-outline:active {
+    background-color: #D5D6DA !important;
+    border-color: #224851 !important;
+    color: #181818 !important;
 }
 .btn-secondary {
     background-color: #224851;
@@ -385,18 +404,29 @@ label.label {
     padding: 8px 8px 8px 16px;
     z-index: 999;
     opacity: 0;
+    pointer-events: none;
 }
 #header.visible {
     opacity: 1;
+    pointer-events: auto;
 }
-#header #top_logo {
+#header #top_logo svg {
     transition: all ease-out 0.3s;
 }
-#header #top_logo:hover {
+#header #top_logo svg:hover {
     transform: scale(1.1);
 }
-#header #top_logo:hover path {
-    /*fill: #9ECC00;*/
+#header #top_logo.full svg:hover {
+    transform: scale(1);
+}
+#header #top_logo .full-logo,
+#header #top_logo.full .b-logo {
+    position: absolute;
+    display: none !important;
+}
+#header #top_logo.full .full-logo {
+    position: relative;
+    display: block !important;
 }
 #header #actions svg {
     margin: 0 8px;
@@ -592,6 +622,19 @@ label.label {
     overflow: hidden;
     opacity: 0;
 }
+#root .full-only {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    z-index: -1;
+}
 #root.freeze * {
     pointer-events: none !important;
 }
@@ -669,7 +712,7 @@ label.label {
     padding: 0;
 }
 #heading.bigger {
-    height: 240px;
+    height: 230px;
 }
 #heading.medium {
     height: 165px;
@@ -733,9 +776,9 @@ label.label {
     border-radius: 16px 16px 0 0;
 }
 #bordered_content.smaller {
-    top: 270px;
-    height: calc(100% - 270px);
-    padding-top: 38px;
+    top: 254px;
+    height: calc(100% - 254px);
+    padding-top: 34px;
 }
 #bordered_content.medium {
     top: 165px;
@@ -788,6 +831,9 @@ label.label {
 }
 #current_wallet.active:after {
     border-radius: 8px 8px 0 0;
+}
+#current_wallet.hidden {
+    width: 0;
 }
 #current_wallet .jdenticon,
 #current_wallet .jdenticon svg {
@@ -905,36 +951,15 @@ label.label {
     user-select: none;
     overflow: hidden;
 }
-.button-item .under-development {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    background-color: rgba(248, 248, 249, 0.8);
-    opacity: 0;
-    transition: all linear 0.2s;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 4px;
-    transform: scale(0.5);
-}
-.button-item:hover .under-development {
-    transform: scale(1);
-    top: 0;
-    opacity: 1;
-}
-.button-item .under-development span {
-    position: relative;
-    width: 100%;
+.button-item.disabled {
+    cursor: auto !important;
 }
 .button-item.click-only * {
     pointer-events: none !important;
 }
 .button-item:hover {
     box-shadow: 0 3px 4px rgb(17 20 30 / 18%), 0 2px 3px rgb(17 20 30 / 8%);
-    transition: all linear 0.1s;
+    transition: box-shadow linear 0.1s;
 }
 .button-item .icon {
     width: 60px;
@@ -972,25 +997,52 @@ label.label {
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
 }
 .button-item.tab-item {
+    padding: 4px 0;
+    border-radius: 8px;
     opacity: 0;
-    height: 100px;
+    height: 114px;
     margin-bottom: 12px;
+    border: 2px solid transparent;
+    transition: border-color linear 0.1s;
+}
+.button-item.tab-item:hover {
+    box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
+    border-color: #224851;
 }
 .button-item.tab-item .icon {
     display: block;
     width: 100%;
-    height: 65px;
-    line-height: 65px;
+    height: 52px;
+    line-height: 42px;
     font-size: 36px;
     text-align: center;
 }
 .button-item.tab-item .title {
     width: 100%;
-    height: 30px;
+    height: 26px;
     text-align: center;
     font-size: 12px;
     font-weight: 500;
-    padding: 0 8px 4px 8px;
+    color: #224851;
+}
+.button-item.tab-item .pill {
+    width: calc(100% - 12px);
+    margin-left: 6px;
+    margin-right: 6px;
+    height: 22px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #224851;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+}
+.button-item.tab-item.disabled .title {
+    color: #8C92A1;
+}
+.button-item.tab-item.disabled .pill {
+    color: #FFFFFF;
+    background-color: #8C92A1;
 }
 .button-item.transaction-item {
     min-height: 65px;
@@ -1209,6 +1261,20 @@ label.label {
 }
 #full_page .content .icon-huge {
     font-size: 53px;
+}
+#full_page .content .choose-words .btn.btn-left {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+#full_page .content .choose-words .btn.btn-right {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+#full_page .content .help-desc {
+    user-select: none !important;
+    padding-left: 16px;
+    font-weight: 500;
+    color: #667085;
 }
 #full_page .content .mnemonics {
     width: 100%;
@@ -1471,7 +1537,7 @@ label.label {
 #portfolio {
     position: relative;
     width: 100%;
-    height: 180px;
+    height: 164px;
     color: #ffffff;
     padding: 12px 22px 12px 12px;
     opacity: 0;

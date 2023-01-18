@@ -1,7 +1,7 @@
 import Screen, { clearHistory, goToScreen, updateCurrentParams } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import { AccountStore, WalletStore } from "@bitgreen/browser-wallet-core";
-import { addressValid, balanceToHuman } from "@bitgreen/browser-wallet-utils";
+import {addressValid, balanceToHuman, formatAmount} from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from "dompurify";
@@ -9,6 +9,7 @@ import DOMPurify from "dompurify";
 export default async function assetSendScreen(params) {
     const wallet_store = new WalletStore()
     if(!await wallet_store.exists()) {
+        await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
         await clearHistory()
         return await goToScreen('walletScreen', {}, false, true)
     }
@@ -34,7 +35,8 @@ export default async function assetSendScreen(params) {
         title: 'Send'
     })
 
-    const balance = balanceToHuman(await sendMessage('get_balance'), 18)
+    const original_balance = await sendMessage('get_balance')
+    const balance = balanceToHuman(original_balance, 18)
 
     const balance_info = balance.toString().split('.')
     let balance_decimals = 4
@@ -56,7 +58,8 @@ export default async function assetSendScreen(params) {
         recipient,
         from_name: current_account.name,
         from_address: current_account.address,
-        balance: parseFloat(balance).toFixed(balance_decimals)
+        balance: formatAmount(balanceToHuman(original_balance, 4)),
+        max_balance: balanceToHuman(original_balance, 18)
     })
 
     const amount_el = document.querySelector("#root #amount")
@@ -105,7 +108,7 @@ export default async function assetSendScreen(params) {
 
         if(parseFloat(amount_el.value) > 0
             && addressValid(address)
-            && parseFloat(amount_el.value) <= parseFloat(balance) + 0.0000000001
+            && parseFloat(amount_el.value) <= parseFloat(balanceToHuman(original_balance, 18)) + 0.0000000001
         ) {
             button_el.classList.remove('disabled')
             button_el.classList.add('btn-primary')

@@ -1,4 +1,4 @@
-import {getAmountDecimal, randomNumber} from "@bitgreen/browser-wallet-utils";
+import {formatAmount, getAmountDecimal, randomNumber} from "@bitgreen/browser-wallet-utils";
 import {bbbTokenPrice} from "@bitgreen/browser-wallet-core";
 
 let bbb_token_amount, nature_based_token_amount, impact_bonds_amount, other_amount
@@ -47,7 +47,7 @@ const renderChart = (init_render = false) => {
     const amount_el = text_el.querySelector('.amount')
     const decimal_el = text_el.querySelector('.decimals')
 
-    const amount_info = getAmountDecimal(total_amount, 2)
+    const amount_info = getAmountDecimal(formatAmount(total_amount, 2), 2)
 
     amount_el.innerHTML = amount_info.amount
     decimal_el.innerHTML = '.' + amount_info.decimals
