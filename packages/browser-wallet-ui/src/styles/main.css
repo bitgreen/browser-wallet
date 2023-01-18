@@ -57,47 +57,44 @@
 
 body {
     font-family: 'Neue Haas Unica Pro', sans-serif;
-    width: 430px;
+    width: 400px;
     min-height: 600px;
     height: 100%;
-    color: #061C00;
-    font-size: 15px;
-    line-height: 15px;
+    color: #181818;
+    font-size: 14px;
+    line-height: 14px;
     overflow: hidden;
-
-    background-image: url('../assets/bg.png');
-    background-size: cover;
-    background-position: center;
+    background-color: #224851;
 }
 h1 {
     font-weight: 500;
     font-size: 24px;
-    color: #061C00;
+    color: #181818;
 }
 h2 {
     font-weight: 500;
     font-size: 22px;
-    color: #061C00;
+    color: #181818;
 }
 h3 {
     font-weight: 500;
-    font-size: 20px;
-    color: #061C00;
+    font-size: 18px;
+    color: #181818;
 }
 h4 {
     font-weight: 500;
-    font-size: 18px;
-    color: #061C00;
+    font-size: 16px;
+    color: #181818;
 }
 h5 {
     font-weight: 500;
-    font-size: 16px;
-    color: #061C00;
+    font-size: 14px;
+    color: #181818;
 }
 h6 {
     font-weight: 400;
-    font-size: 14px;
-    color: #061C00;
+    font-size: 12px;
+    color: #181818;
 }
 p {
     line-height: 18px;
@@ -116,13 +113,13 @@ p {
     color: #9ECC00;
 }
 .text-dark {
-    color: #061C00;
+    color: #181818;
 }
 .text-small {
     font-size: 13px;
 }
 .text-bigger {
-    font-size: 15px;
+    font-size: 16px;
 }
 .text-very-small {
     font-size: 11px;
@@ -159,19 +156,19 @@ p {
 }
 .btn.btn-sm {
     padding: 4px 12px;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 22px;
     min-height: 40px;
 }
 .btn-primary {
     background-color: #C0FF00;
     border-color: #C0FF00;
-    color: #061C00;
+    color: #181818;
 }
 .btn-primary:hover, .btn-primary:active {
     background-color: #A9E208 !important;
     border-color: #A9E208 !important;
-    color: #061C00 !important;
+    color: #181818 !important;
 }
 .btn-danger {
     background-color: #F53400;
@@ -194,22 +191,22 @@ p {
     color: #ffffff !important;
 }
 .btn-secondary {
-    background-color: #061C00;
-    border-color: #061C00;
+    background-color: #224851;
+    border-color: #224851;
     color: #ffffff;
 }
 .btn-secondary:hover, .btn-secondary:active {
-    background-color: #041100 !important;
-    border-color: #041100 !important;
+    background-color: #19363d !important;
+    border-color: #19363d !important;
     color: #ffffff !important;
 }
 .btn-text {
     background-color: transparent;
     border: none !important;
-    color: #061C00;
+    color: #181818;
 }
 .btn-text:hover, .btn-text:active {
-    color: #041100;
+    color: #0c0c0c;
 }
 .btn-text.btn-bordered {
     border: 1px solid #D5D6DA !important;
@@ -222,13 +219,13 @@ p {
     pointer-events: none;
     opacity: .65;
     border-color: transparent !important;
-    color: #061C00 !important;
+    color: #181818 !important;
 }
 .btn.btn-rounded {
     border-radius: 4px;
 }
 .btn .icon {
-    font-size: 15px;
+    font-size: 14px;
     margin-left: 8px;
     min-width: 20px;
 }
@@ -304,10 +301,10 @@ label.label {
     box-shadow: none !important;
     padding-left: 0;
     background-color: #FFFFFF !important;
-    font-size: 15px;
+    font-size: 14px;
 }
 .form-group .form-control.form-control-sm {
-    font-size: 14px;
+    font-size: 12px;
 }
 .form-group .input-group-text {
     background-color: #ffffff;
@@ -392,15 +389,29 @@ label.label {
 #header.visible {
     opacity: 1;
 }
-#header #go_settings {
-    font-size: 18px;
-    margin-left: 8px;
-    margin-right: 4px;
-
-    transition: all linear 0.2s;
+#header #top_logo {
+    transition: all ease-out 0.3s;
 }
-#header #go_settings:hover {
-    transform: rotate(60deg);
+#header #top_logo:hover {
+    transform: scale(1.1);
+}
+#header #top_logo:hover path {
+    /*fill: #9ECC00;*/
+}
+#header #actions svg {
+    margin: 0 8px;
+}
+#header #actions #go_copy {
+    transition: all ease-out 0.22s;
+}
+#header #actions #go_copy:hover {
+    transform: scale(1.15);
+}
+#header #actions #go_settings {
+    transition: all ease-out 0.22s;
+}
+#header #actions #go_settings:hover {
+    transform: rotate(45deg) scale(1.1);
 }
 #login_screen {
     position: absolute;
@@ -758,7 +769,9 @@ label.label {
     line-height: 20px;
     padding: 0;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
     opacity: 0;
 }
 #bordered_content #top_items button .icon {
@@ -766,39 +779,20 @@ label.label {
 }
 #current_wallet {
     position: relative;
-    width: 230px;
-    margin-right: 4px;
+    width: 100%;
+    margin-right: 8px;
     padding: 6px 0 6px 10px;
     z-index: 999;
     cursor: pointer;
     user-select: none !important;
-}
-#current_wallet:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    content: " ";
-    backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    opacity: 0.8;
-    z-index: -1;
-    transition: all linear 0.2s;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
 }
 #current_wallet.active:after {
     border-radius: 8px 8px 0 0;
 }
 #current_wallet .jdenticon,
 #current_wallet .jdenticon svg {
+    min-width: 32px;
+    min-height: 32px;
     width: 32px;
     height: 32px;
 }
@@ -806,19 +800,15 @@ label.label {
     position: relative;
     margin-right: 8px;
     border-radius: 16px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.22);
 }
 #current_wallet .jdenticon svg {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    left: 1px;
-    top: 1px;
 }
 #current_wallet .info {
     color: #ffffff;
     font-size: 12px;
-    width: 150px;
+    width: 100%;
 }
 #current_wallet .info .desc {
     display: block;
@@ -839,7 +829,7 @@ label.label {
 }
 #current_wallet .icon.icon-down-arrow {
     width: 20px;
-    margin: 0 3px 0 0;
+    margin: 0 8px 0 0;
     text-align: center;
     transition: all linear 0.2s;
 }
@@ -1235,7 +1225,7 @@ label.label {
     display: flex;
     border-radius: 8px;
     background-color: #F8F8F9 !important;
-    color: #061C00 !important;
+    color: #181818 !important;
     padding: 9px 4px 9px 8px;
     z-index: 10;
     transition: all 0.3s;
@@ -1374,7 +1364,7 @@ label.label {
     bottom: 8px;
     left: 8px;
     width: calc(100% - 16px);
-    background-color: #061C00;
+    background-color: #224851;
     border-radius: 8px;
     padding: 8px;
     opacity: 0;
@@ -1403,16 +1393,35 @@ label.label {
     transition: color linear 0.3s;
 
 }
+#main_footer .item:hover svg path,
+#main_footer .item:focus svg path,
+#main_footer .item:active svg path {
+    fill: #C0FF00;
+}
 #main_footer .item.active {
     background-color: rgba(192, 255, 0, 0.1);
     color: #C0FF00;
+}
+#main_footer .item.active svg path {
+    fill: #C0FF00;
+}
+/* .item-send is stroke, not a path */
+#main_footer .item.item-send:hover svg path,
+#main_footer .item.item-send:focus svg path,
+#main_footer .item.item-send:active svg path {
+    fill: transparent;
+    stroke: #C0FF00;
+}
+#main_footer .item.item-send.active svg path {
+    fill: transparent;
+    stroke: #C0FF00;
 }
 .footer-only {
     padding: 16px;
 }
 .footer {
     position: fixed;
-    width: 400px;
+    width: 370px;
     min-height: 65px;
     bottom: 0;
     left: auto;
@@ -1428,7 +1437,7 @@ label.label {
 
 .info-messages {
     font-weight: 500;
-    color: #061C00;
+    color: #181818;
 }
 .info-messages.bigger {
     font-size: 16px;
@@ -1467,7 +1476,8 @@ label.label {
     padding: 12px 22px 12px 12px;
     opacity: 0;
 }
-#portfolio:after {
+#portfolio:after,
+#current_wallet:after {
     position: absolute;
     top: 0;
     left: 0;
@@ -1475,12 +1485,19 @@ label.label {
     width: 100%;
     height: 100%;
     content: " ";
-    backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     opacity: 0.8;
     z-index: -1;
+    transition: all linear 0.15s;
+}
+#current_wallet:hover:after {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+#portfolio:after {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 #portfolio .info {
     padding-left: 12px;
@@ -1682,7 +1699,7 @@ label.label {
 #review_transaction {
     padding: 16px;
     margin-bottom: 32px;
-    color: #061C00;
+    color: #181818;
 
     user-select: none;
 }
@@ -1699,44 +1716,30 @@ label.label {
     color: #667085;
     font-size: 14px;
 }
-#review_transaction .amount,
-.amount-wrapper .amount {
+#review_transaction .amount {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     font-size: 26px;
 
     padding: 0 1px 4px;
 }
-#review_transaction .decimals,
-.amount-wrapper .decimals {
+#review_transaction .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
-    font-size: 15px;
-
-    letter-spacing: -0.05em;
-}
-#review_transaction .dollar,
-.amount-wrapper .dollar {
-    font-family: 'Neue Haas Unica Pro', sans-serif;
-    font-weight: 500;
-    font-size: 15px;
-    padding-top: 2px;
-
-    letter-spacing: -0.05em;
-}
-.amount-wrapper .amount {
-    font-size: 32px;
-}
-.amount-wrapper .decimals {
-    position: relative;
     font-size: 16px;
+
+    position: relative;
     top: -6px;
     font-weight: 300;
+
+    letter-spacing: -0.05em;
 }
-.amount-wrapper .dollar {
-    position: relative;
-    font-size: 16px;
-    top: -4px;
-    font-weight: 300;
+#review_transaction .dollar {
+    font-family: 'Neue Haas Unica Pro', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    /*padding-top: 2px;*/
+
+    letter-spacing: -0.05em;
 }
 #transaction_info .wallet {
     height: 40px;
@@ -1746,7 +1749,7 @@ label.label {
     padding-left: 8px;
 }
 #transaction_info .wallet .right .address {
-    font-size: 13px;
+    font-size: 12px;
 }
 #transaction_info .dot {
     display: block;
@@ -1823,7 +1826,7 @@ label.label {
     border-radius: 8px !important;
     max-width: 100% !important;
     width: calc(100% - 28px) !important;
-    color: #061C00 !important;
+    color: #181818 !important;
     padding: 24px 12px !important;
     font-size: 16px !important;
     user-select: none !important;
@@ -1869,7 +1872,7 @@ label.label {
 }
 .modal .modal-header {
     position: relative;
-    background-color: #061C00;
+    background-color: #181818;
     border-radius: 0 !important;
     border-bottom: 0 !important;
 }
@@ -1937,7 +1940,7 @@ label.label {
     font-size: 16px;
 }
 #accounts_modal .current-wallet .address {
-    font-size: 15px;
+    font-size: 14px;
 }
 #accounts_modal .current-wallet .address .icon {
     font-size: 16px;

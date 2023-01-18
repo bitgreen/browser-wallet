@@ -64,13 +64,8 @@ class userInterface {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
         })
-        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async() => {
-            const accounts_store = new AccountStore()
-            const current_account = await accounts_store.current()
-
-            await copyText(current_account.address)
-            await showNotification('Account address copied to clipboard.', 'info')
-        });
+        document.querySelector("#header #go_copy").addEventListener("click", async() => this.copyCurrentAddress());
+        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async() => this.copyCurrentAddress());
         document.querySelector("#accounts_modal #lock_wallet").addEventListener("click", async(e) => {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
@@ -87,6 +82,14 @@ class userInterface {
 
             return await goToScreen('accountManageScreen')
         })
+    }
+
+    copyCurrentAddress = async() =>  {
+        const accounts_store = new AccountStore()
+        const current_account = await accounts_store.current()
+
+        await copyText(current_account.address)
+        await showNotification('Account address copied to clipboard.', 'info')
     }
 
     initAccounts = async() => {

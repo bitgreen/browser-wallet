@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-transfers:before {
+  content: "\e90f";
+}
+.icon-cog-t:before {
+  content: "\e932";
+}
 .icon-code:before {
   content: "\e930";
 }
@@ -120,6 +126,15 @@
 }
 .icon-history:before {
   content: "\e906";
+}
+.icon-ecosystem-n:before {
+  content: "\e933";
+}
+.icon-history-n:before {
+  content: "\e934";
+}
+.icon-copy-bordered:before {
+  content: "\e935";
 }
 .icon-warning:before {
   content: "\e91f";
