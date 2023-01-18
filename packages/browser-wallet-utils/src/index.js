@@ -70,12 +70,28 @@ const balanceToHuman = (balance, decimals = 4) => {
     return (Math.floor(balance / 1000000000000000000 * calc_decimals) / calc_decimals).toFixed(decimals);
 }
 
+const formatAmount = (amount, decimals) => {
+    let formatted_amount = null
+    if(typeof amount === 'string') {
+        formatted_amount = amount.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+        formatted_amount = parseFloat(amount).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    }
+
+    return formatted_amount
+}
+
 const humanToBalance = (amount) => {
     return BigInt(parseInt((parseFloat(amount) * 1000000000000000000).toString()))*1n
 }
 
 const getAmountDecimal = (amount, decimals = 4) => {
-    const amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
+    let amount_info = null
+    if(typeof amount === 'string') {
+        amount_info = amount.split('.')
+    } else {
+        amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
+    }
 
     return {
         amount: amount_info[0],
@@ -108,6 +124,7 @@ export {
     randomString,
     randomNumber,
     balanceToHuman,
+    formatAmount,
     humanToBalance,
     getAmountDecimal,
     addressValid
