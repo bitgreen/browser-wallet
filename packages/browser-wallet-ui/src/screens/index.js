@@ -51,7 +51,8 @@ class Screen {
         auto_load: true,
         smooth_load: false,
         freeze_root: false,
-        freeze_root_delay: 0
+        freeze_root_delay: 0,
+        win_height: 600
     }
 
     constructor(opts) {
@@ -65,6 +66,8 @@ class Screen {
     }
 
     async init() {
+        window.resizeTo(400, this.options.win_height) // Set window height
+
         this.options.freeze_root ? this.freezeRoot() : this.unFreezeRoot
 
         this.options.header ? this.showHeader() : this.hideHeader()
@@ -363,7 +366,7 @@ let active_screen = null
 let transitioning = false
 
 const goToScreen = async(name, params = {}, go_back = false, force = false) => {
-    hideNotification()
+    if(!force) hideNotification()
 
     // pause if still changing screen
     if(transitioning && !force) return false
@@ -416,6 +419,7 @@ const goBackScreen = async() => {
     if(previous_screen) {
         return await goToScreen(previous_screen.name, previous_screen.params, true)
     } else {
+        await clearHistory()
         return await goToScreen('dashboardScreen')
     }
 }
@@ -464,13 +468,20 @@ const updateAccounts = async(current_account_id = null) => {
     const accounts = await accounts_store.asyncAll()
     const current_account = await accounts_store.current()
 
+    const header_logo_el = document.querySelector("#header #top_logo");
     const accounts_modal_el = document.querySelector("#accounts_modal");
     const current_account_el = document.querySelector("#header #current_wallet");
+    const go_copy_el = document.querySelector("#header #go_copy");
 
     if(!current_account) {
+        header_logo_el.classList.add('full')
         current_account_el.classList.add('hidden')
+        go_copy_el.classList.add('hidden')
+
     } else {
+        header_logo_el.classList.remove('full')
         current_account_el.classList.remove('hidden')
+        go_copy_el.classList.remove('hidden')
     }
 
     accounts_modal_el.querySelector('.address').innerHTML = current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account?.address?.length-8)

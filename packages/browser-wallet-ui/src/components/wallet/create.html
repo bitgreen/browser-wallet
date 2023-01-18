@@ -1,11 +1,41 @@
-<h2>Save your secret phrase</h2>
-<p class="text-gray pb-2">Please carefully store the secret words below in a safe place. They are the keys to your wallet and can be used to recover your wallet on a different device.</p>
-<div class="alert alert-danger d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-alert"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can transfer your funds! Store them securely and do not share with untrusted parties.</p></div>
-<div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-secondary pe-3 ps-3"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>
+<h2>Save your secret phrase now</h2>
+<p class="text-gray pb-2">Carefully write down and store these secret words in order. These are your wallet private keys used to recover your wallet. They are the only method for wallet recovery or to move your wallet to a different device.</p>
+<div class="row">
+    <div class="col-6 d-flex align-items-center">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.39014 3.73859H23.0001" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.39014 12H23.0001" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.39014 20.2614H23.0001" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1.5022 1H2.57536V6.02075" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.70522 14.499C3.70522 14.499 1.30932 14.5291 1.19581 14.4913C1.08229 14.4535 1.37779 14.2536 2.9486 12.0092C3.24199 11.5901 3.40348 11.2364 3.47217 10.9402L3.4965 10.7497C3.4965 10.0538 2.9323 9.48963 2.23643 9.48963C1.62408 9.48963 1.11374 9.92643 1 10.5055" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1.12109 18.9912C1.23433 18.4144 1.74271 17.9793 2.35268 17.9793C3.04596 17.9793 3.60787 18.5412 3.60787 19.2344C3.60787 19.9277 3.04596 20.4896 2.35268 20.4896" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.3526 20.4896C3.04583 20.4896 3.60779 21.0516 3.60779 21.7448C3.60779 22.438 3.04583 23 2.3526 23C1.7188 23 1.19472 22.5302 1.10955 21.9199C1.10157 21.8627 1.09741 21.8042 1.09741 21.7448" stroke="#667085" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="help-desc">The order of words is important</span>
+    </div>
+    <div class="col-6 d-flex align-items-center">
+        <svg width="26" height="26" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 0C5.25 0 2.25 3 2.25 6.75V9.75C0.975 9.75 0 10.725 0 12V21.75C0 23.025 0.975 24 2.25 24H15.75C17.025 24 18 23.025 18 21.75V12C18 10.725 17.025 9.75 15.75 9.75V6.75C15.75 3 12.75 0 9 0ZM16.5 12V21.75C16.5 22.2 16.2 22.5 15.75 22.5H2.25C1.8 22.5 1.5 22.2 1.5 21.75V12C1.5 11.55 1.8 11.25 2.25 11.25H3H15H15.75C16.2 11.25 16.5 11.55 16.5 12ZM3.75 9.75V6.75C3.75 3.825 6.075 1.5 9 1.5C11.925 1.5 14.25 3.825 14.25 6.75V9.75H3.75Z" fill="#667085"/>
+            <path d="M9 13.5C7.725 13.5 6.75 14.475 6.75 15.75C6.75 16.725 7.35 17.55 8.25 17.85V19.5C8.25 19.95 8.55 20.25 9 20.25C9.45 20.25 9.75 19.95 9.75 19.5V17.85C10.65 17.55 11.25 16.725 11.25 15.75C11.25 14.475 10.275 13.5 9 13.5ZM9 16.5C8.55 16.5 8.25 16.2 8.25 15.75C8.25 15.3 8.55 15 9 15C9.45 15 9.75 15.3 9.75 15.75C9.75 16.2 9.45 16.5 9 16.5Z" fill="#667085"/>
+        </svg>
+        <span class="help-desc">More words, greater security</span>
+    </div>
+</div>
+<div class="separator-line mt-2 mb-2"></div>
+<div class="row d-flex align-items-center mb-1">
+    <div class="choose-words col-6 d-flex">
+        <button type="button" class="btn btn-xs btn-left btn-secondary-outline btn-secondary pe-3 ps-3" data-words="12">12 words</button>
+        <button type="button" class="btn btn-xs btn-right btn-secondary-outline pe-3 ps-3" data-words="24">24 words</button>
+    </div>
+    <div class="col-6 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-text"><span class="icon icon-left icon-copy"></span>Copy secret phrase</button></div>
+</div>
 <div id="mnemonics" class="mnemonics d-block mt-2" style="opacity: 0;">
 
 </div>
-<div class="footer d-flex align-items-sketch align-items-center">
-<div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key" class="text-small">I have safely stored my secret phrase<br><span class="text-gray fw-light">You must confirm in order to proceed.</span></label></p></div>
-<div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>
+<div class="footer flex-row-reverse pt-0 pb-0">
+    <div class="alert alert-warning d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-warning"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can irrevocably transfer your funds! Store them securely and do not share with untrusted parties.</p></div>
+    <div class="w-100 d-flex align-items-sketch align-items-center mb-3">
+        <div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key" class="text-small">I have safely stored my secret phrase<br><span class="text-gray fw-light">You must confirm in order to proceed.</span></label></p></div>
+        <div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>
+    </div>
 </div>

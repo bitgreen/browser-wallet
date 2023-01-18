@@ -29,9 +29,7 @@ export default async function walletScreen() {
     screen.setListeners([
         {
             element: '#new_wallet',
-            listener: async() => {
-                await goToScreen('walletCreateScreen')
-            }
+            listener: () => goToScreen('walletCreateScreen')
         },
         {
             element: '#import_wallet',
