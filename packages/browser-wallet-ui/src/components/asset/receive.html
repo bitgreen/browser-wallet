@@ -1,8 +1,23 @@
 <div class="d-flex align-items-center justify-content-center">
-    <canvas id="qrcode"></canvas>
+    <div id="qrcode"></div>
     <div class="col text-center">
         <button id="copy_qrcode" class="btn btn-text"><span class="icon icon-left icon-copy"></span> Copy QR</button>
     </div>
 </div>
-<label class="label text-dark">Your Wallet Address</label><div class="form-group"><div class="input-group"><span class="input-group-text"><span class="icon icon-wallet" style="font-size: 18px;"></span></span><input type="text" class="form-control" value="${address}" disabled><span class="input-group-text p-0"><button id="copy_address" type="button" class="btn btn-secondary"><span class="icon icon-copy icon-left"></span>Copy</button></span></div></div>
+<label class="label text-dark">Your Wallet Address</label>
+<div class="form-group custom-border">
+    <div class="input-group">
+        <span class="input-group-text rounded-left"><span class="icon icon-wallet-outline" style="font-size: 18px; color: #667085"></span></span>
+        <input type="text" class="form-control" value="${address}" disabled>
+        <span class="input-group-text p-0">
+            <button id="copy_address" type="button" class="btn btn-secondary rounded-right">
+                <span class="icon icon-left">
+                    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.75 0.833252H1.75001C0.833343 0.833252 0.0833435 1.58325 0.0833435 2.49992V14.1666H1.75001V2.49992H11.75V0.833252ZM14.25 4.16658H5.08334C4.16668 4.16658 3.41668 4.91658 3.41668 5.83325V17.4999C3.41668 18.4166 4.16668 19.1666 5.08334 19.1666H14.25C15.1667 19.1666 15.9167 18.4166 15.9167 17.4999V5.83325C15.9167 4.91658 15.1667 4.16658 14.25 4.16658ZM14.25 17.4999H5.08334V5.83325H14.25V17.4999Z" fill="white"/>
+                    </svg>
+                </span><span>Copy</span>
+            </button>
+        </span>
+    </div>
+</div>
     

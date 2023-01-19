@@ -23,6 +23,7 @@ import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
 import './styles/main.css'
 import './styles/icomoon.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import {formatAddress} from "@bitgreen/browser-wallet-utils";
 
 class userInterface {
     constructor() {
@@ -42,7 +43,7 @@ class userInterface {
     initHeader = async() => {
         await updateElement('#header', 'shared/header', {
             account_jdenticon: jdenticon.toSvg(this.current_account.address,56),
-            account_address: this.current_account?.address?.substring(0,8)+'...'+this.current_account?.address?.substring(this.current_account?.address.length-8),
+            account_address: formatAddress(this.current_account?.address, 8, 8),
             account_name: (this.current_account?.name && this.current_account?.name?.length) > 14 ? this.current_account?.name?.substring(0,14)+'...' : this.current_account?.name
         }, false)
 
@@ -97,7 +98,7 @@ class userInterface {
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
-            current_account_address: current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account.address.length-8),
+            current_account_address: formatAddress(current_account?.address, 16, 8),
             is_primary: current_account?.id === '0' ? '' : 'hidden'
         }, false)
 

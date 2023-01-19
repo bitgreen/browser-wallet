@@ -1,6 +1,6 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import { isFirefox } from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import anime from 'animejs';
@@ -66,12 +66,13 @@ class Screen {
     }
 
     async init() {
+        this.options.login ? await showLogin(true) : hideLogin()
+
         window.resizeTo(400, this.options.win_height) // Set window height
 
         this.options.freeze_root ? this.freezeRoot() : this.unFreezeRoot
 
         this.options.header ? this.showHeader() : this.hideHeader()
-        this.options.login ? await showLogin(true) : await hideLogin()
         this.options.footer ? this.showFooter() : this.hideFooter()
 
         if(this.options.smooth_load) this.resetRoot()
@@ -249,7 +250,7 @@ const showLogin = async(instant = false, force = false) => {
     }
 
     if(logged_in && !force) {
-        return await hideLogin()
+        return hideLogin()
     }
 
     logged_in = false
@@ -320,7 +321,7 @@ const doLogin = async(password) => {
     return result
 }
 
-const hideLogin = async(instant = false) => {
+const hideLogin = (instant = false) => {
     if(!instant) {
         document.querySelector("#login_screen").classList.add("fade-out");
 
@@ -373,7 +374,7 @@ const goToScreen = async(name, params = {}, go_back = false, force = false) => {
     transitioning = true
     setTimeout(() => {
         transitioning = false
-    }, 400)
+    }, 600)
 
     if(typeof screens[name] !== 'function') {
         console.warn(`Screen not found. [${name}]`)
@@ -484,7 +485,7 @@ const updateAccounts = async(current_account_id = null) => {
         go_copy_el.classList.remove('hidden')
     }
 
-    accounts_modal_el.querySelector('.address').innerHTML = current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account?.address?.length-8)
+    accounts_modal_el.querySelector('.address').innerHTML = formatAddress(current_account?.address, 16, 8)
 
     setTimeout(async() => {
         await resetElement('#accounts_modal #wallet_list')
@@ -498,10 +499,10 @@ const updateAccounts = async(current_account_id = null) => {
             if(is_current) {
                 current_account_el.querySelector('.jdenticon').innerHTML = account_jdenticon
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
-                current_account_el.querySelector('.address').innerHTML = account?.address?.substring(0,8)+'...'+account?.address?.substring(account?.address.length-8)
+                current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
 
                 accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
-                accounts_modal_el.querySelector('.address').innerHTML = account?.address?.substring(0,12)+'...'+account?.address?.substring(account?.address.length-8)
+                accounts_modal_el.querySelector('.address').innerHTML = formatAddress(account?.address, 12, 8)
                 if(account_id?.toString() === '0') {
                     accounts_modal_el.querySelector('.badge-primary').classList.remove('hidden')
                 } else {
@@ -513,7 +514,7 @@ const updateAccounts = async(current_account_id = null) => {
                 account_id,
                 account_jdenticon,
                 account_name: (account.name && account.name.length > 10) ? account.name.substring(0,10)+'...' : account.name,
-                account_address: account?.address?.substring(0,16)+'...'+account?.address?.substring(account?.address.length-8),
+                account_address: formatAddress(account?.address, 16, 8),
                 is_main: account_id?.toString() === '0' ? '' : 'hidden',
                 is_current: is_current ? '' : 'hidden'
             }, true)

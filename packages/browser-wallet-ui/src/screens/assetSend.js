@@ -1,7 +1,7 @@
 import Screen, { clearHistory, goToScreen, updateCurrentParams } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
-import { AccountStore, WalletStore } from "@bitgreen/browser-wallet-core";
-import {addressValid, balanceToHuman, formatAmount} from "@bitgreen/browser-wallet-utils";
+import {AccountStore, bbbTokenPrice, bbbTxFee, WalletStore} from "@bitgreen/browser-wallet-core";
+import {addressValid, balanceToHuman, formatAddress, formatAmount} from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from "dompurify";
@@ -20,7 +20,8 @@ export default async function assetSendScreen(params) {
         header: true,
         footer: true,
         tab_id: params?.tab_id,
-        message_id: params?.message_id
+        message_id: params?.message_id,
+        win_height: 660
     })
     await screen.init()
 
@@ -48,34 +49,39 @@ export default async function assetSendScreen(params) {
             }
         }
     }
-    if(balance_decimals < 4) balance_decimals = 4
+    if(balance_decimals < 2) balance_decimals = 2
     if(balance_decimals > 10) balance_decimals = 10
 
     let recipient = params?.recipient ? params.recipient : null
-    let amount = params?.amount ? params.amount : (0).toFixed(4)
+    let amount = params?.amount ? params.amount : (0).toFixed(2)
     await screen.set('#bordered_content', 'asset/send', {
         amount,
         recipient,
         from_name: current_account.name,
-        from_address: current_account.address,
-        balance: formatAmount(balanceToHuman(original_balance, 4)),
+        from_address: formatAddress(current_account.address, 16, 8),
+        balance: formatAmount(balanceToHuman(original_balance, 2)),
+        bbb_fee: formatAmount(bbbTxFee, 2),
+        total_bbb: formatAmount(parseFloat(params.amount) + bbbTxFee, 2),
         max_balance: balanceToHuman(original_balance, 18)
     })
 
     const amount_el = document.querySelector("#root #amount")
-    const range_el = document.querySelector("#root #range")
+    const usd_amount_el = document.querySelector("#root #usd_amount")
+    const send_info_el = document.querySelector("#root #send_info .info")
+    const send_error_el = document.querySelector("#root #send_info .error")
+    const total_amount_el = document.querySelector("#root #send_info .total-amount")
     const recipient_el = document.querySelector("#root #recipient")
 
     screen.setListeners([
         {
-            element: '#root #range',
-            type: 'input',
-            listener: () => syncAmount('range')
-        },
-        {
             element: '#root #amount',
             type: 'input',
             listener: () => syncAmount('amount')
+        },
+        {
+            element: '#root #usd_amount',
+            type: 'input',
+            listener: () => syncAmount('usd_amount')
         },
         {
             element: '#root #recipient',
@@ -108,23 +114,43 @@ export default async function assetSendScreen(params) {
 
         if(parseFloat(amount_el.value) > 0
             && addressValid(address)
-            && parseFloat(amount_el.value) <= parseFloat(balanceToHuman(original_balance, 18)) + 0.0000000001
+            && parseFloat(amount_el.value) <= parseFloat(balanceToHuman(original_balance, 18)) + bbbTxFee
         ) {
             button_el.classList.remove('disabled')
             button_el.classList.add('btn-primary')
+
+            amount_el.classList.remove('error')
+
+            send_info_el.classList.add('d-block')
+            send_error_el.classList.remove('d-block')
         } else {
             button_el.classList.remove('btn-primary')
             button_el.classList.add('disabled')
+
+            if(parseFloat(amount_el.value) >= parseFloat(balanceToHuman(original_balance, 18)) + bbbTxFee) {
+                amount_el.classList.add('error')
+
+                send_info_el.classList.remove('d-block')
+                send_error_el.classList.add('d-block')
+            } else {
+                amount_el.classList.remove('error')
+
+                send_info_el.classList.add('d-block')
+                send_error_el.classList.remove('d-block')
+            }
         }
     }
 
-    let decimals = 4
+    let decimals = 2
     const syncAmount = (type = 'both') => {
-        let amount
+        let amount, usd_amount, total_amount
         let update_amount_el = false
 
-        if(type === 'range') amount = range_el.value
-        if(type === 'amount' || type === 'both') amount = amount_el.value
+        if(type === 'usd_amount') amount = usd_amount_el.value / bbbTokenPrice
+        if(type === 'amount' || type === 'both') {
+            amount = amount_el.value
+            usd_amount = amount_el.value * bbbTokenPrice
+        }
 
         if(type === 'amount' || type === 'both') {
             let amount_info = amount.toString().split('.')
@@ -137,34 +163,30 @@ export default async function assetSendScreen(params) {
 
             if(type === 'both') {
                 // min 4 decimals
-                if(decimals < 4) {
-                    decimals = 4
-                    update_amount_el = true
+                if(decimals < 2) {
+                    decimals = 2
                 }
             }
 
             // max 18 decimals
             if(decimals > 18) {
                 decimals = 18
-                update_amount_el = true
             }
-
-            range_el.step = Math.pow(10, -decimals).toFixed(decimals)
         } else {
             // min 4 decimals
-            if(decimals < 4) {
-                decimals = 4
-                update_amount_el = true
+            if(decimals < 2) {
+                decimals = 2
             }
         }
 
         amount = parseFloat(amount).toFixed(decimals)
+        usd_amount = parseFloat(usd_amount).toFixed(2)
+        total_amount = (parseFloat(amount) + bbbTxFee).toFixed(2)
 
-        if(type === 'range' || type === 'both' || update_amount_el) amount_el.value = amount
-        if(type === 'amount' || type === 'both') range_el.value = amount
+        if(type === 'amount' || type === 'both') usd_amount_el.value = usd_amount
+        if(type === 'usd_amount' || type === 'both') amount_el.value = amount
 
-        const value = (range_el.value-range_el.min)/(parseFloat(range_el.max.replace(',', ''))-range_el.min)*100
-        range_el.style.background = 'linear-gradient(to right, #C0FF00 0%, #C0FF00 ' + value + '%, #F8F8F9 ' + value + '%, #F8F8F9 100%)'
+        total_amount_el.innerHTML = total_amount
 
         checkAddress()
     }
