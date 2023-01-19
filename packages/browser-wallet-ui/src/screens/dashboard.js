@@ -4,7 +4,7 @@ import Screen, { clearHistory, goToScreen } from './index.js'
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
 import { initChart, renderChart } from "../chart.js";
-import { balanceToHuman, formatAmount } from "@bitgreen/browser-wallet-utils";
+import {balanceToHuman, formatAmount, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 
 export default async function dashboardScreen(params = {
     imported: false,
@@ -26,10 +26,12 @@ export default async function dashboardScreen(params = {
     await screen.init()
 
     const balance = await sendMessage('get_balance')
+    const token_price_info = getAmountDecimal(bbbTokenPrice, 2)
 
     await screen.set('#heading', 'dashboard/heading', {
         token_balance: formatAmount(balanceToHuman(balance, 2)),
-        token_price: bbbTokenPrice
+        token_price: token_price_info.amount,
+        token_price_decimals: token_price_info.decimals
     })
     await screen.set('#bordered_content', 'dashboard/content', {
         all_balance: formatAmount(balanceToHuman(balance, 2)),
@@ -61,13 +63,31 @@ export default async function dashboardScreen(params = {
     });
 
     anime({
+        targets: '#portfolio #bbb_token_info svg',
+        scale: [0.4, 1],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 400,
+        delay: params.extend_delay ? 1200 : 400
+    });
+
+    anime({
+        targets: '#portfolio #bbb_token_info .amounts',
+        translateX: [20, 0],
+        opacity: [0, 1],
+        easing: 'easeInOutSine',
+        duration: 400,
+        delay: params.extend_delay ? 1400 : 600
+    });
+
+    anime({
         targets: '#portfolio .info p',
         translateX: [-20, 0],
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*600 + (params.extend_delay ? 1200 : 400)
+            return i*400 + (params.extend_delay ? 1200 : 400)
         },
     });
 
@@ -78,44 +98,8 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*600 + (params.extend_delay ? 1200 : 400)
+            return i*400 + (params.extend_delay ? 1200 : 400)
         },
-    });
-
-    anime({
-        targets: '#portfolio #bbb_token .price',
-        translateX: [20, 0],
-        opacity: [0, 1],
-        easing: 'easeInOutSine',
-        duration: 400,
-        delay: params.extend_delay ? 1200 : 600
-    });
-
-    anime({
-        targets: '#portfolio #bbb_token .balance',
-        translateX: [-20, 0],
-        opacity: [0, 1],
-        easing: 'easeInOutSine',
-        duration: 400,
-        delay: params.extend_delay ? 1200 : 600
-    });
-
-    anime({
-        targets: '#portfolio #bbb_token .price_amount',
-        translateX: [-20, 0],
-        opacity: [0, 1],
-        easing: 'easeInOutSine',
-        duration: 200,
-        delay: params.extend_delay ? 1400 : 800
-    });
-
-    anime({
-        targets: '#portfolio #bbb_token .balance_amount',
-        translateX: [20, 0],
-        opacity: [0, 1],
-        easing: 'easeInOutSine',
-        duration: 200,
-        delay: params.extend_delay ? 1400 : 800
     });
 
     anime({

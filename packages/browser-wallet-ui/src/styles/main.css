@@ -1386,7 +1386,7 @@ label.label {
     padding: 4px;
 }
 #full_page .content .mnemonics.bordered.bordered-green {
-    border-color: #9ECC00;
+    border-color: #C0FF00;
 }
 #full_page .content .mnemonics.dragging .word .badge .remove {
     transition: none !important;
@@ -1563,7 +1563,7 @@ label.label {
     width: 100%;
     height: 164px;
     color: #ffffff;
-    padding: 12px 22px 12px 12px;
+    padding: 8px;
     opacity: 0;
 }
 #portfolio:after,
@@ -1599,6 +1599,23 @@ label.label {
 #portfolio .info .icon {
     display: inline-block;
     margin-right: 8px;
+}
+#portfolio #bbb_token_info {
+    color: #C0FF00;
+    font-weight: 500;
+    font-size: 20px;
+}
+#portfolio #bbb_token_info .dollar {
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 8px;
+    /*margin-right: 2px;*/
+}
+#portfolio #bbb_token_info .decimals {
+    position: relative;
+    top: -4px;
+    font-weight: 400;
+    font-size: 16px;
 }
 #chart .chart-text {
     fill: #FFF;
@@ -1888,7 +1905,7 @@ label.label {
 
     position: relative;
     top: -6px;
-    font-weight: 300;
+    font-weight: 400;
 
     letter-spacing: -0.05em;
 }
@@ -1942,13 +1959,13 @@ label.label {
     border-radius: 4px;
 }
 #transaction_info .dot.dot-green {
-    border: 1px solid #9ECC00;
+    border: 1px solid #C0FF00;
 }
 #transaction_info .dot.dot-green:after {
-    background-color: #9ECC00;
+    background-color: #C0FF00;
 }
 #transaction_info .dot.dot-green .dot-line {
-    background-color: #9ECC00;
+    background-color: #C0FF00;
 }
 #qrcode {
     position: relative;

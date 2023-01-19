@@ -89,7 +89,7 @@ const humanToBalance = (amount) => {
     return BigInt(parseInt((parseFloat(amount) * 1000000000000000000).toString()))*1n
 }
 
-const getAmountDecimal = (amount, decimals = 4) => {
+const getAmountDecimal = (amount, decimals = 2) => {
     let amount_info = null
     if(typeof amount === 'string') {
         amount_info = amount.split('.')
