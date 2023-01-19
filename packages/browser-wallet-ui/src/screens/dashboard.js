@@ -32,8 +32,8 @@ export default async function dashboardScreen(params = {
         token_price: bbbTokenPrice
     })
     await screen.set('#bordered_content', 'dashboard/content', {
-        all_balance: formatAmount(balanceToHuman(balance, 4)),
-        bbb_balance: formatAmount(balanceToHuman(balance, 4))
+        all_balance: formatAmount(balanceToHuman(balance, 2)),
+        bbb_balance: formatAmount(balanceToHuman(balance, 2))
     })
 
     await screen.set('#chart', 'dashboard/chart')

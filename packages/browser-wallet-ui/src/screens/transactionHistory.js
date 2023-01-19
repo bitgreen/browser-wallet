@@ -39,7 +39,7 @@ export default async function transactionHistoryScreen() {
 
     const transactions = await sendMessage('get_transactions')
     for(const transaction of transactions) {
-        const asset_info = getAmountDecimal(balanceToHuman(transaction.value.amount), 4)
+        const asset_info = getAmountDecimal(balanceToHuman(transaction.value.amount), 2)
         const created_at = new Date(Date.parse(transaction.value.createdAt))
         const sent = transaction.value.sender.toLowerCase() === current_account.address.toLowerCase()
 

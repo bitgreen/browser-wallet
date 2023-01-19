@@ -20,7 +20,7 @@ export default async function transactionDetailsScreen(params) {
     const transactions_store = new TransactionStore(current_network, current_account)
     const transaction = await transactions_store.asyncGet(params?.hash)
 
-    const asset_info = getAmountDecimal(balanceToHuman(transaction.amount, 6), 6)
+    const asset_info = getAmountDecimal(balanceToHuman(transaction.amount, 2), 2)
     const usd_info = getAmountDecimal(balanceToHuman(transaction.amount) * bbbTokenPrice, 2) // TODO: update price!
     const fee_info = getAmountDecimal(0.27, 2) // TODO: calculate fees!
     const sent = transaction.sender.toLowerCase() === current_account.address.toLowerCase()

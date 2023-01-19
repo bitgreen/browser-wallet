@@ -65,7 +65,7 @@ const randomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const balanceToHuman = (balance, decimals = 4) => {
+const balanceToHuman = (balance, decimals = 2) => {
     const calc_decimals = Math.pow(10, decimals)
     return (Math.floor(balance / 1000000000000000000 * calc_decimals) / calc_decimals).toFixed(decimals);
 }
