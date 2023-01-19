@@ -1823,6 +1823,9 @@ label.label {
     box-shadow: 0 4px 8px -2px rgba(17, 20, 30, 0.1), 0 2px 4px -2px rgba(17, 20, 30, 0.06);
     border-radius: 12px;
 }
+#max_amount:hover {
+    color: #224851;
+}
 #send_info {
     height: 60px;
     color: #667085;

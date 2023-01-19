@@ -28,7 +28,7 @@ export default async function dashboardScreen(params = {
     const balance = await sendMessage('get_balance')
 
     await screen.set('#heading', 'dashboard/heading', {
-        token_balance: balanceToHuman(balance, 2),
+        token_balance: formatAmount(balanceToHuman(balance, 2)),
         token_price: bbbTokenPrice
     })
     await screen.set('#bordered_content', 'dashboard/content', {

@@ -74,6 +74,20 @@ export default async function assetSendScreen(params) {
 
     screen.setListeners([
         {
+            element: '#root #from_account',
+            listener: () => {
+                let accounts_modal_el = document.querySelector("#accounts_modal");
+
+                if(document.querySelector("#header #current_wallet").classList.contains('active')) {
+                    accounts_modal_el.classList.remove('fade')
+                    accounts_modal_el.classList.remove('show')
+                } else {
+                    accounts_modal_el.classList.add('fade')
+                    accounts_modal_el.classList.add('show')
+                }
+            }
+        },
+        {
             element: '#root #amount',
             type: 'input',
             listener: () => syncAmount('amount')
@@ -82,6 +96,10 @@ export default async function assetSendScreen(params) {
             element: '#root #usd_amount',
             type: 'input',
             listener: () => syncAmount('usd_amount')
+        },
+        {
+            element: '#root #max_amount',
+            listener: () => maxAmount()
         },
         {
             element: '#root #recipient',
@@ -112,9 +130,12 @@ export default async function assetSendScreen(params) {
         const address = recipient_el.value
         const button_el = document.querySelector("#go_review_transaction")
 
+        console.log(parseFloat(amount_el.value) + bbbTxFee)
+        console.log((parseFloat(balanceToHuman(original_balance, 18))))
+
         if(parseFloat(amount_el.value) > 0
             && addressValid(address)
-            && parseFloat(amount_el.value) <= parseFloat(balanceToHuman(original_balance, 18)) + bbbTxFee
+            && (parseFloat(amount_el.value) + bbbTxFee) <= parseFloat(balanceToHuman(original_balance, 18))
         ) {
             button_el.classList.remove('disabled')
             button_el.classList.add('btn-primary')
@@ -127,7 +148,7 @@ export default async function assetSendScreen(params) {
             button_el.classList.remove('btn-primary')
             button_el.classList.add('disabled')
 
-            if(parseFloat(amount_el.value) >= parseFloat(balanceToHuman(original_balance, 18)) + bbbTxFee) {
+            if((parseFloat(amount_el.value) + bbbTxFee) >= parseFloat(balanceToHuman(original_balance, 18))) {
                 amount_el.classList.add('error')
 
                 send_info_el.classList.remove('d-block')
@@ -144,7 +165,6 @@ export default async function assetSendScreen(params) {
     let decimals = 2
     const syncAmount = (type = 'both') => {
         let amount, usd_amount, total_amount
-        let update_amount_el = false
 
         if(type === 'usd_amount') amount = usd_amount_el.value / bbbTokenPrice
         if(type === 'amount' || type === 'both') {
@@ -191,4 +211,16 @@ export default async function assetSendScreen(params) {
         checkAddress()
     }
     syncAmount()
+
+    const maxAmount = () => {
+        let max_amount = parseFloat(balanceToHuman(original_balance, 18)) - bbbTxFee * 1.01
+
+        if(max_amount <= 0) {
+            max_amount = 0.00
+        }
+
+        amount_el.value = max_amount.toFixed(2)
+
+        syncAmount('amount')
+    }
 }
