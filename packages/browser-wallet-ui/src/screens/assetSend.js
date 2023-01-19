@@ -130,9 +130,6 @@ export default async function assetSendScreen(params) {
         const address = recipient_el.value
         const button_el = document.querySelector("#go_review_transaction")
 
-        console.log(parseFloat(amount_el.value) + bbbTxFee)
-        console.log((parseFloat(balanceToHuman(original_balance, 18))))
-
         if(parseFloat(amount_el.value) > 0
             && addressValid(address)
             && (parseFloat(amount_el.value) + bbbTxFee) <= parseFloat(balanceToHuman(original_balance, 18))
