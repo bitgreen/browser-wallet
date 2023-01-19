@@ -78,6 +78,10 @@ const formatAmount = (amount, decimals) => {
         formatted_amount = parseFloat(amount).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
     }
 
+    if(formatted_amount === 'NaN') {
+        formatted_amount = (0).toFixed(decimals).toString()
+    }
+
     return formatted_amount
 }
 
