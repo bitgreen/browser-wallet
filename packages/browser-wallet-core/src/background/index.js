@@ -72,7 +72,6 @@ const showPopup = async(command, params = {}) => {
                     height: 600,
                     left,
                     top
-                    // incognito, top, left, ...
                 });
             });
         });

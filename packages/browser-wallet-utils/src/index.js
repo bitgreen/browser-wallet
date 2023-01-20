@@ -118,7 +118,7 @@ const addressValid = (address) => {
 }
 
 const formatAddress = (address, first = 8, last = 6) => {
-    return address.substring(0, first) + '...' + address.substring(address.length - last)
+    return address?.substring(0, first) + '...' + address?.substring(address?.length - last)
 }
 
 export {
