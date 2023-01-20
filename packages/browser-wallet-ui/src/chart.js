@@ -52,6 +52,18 @@ const renderChart = (init_render = false) => {
     amount_el.innerHTML = amount_info.amount
     decimal_el.innerHTML = '.' + amount_info.decimals
 
+    if(total_amount >= 1000000) {
+        decimal_el.classList.add('d-none')
+    } else {
+        decimal_el.classList.remove('d-none')
+    }
+
+    if(total_amount >= 1000000) {
+        text_el.classList.add('text-small')
+    } else {
+        text_el.classList.remove('text-small')
+    }
+
     bbb_token_el.style.transition = "stroke-dasharray, stroke-dashoffset";
     bbb_token_el.style.strokeDasharray = "0 100";
     bbb_token_el.style.strokeDashoffset = "50";

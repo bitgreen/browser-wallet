@@ -20,8 +20,7 @@ export default async function assetSendScreen(params) {
         header: true,
         footer: true,
         tab_id: params?.tab_id,
-        message_id: params?.message_id,
-        win_height: 660
+        message_id: params?.message_id
     })
     await screen.init()
 
@@ -60,7 +59,7 @@ export default async function assetSendScreen(params) {
         from_name: current_account.name,
         from_address: formatAddress(current_account.address, 16, 8),
         balance: formatAmount(balanceToHuman(original_balance, 2)),
-        bbb_fee: formatAmount(bbbTxFee, 2),
+        bbb_fee: formatAmount(bbbTxFee, 18),
         total_bbb: formatAmount(parseFloat(params.amount) + bbbTxFee, 2),
         max_balance: balanceToHuman(original_balance, 18)
     })
@@ -145,7 +144,7 @@ export default async function assetSendScreen(params) {
             button_el.classList.remove('btn-primary')
             button_el.classList.add('disabled')
 
-            if((parseFloat(amount_el.value) + bbbTxFee) >= parseFloat(balanceToHuman(original_balance, 18))) {
+            if((parseFloat(amount_el.value) + bbbTxFee) > parseFloat(balanceToHuman(original_balance, 18))) {
                 amount_el.classList.add('error')
 
                 send_info_el.classList.remove('d-block')
@@ -198,7 +197,7 @@ export default async function assetSendScreen(params) {
 
         amount = parseFloat(amount).toFixed(decimals)
         usd_amount = parseFloat(usd_amount).toFixed(2)
-        total_amount = (parseFloat(amount) + bbbTxFee).toFixed(2)
+        total_amount = (parseFloat(amount) + bbbTxFee).toFixed(decimals)
 
         if(type === 'amount' || type === 'both') usd_amount_el.value = usd_amount
         if(type === 'usd_amount' || type === 'both') amount_el.value = amount
@@ -210,13 +209,19 @@ export default async function assetSendScreen(params) {
     syncAmount()
 
     const maxAmount = () => {
-        let max_amount = parseFloat(balanceToHuman(original_balance, 18)) - bbbTxFee * 1.01
+        let max_amount = parseFloat(balanceToHuman(original_balance, 18)) - bbbTxFee
 
         if(max_amount <= 0) {
             max_amount = 0.00
         }
 
-        amount_el.value = max_amount.toFixed(2)
+        if(max_amount > 100000) {
+            amount_el.value = (max_amount - 0.0001).toFixed(4)
+        } else if(max_amount > 1000) {
+            amount_el.value = (max_amount - 0.000001).toFixed(6)
+        } else {
+            amount_el.value = (max_amount - 0.00000001).toFixed(8)
+        }
 
         syncAmount('amount')
     }

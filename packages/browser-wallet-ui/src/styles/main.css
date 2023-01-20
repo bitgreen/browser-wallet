@@ -728,7 +728,7 @@ label.label {
     position: relative;
     display: block;
     width: 100%;
-    height: 140px;
+    height: 124px;
     padding: 60px 16px 16px 16px;
     user-select: none;
 }
@@ -746,7 +746,7 @@ label.label {
     float: left;
 }
 #heading .content {
-    padding-top: 22px;
+    padding-top: 10px;
 }
 #heading.custom-header .heading {
     width: 100%;
@@ -787,12 +787,12 @@ label.label {
 }
 #bordered_content {
     position: absolute;
-    top: 140px;
+    top: 124px;
     left: 0;
     right: 0;
 
     width: 100%;
-    height: calc(100% - 140px);
+    height: calc(100% - 124px);
 
     padding: 16px 16px 76px;
 
@@ -1624,8 +1624,8 @@ label.label {
     -webkit-transform: translateY(0.25em);
     transform: translateY(0.25em);
 }
-#chart .chart-amount {
-    font-size: 0.4343em;
+#chart .chart-text .chart-amount {
+    font-size: 0.44em;
     line-height: 1;
     text-anchor: middle;
     -moz-transform: translateY(-0.25em);
@@ -1633,25 +1633,31 @@ label.label {
     -webkit-transform: translateY(-0.25em);
     transform: translateY(-0.25em);
 }
-#chart .chart-amount .amount {
+#chart .chart-text.text-small .chart-amount {
+    font-size: 0.38em;
+}
+#chart .chart-text .chart-amount .amount {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
 
     padding: 0 1px 4px;
 }
-#chart .chart-amount .decimals {
+#chart .chart-text .chart-amount .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     font-size: 0.5em;
 
     letter-spacing: -0.05em;
 }
-#chart .chart-amount .dollar {
+#chart .chart-text .chart-amount .dollar {
     font-family: 'Neue Haas Unica Pro', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 0.6em;
 
     letter-spacing: -0.05em;
+}
+#chart .chart-text.text-small .chart-amount .dollar {
+    font-size: 0.6em;
 }
 #chart .chart-label {
     font-size: 0.18em;
@@ -1844,7 +1850,7 @@ label.label {
     color: #224851;
 }
 #send_info {
-    height: 60px;
+    height: 30px;
     color: #667085;
 }
 #send_info .info .text {

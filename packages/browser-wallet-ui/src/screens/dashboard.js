@@ -28,8 +28,10 @@ export default async function dashboardScreen(params = {
     const balance = await sendMessage('get_balance')
     const token_price_info = getAmountDecimal(bbbTokenPrice, 2)
 
+    const bbb_usd_amount = balanceToHuman(balance, 18) * bbbTokenPrice
+
     await screen.set('#heading', 'dashboard/heading', {
-        token_balance: formatAmount(balanceToHuman(balance, 2)),
+        bbb_usd_amount: formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0),
         token_price: token_price_info.amount,
         token_price_decimals: token_price_info.decimals
     })
