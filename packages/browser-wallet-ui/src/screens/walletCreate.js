@@ -1,8 +1,9 @@
-import Screen, { goBackScreen, goToScreen, updateCurrentParams } from './index.js'
+import Screen, {clearHistory, goBackScreen, goToScreen, updateCurrentParams} from './index.js'
 import { showNotification } from "../notifications.js";
 
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
+import {WalletStore} from "@bitgreen/browser-wallet-core";
 
 export default async function walletCreateScreen(params) {
     let current_words = 12
@@ -14,6 +15,12 @@ export default async function walletCreateScreen(params) {
         await sendMessage('new_wallet_screen')
         window.close()
         return
+    }
+
+    const wallet_store = new WalletStore()
+    if(await wallet_store.exists()) {
+        await clearHistory()
+        return await goToScreen('dashboardScreen', {}, false, true)
     }
 
     const screen = new Screen({
