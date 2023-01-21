@@ -5,6 +5,7 @@ import {addressValid, balanceToHuman, formatAddress, formatAmount} from "@bitgre
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from "dompurify";
+import {Tooltip} from 'bootstrap'
 
 export default async function assetSendScreen(params) {
     const wallet_store = new WalletStore()
@@ -70,6 +71,10 @@ export default async function assetSendScreen(params) {
     const send_error_el = document.querySelector("#root #send_info .error")
     const total_amount_el = document.querySelector("#root #send_info .total-amount")
     const recipient_el = document.querySelector("#root #recipient")
+
+    new Tooltip('#root #go_review_transaction', {
+        placement: 'left'
+    })
 
     screen.setListeners([
         {
