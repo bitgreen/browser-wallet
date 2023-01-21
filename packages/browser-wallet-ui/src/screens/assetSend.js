@@ -72,9 +72,7 @@ export default async function assetSendScreen(params) {
     const total_amount_el = document.querySelector("#root #send_info .total-amount")
     const recipient_el = document.querySelector("#root #recipient")
 
-    new Tooltip('#root #go_review_transaction', {
-        placement: 'left'
-    })
+    const feeTooltip = new Tooltip('#root #go_review_transaction')
 
     screen.setListeners([
         {
@@ -113,6 +111,7 @@ export default async function assetSendScreen(params) {
         {
             element: '#go_review_transaction',
             listener: async() => {
+                feeTooltip.hide()
                 updateCurrentParams({
                     amount: amount_el.value,
                     recipient: recipient_el.value
