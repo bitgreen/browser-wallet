@@ -224,7 +224,13 @@ export default async function assetSendScreen(params) {
         } else if(max_amount > 1000) {
             amount_el.value = (max_amount - 0.000001).toFixed(6)
         } else {
-            amount_el.value = (max_amount - 0.00000001).toFixed(8)
+            max_amount = max_amount - 0.00000001
+            if(max_amount <= 0) {
+                max_amount = 0.00
+                amount_el.value = max_amount.toFixed(2)
+            } else {
+                amount_el.value = max_amount.toFixed(8)
+            }
         }
 
         syncAmount('amount')
