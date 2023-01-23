@@ -99,7 +99,7 @@ const getAmountDecimal = (amount, decimals = 2) => {
 
     return {
         amount: amount_info[0],
-        decimals: amount_info[1]
+        decimals: amount_info[1].substring(0, 2)
     }
 }
 
