@@ -65,21 +65,41 @@ const randomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const balanceToHuman = (balance, decimals = 4) => {
+const balanceToHuman = (balance, decimals = 2) => {
     const calc_decimals = Math.pow(10, decimals)
     return (Math.floor(balance / 1000000000000000000 * calc_decimals) / calc_decimals).toFixed(decimals);
+}
+
+const formatAmount = (amount, decimals) => {
+    let formatted_amount = null
+    if(typeof amount === 'string') {
+        formatted_amount = amount.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+        formatted_amount = parseFloat(amount).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    }
+
+    if(formatted_amount === 'NaN') {
+        formatted_amount = (0).toFixed(decimals).toString()
+    }
+
+    return formatted_amount
 }
 
 const humanToBalance = (amount) => {
     return BigInt(parseInt((parseFloat(amount) * 1000000000000000000).toString()))*1n
 }
 
-const getAmountDecimal = (amount, decimals = 4) => {
-    const amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
+const getAmountDecimal = (amount, decimals = 2) => {
+    let amount_info = null
+    if(typeof amount === 'string') {
+        amount_info = amount.split('.')
+    } else {
+        amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
+    }
 
     return {
         amount: amount_info[0],
-        decimals: amount_info[1]
+        decimals: amount_info[1].substring(0, 2)
     }
 }
 
@@ -97,6 +117,10 @@ const addressValid = (address) => {
     }
 }
 
+const formatAddress = (address, first = 8, last = 6) => {
+    return address?.substring(0, first) + '...' + address?.substring(address?.length - last)
+}
+
 export {
     getBrowser,
     isChrome,
@@ -108,7 +132,9 @@ export {
     randomString,
     randomNumber,
     balanceToHuman,
+    formatAmount,
     humanToBalance,
     getAmountDecimal,
-    addressValid
+    addressValid,
+    formatAddress
 }

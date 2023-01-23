@@ -35,7 +35,7 @@ class Tabs {
 
     extrinsic(params) {
         return new Promise(async(resolve, reject) => {
-            await showPopup('extrinsic', params, 700);
+            await showPopup('extrinsic', params);
 
             resolve(true)
         })

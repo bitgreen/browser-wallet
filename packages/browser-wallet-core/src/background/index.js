@@ -31,7 +31,7 @@ const backgroundMessageHandler = (data, port) => {
     });
 }
 
-const showPopup = async(command, params, popup_height = 600) => {
+const showPopup = async(command, params = {}) => {
     let url = 'index.html?' + new URLSearchParams({
         tab_id: await getCurrentTabId(),
         command,
@@ -43,8 +43,8 @@ const showPopup = async(command, params, popup_height = 600) => {
             url: url,
             type: 'popup',
             focused: true,
-            width: 430,
-            height: popup_height
+            width: 400,
+            height: 600
         });
     } else {
         current_browser.windows.getCurrent((win) => {
@@ -61,18 +61,17 @@ const showPopup = async(command, params, popup_height = 600) => {
 
                 // adjust position
                 top = top + 80;
-                left = left + width - 430 - 100;
+                left = left + width - 400 - 100;
 
                 // After the tab has been created, open a window to inject the tab
                 current_browser.windows.create({
                     tabId: tab.id,
                     type: 'popup',
                     focused: true,
-                    width: 430,
-                    height: popup_height,
+                    width: 400,
+                    height: 600,
                     left,
                     top
-                    // incognito, top, left, ...
                 });
             });
         });

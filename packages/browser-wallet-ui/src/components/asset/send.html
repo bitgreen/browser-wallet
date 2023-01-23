@@ -1,26 +1,66 @@
-<h4 class="mb-0">From (${from_name})</h4>
-<p class="text-gray" style="font-size: 13px;">${from_address}</p>
-<div id="choose_token" class="d-flex align-items-sketch select-none"><span class="icon icon-b-circle"></span>
-    <div class="col d-flex align-items-center"><span class="name">BBB Token</span></div>
-</div>
-<label class="label text-dark">Amount</label>
-<div id="choose_quantity" class="d-flex mb-3">
-    <div class="col-4">
-        <div class="form-group"><input id="amount" type="number" class="form-control" value="${amount}"></div>
+<div id="from_account" class="d-flex align-items-sketch align-items-center custom-dropdown click" style="height: 70px;">
+    <div class="row">
+        <div class="name w-100 d-flex align-items-center">From (${from_name})</div>
+        <div class="desc w-100 d-flex align-items-center"><span class="icon icon-wallet-outline"></span>${from_address}</div>
     </div>
-    <div class="col-8">
-        <div class="w-100 text-gray d-flex flex-row-reverse"><span>${balance} Available</span></div>
-        <input id="range" type="range" min="0" max="${balance}" step="0.0001" value="${amount}"></div>
+    <span class="icon icon-down-arrow"></span>
 </div>
-<label class="label text-dark">Recipient</label>
-<div class="form-group">
-    <div class="input-group"><span class="input-group-text"><span class="icon icon-wallet"
-                                                                  style="font-size: 18px;"></span></span><input
-            id="recipient" type="text" class="form-control" placeholder="Address" value="${recipient}" autocomplete="off" spellcheck="false"></div>
+<div class="d-flex align-items-sketch align-items-center custom-dropdown">
+    <div class="asset-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="20" fill="#C0FF00"/>
+            <path d="M28.8017 13.3191C28.8012 12.144 28.3342 11.0172 27.5031 10.1864C26.6719 9.35562 25.5448 8.88892 24.3697 8.88892H11.2V31.0151H24.3697C25.5448 31.0151 26.6719 30.5485 27.5031 29.7177C28.3342 28.887 28.8012 27.76 28.8017 26.5849C28.8021 25.9575 28.6689 25.3373 28.4111 24.7654C28.1534 24.1934 27.7768 23.6829 27.3066 23.2676C27.777 22.8528 28.1535 22.3426 28.4113 21.7709C28.6691 21.1991 28.8023 20.5792 28.8017 19.952C28.8021 19.325 28.6687 18.7049 28.411 18.1334C28.1532 17.5617 27.7768 17.0514 27.3066 16.6365C27.7768 16.2212 28.1534 15.7106 28.4111 15.1387C28.6689 14.5667 28.8021 13.9465 28.8017 13.3191ZM13.9608 11.1182H23.7048C24.278 11.1345 24.8222 11.3736 25.2218 11.7848C25.6215 12.1959 25.8449 12.7467 25.8449 13.32C25.8449 13.8934 25.6215 14.4441 25.2218 14.8553C24.8222 15.2664 24.278 15.5055 23.7048 15.5218H13.9608V11.1182ZM13.9608 17.7511H23.7048C24.2885 17.7511 24.8483 17.983 25.2611 18.3958C25.6739 18.8086 25.9057 19.3684 25.9057 19.952C25.9057 20.5357 25.6739 21.0955 25.2611 21.5083C24.8483 21.9211 24.2885 22.1529 23.7048 22.1529H13.9608V17.7511ZM23.7048 28.7858H13.9608V24.3822H23.7048C24.278 24.3986 24.8222 24.6377 25.2218 25.0487C25.6215 25.4599 25.8449 26.0107 25.8449 26.584C25.8449 27.1574 25.6215 27.7081 25.2218 28.1193C24.8222 28.5303 24.278 28.7694 23.7048 28.7858Z" fill="#224851"/>
+        </svg>
+    </div>
+    <div class="row">
+        <div class="name w-100 d-flex align-items-center">BBB Tokens</div>
+        <div class="desc w-100 d-flex align-items-center">${balance} Available</div>
+    </div>
+</div>
+<div id="choose_quantity" class="d-flex select-none">
+    <div class="w-100">
+        <div class="form-group custom-border">
+            <input id="amount" type="number" class="form-control" value="${amount}">
+            <label class="d-flex label w-100" for="amount"><span class="w-100">BBB Tokens</span><span id="max_amount" class="text-right click">MAX</span></label>
+        </div>
+    </div>
+    <div class="equals d-flex align-items-center">=</div>
+    <div class="w-100">
+        <div class="form-group custom-border">
+            <input id="usd_amount" type="number" class="form-control">
+            <label class="label w-100 text-center" for="usd_amount">USD</label>
+        </div>
+    </div>
+</div>
+<div id="send_info">
+    <div class="info">
+        <div class="d-flex">
+            <div class="col-4 text">Total to send</div>
+            <div class="col-8 text-right fee-info"><span class="total-amount"></span> BBB</div>
+        </div>
+    </div>
+    <div class="error select-none">
+        <div class="d-flex align-items-center text-center">
+            <span class="w-100"><svg class="me-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C5.36705 0 0 5.36752 0 12C0 18.633 5.36752 24 12 24C18.633 24 24 18.6325 24 12C24 5.36705 18.6325 0 12 0ZM12 22.125C6.40345 22.125 1.875 17.5962 1.875 12C1.875 6.40345 6.40383 1.875 12 1.875C17.5965 1.875 22.125 6.40383 22.125 12C22.125 17.5965 17.5962 22.125 12 22.125Z" fill="#F53400"/>
+                <path d="M12 6.04102C11.4822 6.04102 11.0625 6.46073 11.0625 6.97852V13.0157C11.0625 13.5335 11.4822 13.9532 12 13.9532C12.5178 13.9532 12.9375 13.5335 12.9375 13.0157V6.97852C12.9375 6.46073 12.5178 6.04102 12 6.04102Z" fill="#F53400"/>
+                <path d="M12 17.6326C12.699 17.6326 13.2656 17.0659 13.2656 16.3669C13.2656 15.668 12.699 15.1013 12 15.1013C11.301 15.1013 10.7344 15.668 10.7344 16.3669C10.7344 17.0659 11.301 17.6326 12 17.6326Z" fill="#F53400"/>
+            </svg>Insufficient Balance.</span>
+        </div>
+    </div>
+</div>
+<div class="d-flex align-items-sketch align-items-center custom-dropdown" style="height: 70px;">
+    <div class="row">
+        <div class="name w-100 d-flex align-items-center">Recipient</div>
+        <div class="desc w-100 d-flex align-items-center">
+            <span class="icon icon-wallet-outline"></span>
+            <input id="recipient" type="text" class="form-control desc" placeholder="Address" value="${recipient}" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
 </div>
 <div class="footer double-footer d-flex align-items-sketch flex-row-reverse">
     <div class="d-flex">
-        <button id="go_review_transaction" class="btn disabled ps-3 pe-3">Review <span
+        <button id="go_review_transaction" class="btn btn-sm btn-rounded disabled ps-3 pe-3"  title="Transaction Fee:<br>${bbb_fee} BBB" data-bs-html="true" data-bs-placement="bottom">Review <span
                 class="icon icon-right-arrow"></span></button>
     </div>
 </div>

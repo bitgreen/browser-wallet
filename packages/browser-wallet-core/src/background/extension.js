@@ -14,6 +14,7 @@ import { polkadotApi } from "../polkadotApi.js";
 import { humanToBalance } from "@bitgreen/browser-wallet-utils";
 
 import { passwordTimeout } from "../constants.js";
+import {showPopup} from "./index.js";
 
 class Extension {
     #password
@@ -31,8 +32,10 @@ class Extension {
         await this.refreshPassword()
 
         switch(data.command) {
+            case 'new_wallet_screen':
+                return await this.newWalletScreen()
             case 'new_wallet':
-                return await this.newWallet()
+                return await this.newWallet(data?.params)
             case 'save_wallet':
                 return await this.saveWallet(data?.params)
             case 'unlock_wallet':
@@ -88,10 +91,16 @@ class Extension {
         }
     }
 
-    async newWallet() {
+
+    async newWalletScreen() {
+        return await showPopup('new_wallet');
+    }
+
+    async newWallet(params) {
+        const words = params?.words === 24 ? 24 : 12
         await cryptoWaitReady()
 
-        const mnemonic = mnemonicGenerate(24);
+        const mnemonic = mnemonicGenerate(words);
         return mnemonic.split(' ')
     }
 

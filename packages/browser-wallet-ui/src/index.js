@@ -23,6 +23,7 @@ import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
 import './styles/main.css'
 import './styles/icomoon.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import {formatAddress} from "@bitgreen/browser-wallet-utils";
 
 class userInterface {
     constructor() {
@@ -42,7 +43,7 @@ class userInterface {
     initHeader = async() => {
         await updateElement('#header', 'shared/header', {
             account_jdenticon: jdenticon.toSvg(this.current_account.address,56),
-            account_address: this.current_account?.address?.substring(0,8)+'...'+this.current_account?.address?.substring(this.current_account?.address.length-8),
+            account_address: formatAddress(this.current_account?.address, 8, 8),
             account_name: (this.current_account?.name && this.current_account?.name?.length) > 14 ? this.current_account?.name?.substring(0,14)+'...' : this.current_account?.name
         }, false)
 
@@ -64,13 +65,8 @@ class userInterface {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
         })
-        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async() => {
-            const accounts_store = new AccountStore()
-            const current_account = await accounts_store.current()
-
-            await copyText(current_account.address)
-            await showNotification('Account address copied to clipboard.', 'info')
-        });
+        document.querySelector("#header #go_copy").addEventListener("click", async() => this.copyCurrentAddress());
+        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async() => this.copyCurrentAddress());
         document.querySelector("#accounts_modal #lock_wallet").addEventListener("click", async(e) => {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
@@ -89,13 +85,20 @@ class userInterface {
         })
     }
 
+    copyCurrentAddress = async() =>  {
+        const accounts_store = new AccountStore()
+        const current_account = await accounts_store.current()
+
+        await copyText(current_account.address)
+        await showNotification('Account address copied to clipboard.', 'info')
+    }
+
     initAccounts = async() => {
         const current_account = await this.db.stores.accounts.current()
-        const accounts = await this.db.stores.accounts.asyncAll()
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
-            current_account_address: current_account?.address?.substring(0,16)+'...'+current_account?.address?.substring(current_account.address.length-8),
+            current_account_address: formatAddress(current_account?.address, 16, 8),
             is_primary: current_account?.id === '0' ? '' : 'hidden'
         }, false)
 

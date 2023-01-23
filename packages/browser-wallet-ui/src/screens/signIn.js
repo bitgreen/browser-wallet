@@ -1,12 +1,19 @@
-import Screen, { goToScreen } from './index.js'
+import Screen, {clearHistory, goToScreen} from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import { AccountStore, checkIfAppIsKnown } from "@bitgreen/browser-wallet-core";
+import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
 
 import anime from "animejs";
 import { showNotification } from "../notifications.js";
 
 export default async function signInScreen(params) {
+    const wallet_store = new WalletStore()
+    if(!await wallet_store.exists()) {
+        await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
+        await clearHistory()
+        return await goToScreen('walletScreen', {}, false, true)
+    }
+
     const screen = new Screen({
         template_name: 'layouts/default',
         login: false,

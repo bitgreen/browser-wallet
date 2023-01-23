@@ -22,13 +22,17 @@ export default async function assetReceiveScreen() {
         address: current_account.address
     })
 
-    await QRCode.toCanvas(document.querySelector("#qrcode"), current_account.address, {
-        width: 210,
-        quality: 1,
+    await QRCode.toString(current_account.address, {
+        width: 160,
+        quality: 4,
         margin: 0,
-        colorDark : "#061C00",
-        colorLight : "#ffffff",
+        color: {
+            dark:"#224851",
+            light:"#ffffff"
+        },
         errorCorrectionLevel: 'L'
+    }, (err, string) => {
+        document.querySelector("#qrcode").innerHTML = string
     });
 
     screen.setListeners([

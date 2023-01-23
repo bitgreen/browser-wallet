@@ -1,18 +1,15 @@
 <div id="portfolio" class="d-flex align-items-center">
-    <div id="chart" class="col-6"></div>
-    <div class="col-6 info">
+    <div id="chart" class="col-5"></div>
+    <div class="col-7 info pe-2">
         <h1 class="text-white">Portfolio</h1>
-        <p><span class="icon icon-circle" style="color: #9ECC00"></span> BBB Token</p>
-        <div id="bbb_token" class="mt-1 mb-2">
-            <div class="row d-flex">
-                <div class="col-4 price text-small text-light-gray text-bold">Price</div>
-                <div class="col-8 balance text-small text-light-gray text-bold text-right">Balance Available</div>
-            </div>
-            <div class="row d-flex">
-                <div class="col-3 price_amount">$${token_price}</div>
-                <div class="col-9 balance_amount text-right">${token_balance} BBB</div>
-            </div>
+        <div id="bbb_token_info" class="d-flex align-items-center mt-2 mb-2">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="16" fill="#C0FF00"/>
+                <path d="M23.0414 10.6553C23.041 9.71516 22.6674 8.81368 22.0025 8.14906C21.3376 7.48445 20.4359 7.11108 19.4958 7.11108H8.95999V24.8121H19.4958C20.4359 24.8121 21.3376 24.4387 22.0025 23.7741C22.6674 23.1095 23.041 22.208 23.0414 21.2679C23.0417 20.766 22.9352 20.2698 22.729 19.8122C22.5227 19.3547 22.2215 18.9462 21.8453 18.614C22.2216 18.2822 22.5229 17.874 22.7291 17.4166C22.9353 16.9593 23.0418 16.4633 23.0414 15.9616C23.0417 15.46 22.935 14.9639 22.7288 14.5066C22.5226 14.0493 22.2215 13.6411 21.8453 13.3091C22.2215 12.9769 22.5227 12.5684 22.729 12.1109C22.9352 11.6533 23.0417 11.1571 23.0414 10.6553ZM11.1687 8.89455H18.9639C19.4224 8.90758 19.8578 9.09887 20.1775 9.42778C20.4972 9.75669 20.676 10.1973 20.676 10.656C20.676 11.1147 20.4972 11.5553 20.1775 11.8842C19.8578 12.2131 19.4224 12.4044 18.9639 12.4174H11.1687V8.89455ZM11.1687 14.2009H18.9639C19.4308 14.2009 19.8787 14.3863 20.2089 14.7166C20.5392 15.0468 20.7246 15.4947 20.7246 15.9616C20.7246 16.4285 20.5392 16.8763 20.2089 17.2066C19.8787 17.5368 19.4308 17.7223 18.9639 17.7223H11.1687V14.2009ZM18.9639 23.0286H11.1687V19.5058H18.9639C19.4224 19.5188 19.8578 19.7101 20.1775 20.0389C20.4972 20.3679 20.676 20.8085 20.676 21.2672C20.676 21.7258 20.4972 22.1664 20.1775 22.4954C19.8578 22.8242 19.4224 23.0155 18.9639 23.0286Z" fill="#224851"/>
+            </svg>
+            <span class="amounts"><span class="dollar">$</span>${token_price}<span class="decimals">.${token_price_decimals}</span></span>
         </div>
-        <p><span class="icon icon-circle" style="color: #D5D6DA"></span> Other</p>
+        <p class="d-flex"><span class="icon icon-circle" style="color: #C0FF00"></span><span class="w-100">BBB Tokens</span><span class="w-100 text-right">$${bbb_usd_amount}</span></p>
+        <p><span class="icon icon-circle" style="color: #D5D6DA"></span>Other</p>
     </div>
 </div>

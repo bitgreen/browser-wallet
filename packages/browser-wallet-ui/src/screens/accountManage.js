@@ -2,6 +2,7 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import * as jdenticon from 'jdenticon'
+import {formatAddress} from "@bitgreen/browser-wallet-utils";
 
 export default async function accountManageScreen() {
     const screen = new Screen({
@@ -25,7 +26,7 @@ export default async function accountManageScreen() {
             account_id,
             account_jdenticon: jdenticon.toSvg(account?.address,56),
             account_name: (account?.name && account?.name.length > 10) ? account?.name.substring(0,10)+'...' : account?.name,
-            account_address: account?.address?.substring(0,16)+'...'+account?.address?.substring(account?.address.length-8),
+            account_address: formatAddress(account?.address, 16, 8),
             is_main: account_id?.toString() === '0' ? '' : 'hidden',
             is_current: account_id?.toString() === current_account?.id?.toString() ? '' : 'hidden'
         })

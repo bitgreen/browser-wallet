@@ -1,19 +1,27 @@
-import Screen, { goToScreen } from './index.js'
+import Screen, {clearHistory, goToScreen} from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
-import { AccountStore, checkIfAppIsKnown } from "@bitgreen/browser-wallet-core";
+import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
 
 import DOMPurify from "dompurify";
 import { showNotification } from "../notifications.js";
 import anime from "animejs";
 
 export default async function extrinsicSendScreen(params) {
+    const wallet_store = new WalletStore()
+    if(!await wallet_store.exists()) {
+        await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
+        await clearHistory()
+        return await goToScreen('walletScreen', {}, false, true)
+    }
+
     const screen = new Screen({
         template_name: 'layouts/default',
         login: false,
         header: true,
         footer: false,
         tab_id: params?.tab_id,
-        message_id: params?.message_id
+        message_id: params?.message_id,
+        win_height: 700
     })
     await screen.init()
 
