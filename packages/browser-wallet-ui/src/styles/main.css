@@ -1506,6 +1506,19 @@ label.label {
     fill: transparent;
     stroke: #C0FF00;
 }
+.tooltip.tooltip-footer.show {
+    opacity: 1 !important;
+}
+.tooltip.tooltip-footer .tooltip-inner {
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 12px;
+    text-transform: uppercase;
+    color: #C0FF00;
+    padding: 2px 8px;
+    border: 1px solid #C0FF00;
+    background-color: #224851;
+}
 .footer-only {
     padding: 16px;
 }
