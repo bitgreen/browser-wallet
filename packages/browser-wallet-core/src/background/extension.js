@@ -468,6 +468,7 @@ class Extension {
         }
 
         return new Promise(async(resolve) => {
+            console.log(amount)
             await polkadot_api.tx.balances.transfer(params?.recipient, amount)
                 .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
                     if(dispatchError) {
@@ -497,8 +498,8 @@ class Extension {
                         resolve(response)
                     }
 
-                    if(status.isInBlock || status.isFinalized) {
-                        // return result as soon as successfully submitted to the chain
+                    if(status.isInBlock) {
+                        // return result after confirmation
                         resolve({
                             success: true,
                             data: {
@@ -577,8 +578,8 @@ class Extension {
                         resolve(response)
                     }
 
-                    if(status.isInBlock || status.isFinalized) {
-                        // return result as soon as successfully submitted to the chain
+                    if(status.isInBlock) {
+                        // return result after confirmation
                         resolve({
                             success: true,
                             data: {

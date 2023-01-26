@@ -1,5 +1,6 @@
 import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 import { hexToU8a, isHex } from "@polkadot/util";
+import BigNumber from "bignumber.js";
 
 const getBrowser = () => {
     let userAgent = navigator.userAgent;
@@ -86,7 +87,11 @@ const formatAmount = (amount, decimals) => {
 }
 
 const humanToBalance = (amount) => {
-    return BigInt(parseInt((parseFloat(amount) * 1000000000000000000).toString()))*1n
+    const decimals = new BigNumber(1000000000000000000)
+    const amountBalance = new BigNumber(parseFloat(amount))
+
+    const result = amountBalance.times(decimals);
+    return result.toFixed(0)
 }
 
 const getAmountDecimal = (amount, decimals = 2) => {
@@ -99,7 +104,7 @@ const getAmountDecimal = (amount, decimals = 2) => {
 
     return {
         amount: amount_info[0],
-        decimals: amount_info[1].substring(0, 2)
+        decimals: amount_info[1]?.substring(0, 2) || '00'
     }
 }
 
