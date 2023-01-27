@@ -1,7 +1,7 @@
 #!/bin/sh
 
 mkdir -p dist && rm dist/*.zip
-npm run install
+npm install
 npm run build
 cd build/chrome/
 zip -r ../../dist/chrome.zip .
