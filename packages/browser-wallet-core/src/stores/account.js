@@ -16,7 +16,7 @@ class AccountStore extends BaseStore {
         let account = await this.asyncGet(current_id)
 
         if(!current_id || !account) {
-            current_id = '0'
+            current_id = 'main'
             await this.asyncSet('current', current_id)
         }
 
@@ -30,6 +30,34 @@ class AccountStore extends BaseStore {
         }
     }
 
+    all(update, exclude = []) {
+        this.allMap((map) => {
+            let items = []
+
+            for(const [key, value] of Object.entries(map)) {
+                if(!exclude.includes(key)) items.push({key, value})
+            }
+
+            // Sort accounts by key. Keep 'main' at the top.
+            items.sort((a, b) => {
+                if(a.key === 'main') {
+                    return -1
+                } else {
+                    if(parseInt(a.key) < parseInt(b.key)) {
+                        return -1
+                    }
+
+                    if(parseInt(a.key) > parseInt(b.key)) {
+                        return 1
+                    }
+                }
+
+                return 0
+            })
+
+            update(items)
+        });
+    }
     async asyncAll() {
         return new Promise((resolve) => {
             this.all(resolve, ['current']);
@@ -37,14 +65,14 @@ class AccountStore extends BaseStore {
     }
 
     async nextId() {
-        let next_id = null
+        let next_id = 0
         for(const account of await this.asyncAll()) {
             if(parseInt(account?.key) >= next_id) {
                 next_id = parseInt(account?.key) + 1
             }
         }
 
-        return next_id
+        return next_id.toString()
     }
 }
 

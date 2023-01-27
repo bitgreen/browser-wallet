@@ -1,5 +1,9 @@
 <div class="button-item d-flex align-items-center click-only" data-id="${account_id}">
     ${account_jdenticon}
-    <div class="col"><h4 class="m-0 d-flex align-items-center">${account_name}<span class="badge badge-rounded badge-primary ms-1 ${is_main}">Primary</span><span class="badge badge-rounded badge-secondary ms-1 ${is_current}">Current</span></h4><p class="text-gray text-small m-0 w-75"><span class="icon-wallet-outline me-1"></span>${account_address}</p></div>
+    <div class="col">
+        <h4 class="m-0 d-flex align-items-center">${account_name}<span class="badge badge-rounded badge-primary ms-1 ${is_main}">Primary</span><span class="badge badge-rounded badge-secondary ms-1 ${is_current}">Current</span></h4>
+        <p class="text-gray text-small m-0 w-75"><span class="icon-wallet-outline me-1"></span>${account_address}</p>
+        <p class="text-gray text-very-small ${hide_derivation}">Derivation path: ${derivation_path}</p>
+    </div>
     <span class="icon icon-right-arrow text-center"></span>
 </div>

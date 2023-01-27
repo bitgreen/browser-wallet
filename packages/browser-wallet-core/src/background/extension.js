@@ -1,5 +1,5 @@
 import aesjs from 'aes-js'
-import { hexToU8a, stringToU8a, u8aToHex } from '@polkadot/util'
+import {hexToU8a, stringToU8a, u8aToHex} from '@polkadot/util'
 import {
     blake2AsU8a,
     cryptoWaitReady,
@@ -8,12 +8,12 @@ import {
     mnemonicValidate,
     sha512AsU8a
 } from '@polkadot/util-crypto'
-import { AccountStore, NetworkStore, SettingsStore, WalletStore, TransactionStore } from "../stores/index.js"
-import { Keyring } from "@polkadot/keyring"
-import { polkadotApi } from "../polkadotApi.js";
-import { humanToBalance } from "@bitgreen/browser-wallet-utils";
+import {AccountStore, NetworkStore, SettingsStore, TransactionStore, WalletStore} from "../stores/index.js"
+import {Keyring} from "@polkadot/keyring"
+import {polkadotApi} from "../polkadotApi.js";
+import {humanToBalance} from "@bitgreen/browser-wallet-utils";
 
-import { passwordTimeout } from "../constants.js";
+import {passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
 
 class Extension {
@@ -91,7 +91,6 @@ class Extension {
         }
     }
 
-
     async newWalletScreen() {
         return await showPopup('new_wallet');
     }
@@ -119,7 +118,11 @@ class Extension {
         const encrypted_data = await this.encryptWallet(mnemonic, password)
         await this.wallets_store.asyncSet('main', encrypted_data)
 
-        await this.createAccount(name, mnemonic)
+        // create main account
+        await this.createAccount(name, mnemonic, 'main')
+
+        // import accounts with balance > 0
+        // TODO
 
         return true
     }
@@ -187,11 +190,15 @@ class Extension {
         await polkadotApi(true) // reload polkadot API
     }
 
-    async getBalance() {
+    async getBalance(account_id = '') {
         const polkadot_api = await polkadotApi()
-        const current_account = await this.accounts_store.current()
+        let account = await this.accounts_store.current()
 
-        const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
+        if(account_id) {
+            account = await this.accounts_store.asyncGet(account_id)
+        }
+
+        const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
 
         return balance.free.toString()
     }
@@ -385,11 +392,11 @@ class Extension {
         }
     }
 
-    async createAccount(name, mnemonic, account_id = 0) {
+    async createAccount(name, mnemonic, account_id = 'main') {
         await cryptoWaitReady()
 
         let uri_mnemonic = mnemonic
-        if(account_id > 0) {
+        if(account_id !== 'main') {
             uri_mnemonic += '//' + account_id
         }
 
@@ -411,7 +418,7 @@ class Extension {
         return account_id
     }
 
-    async loadAccount(password, account_id = false) {
+    async loadAccount(password, account_id) {
         await cryptoWaitReady()
 
         let mnemonic = await this.decryptWallet(password, true)
@@ -420,9 +427,8 @@ class Extension {
             return false
         }
 
-        account_id = parseInt(account_id)
         const account = await this.accounts_store.asyncGet(account_id)
-        if(account_id && account_id > 0 && account) {
+        if(account_id && account) {
             mnemonic += '//' + account_id
         }
 
@@ -468,7 +474,6 @@ class Extension {
         }
 
         return new Promise(async(resolve) => {
-            console.log(amount)
             await polkadot_api.tx.balances.transfer(params?.recipient, amount)
                 .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
                     if(dispatchError) {
