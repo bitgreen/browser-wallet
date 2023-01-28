@@ -1535,6 +1535,11 @@ label.label {
     z-index: 99;
     user-select: none;
 }
+.footer.equal-footer {
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+}
 .footer.double-footer {
     bottom: 62px;
 }
