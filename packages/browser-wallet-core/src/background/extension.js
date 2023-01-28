@@ -11,7 +11,7 @@ import {
 import {AccountStore, NetworkStore, SettingsStore, TransactionStore, WalletStore} from "../stores/index.js"
 import {Keyring} from "@polkadot/keyring"
 import {polkadotApi} from "../polkadotApi.js";
-import {humanToBalance} from "@bitgreen/browser-wallet-utils";
+import {addressValid, humanToBalance} from "@bitgreen/browser-wallet-utils";
 
 import {passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
@@ -72,11 +72,7 @@ class Extension {
     async savePassword(password) {
         this.#password = password
 
-        // remove password after password_time
-        clearTimeout(this.password_timer)
-        this.password_timer = setTimeout(() => {
-            this.#password = null;
-        }, passwordTimeout)
+        await this.refreshPassword()
     }
 
     async refreshPassword() {
@@ -118,11 +114,12 @@ class Extension {
         const encrypted_data = await this.encryptWallet(mnemonic, password)
         await this.wallets_store.asyncSet('main', encrypted_data)
 
-        // create main account
+        // create main account & set as default
         await this.createAccount(name, mnemonic, 'main')
+        await this.accounts_store.asyncSet('current', 'main')
 
         // import accounts with balance > 0
-        // TODO
+        this.importAccountsWithBalance(mnemonic, password).then()
 
         return true
     }
@@ -148,15 +145,35 @@ class Extension {
         const password = params?.password
         const name = params?.name
         const next_id = await this.accounts_store.nextId()
+        let derivation_path = params?.derivation_path.toLowerCase()
 
-        if(!password || !name) {
-            return false
+        if(!password) {
+            return { error: 'Password is wrong!' }
+        }
+
+        if(!name) {
+            return { error: 'Account Name is required.' }
+        }
+
+        if(derivation_path && derivation_path !== '') {
+            if(!derivation_path.match(/^[\w-]+$/g)) {
+                return { error: 'Invalid derivation path.' }
+            }
+
+            const account_exist = await this.accounts_store.asyncGet(derivation_path)
+            if(account_exist) {
+                return { error: 'Account already exists.' }
+            }
+        } else {
+            derivation_path = next_id
         }
 
         const mnemonic = await this.decryptWallet(password, true)
 
         if(mnemonic) {
-            return this.createAccount(name, mnemonic, next_id)
+            const response = this.createAccount(name, mnemonic, derivation_path)
+            if(response) await this.accounts_store.asyncSet('current', derivation_path)
+            return response
         }
 
         return false
@@ -190,15 +207,23 @@ class Extension {
         await polkadotApi(true) // reload polkadot API
     }
 
-    async getBalance(account_id = '') {
+    async getBalance() {
         const polkadot_api = await polkadotApi()
-        let account = await this.accounts_store.current()
-
-        if(account_id) {
-            account = await this.accounts_store.asyncGet(account_id)
-        }
+        const account = await this.accounts_store.current()
 
         const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
+
+        return balance.free.toString()
+    }
+
+    async getBalanceByAddress(account_address) {
+        const polkadot_api = await polkadotApi()
+
+        if(!addressValid(account_address)) {
+            return 0
+        }
+
+        const { nonce, data: balance } = await polkadot_api.query.system.account(account_address);
 
         return balance.free.toString()
     }
@@ -392,7 +417,7 @@ class Extension {
         }
     }
 
-    async createAccount(name, mnemonic, account_id = 'main') {
+    async createAccount(name, mnemonic, account_id) {
         await cryptoWaitReady()
 
         let uri_mnemonic = mnemonic
@@ -413,12 +438,10 @@ class Extension {
             "name": name
         })
 
-        await this.accounts_store.asyncSet('current', account_id)
-
         return account_id
     }
 
-    async loadAccount(password, account_id) {
+    async loadAccount(password, account_id, temp_load = false) {
         await cryptoWaitReady()
 
         let mnemonic = await this.decryptWallet(password, true)
@@ -428,7 +451,7 @@ class Extension {
         }
 
         const account = await this.accounts_store.asyncGet(account_id)
-        if(account_id && account) {
+        if(account_id && (account || temp_load)) {
             mnemonic += '//' + account_id
         }
 
@@ -436,7 +459,21 @@ class Extension {
             type: 'sr25519'
         });
 
-        return keyring.addFromUri(mnemonic, { name: account.name }, 'sr25519');
+        return keyring.addFromUri(mnemonic, { name: temp_load ? 'Account ' + account_id : account.name }, 'sr25519');
+    }
+
+    async importAccountsWithBalance(mnemonic, password) {
+        for(let i = 0; i <= 100; i++) {
+            const account_id = i
+            const temp_account = await this.loadAccount(password, account_id.toString(), true)
+
+            if(await this.getBalanceByAddress(temp_account.address) > 0) {
+                // save this account
+                await this.createAccount('Account ' + account_id, mnemonic, account_id.toString())
+            } else {
+                break
+            }
+        }
     }
 
     async signIn(message_id, params) {
@@ -472,6 +509,8 @@ class Extension {
         if(!account) {
             return false
         }
+
+        console.log(amount)
 
         return new Promise(async(resolve) => {
             await polkadot_api.tx.balances.transfer(params?.recipient, amount)

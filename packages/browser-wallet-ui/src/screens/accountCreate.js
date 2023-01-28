@@ -23,7 +23,21 @@ export default async function accountCreateScreen() {
             listener: () => goBackScreen()
         },
         {
-            element: '#store_account',
+            element: '#root #derivation_path_check',
+            type: 'change',
+            listener: () => {
+                const derivation_path_wrapper = document.querySelector("#root #derivation_path_wrapper")
+                const derivation_path_check = document.querySelector("#root #derivation_path_check").checked
+
+                if(derivation_path_check) {
+                    derivation_path_wrapper.classList.remove('hidden')
+                } else {
+                    derivation_path_wrapper.classList.add('hidden')
+                }
+            }
+        },
+        {
+            element: '#root #store_account',
             listener: () => storeAccount()
         }
     ])
@@ -31,17 +45,23 @@ export default async function accountCreateScreen() {
     const storeAccount = async() => {
         const password = DOMPurify.sanitize(document.querySelector("#root #password").value);
         const name = DOMPurify.sanitize(document.querySelector("#root #wallet_name").value);
+        const derivation_path_check = document.querySelector("#root #derivation_path_check").checked
+        let derivation_path = ''
 
-        const account_id = await sendMessage('new_account', {
-            password, name
+        if(derivation_path_check) {
+            derivation_path = DOMPurify.sanitize(document.querySelector("#root #derivation_path").value);
+        }
+
+        const response = await sendMessage('new_account', {
+            password, name, derivation_path
         })
 
-        if(account_id) {
-            await updateAccounts(account_id)
+        if(response && !response.error) {
+            await updateAccounts(response)
             await goToScreen('accountManageScreen', {}, true)
             await showNotification('New account created!', 'success')
         } else {
-            await showNotification('Password is wrong!', 'error')
+            await showNotification(response.error, 'error')
         }
     }
 }
