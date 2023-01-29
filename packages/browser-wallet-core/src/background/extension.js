@@ -451,7 +451,7 @@ class Extension {
         }
 
         const account = await this.accounts_store.asyncGet(account_id)
-        if(account_id && (account || temp_load)) {
+        if(account_id !== 'main' && account_id && (account || temp_load)) {
             mnemonic += '//' + account_id
         }
 
@@ -509,8 +509,6 @@ class Extension {
         if(!account) {
             return false
         }
-
-        console.log(amount)
 
         return new Promise(async(resolve) => {
             await polkadot_api.tx.balances.transfer(params?.recipient, amount)
