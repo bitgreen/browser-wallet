@@ -21,7 +21,7 @@ export default async function accountEditScreen(params) {
     const accounts_store = new AccountStore()
     const account = await accounts_store.asyncGet(account_id)
 
-    if(account_id > 0) await screen.append('.heading', 'accounts/edit/delete_button')
+    if(account_id !== 'main') await screen.append('.heading', 'accounts/edit/delete_button')
 
     await screen.set('.content', 'accounts/edit/content', {
         account_id,
