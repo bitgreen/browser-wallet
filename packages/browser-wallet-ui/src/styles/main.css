@@ -1531,7 +1531,7 @@ label.label {
     width: calc(100% - 16px);
     min-height: 65px;
     padding-top: 8px;
-    padding-bottom: 16px;
+    padding-bottom: 8px;
     z-index: 99;
     user-select: none;
 }
@@ -1541,7 +1541,7 @@ label.label {
     align-items: center;
 }
 .footer.double-footer {
-    bottom: 62px;
+    bottom: 64px;
 }
 
 .info-messages {
