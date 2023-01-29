@@ -10,7 +10,7 @@ export default async function walletBackupScreen(params) {
     const screen = new Screen({
         template_name: 'layouts/full_page',
         template_params: {
-            title: 'Backup Wallet'
+            title: 'Back Up Wallet'
         },
         header: false
         // smooth_load: true

@@ -503,7 +503,7 @@ const updateAccounts = async(current_account_id = null) => {
 
                 accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 accounts_modal_el.querySelector('.address').innerHTML = formatAddress(account?.address, 12, 8)
-                if(account_id?.toString() === '0') {
+                if(account_id?.toString() === 'main') {
                     accounts_modal_el.querySelector('.badge-primary').classList.remove('hidden')
                 } else {
                     accounts_modal_el.querySelector('.badge-primary').classList.add('hidden')
@@ -515,7 +515,7 @@ const updateAccounts = async(current_account_id = null) => {
                 account_jdenticon,
                 account_name: (account.name && account.name.length > 10) ? account.name.substring(0,10)+'...' : account.name,
                 account_address: formatAddress(account?.address, 16, 8),
-                is_main: account_id?.toString() === '0' ? '' : 'hidden',
+                is_main: account_id?.toString() === 'main' ? '' : 'hidden',
                 is_current: is_current ? '' : 'hidden'
             }, true)
         }

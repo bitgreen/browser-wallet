@@ -164,7 +164,7 @@ p {
     min-height: 40px;
 }
 .btn.btn-xs {
-    padding: 4px 6px;
+    padding: 4px 6px !important;
     font-size: 12px;
     line-height: 22px;
     min-height: 30px;
@@ -286,6 +286,7 @@ p {
 }
 .alert {
     padding: 0;
+    margin-bottom: 8px;
 }
 .alert-danger {
     background-color: #ffffff;
@@ -1506,23 +1507,41 @@ label.label {
     fill: transparent;
     stroke: #C0FF00;
 }
+.tooltip.tooltip-footer.show {
+    opacity: 1 !important;
+}
+.tooltip.tooltip-footer .tooltip-inner {
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 12px;
+    text-transform: uppercase;
+    color: #C0FF00;
+    padding: 2px 8px;
+    border: 1px solid #C0FF00;
+    background-color: #224851;
+}
 .footer-only {
     padding: 16px;
 }
 .footer {
     position: fixed;
-    width: 370px;
-    min-height: 65px;
+    left: 8px;
+    right: 8px;
     bottom: 0;
-    left: auto;
-    right: auto;
+    width: calc(100% - 16px);
+    min-height: 65px;
     padding-top: 8px;
-    padding-bottom: 16px;
+    padding-bottom: 8px;
     z-index: 99;
     user-select: none;
 }
+.footer.equal-footer {
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+}
 .footer.double-footer {
-    bottom: 62px;
+    bottom: 65px;
 }
 
 .info-messages {

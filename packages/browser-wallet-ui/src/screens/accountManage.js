@@ -24,10 +24,12 @@ export default async function accountManageScreen() {
         const account = a.value
         await screen.append('#root #wallet_list', 'accounts/manage/list_item', {
             account_id,
+            derivation_path: account_id?.toString() === 'main' ? '' : '//' + account_id,
+            hide_derivation: account_id?.toString() === 'main' ? 'd-none hidden' : '',
             account_jdenticon: jdenticon.toSvg(account?.address,56),
             account_name: (account?.name && account?.name.length > 10) ? account?.name.substring(0,10)+'...' : account?.name,
             account_address: formatAddress(account?.address, 16, 8),
-            is_main: account_id?.toString() === '0' ? '' : 'hidden',
+            is_main: account_id?.toString() === 'main' ? '' : 'hidden',
             is_current: account_id?.toString() === current_account?.id?.toString() ? '' : 'hidden'
         })
     }

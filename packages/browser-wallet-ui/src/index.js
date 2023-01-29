@@ -15,6 +15,7 @@ import { hideNotification, showNotification } from "./notifications.js";
 
 import DOMPurify from 'dompurify';
 import * as jdenticon from 'jdenticon'
+import {Tooltip} from 'bootstrap'
 
 /* import stores */
 import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
@@ -99,7 +100,7 @@ class userInterface {
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
-            is_primary: current_account?.id === '0' ? '' : 'hidden'
+            is_primary: current_account?.id === 'main' ? '' : 'hidden'
         }, false)
 
         await updateAccounts(current_account?.id)
@@ -116,6 +117,60 @@ class userInterface {
         document.querySelector("#main_footer #go_transactionHistoryScreen").addEventListener("click", async() => {
             await clearHistory()
             await goToScreen('transactionHistoryScreen')
+        })
+
+        const dashboardTooltip = new Tooltip('#main_footer #go_dashboardScreen', {
+            html: true,
+            offset: [0, -8],
+            placement: 'top',
+            container: 'body',
+            popperConfig: (config) => {
+                const flip = config.modifiers.find(({ name }) => name === 'flip')
+
+                flip.options = {
+                    ...flip.options,
+                    boundary: document.querySelector('#root'),
+                }
+
+                return config
+            },
+            template: '<div class="tooltip tooltip-footer" role="tooltip"><div class="tooltip-arrow d-none"></div><div class="tooltip-inner"></div></div>'
+        })
+
+        const assetSendTooltip = new Tooltip('#main_footer #go_assetSendScreen', {
+            html: true,
+            offset: [0, -8],
+            placement: 'top',
+            container: 'body',
+            popperConfig: (config) => {
+                const flip = config.modifiers.find(({ name }) => name === 'flip')
+
+                flip.options = {
+                    ...flip.options,
+                    boundary: document.querySelector('#root'),
+                }
+
+                return config
+            },
+            template: '<div class="tooltip tooltip-footer" role="tooltip"><div class="tooltip-arrow d-none"></div><div class="tooltip-inner"></div></div>'
+        })
+
+        const transactionHistoryTooltip = new Tooltip('#main_footer #go_transactionHistoryScreen', {
+            html: true,
+            offset: [0, -8],
+            placement: 'top',
+            container: 'body',
+            popperConfig: (config) => {
+                const flip = config.modifiers.find(({ name }) => name === 'flip')
+
+                flip.options = {
+                    ...flip.options,
+                    boundary: document.querySelector('#root'),
+                }
+
+                return config
+            },
+            template: '<div class="tooltip tooltip-footer" role="tooltip"><div class="tooltip-arrow d-none"></div><div class="tooltip-inner"></div></div>'
         })
     }
 

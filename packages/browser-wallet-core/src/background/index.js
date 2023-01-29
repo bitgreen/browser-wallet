@@ -20,7 +20,7 @@ const backgroundMessageHandler = (data, port) => {
     }
 
     promise.then((response) => {
-        port.postMessage({ id: data.id, response });
+        if(port) port.postMessage({ id: data.id, response });
     }).catch((error) => {
         console.error(error);
 
