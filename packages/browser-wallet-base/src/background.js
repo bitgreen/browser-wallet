@@ -9,15 +9,15 @@ let ports_extension = []
 let port_content = null
 
 // init polkadot api
-polkadotApi().then(r => {
-
-})
+polkadotApi(true).then()
 
 // listen for messages from both content.js and extension.js
 current_browser.runtime.onConnect.addListener((port) => {
     console.info(`Connected to ${port.name}`);
 
     if(port.name === 'PORT_EXTENSION') {
+        polkadotApi(true).then() // reload on every wallet opening
+
         openCount += 1;
 
         if(waiting_to_stop) {
