@@ -125,12 +125,13 @@ export default async function walletCreateScreen(params) {
                 current_words = words === 24 ? 24 : 12
 
                 if(current_words === 24) {
-                    window.resizeTo(400, 680) // Extend window height
+                    screen.resizeTo(400, 680) // Extend window height
 
                     button_left.classList.remove('btn-secondary')
                     button_right.classList.add('btn-secondary')
                 } else {
-                    window.resizeTo(400, 600) // Reset window height
+                    screen.resizeTo(400, 600) // Reset window height
+
 
                     button_left.classList.add('btn-secondary')
                     button_right.classList.remove('btn-secondary')
