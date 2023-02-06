@@ -11,7 +11,8 @@ const initPolkadotApi = async() => {
         const current_network = await networks_store.current()
 
         ws_provider_url = current_network.url
-        ws_provider = new WsProvider(ws_provider_url)
+        ws_provider = new WsProvider(ws_provider_url, false)
+        await ws_provider.connect()
 
         ws_provider.on('connected', async(e) => {
             const api_promise = await ApiPromise.create({
@@ -283,13 +284,16 @@ const initPolkadotApi = async() => {
         })
 
         ws_provider.on('error', async(e) => {
+            api = null
+
             if(current_network.id !== 'mainnet' && current_network.id !== 'testnet') {
                 await networks_store.asyncSet('current', 'mainnet') // reset to mainnet
             }
-            await ws_provider.disconnect()
         });
 
         ws_provider.on('disconnected', async(e) => {
+            api = null
+
             console.warn('Polkadot WS provider disconnected. Resetting to mainnet network.')
         })
     });

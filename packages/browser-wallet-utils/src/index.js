@@ -126,6 +126,31 @@ const formatAddress = (address, first = 8, last = 6) => {
     return address?.substring(0, first) + '...' + address?.substring(address?.length - last)
 }
 
+const getOperatingSystem = () => {
+    let userAgent = navigator.userAgent;
+    let osName = '';
+
+    if (userAgent.search('Windows') !== -1) {
+        osName = "windows";
+    } else if (userAgent.search('Mac') !== -1) {
+        osName = "mac";
+    } else if (userAgent.search('X11') !== -1 && !(userAgent.search('Linux') !== -1)) {
+        osName = "unix";
+    } else if (userAgent.search('Linux') !== -1 && userAgent.search('X11') !== -1) {
+        osName = "linux";
+    }
+
+    return osName;
+}
+
+const isWindows = () => {
+    return getOperatingSystem() === 'windows'
+}
+
+const isMacOs = () => {
+    return getOperatingSystem() === 'mac'
+}
+
 export {
     getBrowser,
     isChrome,
@@ -141,5 +166,8 @@ export {
     humanToBalance,
     getAmountDecimal,
     addressValid,
-    formatAddress
+    formatAddress,
+    getOperatingSystem,
+    isWindows,
+    isMacOs
 }

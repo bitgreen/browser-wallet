@@ -1,6 +1,6 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isWindows} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox, isMacOs, isWindows} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import anime from 'animejs';
@@ -89,8 +89,11 @@ class Screen {
 
     resizeTo(width, height) {
         if(isWindows()) {
-            // Add 16px in width and 32px height on windows.
+            // Add 16px in width and 39px height on windows.
             width += 16
+            height += 39
+        } else if(isMacOs()) {
+            // Add 39px height on macOS.
             height += 39
         }
 
