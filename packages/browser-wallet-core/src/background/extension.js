@@ -565,6 +565,7 @@ class Extension {
         const pallet = params?.pallet
         const call = params?.call
         const call_parameters = params?.call_parameters
+        let call_request = call_parameters
 
         let response = {}
 
@@ -572,6 +573,15 @@ class Extension {
 
         if(!account) {
             return false
+        }
+
+        if(pallet === 'utility' && (call === 'batch' || call === 'batchAll' || call === 'forceBatch')) {
+            call_request = []
+            for(const extrinsic of call_parameters) {
+                call_request.push(await polkadot_api.tx[extrinsic[0]][extrinsic[1]](...extrinsic[2]))
+            }
+
+            call_request = [call_request]
         }
 
         return new Promise(async(resolve) => {
@@ -591,7 +601,7 @@ class Extension {
                 }
                 return resolve(response)
             }
-            await polkadot_api.tx[pallet][call](...call_parameters)
+            await polkadot_api.tx[pallet][call](...call_request)
                 .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
                     if(dispatchError) {
                         // for module errors, we have the section indexed, lookup
