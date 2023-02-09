@@ -61,10 +61,11 @@ current_browser.runtime.onConnect.addListener((port) => {
         // console.log(ports_extension.length)
         if(port.name === 'PORT_CONTENT' && ports_extension.length > 0) {
             for(const port_extension of ports_extension) {
+                // TODO: close only if source tab is closed/changed
                 // sends a kill signal back to extension
-                port_extension.postMessage({
-                    command: 'kill_popup'
-                })
+                // port_extension.postMessage({
+                //     command: 'kill_popup'
+                // })
             }
         }
 
