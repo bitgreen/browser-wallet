@@ -5,12 +5,15 @@ const port = current_browser.runtime.connect({ name: 'PORT_EXTENSION' });
 const handlers = {};
 let kill_popup = true
 
-// setup a listener for messages, any incoming resolves the promise
+const urlParams = new URLSearchParams(window.location.search)
+
+// Set up the listener for messages, any incoming resolves the promise.
 port.onMessage.addListener((data) => {
+
     const handler = handlers[data.id];
 
-    // receives this signal from background page, triggered when origin tab was changed/closed
-    if(data.command === 'kill_popup') {
+    // Receives this signal from background page, triggered when origin tab was changed/closed.
+    if(data.command === 'kill_popup' && urlParams.get('kill_popup') === 'true' && urlParams.get('tab_id').toString() === data?.tab_id.toString()) {
         if(port) port.disconnect()
 
         if(kill_popup) window.close()
@@ -18,7 +21,7 @@ port.onMessage.addListener((data) => {
         return;
     }
 
-    if(!handler) {
+    if(!handler && data.command !== 'kill_popup') {
         console.error(`Unknown response: ${JSON.stringify(data)}`);
 
         return;

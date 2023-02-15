@@ -10,6 +10,7 @@
 <button id="sign_in">Sign In</button>
 <button id="send">Send 1 BBB</button>
 <button id="create_asset">Create Asset</button>
+<button id="batch_call">Batch Call</button>
 <button id="query_balance">Query Balance</button>
 <script>
     window.addEventListener('load', async() => {
@@ -57,6 +58,27 @@
                 100000,
                 '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
                 1
+            ]).then((response) => {
+                if(response.success) {
+                    alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
+                } else {
+                    alert(`Transaction failed. Status: ${response.status}. Error: ${response.error}`)
+                }
+            })
+        })
+
+        document.querySelector('#batch_call').addEventListener('click', () => {
+            bitgreen_wallet.extrinsic('utility', 'batch', [
+                ['assets', 'create', [
+                    100001,
+                    '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ',
+                    1
+                ]],
+                ['assets', 'create', [
+                    100002,
+                    '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
+                    1
+                ]]
             ]).then((response) => {
                 if(response.success) {
                     alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
