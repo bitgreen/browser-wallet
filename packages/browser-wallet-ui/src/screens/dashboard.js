@@ -151,6 +151,10 @@ export default async function dashboardScreen(params = {
         {
             element: '#retired_credits',
             listener: () => goToScreen('retiredCreditsScreen')
-        }
+        },
+        {
+            element: '#all_assests',
+            listener: () => goToScreen('allAssetType')
+        },
     ])
 }
