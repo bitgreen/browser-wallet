@@ -54,11 +54,7 @@
 * {
     font-family: "Neue Haas Unica Pro", sans-serif !important;
 }
-:root {
-  --main-bg-color: #224851;
-  --secondary-font :#667085;
-  --icon_url:url('../assets/Vector.png');
-}
+
 body {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     width: 400px;
@@ -814,7 +810,7 @@ label.label {
     height: calc(100% - 165px);
     padding-top: 20px;
 }
-#wallet_list,#asset_list {
+#wallet_list {
     height: 100%;
     overflow-y: scroll;
     padding-right: 8px;
@@ -2164,37 +2160,4 @@ label.label {
 }
 #accounts_modal #wallet_list {
     max-height: 290px;
-}
-
- 
-.asset-item-container .info .icon {
-    display: inline-block;
-    margin-right: 8px;
-}
-.asset-item-container .asset-each {
-   color: var(--main-bg-color);
-    font-weight: 400;
-    font-size: 2em;
-}
-.asset-item-container .asset-each .dollar {
-    font-weight: 400;
-    font-size: 14px;
-    margin-left: 8px;
-    /*margin-right: 2px;*/
-}
-.asset-item-container .asset-each .decimals {
-    position: relative;
-    top: -4px;
-    font-weight: 400;
-    font-size: 0.8em;
-}
-.asset-item-container .bottom-color   {
- color:var(--secondary-font); 
- font-size: 0.8em;
-} 
-
-#asset-icon{ 
-    width: 26px;
-    height: 27px;
-    margin-left: 10px;
 }
