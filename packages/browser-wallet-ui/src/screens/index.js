@@ -30,6 +30,7 @@ import networkCreateScreen from "./networkCreate.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
+import allAssetType from "./allAssetType.js";
 
 import { hideNotification } from "../notifications.js";
 
@@ -373,7 +374,8 @@ const screens = {
     settingsScreen,
     networkManageScreen,
     networkCreateScreen,
-    extrinsicSendScreen
+    extrinsicSendScreen,
+    allAssetType,
 }
 
 let screen_history = []
