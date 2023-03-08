@@ -72,16 +72,26 @@ const balanceToHuman = (balance, decimals = 2) => {
 }
 
 const formatAmount = (amount, decimals) => {
-    let formatted_amount = null
-    if(typeof amount === 'string') {
-        formatted_amount = amount.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-    } else {
-        formatted_amount = parseFloat(amount).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    let formatted_amount
+    if(typeof amount === 'number') {
+        amount = amount.toFixed(decimals).toString()
     }
 
-    if(formatted_amount === 'NaN') {
-        formatted_amount = (0).toFixed(decimals).toString()
+    // Split the number string into the integer and decimal parts
+    const parts = amount.split(".");
+
+    // Add commas to the integer part
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // Pad the decimal part with zeros if necessary
+    if (parts.length > 1) {
+        parts[1] = parts[1].padEnd(decimals, "0").substring(0, decimals);
+    } else {
+        parts[1] = (0).toString().padEnd(decimals, "0");
     }
+
+    // Concatenate the integer and decimal parts with a period separator
+    formatted_amount = parts.join(".");
 
     return formatted_amount
 }
