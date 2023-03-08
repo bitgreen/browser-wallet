@@ -98,9 +98,6 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
     }
 
     if(browser === 'safari') {
-        // change output directory
-        output_dir = path.join(__dirname, `../../build/${browser}/javascript`)
-
         // copy necessary files
         plugins.push(new CopyPlugin({
             patterns: [{
@@ -109,6 +106,9 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
                 noErrorOnMissing: true
             }]
         }))
+
+        // change output directory
+        output_dir = path.join(__dirname, `../../build/${browser}/Shared (Extension)`)
     }
 
     const result = {
