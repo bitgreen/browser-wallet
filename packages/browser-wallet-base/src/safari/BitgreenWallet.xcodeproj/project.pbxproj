@@ -7,6 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		271FBF0F29B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
+		271FBF1029B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
+		271FBF1129B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
+		271FBF1229B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
+		271FBF1329B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
+		271FBF1429B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
+		271FBF1529B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
+		271FBF1629B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
+		271FBF1729B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
+		271FBF1829B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
+		271FBF1929B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
+		271FBF1A29B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
+		271FBF1B29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
+		271FBF1C29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
+		271FBF1D29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
+		271FBF1E29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
+		271FBF1F29B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
+		271FBF2029B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
+		271FBF2129B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
+		271FBF2229B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
+		271FBF2329B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
+		271FBF2429B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
+		271FBF2529B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
+		271FBF2629B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
+		271FBF2729B8DB52001D0940 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0929B8DB52001D0940 /* background.js */; };
+		271FBF2829B8DB52001D0940 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0929B8DB52001D0940 /* background.js */; };
+		271FBF2929B8DB52001D0940 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0929B8DB52001D0940 /* background.js */; };
+		271FBF2A29B8DB52001D0940 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0929B8DB52001D0940 /* background.js */; };
+		271FBF2B29B8DB52001D0940 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0A29B8DB52001D0940 /* content.js */; };
+		271FBF2C29B8DB52001D0940 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0A29B8DB52001D0940 /* content.js */; };
+		271FBF2D29B8DB52001D0940 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0A29B8DB52001D0940 /* content.js */; };
+		271FBF2E29B8DB52001D0940 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0A29B8DB52001D0940 /* content.js */; };
+		271FBF2F29B8DB52001D0940 /* extension.css in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0B29B8DB52001D0940 /* extension.css */; };
+		271FBF3029B8DB52001D0940 /* extension.css in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0B29B8DB52001D0940 /* extension.css */; };
+		271FBF3129B8DB52001D0940 /* extension.css in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0B29B8DB52001D0940 /* extension.css */; };
+		271FBF3229B8DB52001D0940 /* extension.css in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0B29B8DB52001D0940 /* extension.css */; };
+		271FBF3329B8DB52001D0940 /* extension.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0C29B8DB52001D0940 /* extension.js */; };
+		271FBF3429B8DB52001D0940 /* extension.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0C29B8DB52001D0940 /* extension.js */; };
+		271FBF3529B8DB52001D0940 /* extension.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0C29B8DB52001D0940 /* extension.js */; };
+		271FBF3629B8DB52001D0940 /* extension.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0C29B8DB52001D0940 /* extension.js */; };
+		271FBF3729B8DB52001D0940 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0D29B8DB52001D0940 /* assets */; };
+		271FBF3829B8DB52001D0940 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0D29B8DB52001D0940 /* assets */; };
+		271FBF3929B8DB52001D0940 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0D29B8DB52001D0940 /* assets */; };
+		271FBF3A29B8DB52001D0940 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0D29B8DB52001D0940 /* assets */; };
+		271FBF3B29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
+		271FBF3C29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
+		271FBF3D29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
+		271FBF3E29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
 		8E77E4422875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
 		8E77E4432875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
 		8E77E4442875495C0020A55D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E4412875495C0020A55D /* icon.png */; };
@@ -37,38 +85,6 @@
 		8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
 		8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
 		8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
-		8E8684A92872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
-		8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
-		8E8684AB2872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
-		8E8684AC2872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
-		8E8684AD2872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
-		8E8684AE2872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
-		8E8684B02872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
-		8E8684B12872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
-		8E8684B22872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
-		8E8684B42872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
-		8E8684B62872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
-		8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
-		8E8684B82872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
-		8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
-		8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
-		8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
-		8E8684BE2872B3510037E6C9 /* window.html in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684942872B3510037E6C9 /* window.html */; };
-		8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */; };
-		8E8684C02872B3510037E6C9 /* toastify-1.11.2 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684962872B3510037E6C9 /* toastify-1.11.2 */; };
-		8E8684C12872B3510037E6C9 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684972872B3510037E6C9 /* background.js */; };
-		8E8684C22872B3510037E6C9 /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684982872B3510037E6C9 /* tests */; };
-		8E8684C32872B3510037E6C9 /* domppurify-2.3.8 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684992872B3510037E6C9 /* domppurify-2.3.8 */; };
-		8E8684C52872B3510037E6C9 /* wallet.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849B2872B3510037E6C9 /* wallet.js */; };
-		8E8684C62872B3510037E6C9 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849C2872B3510037E6C9 /* style.css */; };
-		8E8684C72872B3510037E6C9 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849D2872B3510037E6C9 /* manifest.json */; };
-		8E8684C92872B3510037E6C9 /* aesjs.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86849F2872B3510037E6C9 /* aesjs.js */; };
-		8E8684CB2872B3510037E6C9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A12872B3510037E6C9 /* assets */; };
-		8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */; };
-		8E8684CD2872B3510037E6C9 /* anime-3.2.1 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A32872B3510037E6C9 /* anime-3.2.1 */; };
-		8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A42872B3510037E6C9 /* sortable-1.15.0 */; };
-		8E8684CF2872B3510037E6C9 /* qrcodejs in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A52872B3510037E6C9 /* qrcodejs */; };
-		8E8684D02872B3510037E6C9 /* contentscript.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684A62872B3510037E6C9 /* contentscript.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +130,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		271FBF0329B8DB52001D0940 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		271FBF0429B8DB52001D0940 /* components */ = {isa = PBXFileReference; lastKnownFileType = folder; path = components; sourceTree = "<group>"; };
+		271FBF0529B8DB52001D0940 /* 472.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = 472.js; sourceTree = "<group>"; };
+		271FBF0629B8DB52001D0940 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundles; sourceTree = "<group>"; };
+		271FBF0729B8DB52001D0940 /* index.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.min.js; sourceTree = "<group>"; };
+		271FBF0829B8DB52001D0940 /* page.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
+		271FBF0929B8DB52001D0940 /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		271FBF0A29B8DB52001D0940 /* content.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		271FBF0B29B8DB52001D0940 /* extension.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = extension.css; sourceTree = "<group>"; };
+		271FBF0C29B8DB52001D0940 /* extension.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = extension.js; sourceTree = "<group>"; };
+		271FBF0D29B8DB52001D0940 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		271FBF0E29B8DB52001D0940 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		8E77E4412875495C0020A55D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		8E77E44628754AA80020A55D /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
 		8E8684372872B34D0037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
@@ -139,22 +167,6 @@
 		8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E8684712872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
-		8E8684942872B3510037E6C9 /* window.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = window.html; path = ../javascript/window.html; sourceTree = "<group>"; };
-		8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "jdenticon-3.1.1"; path = "../javascript/jdenticon-3.1.1"; sourceTree = "<group>"; };
-		8E8684962872B3510037E6C9 /* toastify-1.11.2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "toastify-1.11.2"; path = "../javascript/toastify-1.11.2"; sourceTree = "<group>"; };
-		8E8684972872B3510037E6C9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../javascript/background.js; sourceTree = "<group>"; };
-		8E8684982872B3510037E6C9 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = ../javascript/tests; sourceTree = "<group>"; };
-		8E8684992872B3510037E6C9 /* domppurify-2.3.8 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "domppurify-2.3.8"; path = "../javascript/domppurify-2.3.8"; sourceTree = "<group>"; };
-		8E86849B2872B3510037E6C9 /* wallet.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = wallet.js; path = ../javascript/wallet.js; sourceTree = "<group>"; };
-		8E86849C2872B3510037E6C9 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = style.css; path = ../javascript/style.css; sourceTree = "<group>"; };
-		8E86849D2872B3510037E6C9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../javascript/manifest.json; sourceTree = "<group>"; };
-		8E86849F2872B3510037E6C9 /* aesjs.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = aesjs.js; path = ../javascript/aesjs.js; sourceTree = "<group>"; };
-		8E8684A12872B3510037E6C9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../javascript/assets; sourceTree = "<group>"; };
-		8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "bootstrap-5.1.3"; path = "../javascript/bootstrap-5.1.3"; sourceTree = "<group>"; };
-		8E8684A32872B3510037E6C9 /* anime-3.2.1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anime-3.2.1"; path = "../javascript/anime-3.2.1"; sourceTree = "<group>"; };
-		8E8684A42872B3510037E6C9 /* sortable-1.15.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "sortable-1.15.0"; path = "../javascript/sortable-1.15.0"; sourceTree = "<group>"; };
-		8E8684A52872B3510037E6C9 /* qrcodejs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qrcodejs; path = ../javascript/qrcodejs; sourceTree = "<group>"; };
-		8E8684A62872B3510037E6C9 /* contentscript.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = contentscript.js; path = ../javascript/contentscript.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,24 +298,20 @@
 		8E8684912872B3510037E6C9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8E8684942872B3510037E6C9 /* window.html */,
-				8E8684952872B3510037E6C9 /* jdenticon-3.1.1 */,
-				8E8684962872B3510037E6C9 /* toastify-1.11.2 */,
-				8E8684972872B3510037E6C9 /* background.js */,
-				8E8684982872B3510037E6C9 /* tests */,
-				8E8684992872B3510037E6C9 /* domppurify-2.3.8 */,
-				8E86849B2872B3510037E6C9 /* wallet.js */,
+				271FBF0529B8DB52001D0940 /* 472.js */,
+				271FBF0D29B8DB52001D0940 /* assets */,
+				271FBF0929B8DB52001D0940 /* background.js */,
+				271FBF0629B8DB52001D0940 /* bundles */,
+				271FBF0429B8DB52001D0940 /* components */,
+				271FBF0A29B8DB52001D0940 /* content.js */,
+				271FBF0B29B8DB52001D0940 /* extension.css */,
+				271FBF0C29B8DB52001D0940 /* extension.js */,
+				271FBF0E29B8DB52001D0940 /* index.html */,
+				271FBF0729B8DB52001D0940 /* index.min.js */,
+				271FBF0329B8DB52001D0940 /* manifest.json */,
+				271FBF0829B8DB52001D0940 /* page.js */,
 				8E77E4412875495C0020A55D /* icon.png */,
 				8E77E44628754AA80020A55D /* icons */,
-				8E86849C2872B3510037E6C9 /* style.css */,
-				8E86849D2872B3510037E6C9 /* manifest.json */,
-				8E86849F2872B3510037E6C9 /* aesjs.js */,
-				8E8684A12872B3510037E6C9 /* assets */,
-				8E8684A22872B3510037E6C9 /* bootstrap-5.1.3 */,
-				8E8684A32872B3510037E6C9 /* anime-3.2.1 */,
-				8E8684A42872B3510037E6C9 /* sortable-1.15.0 */,
-				8E8684A52872B3510037E6C9 /* qrcodejs */,
-				8E8684A62872B3510037E6C9 /* contentscript.js */,
 			);
 			name = Resources;
 			path = "Shared (Extension)";
@@ -435,15 +443,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				271FBF1729B8DB52001D0940 /* 472.js in Resources */,
+				271FBF3B29B8DB52001D0940 /* index.html in Resources */,
 				8E8684752872B3500037E6C9 /* Icon.png in Resources */,
+				271FBF2F29B8DB52001D0940 /* extension.css in Resources */,
+				271FBF3329B8DB52001D0940 /* extension.js in Resources */,
 				8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */,
 				8E8684732872B3500037E6C9 /* Main.html in Resources */,
+				271FBF1329B8DB52001D0940 /* components in Resources */,
+				271FBF2B29B8DB52001D0940 /* content.js in Resources */,
+				271FBF3729B8DB52001D0940 /* assets in Resources */,
 				8E77E44728754AA80020A55D /* icons in Resources */,
+				271FBF0F29B8DB52001D0940 /* manifest.json in Resources */,
 				8E8684792872B3500037E6C9 /* Script.js in Resources */,
 				8E77E4422875495C0020A55D /* icon.png in Resources */,
 				8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */,
 				8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */,
+				271FBF1B29B8DB52001D0940 /* bundles in Resources */,
 				8E8684772872B3500037E6C9 /* Style.css in Resources */,
+				271FBF1F29B8DB52001D0940 /* index.min.js in Resources */,
+				271FBF2729B8DB52001D0940 /* background.js in Resources */,
+				271FBF2329B8DB52001D0940 /* page.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,13 +471,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				271FBF3C29B8DB52001D0940 /* index.html in Resources */,
+				271FBF3429B8DB52001D0940 /* extension.js in Resources */,
 				8E8684762872B3500037E6C9 /* Icon.png in Resources */,
+				271FBF1429B8DB52001D0940 /* components in Resources */,
 				8E77E44828754AA80020A55D /* icons in Resources */,
+				271FBF2029B8DB52001D0940 /* index.min.js in Resources */,
+				271FBF3829B8DB52001D0940 /* assets in Resources */,
+				271FBF1C29B8DB52001D0940 /* bundles in Resources */,
+				271FBF1029B8DB52001D0940 /* manifest.json in Resources */,
+				271FBF2429B8DB52001D0940 /* page.js in Resources */,
+				271FBF3029B8DB52001D0940 /* extension.css in Resources */,
 				8E77E4432875495C0020A55D /* icon.png in Resources */,
+				271FBF2829B8DB52001D0940 /* background.js in Resources */,
 				8E8684782872B3500037E6C9 /* Style.css in Resources */,
 				8E86845B2872B3500037E6C9 /* Main.storyboard in Resources */,
 				8E86847A2872B3500037E6C9 /* Script.js in Resources */,
 				8E86847E2872B3500037E6C9 /* Assets.xcassets in Resources */,
+				271FBF2C29B8DB52001D0940 /* content.js in Resources */,
+				271FBF1829B8DB52001D0940 /* 472.js in Resources */,
 				8E8684742872B3500037E6C9 /* Main.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,24 +498,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E8684D02872B3510037E6C9 /* contentscript.js in Resources */,
-				8E8684CC2872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
-				8E8684CE2872B3510037E6C9 /* sortable-1.15.0 in Resources */,
-				8E8684BE2872B3510037E6C9 /* window.html in Resources */,
+				271FBF3D29B8DB52001D0940 /* index.html in Resources */,
+				271FBF2529B8DB52001D0940 /* page.js in Resources */,
+				271FBF3129B8DB52001D0940 /* extension.css in Resources */,
+				271FBF2D29B8DB52001D0940 /* content.js in Resources */,
+				271FBF1129B8DB52001D0940 /* manifest.json in Resources */,
+				271FBF2129B8DB52001D0940 /* index.min.js in Resources */,
 				8E77E4442875495C0020A55D /* icon.png in Resources */,
-				8E8684C72872B3510037E6C9 /* manifest.json in Resources */,
-				8E8684BF2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				271FBF2929B8DB52001D0940 /* background.js in Resources */,
 				8E77E44928754AA80020A55D /* icons in Resources */,
-				8E8684C52872B3510037E6C9 /* wallet.js in Resources */,
-				8E8684CB2872B3510037E6C9 /* assets in Resources */,
-				8E8684C62872B3510037E6C9 /* style.css in Resources */,
-				8E8684C12872B3510037E6C9 /* background.js in Resources */,
-				8E8684C32872B3510037E6C9 /* domppurify-2.3.8 in Resources */,
-				8E8684CF2872B3510037E6C9 /* qrcodejs in Resources */,
-				8E8684CD2872B3510037E6C9 /* anime-3.2.1 in Resources */,
-				8E8684C02872B3510037E6C9 /* toastify-1.11.2 in Resources */,
-				8E8684C22872B3510037E6C9 /* tests in Resources */,
-				8E8684C92872B3510037E6C9 /* aesjs.js in Resources */,
+				271FBF3929B8DB52001D0940 /* assets in Resources */,
+				271FBF1929B8DB52001D0940 /* 472.js in Resources */,
+				271FBF1D29B8DB52001D0940 /* bundles in Resources */,
+				271FBF3529B8DB52001D0940 /* extension.js in Resources */,
+				271FBF1529B8DB52001D0940 /* components in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,24 +519,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E8684BB2872B3510037E6C9 /* contentscript.js in Resources */,
-				8E8684B72872B3510037E6C9 /* bootstrap-5.1.3 in Resources */,
-				8E8684B92872B3510037E6C9 /* sortable-1.15.0 in Resources */,
-				8E8684A92872B3510037E6C9 /* window.html in Resources */,
+				271FBF3E29B8DB52001D0940 /* index.html in Resources */,
+				271FBF2629B8DB52001D0940 /* page.js in Resources */,
+				271FBF3229B8DB52001D0940 /* extension.css in Resources */,
+				271FBF2E29B8DB52001D0940 /* content.js in Resources */,
+				271FBF1229B8DB52001D0940 /* manifest.json in Resources */,
+				271FBF2229B8DB52001D0940 /* index.min.js in Resources */,
 				8E77E4452875495C0020A55D /* icon.png in Resources */,
-				8E8684B22872B3510037E6C9 /* manifest.json in Resources */,
-				8E8684AA2872B3510037E6C9 /* jdenticon-3.1.1 in Resources */,
+				271FBF2A29B8DB52001D0940 /* background.js in Resources */,
 				8E77E44A28754AA80020A55D /* icons in Resources */,
-				8E8684B02872B3510037E6C9 /* wallet.js in Resources */,
-				8E8684B62872B3510037E6C9 /* assets in Resources */,
-				8E8684B12872B3510037E6C9 /* style.css in Resources */,
-				8E8684AC2872B3510037E6C9 /* background.js in Resources */,
-				8E8684AE2872B3510037E6C9 /* domppurify-2.3.8 in Resources */,
-				8E8684BA2872B3510037E6C9 /* qrcodejs in Resources */,
-				8E8684B82872B3510037E6C9 /* anime-3.2.1 in Resources */,
-				8E8684AB2872B3510037E6C9 /* toastify-1.11.2 in Resources */,
-				8E8684AD2872B3510037E6C9 /* tests in Resources */,
-				8E8684B42872B3510037E6C9 /* aesjs.js in Resources */,
+				271FBF3A29B8DB52001D0940 /* assets in Resources */,
+				271FBF1A29B8DB52001D0940 /* 472.js in Resources */,
+				271FBF1E29B8DB52001D0940 /* bundles in Resources */,
+				271FBF3629B8DB52001D0940 /* extension.js in Resources */,
+				271FBF1629B8DB52001D0940 /* components in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,7 +759,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
@@ -766,7 +790,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "BitgreenWallet Extension";
@@ -801,7 +825,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
@@ -839,7 +863,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
@@ -877,7 +901,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
@@ -911,7 +935,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
@@ -948,7 +972,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (App)/Info.plist";
@@ -985,7 +1009,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6LFC8BL478;
+				DEVELOPMENT_TEAM = VX7S8YUUCP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (App)/Info.plist";
