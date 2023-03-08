@@ -69,7 +69,7 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
         new CopyPlugin({
             patterns: [{
                 from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons'),
-                to: 'assets/icons'
+                to: 'icons'
             }]
         }),
         new CopyPlugin({
@@ -104,6 +104,13 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
                 from: 'src/safari',
                 to: '../',
                 noErrorOnMissing: true
+            }]
+        }))
+
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/64x64.png'),
+                to: 'icon.png'
             }]
         }))
 
