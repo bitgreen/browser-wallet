@@ -31,6 +31,7 @@ import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
 import allAssetType from "./allAssetType.js";
+import otherToken from "./otherToken.js";
 
 import { hideNotification } from "../notifications.js";
 
@@ -376,6 +377,7 @@ const screens = {
     networkCreateScreen,
     extrinsicSendScreen,
     allAssetType,
+    otherToken,
 }
 
 let screen_history = []

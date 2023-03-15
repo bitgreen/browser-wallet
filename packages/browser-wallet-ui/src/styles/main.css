@@ -2193,8 +2193,13 @@ label.label {
  font-size: 0.8em;
 } 
 
-#asset-icon{ 
+.asset-icon{ 
     width: 26px;
     height: 27px;
     margin-left: 10px;
+}
+.reduced{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

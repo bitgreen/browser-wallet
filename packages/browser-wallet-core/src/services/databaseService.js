@@ -1,4 +1,4 @@
-import { AccountStore, SessionStore, SettingsStore, WalletStore,AssetStore } from '../stores/index.js'
+import { AccountStore, SessionStore, SettingsStore, WalletStore,AssetStore,TokenStore } from '../stores/index.js'
 
 class DatabaseService {
     constructor() {
@@ -8,6 +8,7 @@ class DatabaseService {
             settings: new SettingsStore(),
             wallets: new WalletStore(),
             assets: new AssetStore(),
+            tokens: new TokenStore(),
         }
     }
 }
