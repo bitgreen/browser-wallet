@@ -22,6 +22,7 @@ import accountManageScreen from "./accountManage.js";
 import accountCreateScreen from "./accountCreate.js";
 import settingsScreen from "./settings.js";
 import accountEditScreen from "./accountEdit.js";
+import assetAllScreen from "./assetAll.js";
 import assetReceiveScreen from "./assetReceive.js";
 import assetTransactionReviewScreen from "./assetTransactionReview.js";
 import assetTransactionFinishScreen from "./assetTransactionFinish.js";
@@ -30,7 +31,6 @@ import networkCreateScreen from "./networkCreate.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
-import allAssetType from "./allAssetType.js";
 
 import { hideNotification } from "../notifications.js";
 
@@ -366,6 +366,7 @@ const screens = {
     dashboardScreen,
     signInScreen,
     assetSendScreen,
+    assetAllScreen,
     assetReceiveScreen,
     assetTransactionReviewScreen,
     assetTransactionFinishScreen,
@@ -374,8 +375,7 @@ const screens = {
     settingsScreen,
     networkManageScreen,
     networkCreateScreen,
-    extrinsicSendScreen,
-    allAssetType,
+    extrinsicSendScreen
 }
 
 let screen_history = []
