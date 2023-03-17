@@ -29,7 +29,8 @@
     }
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "web_accessible_resources": [
     "page.js",
