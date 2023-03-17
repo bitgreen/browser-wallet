@@ -1,18 +1,11 @@
 import Screen, { goBackScreen, goToScreen, reloadScreen } from "./index.js";
 import {
-  AssetStore,
   AccountStore,
-  NetworkStore,
-  TokenStore,
+  TokenStore
 } from "@bitgreen/browser-wallet-core";
-import { sendMessage } from "../messaging.js";
-import DOMPurify from "dompurify";
-import { showNotification } from "../notifications.js";
-import { isFirefox } from "@bitgreen/browser-wallet-utils";
-import dashboardScreen from "./dashboard.js";
 import { getAmountDecimal } from "@bitgreen/browser-wallet-utils";
 
-export default async function otherToken(params) {
+export default async function tokenAllScreen(params) {
   const screen = new Screen({
     template_name: "layouts/default_custom_header",
     header: false,

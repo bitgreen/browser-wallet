@@ -154,11 +154,11 @@ export default async function dashboardScreen(params = {
         },
         {
             element: '#all_assests',
-            listener: () => goToScreen('allAssetType')
+            listener: () => goToScreen('assetAllScreen')
         },
         {
             element: '#other_tokens',
-            listener: () => goToScreen('otherToken')
+            listener: () => goToScreen('tokenAllScreen')
         },
     ])
 }

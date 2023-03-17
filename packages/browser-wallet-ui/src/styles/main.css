@@ -814,11 +814,14 @@ label.label {
     height: calc(100% - 165px);
     padding-top: 20px;
 }
-#wallet_list,#asset_list {
+#wallet_list, #asset_list {
     height: 100%;
     overflow-y: scroll;
     padding-right: 8px;
     padding-bottom: 8px;
+}
+#asset_list {
+    height: calc(100% - 60px);
 }
 #wallet_list.backup-list {
     height: calc(100% - 130px);
@@ -1200,7 +1203,8 @@ label.label {
     font-size: 26px;
 }
 #transactions {
-    height: 345px;
+    min-height: 300px;
+    height: calc(100% - 5px);
     overflow: hidden;
     overflow-y: scroll;
     padding-right: 8px;
