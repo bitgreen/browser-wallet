@@ -109,7 +109,7 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
 
         plugins.push(new CopyPlugin({
             patterns: [{
-                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/64x64.png'),
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/square.png'),
                 to: 'icon.png'
             }]
         }))

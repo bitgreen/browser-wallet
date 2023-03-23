@@ -138,16 +138,18 @@ const formatAddress = (address, first = 8, last = 6) => {
 
 const getOperatingSystem = () => {
     let userAgent = navigator.userAgent;
-    let osName = '';
+    let osName = 'other';
 
-    if (userAgent.search('Windows') !== -1) {
+    if (userAgent.match(/Windows/i)) {
         osName = "windows";
-    } else if (userAgent.search('Mac') !== -1) {
-        osName = "mac";
-    } else if (userAgent.search('X11') !== -1 && !(userAgent.search('Linux') !== -1)) {
-        osName = "unix";
-    } else if (userAgent.search('Linux') !== -1 && userAgent.search('X11') !== -1) {
+    } else if (userAgent.match(/Macintosh/i)) {
+        osName = "macos";
+    } else if (userAgent.match(/iPhone|iPad/i)) {
+        osName = "ios";
+    } else if (userAgent.match(/Linux/i)) {
         osName = "linux";
+    } else if (userAgent.match(/Android/i)) {
+        osName = "android";
     }
 
     return osName;
@@ -158,7 +160,11 @@ const isWindows = () => {
 }
 
 const isMacOs = () => {
-    return getOperatingSystem() === 'mac'
+    return getOperatingSystem() === 'macos'
+}
+
+const isIOs = () => {
+    return getOperatingSystem() === 'ios'
 }
 
 export {
@@ -179,5 +185,6 @@ export {
     formatAddress,
     getOperatingSystem,
     isWindows,
-    isMacOs
+    isMacOs,
+    isIOs
 }
