@@ -1,4 +1,4 @@
-export { AccountStore, SettingsStore, WalletStore, NetworkStore, TransactionStore, AssetStore,TokenStore } from './stores/index.js';
+export { AccountStore, SettingsStore, WalletStore, NetworkStore, TransactionStore, AssetStore, TokenStore } from './stores/index.js';
 
 export { backgroundMessageHandler, findTab } from './background/index.js'
 

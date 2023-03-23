@@ -8,7 +8,15 @@ import {
     mnemonicValidate,
     sha512AsU8a
 } from '@polkadot/util-crypto'
-import {AccountStore, NetworkStore, SettingsStore, TransactionStore, WalletStore} from "../stores/index.js"
+import {
+    AccountStore,
+    AssetStore,
+    NetworkStore,
+    SettingsStore,
+    TokenStore,
+    TransactionStore,
+    WalletStore
+} from "../stores/index.js"
 import {Keyring} from "@polkadot/keyring"
 import {polkadotApi} from "../polkadotApi.js";
 import {addressValid, humanToBalance} from "@bitgreen/browser-wallet-utils";
@@ -52,6 +60,10 @@ class Extension {
                 return await this.getBalance()
             case 'get_transactions':
                 return await this.getTransactions()
+            case 'get_assets':
+                return await this.getAssets()
+            case 'get_tokens':
+                return await this.getTokens()
             case 'reveal_mnemonic':
                 return await this.revealMnemonic(data?.params)
             case 'check_login':
@@ -238,6 +250,7 @@ class Extension {
     async getTransactions() {
         await this.initTransactionsStore()
 
+        await this.transactions_store.asyncRemoveAll()
         await this.transactions_store.fetch()
 
         let transactions = await this.transactions_store.asyncAll()
@@ -248,6 +261,52 @@ class Extension {
         })
 
         return transactions
+    }
+
+    async initAssetsStore() {
+        const current_network = await this.networks_store.current()
+        const current_account = await this.accounts_store.current()
+
+        this.assets_store = new AssetStore(current_network, current_account)
+    }
+
+    async getAssets() {
+        await this.initAssetsStore()
+
+        await this.assets_store.asyncRemoveAll()
+        await this.assets_store.fetch()
+
+        let assets = await this.assets_store.asyncAll()
+
+        // Sort by date by default
+        // assets.sort((a, b) => {
+        //     return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+        // })
+
+        return assets
+    }
+
+    async initTokensStore() {
+        const current_network = await this.networks_store.current()
+        const current_account = await this.accounts_store.current()
+
+        this.tokens_store = new TokenStore(current_network, current_account)
+    }
+
+    async getTokens() {
+        await this.initTokensStore()
+
+        await this.tokens_store.asyncRemoveAll()
+        await this.tokens_store.fetch()
+
+        let tokens = await this.tokens_store.asyncAll()
+
+        // Sort by date by default
+        // assets.sort((a, b) => {
+        //     return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+        // })
+
+        return tokens
     }
 
     async revealMnemonic(params) {
