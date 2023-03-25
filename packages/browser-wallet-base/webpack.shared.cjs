@@ -68,12 +68,6 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
         }),
         new CopyPlugin({
             patterns: [{
-                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons'),
-                to: 'icons'
-            }]
-        }),
-        new CopyPlugin({
-            patterns: [{
                 from: path.resolve(__dirname, '../browser-wallet-ui/src/components'),
                 to: 'components'
             }]
@@ -109,13 +103,27 @@ module.exports = (entry, alias = {}, useSplitChunk = false, browser = 'chrome') 
 
         plugins.push(new CopyPlugin({
             patterns: [{
-                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/square.png'),
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/square/1024x1024.png'),
                 to: 'icon.png'
+            }]
+        }))
+
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/square'),
+                to: 'icons'
             }]
         }))
 
         // change output directory
         output_dir = path.join(__dirname, `../../build/${browser}/Shared (Extension)`)
+    } else {
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/normal'),
+                to: 'icons'
+            }]
+        }))
     }
 
     const result = {
