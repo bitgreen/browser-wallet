@@ -1,8 +1,8 @@
 import Extension from './extension.js'
 import Tabs from './tabs.js'
-import { isFirefox, isSafari } from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isMacOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 const extension = new Extension()
 const tabs = new Tabs()
@@ -38,7 +38,7 @@ const showPopup = async(command, params = {}) => {
         ...params
     }).toString();
 
-    if(isSafari()) {
+    if(isSafari() && isMacOs()) {
         chrome.windows.create({
             url: url,
             type: 'popup',
@@ -55,7 +55,7 @@ const showPopup = async(command, params = {}) => {
 
             current_browser.tabs.create({
                 url: current_browser.runtime.getURL(url),
-                active: false
+                active: true
             }, function(tab) {
                 // get windows properties
 

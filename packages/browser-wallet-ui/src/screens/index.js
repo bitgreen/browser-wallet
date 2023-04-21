@@ -1,6 +1,6 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isMacOs, isWindows} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import anime from 'animejs';
@@ -33,7 +33,7 @@ import transactionDetailsScreen from "./transactionDetails.js";
 
 import { hideNotification } from "../notifications.js";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 let logged_in = false
 

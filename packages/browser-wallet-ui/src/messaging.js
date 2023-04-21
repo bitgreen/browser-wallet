@@ -1,6 +1,6 @@
-import { generateMessageId, isFirefox } from "@bitgreen/browser-wallet-utils";
+import {generateMessageId, isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 const port = current_browser.runtime.connect({ name: 'PORT_EXTENSION' });
 const handlers = {};
 let kill_popup = true
@@ -9,7 +9,6 @@ const urlParams = new URLSearchParams(window.location.search)
 
 // Set up the listener for messages, any incoming resolves the promise.
 port.onMessage.addListener((data) => {
-
     const handler = handlers[data.id];
 
     // Receives this signal from background page, triggered when origin tab was changed/closed.

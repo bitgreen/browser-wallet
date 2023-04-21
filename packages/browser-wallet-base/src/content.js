@@ -1,10 +1,10 @@
 import { extractGlobal, xglobal } from '@polkadot/x-global';
-import { isFirefox } from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
 const chrome = extractGlobal('chrome', xglobal.browser);
 const browser = extractGlobal('browser', xglobal.browser);
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 const port_content = current_browser.runtime.connect({ name: 'PORT_CONTENT' });
 
 // This code is inject in all the pages to intercept the messages for the browser wallet
@@ -28,6 +28,9 @@ window.addEventListener("message", (event) => {
 
         // send the message to the extension
         port_content.postMessage(message);
+
+        // send the message to the iOS extension
+        // safari.extension.dispatchMessage('herere')
     }
 
     return true;

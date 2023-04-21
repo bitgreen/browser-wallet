@@ -7,7 +7,8 @@ module.exports = [
     createConfig({
         background: './src/background.js',
         content: './src/content.js',
-        page: './src/page.js'
+        page: './src/page.js',
+        inject: './src/inject.js'
     }, {}, false, 'safari'),
     createConfig({
         extension: './src/extension.js'
