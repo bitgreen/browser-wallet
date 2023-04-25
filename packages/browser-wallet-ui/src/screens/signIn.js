@@ -1,4 +1,4 @@
-import Screen, {clearHistory, goToScreen} from './index.js'
+import Screen, {clearHistory, goToScreen, scrollToBottom} from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
 import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
@@ -40,6 +40,7 @@ export default async function signInScreen(params) {
         domain,
         title: params?.title?.substring(0, 60)
     });
+
     if(checkIfAppIsKnown(domain)) {
         document.querySelector('#app_info').classList.add('known')
     }
@@ -75,6 +76,16 @@ export default async function signInScreen(params) {
                 if(e.key === "Enter") {
                     await doSignIn()
                 }
+                await scrollToBottom()
+            }
+        },
+        {
+            element: '#root #password',
+            type: 'focus',
+            listener: async() => {
+                await scrollToBottom()
+                await scrollToBottom(200)
+                await scrollToBottom(1600)
             }
         },
         {

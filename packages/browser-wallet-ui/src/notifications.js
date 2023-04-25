@@ -2,7 +2,7 @@ import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
 
 let notification
-const showNotification = async(message, type, duration = 1800) => {
+const showNotification = async(message, type, duration = 1800, offset = 40) => {
     let classes, icon_classes
     if(type === 'success') {
         classes = 'notification notification-success'
@@ -22,7 +22,7 @@ const showNotification = async(message, type, duration = 1800) => {
     notification = Toastify({
         text: '<div class="d-flex align-items-center"><div class="col-2 d-flex justify-content-center"><span class="' + icon_classes + '"></span></div><div class="col-10">'+message+'</div></div>',
         offset: {
-            y: 40
+            y: offset
         },
         duration: duration,
         className: classes,

@@ -12,7 +12,7 @@ export default async function walletCreateScreen(params) {
 
     const url_params = new URLSearchParams(window.location.search)
 
-    if(url_params.has('popup') && !isIOs()) {
+    if(url_params.has('popup')) {
         await sendMessage('new_wallet_screen')
         window.close()
         return

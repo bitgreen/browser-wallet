@@ -28,9 +28,6 @@ window.addEventListener("message", (event) => {
 
         // send the message to the extension
         port_content.postMessage(message);
-
-        // send the message to the iOS extension
-        // safari.extension.dispatchMessage('herere')
     }
 
     return true;
@@ -39,11 +36,11 @@ window.addEventListener("message", (event) => {
 // listen to messages from extension, and forward them to webpage
 current_browser.runtime.onConnect.addListener((port) => {
     port.onMessage.addListener((data) => {
-        if(port.name === 'PORT_CONTENT' || port.name === 'PORT_BACKGROUND') {
-            window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT' }, '*');
-        } else if(port.name.startsWith('PORT_CONTENT_RESOLVE')) {
+        if(port.name.startsWith('PORT_CONTENT_RESOLVE') || data.response.resolve) {
             // resolve message requested from tab
             window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT', resolve: true }, '*');
+        } else if(port.name === 'PORT_CONTENT' || port.name === 'PORT_BACKGROUND') {
+            window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT' }, '*');
         } else if(port.name === 'KEEP_ALIVE') {
             // console.log('KEEP_ALIVE MESSAGE')
         }

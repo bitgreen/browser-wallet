@@ -1,3 +1,5 @@
+import {isIOs, isMacOs} from "@bitgreen/browser-wallet-utils";
+
 const renderTemplate = async(template, params = {}) => {
     let template_data = await loadTemplate(template)
 
@@ -46,7 +48,16 @@ const updateElement = async(element, template_name = 'false', params = {}, appen
 
     let el = document.querySelector('#root') // default element
     if(element === 'body') {
+        const url_params = new URLSearchParams(window.location.search)
+
         el = document.getElementsByTagName('body')[0]
+
+        // Add class to body, so we can apply custom CSS.
+        if(isIOs()) {
+            el.classList.add('ios')
+        } else if(isMacOs() && !url_params.get('popup')) {
+            el.classList.add('macos')
+        }
     } else if(element) {
         el = document.querySelector(element)
     }

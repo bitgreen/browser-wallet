@@ -7,12 +7,12 @@ import {
     updateAccounts,
     showLogin,
     currentScreen,
-    clearHistory, reloadScreen
+    clearHistory, reloadScreen, scrollToBottom, disableFooter, enableFooter
 } from './screens/index.js'
-import { renderChart } from "./chart.js";
 import { sendMessage } from "./messaging.js";
 import { hideNotification, showNotification } from "./notifications.js";
 
+import anime from 'animejs';
 import DOMPurify from 'dompurify';
 import * as jdenticon from 'jdenticon'
 import {Tooltip} from 'bootstrap'
@@ -22,9 +22,10 @@ import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
 
 /* import all css files */
 import './styles/main.css'
+import './styles/ios.css'
 import './styles/icomoon.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import {formatAddress} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isIOs} from "@bitgreen/browser-wallet-utils";
 
 class userInterface {
     constructor() {
@@ -39,6 +40,7 @@ class userInterface {
         await this.initHeader()
         await this.initFooter()
         await this.initLogin()
+        await this.initCustomActions()
     }
 
     initHeader = async() => {
@@ -87,10 +89,7 @@ class userInterface {
     }
 
     copyCurrentAddress = async() =>  {
-        const accounts_store = new AccountStore()
-        const current_account = await accounts_store.current()
-
-        await copyText(current_account.address)
+        await copyText(this.current_account.address)
         await showNotification('Account address copied to clipboard.', 'info')
     }
 
@@ -182,6 +181,19 @@ class userInterface {
             if (e.key === "Enter") {
                 return await this.doLoginEvent();
             }
+            await scrollToBottom()
+        })
+
+        document.querySelector("#login_screen #password").addEventListener("focus", async() => {
+            document.querySelector("#login_screen").classList.add('focused')
+
+            await scrollToBottom()
+            await scrollToBottom(200)
+            await scrollToBottom(1600)
+        })
+
+        document.querySelector("#login_screen #password").addEventListener("blur", async() => {
+            document.querySelector("#login_screen").classList.remove('focused')
         })
     }
 
@@ -196,12 +208,87 @@ class userInterface {
             await hideLogin()
             if(current_screen.name === 'dashboardScreen') await reloadScreen()
         } else {
-            await showNotification('Password is wrong!', 'error')
+            await showNotification('Password is wrong!', 'error', 1800, 0)
         }
     }
 
     goToScreen = async(name, params) => {
         return goToScreen(name, params)
+    }
+
+    initCustomActions = async() => {
+        if(isIOs()) {
+            const url_params = new URLSearchParams(window.location.search)
+            if(url_params.has('popup')) {
+                document.querySelector("#login_screen").classList.add('mini')
+
+                await disableFooter()
+            }
+
+            this.disableDoubleClickZoom()
+            this.limitScroll()
+            await this.handleFooterVisibility()
+        }
+    }
+
+    // Disable double click event on iOS
+    disableDoubleClickZoom = () => {
+        let lastTouchEnd = 0
+        const delay = 400
+
+        document.addEventListener('touchend', function(event) {
+            var now = (new Date()).getTime();
+            if (now - lastTouchEnd <= delay) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    }
+
+    limitScroll = () => {
+        let ticking = false
+        window.addEventListener('scroll', async() => {
+            if(!ticking) {
+                window.requestAnimationFrame(async() => {
+                    const bodyElement = document.getElementsByTagName('body')[0]
+                    const bodyElementOffset = bodyElement.offsetHeight;
+                    const innerHeight = window.innerHeight
+
+                    // Get the current scroll position
+                    const scrollPosition = window.scrollY;
+
+                    if((scrollPosition + innerHeight > bodyElementOffset)) {
+                        await scrollToBottom()
+                    }
+
+                    ticking = false;
+                });
+
+                ticking = true;
+            }
+        });
+    }
+
+    handleFooterVisibility = async() => {
+        let ticking = false
+        window.addEventListener('resize', () => {
+            if(!ticking) {
+                window.requestAnimationFrame(async() => {
+                    const htmlElement = document.getElementsByTagName('html')[0]
+                    const htmlElementOffset = htmlElement.offsetHeight;
+
+                    if(htmlElementOffset < 400 || !(await this.db.stores.wallets.exists())) {
+                        await disableFooter()
+                    } else {
+                        await enableFooter()
+                    }
+
+                    ticking = false;
+                });
+
+                ticking = true;
+            }
+        })
     }
 }
 

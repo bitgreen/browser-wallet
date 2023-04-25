@@ -2,6 +2,7 @@ import Screen, { goToScreen } from './index.js'
 import { SettingsStore } from "@bitgreen/browser-wallet-core";
 
 import anime from 'animejs';
+import {isIOs} from "@bitgreen/browser-wallet-utils";
 
 export default async function welcomeScreen() {
     const settings = new SettingsStore()
@@ -15,21 +16,25 @@ export default async function welcomeScreen() {
 
     await screen.set()
 
-    anime({
-        targets: '#init_screen',
-        opacity: 0,
-        duration: 1000,
-        delay: 2000
-    });
-    anime({
-        targets: '#init_screen .init-logo',
-        delay: 600,
-        easing: 'linear',
-        keyframes: [
-            { translateY: -100, scale: 0.323232, duration: 800 },
-            { translateX: -290, duration: 600 },
-        ]
-    });
+    if(isIOs()) {
+        screen.hideInit()
+    } else {
+        anime({
+            targets: '#init_screen',
+            opacity: 0,
+            duration: 1000,
+            delay: 2000
+        });
+        anime({
+            targets: '#init_screen .init-logo',
+            delay: 600,
+            easing: 'linear',
+            keyframes: [
+                { translateY: -100, scale: 0.323232, duration: 800 },
+                { translateX: -290, duration: 600 },
+            ]
+        });
+    }
 
     anime({
         targets: '.bitgreen-svg path',
@@ -38,9 +43,12 @@ export default async function welcomeScreen() {
         "fill-opacity": "1",
         "stroke-width": "0",
         duration: 400,
-        // duration: function(el, i) { return 1000 - i * 100 },
         delay: function(el, i) {
-            return i*200 + 300
+            if(isIOs()) {
+                return i * 100
+            } else {
+                return i * 200 + 300
+            }
         },
     });
 
@@ -48,7 +56,7 @@ export default async function welcomeScreen() {
         targets: '.separator',
         easing: 'linear',
         duration: 500,
-        delay: 3000,
+        delay: isIOs() ? 1000 : 3000,
         translateY: [-20, 0],
         opacity: [0, 1]
     });
@@ -57,7 +65,7 @@ export default async function welcomeScreen() {
         targets: '.browser-wallet',
         easing: 'linear',
         duration: 300,
-        delay: 3200,
+        delay: isIOs() ? 1200 : 3200,
         translateX: [-30, 0],
         opacity: [0, 1]
     });
@@ -66,14 +74,14 @@ export default async function welcomeScreen() {
         targets: '#get_started',
         easing: 'linear',
         duration: 400,
-        delay: 3400,
+        delay: isIOs() ? 1400 : 3400,
         translateY: [40, 0],
         opacity: [0, 1]
     });
 
     setTimeout(function() {
         document.querySelector("#init_screen").classList.add("inactive")
-    }, 4000)
+    }, isIOs() ? 1800 : 4000)
 
     screen.setListeners([
         {
