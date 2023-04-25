@@ -1,19 +1,18 @@
-import { generateMessageId, isFirefox } from "@bitgreen/browser-wallet-utils";
+import {generateMessageId, isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 const port = current_browser.runtime.connect({ name: 'PORT_EXTENSION' });
 const handlers = {};
 let kill_popup = true
 
-const urlParams = new URLSearchParams(window.location.search)
+const url_params = new URLSearchParams(window.location.search)
 
 // Set up the listener for messages, any incoming resolves the promise.
 port.onMessage.addListener((data) => {
-
     const handler = handlers[data.id];
 
     // Receives this signal from background page, triggered when origin tab was changed/closed.
-    if(data.command === 'kill_popup' && urlParams.get('kill_popup') === 'true' && urlParams.get('tab_id').toString() === data?.tab_id.toString()) {
+    if(data.command === 'kill_popup' && url_params.get('kill_popup') === 'true' && urlParams.get('tab_id').toString() === data?.tab_id.toString()) {
         if(port) port.disconnect()
 
         if(kill_popup) window.close()
@@ -37,6 +36,15 @@ port.onMessage.addListener((data) => {
         handler.resolve(data.response);
     }
 });
+
+// Listen for messages from background
+current_browser.runtime.onMessage.addListener((data) => {
+    if(data.command === 'kill_popup' && url_params.get('kill_popup') === 'true') {
+        window.close()
+
+        return;
+    }
+})
 
 // port.onDisconnect.addListener((obj) => {
 //     console.log('disconnected port');

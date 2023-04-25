@@ -2,7 +2,7 @@
   "name": "@bitgreen/browser-wallet-base",
   "author": "Bitgreen",
   "description": "",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "homepage": "https://github.com/bitgreen/browser-wallet#readme",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -47,7 +47,7 @@
     "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.0",
     "webpack-cli": "^4.10.0",
     "webpack-extension-manifest-plugin": "^0.8.0"
   }

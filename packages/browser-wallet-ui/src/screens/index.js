@@ -1,6 +1,6 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isMacOs, isWindows} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import anime from 'animejs';
@@ -33,7 +33,7 @@ import transactionDetailsScreen from "./transactionDetails.js";
 
 import { hideNotification } from "../notifications.js";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 let logged_in = false
 
@@ -89,7 +89,7 @@ class Screen {
 
     resizeTo(width, height) {
         if(isWindows()) {
-            // Add 16px in width and 39px height on windows.
+            // Add 16px width and 39px height on windows.
             width += 16
             height += 39
         } else if(isMacOs()) {
@@ -180,7 +180,7 @@ class Screen {
     showFooter() {
         const current_screen = currentScreen()
 
-        if(!this.footer_el.classList.contains('visible')) {
+        if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
             anime({
                 targets: '#main_footer',
                 duration: 300,
@@ -310,7 +310,7 @@ const showLogin = async(instant = false, force = false) => {
     }
 
     setTimeout(() => {
-        document.querySelector("#login_screen #password").focus();
+        if(!isIOs()) document.querySelector("#login_screen #password").focus();
     }, 100)
 
     if(!instant) {
@@ -348,6 +348,40 @@ const hideLogin = (instant = false) => {
         document.querySelector("#login_screen").classList.add("inactive")
         document.querySelector("#login_screen #password").value = ''; // remove password from a field
     }
+}
+
+const enableFooter = async() => {
+    const footer_el = document.querySelector('#main_footer')
+
+    if(footer_el.classList.contains('disabled')) {
+        anime({
+            targets: '#main_footer',
+            duration: 300,
+            translateY: [60, 0],
+            opacity: 1,
+            easing: 'linear',
+            delay: 400
+        });
+    }
+
+    footer_el.classList.remove('disabled')
+}
+
+const disableFooter = async() => {
+    const footer_el = document.querySelector('#main_footer')
+
+    if(!footer_el.classList.contains('disabled')) {
+        anime({
+            targets: '#main_footer',
+            duration: 300,
+            translateY: [0, 120],
+            opacity: [1, 0],
+            easing: 'linear',
+            delay: 0
+        });
+    }
+
+    footer_el.classList.add('disabled')
 }
 
 const screens = {
@@ -553,6 +587,21 @@ const copyText = async(text) => {
     await navigator.clipboard.writeText(text);
 }
 
+const scrollToBottom = async(delay = 0) => {
+    if(delay > 0) await sleep(delay)
+
+    const bodyElement = document.getElementsByTagName('body')[0]
+    const bodyElementOffset = bodyElement.offsetHeight;
+    const outerHeight = window.outerHeight
+
+    const url_params = new URLSearchParams(window.location.search)
+    if(url_params.has('popup')) {
+        window.scrollTo(0, 1000)
+    } else {
+        window.scrollTo(0, outerHeight - bodyElementOffset + 90)
+    }
+}
+
 export default Screen
 export {
     screens,
@@ -566,5 +615,8 @@ export {
     currentScreen,
     clearHistory,
     updateAccounts,
-    copyText
+    copyText,
+    enableFooter,
+    disableFooter,
+    scrollToBottom
 }

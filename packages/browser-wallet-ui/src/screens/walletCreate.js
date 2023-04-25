@@ -4,6 +4,7 @@ import { showNotification } from "../notifications.js";
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
 import {WalletStore} from "@bitgreen/browser-wallet-core";
+import {isIOs} from "@bitgreen/browser-wallet-utils";
 
 export default async function walletCreateScreen(params) {
     let current_words = 12

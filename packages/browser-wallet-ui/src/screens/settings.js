@@ -4,7 +4,7 @@ import { sendMessage } from "../messaging.js";
 
 import DOMPurify from "dompurify";
 import { showNotification } from "../notifications.js";
-import {isFirefox} from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
 export default async function settingsScreen(params) {
     const screen = new Screen({
@@ -109,7 +109,7 @@ export default async function settingsScreen(params) {
         {
             element: '#go_support',
             listener: () => {
-                const current_browser = isFirefox() ? browser : chrome
+                const current_browser = (isFirefox() || isSafari()) ? browser : chrome
                 current_browser.tabs.create({ url: 'https://bitgreen.org/contact' })
             }
         }
