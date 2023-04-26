@@ -42,64 +42,51 @@ module.exports = (
   const manifest = require(`./manifest-${browser}.json`);
   let output_dir = path.join(__dirname, `../../build/${browser}`);
 
-  let plugins = [
-    new webpack.ProvidePlugin({
-      Buffer: ["buffer", "Buffer"],
-    }),
-    new webpack.ProvidePlugin({
-      process: "process/browser.js",
-    }),
-    new webpack.IgnorePlugin({
-      contextRegExp: /moment$/,
-      resourceRegExp: /^\.\/locale$/,
-    }),
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(mode),
-        PKG_NAME: JSON.stringify(pkgJson.name),
-        PKG_VERSION: JSON.stringify(pkgJson.version),
-      },
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: "public",
-          noErrorOnMissing: true,
-          globOptions: {
-            ignore: ["**/*.html"],
-          },
-        },
-      ],
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(
-            __dirname,
-            "../browser-wallet-ui/src/assets/icons"
-          ),
-          to: "assets/icons",
-        },
-      ],
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "../browser-wallet-ui/src/components"),
-          to: "components",
-        },
-      ],
-    }),
-    new ManifestPlugin({
-      config: {
-        base: manifest,
-        extend: {
-          version: pkgJson.version.split("-")[0], // remove possible -beta.xx
-        },
-      },
-    }),
-    new MiniCssExtractPlugin(),
-  ];
+    let plugins = [
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser.js',
+        }),
+        new webpack.IgnorePlugin({
+            contextRegExp: /moment$/,
+            resourceRegExp: /^\.\/locale$/
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(mode),
+                PKG_NAME: JSON.stringify(pkgJson.name),
+                PKG_VERSION: JSON.stringify(pkgJson.version)
+            }
+        }),
+        new CopyPlugin({
+            patterns: [{
+                from: 'public',
+                noErrorOnMissing: true,
+                globOptions: {
+                    ignore: [
+                        '**/*.html'
+                    ]
+                }
+            }]
+        }),
+        new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/components'),
+                to: 'components'
+            }]
+        }),
+        new ManifestPlugin({
+            config: {
+                base: manifest,
+                extend: {
+                    version: pkgJson.version.split('-')[0] // remove possible -beta.xx
+                }
+            }
+        }),
+        new MiniCssExtractPlugin()
+    ]
 
   if (useSplitChunk) {
     plugins.push(
@@ -111,23 +98,33 @@ module.exports = (
     );
   }
 
-  if (browser === "safari") {
-    // change output directory
-    output_dir = path.join(__dirname, `../../build/${browser}/javascript`);
+    if(browser === 'safari') {
+        // copy necessary files
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: 'src/safari',
+                to: '../',
+                noErrorOnMissing: true
+            }]
+        }))
 
-    // copy necessary files
-    plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: "src/safari",
-            to: "../",
-            noErrorOnMissing: true,
-          },
-        ],
-      })
-    );
-  }
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/square'),
+                to: 'icons'
+            }]
+        }))
+
+        // change output directory
+        output_dir = path.join(__dirname, `../../build/${browser}/Shared (Extension)`)
+    } else {
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/normal'),
+                to: 'icons'
+            }]
+        }))
+    }
 
   const result = {
     context: __dirname,

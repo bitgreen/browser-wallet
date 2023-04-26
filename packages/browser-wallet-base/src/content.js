@@ -1,10 +1,10 @@
 import { extractGlobal, xglobal } from '@polkadot/x-global';
-import { isFirefox } from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
 const chrome = extractGlobal('chrome', xglobal.browser);
 const browser = extractGlobal('browser', xglobal.browser);
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 const port_content = current_browser.runtime.connect({ name: 'PORT_CONTENT' });
 
 // This code is inject in all the pages to intercept the messages for the browser wallet
@@ -36,11 +36,11 @@ window.addEventListener("message", (event) => {
 // listen to messages from extension, and forward them to webpage
 current_browser.runtime.onConnect.addListener((port) => {
     port.onMessage.addListener((data) => {
-        if(port.name === 'PORT_CONTENT' || port.name === 'PORT_BACKGROUND') {
-            window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT' }, '*');
-        } else if(port.name.startsWith('PORT_CONTENT_RESOLVE')) {
+        if(port.name.startsWith('PORT_CONTENT_RESOLVE') || data.response.resolve) {
             // resolve message requested from tab
             window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT', resolve: true }, '*');
+        } else if(port.name === 'PORT_CONTENT' || port.name === 'PORT_BACKGROUND') {
+            window.postMessage({ ...data, origin: 'MESSAGE_ORIGIN_CONTENT' }, '*');
         } else if(port.name === 'KEEP_ALIVE') {
             // console.log('KEEP_ALIVE MESSAGE')
         }

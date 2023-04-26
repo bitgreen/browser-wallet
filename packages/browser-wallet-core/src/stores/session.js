@@ -1,7 +1,7 @@
 import BaseStore from "./base.js";
-import { isFirefox } from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 class SessionStore extends BaseStore {
     constructor() {

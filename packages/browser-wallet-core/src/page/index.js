@@ -29,7 +29,7 @@ const enablePage = async() => {
 
 const signIn = async() => {
     const title = document.querySelector('title')?.innerText
-    return await sendMessage('sign_in', { domain: origin, title }, true);
+    return await sendMessage('sign_in', { domain: origin, title, kill_popup: true }, true);
 }
 
 const send = async(amount = 0, recipient = false, kill_popup = true) => {

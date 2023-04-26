@@ -54,6 +54,11 @@
 * {
     font-family: "Neue Haas Unica Pro", sans-serif !important;
 }
+
+html {
+    height:100%;
+}
+
 :root {
   --main-bg-color: #224851;
   --secondary-font :#667085;
@@ -144,6 +149,8 @@ p {
 }
 .select-none {
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 .btn {
     font-style: normal;
@@ -399,6 +406,8 @@ label.label {
     height: 24px;
     line-height: 24px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 .form-switch .form-check-label h4 {
     height: 24px;
@@ -472,7 +481,7 @@ label.label {
     transform: rotate(45deg) scale(1.1);
 }
 #login_screen {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -494,7 +503,7 @@ label.label {
     z-index: -1;
 }
 #init_screen {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -735,6 +744,8 @@ label.label {
     height: 124px;
     padding: 60px 16px 16px 16px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #heading.custom-header {
     padding: 0;
@@ -779,6 +790,8 @@ label.label {
     font-weight: 500;
     transition: all linear 0.2s;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #go_back:hover .text {
     transform: translateX(4px);
@@ -977,6 +990,8 @@ label.label {
     cursor: pointer;
     transition: all linear 0.3s;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     overflow: hidden;
 }
 .button-item.disabled {
@@ -1269,6 +1284,8 @@ label.label {
     background-color: #224851;
     color: #ffffff;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #full_page .heading.equal-padding {
     padding: 12px 24px;
@@ -1416,6 +1433,8 @@ label.label {
     text-align: center;
     color: #B1B4BD;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #full_page .content .mnemonics .word .badge .text {
     width: 100%;
@@ -1432,6 +1451,8 @@ label.label {
     font-weight: 500;
     padding: 10px 12px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #full_page .content #mnemonics_info .col-6 {
     padding: 0 8px;
@@ -1545,6 +1566,8 @@ label.label {
     padding-bottom: 8px;
     z-index: 99;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 .footer.equal-footer {
     padding-bottom: 0;
@@ -1716,6 +1739,8 @@ label.label {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #app_info.known .left {
     background-color: #224851;
@@ -1794,6 +1819,8 @@ label.label {
     border-radius: 4px;
     margin-bottom: 8px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     min-height: 66px;
 }
 .custom-dropdown .icon-wallet-outline {
@@ -1914,6 +1941,8 @@ label.label {
     color: #181818;
 
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #review_transaction .token {
     padding-left: 32px;
@@ -2119,6 +2148,8 @@ label.label {
     left: 8px;
     padding-top: 8px;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 #accounts_modal:after {
     position: fixed;

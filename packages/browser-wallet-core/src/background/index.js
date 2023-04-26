@@ -1,11 +1,13 @@
 import Extension from './extension.js'
 import Tabs from './tabs.js'
-import { isFirefox, isSafari } from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isMacOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = isFirefox() ? browser : chrome
+const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 const extension = new Extension()
 const tabs = new Tabs()
+
+let opened_tabs = []
 
 const backgroundMessageHandler = (data, port) => {
     const isExtension = port.name === 'PORT_EXTENSION'
@@ -32,20 +34,28 @@ const backgroundMessageHandler = (data, port) => {
 }
 
 const showPopup = async(command, params = {}) => {
+    const origin_tab_id = await getCurrentTabId()
+
     let url = 'index.html?' + new URLSearchParams({
-        tab_id: await getCurrentTabId(),
+        tab_id: origin_tab_id,
         command,
         ...params
     }).toString();
 
-    if(isSafari()) {
-        chrome.windows.create({
+    if(isSafari() && isMacOs()) {
+        const response = await current_browser.windows.create({
             url: url,
             type: 'popup',
             focused: true,
             width: 400,
             height: 600
         });
+
+        opened_tabs.push({
+            message_id: params.id,
+            origin_tab_id: origin_tab_id,
+            wallet_tab_id: response.tabs[0].id
+        })
     } else {
         current_browser.windows.getCurrent((win) => {
             let width = win.width;
@@ -55,13 +65,19 @@ const showPopup = async(command, params = {}) => {
 
             current_browser.tabs.create({
                 url: current_browser.runtime.getURL(url),
-                active: false
-            }, function(tab) {
-                // get windows properties
-
+                active: true
+            }, (tab) => {
                 // adjust position
                 top = top + 80;
                 left = left + width - 400 - 100;
+
+                if(isIOs()) {
+                    opened_tabs.push({
+                        message_id: params.id,
+                        origin_tab_id: origin_tab_id,
+                        wallet_tab_id: tab.id
+                    })
+                }
 
                 // After the tab has been created, open a window to inject the tab
                 current_browser.windows.create({
@@ -69,7 +85,7 @@ const showPopup = async(command, params = {}) => {
                     type: 'popup',
                     focused: true,
                     width: 400,
-                    height: 600,
+                    height: 300,
                     left,
                     top
                 });
@@ -111,6 +127,37 @@ const sendMessageToTab = (tab_id, message_id, response) => {
         id: message_id,
         response
     });
+}
+
+// Handle communication lost on safari
+if(isSafari()) {
+    current_browser.tabs.onRemoved.addListener(async(tab_id, removeInfo) => {
+        opened_tabs.map((data) => {
+            // If wallet tab is closed, send message back to webpage
+            if(data.wallet_tab_id === tab_id) {
+                // Remove from opened tabs
+                opened_tabs = opened_tabs.filter((data) => {
+                    return data.wallet_tab_id !== tab_id
+                })
+
+                sendMessageToTab(data.origin_tab_id, data.message_id,{ success: false, status: 'closed', resolve: true, error: 'Communication to the popup has been lost.' })
+            }
+        })
+    });
+
+    current_browser.tabs.onUpdated.addListener(async(tab_id) => {
+        opened_tabs.map((data) => {
+            // If origin tab is closed, kill all popups from that tab
+            if(data.origin_tab_id === tab_id) {
+                // Remove from opened tabs
+                opened_tabs = opened_tabs.filter((data) => {
+                    return data.origin_tab_id !== tab_id
+                })
+
+                current_browser.tabs.sendMessage(data.wallet_tab_id, { command: "kill_popup" });
+            }
+        })
+    })
 }
 
 export {

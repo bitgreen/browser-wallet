@@ -1,0 +1,96 @@
+body.macos {
+    position: fixed;
+}
+body.ios {
+    position: fixed;
+    top: 0;
+    left: 0;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+}
+body.ios * {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+}
+body.ios #login_screen {
+    background-image: none;
+    background-color: #224851;
+}
+body.ios #login_screen .bitgreen-svg {
+    position: absolute;
+    top: auto;
+    bottom: calc(50% + 50px);
+
+    transition: all linear 0.3s;
+}
+body.ios #login_screen .separator {
+    position: absolute;
+    top: auto;
+    bottom: calc(50% + 35px);
+
+    transition: all linear 0.3s;
+}
+body.ios #login_screen .browser-wallet {
+    position: absolute;
+    top: auto;
+    bottom: calc(50%);
+
+    transition: all linear 0.3s;
+}
+body.ios #login_screen.focused .bitgreen-svg {
+    position: absolute;
+    top: auto;
+    bottom: calc(30% + 50px);
+}
+body.ios #login_screen.focused .separator {
+    position: absolute;
+    top: auto;
+    bottom: calc(30% + 35px);
+}
+body.ios #login_screen.focused .browser-wallet {
+    position: absolute;
+    top: auto;
+    bottom: calc(30%);
+}
+body.ios #login_screen.mini .footer {
+    bottom: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
+}
+body.ios #init_screen {
+    background-image: none;
+    background-color: #224851;
+    overflow: hidden;
+}
+body.ios #full_page,
+body.ios #heading,
+body.ios #bordered_content {
+    position: fixed;
+}
+body.ios #root .full-only {
+    background-image: none;
+    background-color: #224851;
+}
+body.ios #root .bitgreen-svg {
+    position: fixed;
+    top: auto;
+    bottom: 70%;
+}
+body.ios #root .separator {
+    position: fixed;
+    top: auto;
+    bottom: calc(70% - 20px);
+}
+body.ios #root .browser-wallet {
+    position: fixed;
+    top: auto;
+    bottom: calc(70% - 60px);
+}
+body.ios #root #get_started {
+    position: fixed;
+    top: auto;
+    bottom: calc(70% - 200px);
+ }
+body.ios #main_footer.disabled {
+    pointer-events: none !important;
+}

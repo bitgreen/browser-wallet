@@ -1,4 +1,4 @@
-import Screen, {clearHistory, goToScreen} from './index.js'
+import Screen, {clearHistory, goToScreen, scrollToBottom} from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
 
@@ -81,6 +81,16 @@ export default async function extrinsicSendScreen(params) {
                 if(e.key === "Enter") {
                     await approveExtrinsic()
                 }
+                await scrollToBottom()
+            }
+        },
+        {
+            element: '#password',
+            type: 'focus',
+            listener: async() => {
+                await scrollToBottom()
+                await scrollToBottom(200)
+                await scrollToBottom(1600)
             }
         },
         {

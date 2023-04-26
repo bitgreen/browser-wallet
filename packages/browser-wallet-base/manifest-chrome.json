@@ -5,15 +5,15 @@
   "homepage_url": "https://bitgreen.org",
   "version": "1.0.0",
   "action": {
-    "default_icon": "assets/icons/48x48.png",
+    "default_icon": "icons/48x48.png",
     "default_popup": "index.html?popup=true"
   },
   "icons": {
-    "16": "assets/icons/16x16.png",
-    "32": "assets/icons/32x32.png",
-    "48": "assets/icons/48x48.png",
-    "64": "assets/icons/64x64.png",
-    "128": "assets/icons/128x128.png"
+    "16": "icons/16x16.png",
+    "32": "icons/32x32.png",
+    "48": "icons/48x48.png",
+    "64": "icons/64x64.png",
+    "128": "icons/128x128.png"
   },
   "permissions": [
     "clipboardWrite",
