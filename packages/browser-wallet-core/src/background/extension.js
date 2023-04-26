@@ -239,7 +239,10 @@ class Extension {
         if(!['mainnet', 'testnet'].includes(current_network.id)) return false;
 
         const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address;
-        let result = await fetch(url)
+        let result = await fetch(url, {
+            mode: 'cors',
+            credentials: 'include',
+        })
         result = await result.json()
 
         const balances = {

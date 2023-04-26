@@ -19,7 +19,10 @@ class AssetStore extends BaseStore {
     if(!['mainnet', 'testnet'].includes(this.network.id)) return false;
 
     const url = this.network.api_endpoint + '/asset/transactions?account=' + this.account.address;
-    let result = await fetch(url)
+    let result = await fetch(url, {
+      mode: 'cors',
+      credentials: 'include',
+    })
     result = await result.json()
 
     for(const asset of result) {

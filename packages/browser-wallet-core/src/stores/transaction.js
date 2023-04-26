@@ -23,10 +23,7 @@ class TransactionStore extends BaseStore {
         const url = this.network.api_endpoint + '/transactions?account=' + this.account.address + '&date_start=2022-05-01&date_end=' + date_end;
         let result = await fetch(url, {
             mode: 'cors',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            credentials: 'include'
         })
         result = await result.json()
 
