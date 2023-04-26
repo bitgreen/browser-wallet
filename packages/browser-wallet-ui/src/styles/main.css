@@ -57,7 +57,6 @@
 :root {
   --main-bg-color: #224851;
   --secondary-font :#667085;
-  --icon_url:url('../assets/Vector.png');
 }
 body {
     font-family: 'Neue Haas Unica Pro', sans-serif;
@@ -814,14 +813,11 @@ label.label {
     height: calc(100% - 165px);
     padding-top: 20px;
 }
-#wallet_list, #asset_list {
+#wallet_list {
     height: 100%;
     overflow-y: scroll;
     padding-right: 8px;
     padding-bottom: 8px;
-}
-#asset_list {
-    height: calc(100% - 60px);
 }
 #wallet_list.backup-list {
     height: calc(100% - 130px);
@@ -1116,7 +1112,6 @@ label.label {
 }
 .button-item.transaction-item .transaction-info {
     width: 90%;
-    padding-right: 40px;
     min-height: 65px;
 }
 .button-item.transaction-item .transaction-info .icon,
@@ -1127,6 +1122,7 @@ label.label {
     height: 28px;
     line-height: 28px;
     margin-bottom: 2px;
+    color: #224851;
 }
 .button-item.transaction-item .transaction-info .icon {
     padding: 0;
@@ -1158,8 +1154,16 @@ label.label {
     font-size: 20px;
 }
 .button-item.transaction-item .transaction-info .amount .digits {
-    font-size: 14px;
-    padding-top: 4px;
+    position: relative;
+    font-size: 16px;
+    top: -2px;
+    right: 2px;
+}
+.button-item.transaction-item .transaction-info .amount .dollar {
+    position: relative;
+    font-size: 16px;
+    top: 0;
+    right: 2px;
 }
 .button-item.transaction-item .icon.icon-right {
     transition: all linear 0.1s;
@@ -1246,7 +1250,6 @@ label.label {
 }
 #transactions .transaction-info {
     width: 90%;
-    padding-right: 40px;
     text-align: center;
     text-transform: uppercase;
 }
@@ -2168,42 +2171,4 @@ label.label {
 }
 #accounts_modal #wallet_list {
     max-height: 290px;
-}
-
- 
-.asset-item-container .info .icon {
-    display: inline-block;
-    margin-right: 8px;
-}
-.asset-item-container .asset-each {
-   color: var(--main-bg-color);
-    font-weight: 400;
-    font-size: 2em;
-}
-.asset-item-container .asset-each .dollar {
-    font-weight: 400;
-    font-size: 14px;
-    margin-left: 8px;
-    /*margin-right: 2px;*/
-}
-.asset-item-container .asset-each .decimals {
-    position: relative;
-    top: -4px;
-    font-weight: 400;
-    font-size: 0.8em;
-}
-.asset-item-container .bottom-color   {
- color:var(--secondary-font); 
- font-size: 0.8em;
-} 
-
-.asset-icon{ 
-    width: 26px;
-    height: 27px;
-    margin-left: 10px;
-}
-.reduced{
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
 }

@@ -1,24 +1,9 @@
-<div class="button-item d-flex align-items-center justify-content-center click-only gx-3 asset-item-container">
-    <div class="asset-icon" style="background-image:url( ${assetLogo} );">
+<div class="button-item transaction-item d-flex align-items-center click-only">
+    <div class="transaction-info d-flex align-items-center">
+        <div class="col-2"><span class="icon text-center">${assetLogo}</span></div>
+        <div class="col-4 align-items-center text-center"><span class="d-block w-100 amount">${balance}<span class="d-inline-block digits text-gray">.${decimal}</span></span><span class="desc d-block w-100">CREDITS</span></div>
+        <div class="col align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="dollar">$</span>${price}<span class="d-inline-block digits text-gray">.${priceDecimal}</span></span><span class="desc d-block w-100">EACH</span></div>
+        <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="dollar">$</span>${balanceUsd}<span class="d-inline-block digits text-gray">.${balanceUsdDecimal}</span></span><span class="desc d-block w-100">VALUE (USD)</span></div>
     </div>
-    <div class="col">
-        <div class="name w-100 text-center justify-content-center h5 asset-each">${assetId} </div>
-        <div class="desc w-100 d-flex align-items-center justify-content-center h6 bottom-color">CREDITS</div>
-    </div>
-    <div class="col" style=" white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;">
-        <div class="name w-100 d-flex align-items-center justify-content-center h5 asset-each">
-            <span class="amounts reduced"><span class="dollar">$</span>${balance}<span
-                    class="decimals">.${decimal}</span></span>
-        </div>
-        <div class="desc w-100 d-flex align-items-center text-center justify-content-center h6 bottom-color">EACH</div>
-    </div>
-    <div class="col">
-        <div class="name w-100 d-flex align-items-center justify-content-center h5 asset-each"> <span
-                class="amounts"><span class="dollar">$</span>${balanceUsd}<span
-                    class="decimals">.${decimal}</span></span> </div>
-        <div class="desc w-100 d-flex align-items-center justify-content-center h6 bottom-color ">VALUE(USD)</div>
-    </div>
-    <span class="icon icon-arrow-right-2 text-center"></span>
+    <span class="icon icon-small icon-arrow-right-2 text-center"></span>
 </div>

@@ -96,7 +96,7 @@ class BaseStore {
 
     async asyncRemoveAll() {
         for(const record of await this.asyncAll()) {
-            await this.asyncSet(record.key, null)
+            this.remove(record.key)
         }
     }
 

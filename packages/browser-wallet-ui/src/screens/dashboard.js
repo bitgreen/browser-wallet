@@ -26,23 +26,36 @@ export default async function dashboardScreen(params = {
     await screen.init()
 
     const balance = await sendMessage('get_balance')
+    const all_balances = await sendMessage('get_all_balances')
     const token_price_info = getAmountDecimal(bbbTokenPrice, 2)
 
     const bbb_usd_amount = balanceToHuman(balance, 18) * bbbTokenPrice
 
+    let other_usd_amount = 0
+    for(const token of all_balances.tokens) {
+        if(token.token_name === 'BBB') continue
+        other_usd_amount += balanceToHuman(token.balance, 18) * token.price
+    }
+    for(const asset of all_balances.assets) {
+        other_usd_amount += asset.balance * asset.price
+    }
+
     await screen.set('#heading', 'dashboard/heading', {
         bbb_usd_amount: formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0),
+        other_usd_amount: formatAmount(other_usd_amount, other_usd_amount < 1000000 ? 2 : 0),
         token_price: token_price_info.amount,
         token_price_decimals: token_price_info.decimals
     })
     await screen.set('#bordered_content', 'dashboard/content', {
-        all_balance: formatAmount(balanceToHuman(balance, 2)),
-        bbb_balance: formatAmount(balanceToHuman(balance, 2))
+        all_balance: formatAmount(all_balances.total, 2),
+        bbb_balance: formatAmount(balanceToHuman(balance, 2)),
+        token_balance: formatAmount(all_balances.tokens_total, 2)
     })
 
     await screen.set('#chart', 'dashboard/chart')
     initChart({
-        bbb_token_amount: balanceToHuman(balance, 18)
+        bbb_token_amount: bbb_usd_amount,
+        other_amount: other_usd_amount
     })
 
     await clearHistory()

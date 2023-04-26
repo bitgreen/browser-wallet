@@ -19,9 +19,9 @@ import {
 } from "../stores/index.js"
 import {Keyring} from "@polkadot/keyring"
 import {polkadotApi} from "../polkadotApi.js";
-import {addressValid, humanToBalance} from "@bitgreen/browser-wallet-utils";
+import {addressValid, balanceToHuman, humanToBalance} from "@bitgreen/browser-wallet-utils";
 
-import {passwordTimeout} from "../constants.js";
+import {bbbTokenPrice, passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
 
 class Extension {
@@ -58,12 +58,14 @@ class Extension {
                 return await this.changeNetwork(data?.params)
             case 'get_balance':
                 return await this.getBalance()
+            case 'get_all_balances':
+                return await this.getAllBalances()
             case 'get_transactions':
                 return await this.getTransactions()
-            case 'get_assets':
-                return await this.getAssets()
-            case 'get_tokens':
-                return await this.getTokens()
+            case 'get_asset_transactions':
+                return await this.getAssetTransactions()
+            case 'get_token_transactions':
+                return await this.getTokenTransactions()
             case 'reveal_mnemonic':
                 return await this.revealMnemonic(data?.params)
             case 'check_login':
@@ -228,6 +230,69 @@ class Extension {
         return balance.free.toString()
     }
 
+    async getAllBalances() {
+        const current_network = await this.networks_store.current()
+        const current_account = await this.accounts_store.current()
+
+        const polkadot_api = await polkadotApi()
+
+        if(!['mainnet', 'testnet'].includes(current_network.id)) return false;
+
+        const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address;
+        let result = await fetch(url)
+        result = await result.json()
+
+        const balances = {
+            tokens: [],
+            assets: [],
+
+            total: 0,
+            tokens_total: 0
+        }
+
+        for(const asset of result.assets) {
+            let price = 1.56541
+
+            const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
+            balances.assets.push({
+                asset_name: asset,
+                balance: data.balance.toString(),
+                price: price
+            })
+
+            balances.total += parseFloat(data.balance)
+        }
+
+        // Add BBB on the list
+        const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
+        balances.tokens.push({
+            token_name: 'BBB',
+            balance: balance.free.toString(),
+            price: bbbTokenPrice
+        })
+        balances.total += parseFloat(balanceToHuman(balance.free.toString()))
+
+        for(const token of result.tokens) {
+            let price = 0
+            if(token === 'USDT' || token === 'USDC') {
+                price = 0.9898
+            }
+
+            const { free } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+            balances.tokens.push({
+                token_name: token,
+                balance: free.toString(),
+                price: price
+            })
+
+            balances.total += parseFloat(balanceToHuman(free.toString()))
+            balances.tokens_total += parseFloat(balanceToHuman(free.toString()))
+        }
+
+
+        return balances
+    }
+
     async getBalanceByAddress(account_address) {
         const polkadot_api = await polkadotApi()
 
@@ -270,7 +335,7 @@ class Extension {
         this.assets_store = new AssetStore(current_network, current_account)
     }
 
-    async getAssets() {
+    async getAssetTransactions() {
         await this.initAssetsStore()
 
         await this.assets_store.asyncRemoveAll()
@@ -279,9 +344,9 @@ class Extension {
         let assets = await this.assets_store.asyncAll()
 
         // Sort by date by default
-        // assets.sort((a, b) => {
-        //     return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
-        // })
+        assets.sort((a, b) => {
+            return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+        })
 
         return assets
     }
@@ -293,7 +358,7 @@ class Extension {
         this.tokens_store = new TokenStore(current_network, current_account)
     }
 
-    async getTokens() {
+    async getTokenTransactions() {
         await this.initTokensStore()
 
         await this.tokens_store.asyncRemoveAll()
@@ -302,9 +367,9 @@ class Extension {
         let tokens = await this.tokens_store.asyncAll()
 
         // Sort by date by default
-        // assets.sort((a, b) => {
-        //     return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
-        // })
+        tokens.sort((a, b) => {
+            return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+        })
 
         return tokens
     }

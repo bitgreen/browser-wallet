@@ -18,7 +18,7 @@ class TokenStore extends BaseStore {
   async fetch() {
     if(!['mainnet', 'testnet'].includes(this.network.id)) return false;
 
-    const url = this.network.api_endpoint + '/tokens/transaction?account=' + this.account.address;
+    const url = this.network.api_endpoint + '/token/transactions?account=' + this.account.address;
     let result = await fetch(url)
     result = await result.json()
 

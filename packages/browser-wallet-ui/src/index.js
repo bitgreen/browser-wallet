@@ -7,9 +7,9 @@ import {
     updateAccounts,
     showLogin,
     currentScreen,
-    clearHistory, reloadScreen
+    clearHistory,
+    reloadScreen
 } from './screens/index.js'
-import { renderChart } from "./chart.js";
 import { sendMessage } from "./messaging.js";
 import { hideNotification, showNotification } from "./notifications.js";
 

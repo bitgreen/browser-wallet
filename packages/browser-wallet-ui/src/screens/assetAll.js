@@ -1,53 +1,84 @@
 import Screen, { goBackScreen, goToScreen, reloadScreen } from "./index.js";
-import { getAmountDecimal } from "@bitgreen/browser-wallet-utils";
+import {balanceToHuman, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 import {sendMessage} from "../messaging.js";
+import {bbbTokenPrice} from "@bitgreen/browser-wallet-core";
+import {renderTemplate} from "../screens.js";
+import anime from "animejs";
 
 export default async function assetAllScreen(params) {
   const screen = new Screen({
-    template_name: 'layouts/full_page',
-    template_params: {
-      title: 'All Assets'
-    },
+    template_name: 'layouts/default_custom_header',
     header: false,
-    footer: true,
+    footer: true
   });
   await screen.init();
 
-  await screen.set('.content', 'asset/all/content')
+  await screen.set('#heading', 'asset/all/heading')
 
-  const all_token = await sendMessage('get_tokens')
+  await screen.set('#bordered_content', 'asset/all/content')
 
-  for (const asset of all_token) {
-    const defaultLogo = "assets/3ca609dfb4d2c2335575-Vector.png";
-    await screen.append("#root #asset_list", "asset/all/list_item", {
-      assetId:
-        asset?.value?.assetId === "NaN" || typeof asset?.value?.assetId == "undefined"
-          ? 0
-          : asset?.value?.assetId,
-      assetName: asset?.value?.assetName,
-      balance: asset?.value?.balance,
-      decimal: getAmountDecimal(asset?.balance, 2).decimals,
-      balanceUsd: asset?.value?.balanceUsd === "NaN" ? 0 : asset?.value?.balanceUsd,
-      assetLogo: asset?.value?.assetLogo != null ? asset?.value?.assetLogo : defaultLogo,
-      nftImage: asset?.value?.nftImage,
+  const defaultIcon = await renderTemplate('shared/icons/default')
+
+  const bbbIcon = await renderTemplate('shared/icons/bbb')
+  const usdtIcon = await renderTemplate('shared/icons/usdt')
+  const usdcIcon = await renderTemplate('shared/icons/usdc')
+  const dotIcon = await renderTemplate('shared/icons/dot')
+
+  const carbonCreditIcon = await renderTemplate('shared/icons/carbon_credit')
+
+  const balances = await sendMessage('get_all_balances')
+
+  for (const token of balances.tokens) {
+    let icon = defaultIcon
+    if(token.token_name === 'BBB') icon = bbbIcon
+    if(token.token_name === 'USDT') icon = usdtIcon
+    if(token.token_name === 'USDC') icon = usdcIcon
+    if(token.token_name === 'DOT') icon = dotIcon
+
+    const balance_info = getAmountDecimal(balanceToHuman(token.balance), 2)
+    const balance_usd_info = getAmountDecimal(balanceToHuman(token.balance) * token.price, 2)
+    const price_info = getAmountDecimal(token.price, 2)
+
+    await screen.append("#root #transactions", "token/all/list_item", {
+      tokenName: token.token_name,
+      balance: balance_info.amount,
+      decimal: balance_info.decimals,
+
+      tokenLogo: icon,
+
+      price: price_info.amount,
+      priceDecimal: price_info.decimals,
+      balanceUsd: balance_usd_info.amount,
+      balanceUsdDecimal: balance_usd_info.decimals,
     });
   }
 
-  const all_asset = await sendMessage('get_assets')
+  for (const asset of balances.assets) {
+    const balance_info = getAmountDecimal(asset.balance, 2)
+    const balance_usd_info = getAmountDecimal(asset.balance * asset.price, 2)
+    const price_info = getAmountDecimal(asset.price, 2)
 
-  for (const a of all_asset) {
-    const asset = a;
-    const defaultLogo = "assets/3ca609dfb4d2c2335575-Vector.png";
-    await screen.append("#root #asset_list", "asset/all/list_item", {
-      assetId: asset?.assetId,
-      assetName: asset?.assetName,
-      balance: asset?.balance,
-      decimal: getAmountDecimal(asset?.balance, 2).decimals,
-      balanceUsd: asset?.balanceUsd == "NaN" ? 0 : asset?.balanceUsd,
-      assetLogo: asset?.assetLogo != null ? asset?.assetLogo : defaultLogo,
-      nftImage: asset?.nftImage,
+    await screen.append("#root #transactions", "asset/all/list_item", {
+      balance: balance_info.amount,
+      decimal: balance_info.decimals,
+
+      assetLogo: carbonCreditIcon,
+
+      price: price_info.amount,
+      priceDecimal: price_info.decimals,
+      balanceUsd: balance_usd_info.amount,
+      balanceUsdDecimal: balance_usd_info.decimals
     });
   }
+
+  anime({
+    targets: '#transactions .button-item',
+    translateX: [-20, 0],
+    opacity: [0, 1],
+    easing: 'easeInOutSine',
+    duration: 250,
+    delay: function(el, i) { return (i * 150) > 1200 ? 1200 : (i * 150) },
+  });
 
   screen.setListeners([
     {
@@ -55,7 +86,7 @@ export default async function assetAllScreen(params) {
       listener: () => goBackScreen(),
     },
     {
-      element: "#root #asset_list .button-item",
+      element: "#root #transactions .button-item",
       listener: (e) => {},
     },
   ]);
