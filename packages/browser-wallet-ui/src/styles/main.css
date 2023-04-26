@@ -1139,6 +1139,9 @@ label.label {
     margin-bottom: 2px;
     color: #224851;
 }
+.button-item.transaction-item .transaction-info .amount .digits {
+    min-width: 0;
+}
 .button-item.transaction-item .transaction-info .icon {
     padding: 0;
     text-align: center;
@@ -1172,7 +1175,6 @@ label.label {
     position: relative;
     font-size: 16px;
     top: -2px;
-    right: 2px;
 }
 .button-item.transaction-item .transaction-info .amount .dollar {
     position: relative;

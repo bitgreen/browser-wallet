@@ -251,7 +251,7 @@ class Extension {
         }
 
         for(const asset of result.assets) {
-            let price = 1.56541
+            let price = 0
 
             const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
             balances.assets.push({

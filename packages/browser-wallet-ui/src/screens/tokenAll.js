@@ -47,10 +47,10 @@ export default async function tokenAllScreen(params) {
 
       tokenLogo: icon,
 
-      price: price_info.amount,
-      priceDecimal: price_info.decimals,
-      balanceUsd: balance_usd_info.amount,
-      balanceUsdDecimal: balance_usd_info.decimals,
+      price: token.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
+      priceDecimal: token.price > 0 ? '.' + price_info.decimals : 'N/A',
+      balanceUsd: token.price > 0 ? `<span class="dollar">$</span>${balance_usd_info.amount}` : '',
+      balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A'
     });
   }
 
