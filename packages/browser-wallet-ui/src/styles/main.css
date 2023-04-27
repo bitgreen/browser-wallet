@@ -59,6 +59,10 @@ html {
     height:100%;
 }
 
+:root {
+  --main-bg-color: #224851;
+  --secondary-font :#667085;
+}
 body {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     width: 400px;
@@ -1123,7 +1127,6 @@ label.label {
 }
 .button-item.transaction-item .transaction-info {
     width: 90%;
-    padding-right: 40px;
     min-height: 65px;
 }
 .button-item.transaction-item .transaction-info .icon,
@@ -1134,6 +1137,10 @@ label.label {
     height: 28px;
     line-height: 28px;
     margin-bottom: 2px;
+    color: #224851;
+}
+.button-item.transaction-item .transaction-info .amount .digits {
+    min-width: 0;
 }
 .button-item.transaction-item .transaction-info .icon {
     padding: 0;
@@ -1165,8 +1172,15 @@ label.label {
     font-size: 20px;
 }
 .button-item.transaction-item .transaction-info .amount .digits {
-    font-size: 14px;
-    padding-top: 4px;
+    position: relative;
+    font-size: 16px;
+    top: -2px;
+}
+.button-item.transaction-item .transaction-info .amount .dollar {
+    position: relative;
+    font-size: 16px;
+    top: 0;
+    right: 2px;
 }
 .button-item.transaction-item .icon.icon-right {
     transition: all linear 0.1s;
@@ -1210,7 +1224,8 @@ label.label {
     font-size: 26px;
 }
 #transactions {
-    height: 345px;
+    min-height: 300px;
+    height: calc(100% - 5px);
     overflow: hidden;
     overflow-y: scroll;
     padding-right: 8px;
@@ -1252,7 +1267,6 @@ label.label {
 }
 #transactions .transaction-info {
     width: 90%;
-    padding-right: 40px;
     text-align: center;
     text-transform: uppercase;
 }

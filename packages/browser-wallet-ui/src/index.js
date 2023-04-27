@@ -7,7 +7,11 @@ import {
     updateAccounts,
     showLogin,
     currentScreen,
-    clearHistory, reloadScreen, scrollToBottom, disableFooter, enableFooter
+    clearHistory,
+    reloadScreen,
+    scrollToBottom,
+    disableFooter,
+    enableFooter
 } from './screens/index.js'
 import { sendMessage } from "./messaging.js";
 import { hideNotification, showNotification } from "./notifications.js";

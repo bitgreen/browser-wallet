@@ -37,13 +37,58 @@ export default async function transactionHistoryScreen() {
 
     showLoading()
 
-    const transactions = await sendMessage('get_transactions')
-    for(const transaction of transactions) {
-        const asset_info = getAmountDecimal(balanceToHuman(transaction.value.amount), 2)
+    const all_transactions = []
+
+    const [transactions, token_transactions, asset_transactions] = await Promise.all([
+      sendMessage('get_transactions'),
+      sendMessage('get_token_transactions'),
+      sendMessage('get_asset_transactions')
+    ])
+
+    for(const t of transactions) {
+        all_transactions.push({
+            type: 'bbb',
+            ...t
+        })
+    }
+
+    for(const t of token_transactions) {
+        all_transactions.push({
+            type: 'token',
+            ...t
+        })
+    }
+
+    for(const t of asset_transactions) {
+        all_transactions.push({
+            type: 'asset',
+            ...t
+        })
+    }
+
+    // Default sort by date
+    all_transactions.sort((a, b) => {
+        return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
+    })
+
+    for(const transaction of all_transactions) {
+        if(!transaction.value) continue
+
+        let asset_name = 'BBB' // Default
+        let human_balance = balanceToHuman(transaction.value.amount)
+        if(transaction.type === 'token') asset_name = transaction.value.tokenId
+
+        if(transaction.type === 'asset') {
+            asset_name = 'CO2'
+            human_balance = transaction.value.amount
+        }
+
+        const asset_info = getAmountDecimal(human_balance, 2)
         const created_at = new Date(Date.parse(transaction.value.createdAt))
         const sent = transaction.value.sender.toLowerCase() === current_account.address.toLowerCase()
 
         await screen.append('#bordered_content #transactions', 'transaction/list_item', {
+            asset_name: asset_name,
             hash: transaction.value.hash,
             created_at: created_at.getDate(),
             created_at_month: created_at.toLocaleString('default', { month: 'short' }),
@@ -73,6 +118,8 @@ export default async function transactionHistoryScreen() {
         {
             element: '#root #transactions .button-item',
             listener: async(e) => {
+                if(!e.target.dataset?.hash) return false
+
                 return await goToScreen('transactionDetailsScreen', {
                     hash: e.target.dataset?.hash
                 })

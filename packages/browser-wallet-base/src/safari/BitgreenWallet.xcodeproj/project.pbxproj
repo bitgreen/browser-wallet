@@ -18,16 +18,16 @@
 		0432DBEF29F21EB40011FCE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
 		0432DBF229F220900011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
 		0432DBF329F220BB0011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
+		04B0525729F9EC730049B197 /* 589.css in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525429F9EC730049B197 /* 589.css */; };
+		04B0525829F9EC730049B197 /* 589.css in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525429F9EC730049B197 /* 589.css */; };
+		04B0525929F9EC730049B197 /* 589.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525529F9EC730049B197 /* 589.js */; };
+		04B0525A29F9EC730049B197 /* 589.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525529F9EC730049B197 /* 589.js */; };
+		04B0525B29F9EC730049B197 /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525629F9EC730049B197 /* inject.js */; };
+		04B0525C29F9EC730049B197 /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525629F9EC730049B197 /* inject.js */; };
 		271FBF1129B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
 		271FBF1229B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
 		271FBF1529B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
 		271FBF1629B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
-		271FBF1929B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
-		271FBF1A29B8DB52001D0940 /* 472.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0529B8DB52001D0940 /* 472.js */; };
-		271FBF1D29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
-		271FBF1E29B8DB52001D0940 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0629B8DB52001D0940 /* bundles */; };
-		271FBF2129B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
-		271FBF2229B8DB52001D0940 /* index.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0729B8DB52001D0940 /* index.min.js */; };
 		271FBF2529B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
 		271FBF2629B8DB52001D0940 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0829B8DB52001D0940 /* page.js */; };
 		271FBF2929B8DB52001D0940 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0929B8DB52001D0940 /* background.js */; };
@@ -105,11 +105,11 @@
 		0432DBDE29F21C590011FCE0 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		0432DBE129F21C6A0011FCE0 /* main.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = main.html; sourceTree = "<group>"; };
 		0432DBE429F21C720011FCE0 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		04B0525429F9EC730049B197 /* 589.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = 589.css; sourceTree = "<group>"; };
+		04B0525529F9EC730049B197 /* 589.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = 589.js; sourceTree = "<group>"; };
+		04B0525629F9EC730049B197 /* inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = inject.js; sourceTree = "<group>"; };
 		271FBF0329B8DB52001D0940 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
 		271FBF0429B8DB52001D0940 /* components */ = {isa = PBXFileReference; lastKnownFileType = folder; path = components; sourceTree = "<group>"; };
-		271FBF0529B8DB52001D0940 /* 472.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = 472.js; sourceTree = "<group>"; };
-		271FBF0629B8DB52001D0940 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundles; sourceTree = "<group>"; };
-		271FBF0729B8DB52001D0940 /* index.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.min.js; sourceTree = "<group>"; };
 		271FBF0829B8DB52001D0940 /* page.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
 		271FBF0929B8DB52001D0940 /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
 		271FBF0A29B8DB52001D0940 /* content.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
@@ -269,16 +269,16 @@
 		8E8684912872B3510037E6C9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				271FBF0529B8DB52001D0940 /* 472.js */,
+				04B0525429F9EC730049B197 /* 589.css */,
+				04B0525529F9EC730049B197 /* 589.js */,
+				04B0525629F9EC730049B197 /* inject.js */,
 				271FBF0D29B8DB52001D0940 /* assets */,
 				271FBF0929B8DB52001D0940 /* background.js */,
-				271FBF0629B8DB52001D0940 /* bundles */,
 				271FBF0429B8DB52001D0940 /* components */,
 				271FBF0A29B8DB52001D0940 /* content.js */,
 				271FBF0B29B8DB52001D0940 /* extension.css */,
 				271FBF0C29B8DB52001D0940 /* extension.js */,
 				271FBF0E29B8DB52001D0940 /* index.html */,
-				271FBF0729B8DB52001D0940 /* index.min.js */,
 				271FBF0329B8DB52001D0940 /* manifest.json */,
 				271FBF0829B8DB52001D0940 /* page.js */,
 				8E77E44628754AA80020A55D /* icons */,
@@ -440,18 +440,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B0525929F9EC730049B197 /* 589.js in Resources */,
+				04B0525729F9EC730049B197 /* 589.css in Resources */,
 				0432DBF229F220900011FCE0 /* icon.png in Resources */,
+				04B0525B29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3D29B8DB52001D0940 /* index.html in Resources */,
 				271FBF2529B8DB52001D0940 /* page.js in Resources */,
 				271FBF3129B8DB52001D0940 /* extension.css in Resources */,
 				271FBF2D29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1129B8DB52001D0940 /* manifest.json in Resources */,
-				271FBF2129B8DB52001D0940 /* index.min.js in Resources */,
 				271FBF2929B8DB52001D0940 /* background.js in Resources */,
 				8E77E44928754AA80020A55D /* icons in Resources */,
 				271FBF3929B8DB52001D0940 /* assets in Resources */,
-				271FBF1929B8DB52001D0940 /* 472.js in Resources */,
-				271FBF1D29B8DB52001D0940 /* bundles in Resources */,
 				271FBF3529B8DB52001D0940 /* extension.js in Resources */,
 				271FBF1529B8DB52001D0940 /* components in Resources */,
 			);
@@ -461,18 +461,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B0525A29F9EC730049B197 /* 589.js in Resources */,
+				04B0525829F9EC730049B197 /* 589.css in Resources */,
 				0432DBF329F220BB0011FCE0 /* icon.png in Resources */,
+				04B0525C29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3E29B8DB52001D0940 /* index.html in Resources */,
 				271FBF2629B8DB52001D0940 /* page.js in Resources */,
 				271FBF3229B8DB52001D0940 /* extension.css in Resources */,
 				271FBF2E29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1229B8DB52001D0940 /* manifest.json in Resources */,
-				271FBF2229B8DB52001D0940 /* index.min.js in Resources */,
 				271FBF2A29B8DB52001D0940 /* background.js in Resources */,
 				8E77E44A28754AA80020A55D /* icons in Resources */,
 				271FBF3A29B8DB52001D0940 /* assets in Resources */,
-				271FBF1A29B8DB52001D0940 /* 472.js in Resources */,
-				271FBF1E29B8DB52001D0940 /* bundles in Resources */,
 				271FBF3629B8DB52001D0940 /* extension.js in Resources */,
 				271FBF1629B8DB52001D0940 /* components in Resources */,
 			);

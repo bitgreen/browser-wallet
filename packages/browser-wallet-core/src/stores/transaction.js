@@ -22,11 +22,7 @@ class TransactionStore extends BaseStore {
         const date_end = date.toISOString().slice(0, 19).replace('T', '+');
         const url = this.network.api_endpoint + '/transactions?account=' + this.account.address + '&date_start=2022-05-01&date_end=' + date_end;
         let result = await fetch(url, {
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            mode: 'cors'
         })
         result = await result.json()
 

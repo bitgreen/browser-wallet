@@ -1,6 +1,6 @@
 import Screen, { goBackScreen } from './index.js'
 import {AccountStore, bbbTokenPrice, NetworkStore, TransactionStore} from "@bitgreen/browser-wallet-core";
-import { balanceToHuman, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
+import {balanceToHuman, formatAddress, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 
 export default async function transactionDetailsScreen(params) {
     const screen = new Screen({
@@ -33,10 +33,10 @@ export default async function transactionDetailsScreen(params) {
         usd_decimals: usd_info.decimals,
         fee_amount: fee_info.amount,
         fee_decimals: fee_info.decimals,
-        from_account_address: transaction.sender,
+        from_account_address: formatAddress(transaction.sender, 16, 16),
         from_account_name: sent ? account_name : '',
         recipient_name: !sent ? account_name : '',
-        recipient_address: transaction.recipient,
+        recipient_address: formatAddress(transaction.recipient, 16, 16),
         wss_endpoint: encodeURI(current_network.url),
         block_number: transaction.blockNumber
     })

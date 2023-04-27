@@ -94,6 +94,12 @@ class BaseStore {
         });
     }
 
+    async asyncRemoveAll() {
+        for(const record of await this.asyncAll()) {
+            this.remove(record.key)
+        }
+    }
+
     total(update) {
         this.allMap((map) => {
             update(Object.keys(map).length)

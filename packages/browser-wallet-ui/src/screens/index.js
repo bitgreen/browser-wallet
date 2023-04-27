@@ -17,6 +17,7 @@ import walletFinishScreen from "./walletFinish.js";
 import walletBackupScreen from "./walletBackup.js";
 import dashboardScreen from "./dashboard.js";
 import signInScreen from "./signIn.js";
+import assetAllScreen from "./assetAll.js";
 import assetSendScreen from "./assetSend.js";
 import accountManageScreen from "./accountManage.js";
 import accountCreateScreen from "./accountCreate.js";
@@ -30,6 +31,7 @@ import networkCreateScreen from "./networkCreate.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
+import tokenAllScreen from "./tokenAll.js";
 
 import { hideNotification } from "../notifications.js";
 
@@ -398,6 +400,7 @@ const screens = {
     accountEditScreen,
     dashboardScreen,
     signInScreen,
+    assetAllScreen,
     assetSendScreen,
     assetReceiveScreen,
     assetTransactionReviewScreen,
@@ -407,7 +410,8 @@ const screens = {
     settingsScreen,
     networkManageScreen,
     networkCreateScreen,
-    extrinsicSendScreen
+    extrinsicSendScreen,
+    tokenAllScreen,
 }
 
 let screen_history = []

@@ -82,6 +82,7 @@ const resetElement = async(element) => {
 }
 
 export {
+    renderTemplate,
     updateElement,
     resetElement
 }
