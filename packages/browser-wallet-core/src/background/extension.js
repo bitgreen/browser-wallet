@@ -241,7 +241,9 @@ class Extension {
         const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address;
         let result = await fetch(url, {
             mode: 'cors',
-            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            }
         })
         result = await result.json()
 

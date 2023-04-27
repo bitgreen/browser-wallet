@@ -20,8 +20,7 @@ class AssetStore extends BaseStore {
 
     const url = this.network.api_endpoint + '/asset/transactions?account=' + this.account.address;
     let result = await fetch(url, {
-      mode: 'cors',
-      credentials: 'include',
+      mode: 'cors'
     })
     result = await result.json()
 

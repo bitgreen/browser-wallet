@@ -20,8 +20,7 @@ class TokenStore extends BaseStore {
 
     const url = this.network.api_endpoint + '/token/transactions?account=' + this.account.address;
     let result = await fetch(url, {
-      mode: 'cors',
-      credentials: 'include',
+      mode: 'cors'
     })
     result = await result.json()
 
