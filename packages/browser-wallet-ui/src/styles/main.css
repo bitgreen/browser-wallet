@@ -803,7 +803,7 @@ label.label {
     color: #ffffff;
 }
 #bordered_content {
-    position: absolute;
+    position: fixed;
     top: 124px;
     left: 0;
     right: 0;
@@ -1275,7 +1275,7 @@ label.label {
     font-size: 12px;
 }
 #full_page {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
 }
@@ -1312,7 +1312,7 @@ label.label {
     overflow-x: hidden;
 }
 #full_page .content.full-content {
-    height: 600px;
+    height: 100%;
 }
 #full_page .content .icon-huge {
     font-size: 53px;
