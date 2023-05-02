@@ -65,7 +65,7 @@ const showPopup = async(command, params = {}) => {
 
             current_browser.tabs.create({
                 url: current_browser.runtime.getURL(url),
-                active: true
+                active: isIOs()
             }, (tab) => {
                 // adjust position
                 top = top + 80;
