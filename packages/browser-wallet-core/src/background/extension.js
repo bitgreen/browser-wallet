@@ -651,7 +651,7 @@ class Extension {
                             response = {
                                 success: false,
                                 status: 'failed',
-                                error: docs.join(' '),
+                                error: section + '.' + method + ' ' + docs.join(' '),
                                 data: {
                                     section,
                                     method
@@ -741,7 +741,7 @@ class Extension {
                             response = {
                                 success: false,
                                 status: 'failed',
-                                error: docs.join(' '),
+                                error: section + '.' + method + ' ' + docs.join(' '),
                                 data: {
                                     section,
                                     method
@@ -759,8 +759,8 @@ class Extension {
                         resolve(response)
                     }
 
+
                     if(status.isInBlock) {
-                        // return result after confirmation
                         resolve({
                             success: true,
                             data: {
