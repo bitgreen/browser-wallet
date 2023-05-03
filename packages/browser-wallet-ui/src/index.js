@@ -93,6 +93,8 @@ class userInterface {
     }
 
     copyCurrentAddress = async() =>  {
+        this.current_account = await this.db.stores.accounts.current()
+
         await copyText(this.current_account.address)
         await showNotification('Account address copied to clipboard.', 'info')
     }
