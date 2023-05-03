@@ -1,5 +1,6 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { NetworkStore } from "./stores/index.js";
+import { isIOs } from "@bitgreen/browser-wallet-utils";
 
 let ws_provider_url = null;
 let ws_provider = null;
@@ -300,7 +301,7 @@ const initPolkadotApi = async() => {
 }
 
 const polkadotApi = async(force = false) => {
-    if(!api || force) {
+    if(!api || force || isIOs()) {
         api = await initPolkadotApi()
     }
 
