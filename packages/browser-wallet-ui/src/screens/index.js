@@ -553,6 +553,9 @@ const updateAccounts = async(current_account_id = null) => {
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
 
+                go_copy_el.dataset.address = account?.address;
+                accounts_modal_el.querySelector('#copy_address .btn').dataset.address = account?.address
+
                 accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 accounts_modal_el.querySelector('.address').innerHTML = formatAddress(account?.address, 12, 8)
                 if(account_id?.toString() === 'main') {
