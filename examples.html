@@ -7,6 +7,7 @@
 <h4>Wallet Status: <span class="wallet-status"></span></h4>
 <a href="https://bitgreen.org" title="Bitgreen">Bitgreen</a>
 <hr>
+<button id="portfolio">Portfolio</button>
 <button id="sign_in">Sign In</button>
 <button id="send">Send 1 BBB</button>
 <button id="create_asset">Create Asset</button>
@@ -25,6 +26,10 @@
             document.querySelector('.wallet-status').innerHTML = 'installed'
             document.querySelector('.wallet-status').classList.add('green-text')
         }
+
+        document.querySelector('#portfolio').addEventListener('click', () => {
+            bitgreen_wallet.open()
+        })
 
         document.querySelector('#sign_in').addEventListener('click', () => {
             bitgreen_wallet.signIn().then((response) => {
