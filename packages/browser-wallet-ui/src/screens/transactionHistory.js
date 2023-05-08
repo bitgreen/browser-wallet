@@ -35,6 +35,14 @@ export default async function transactionHistoryScreen() {
         padding_top: '40px',
     });
 
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
+
     showLoading()
 
     const all_transactions = []

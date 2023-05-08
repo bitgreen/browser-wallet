@@ -73,6 +73,9 @@
 .icon-hashtag:before {
   content: "\e90b";
 }
+.icon-lock:before {
+  content: "\e936";
+}
 .icon-wallet-outline:before {
   content: "\e92b";
 }

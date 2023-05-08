@@ -4,7 +4,7 @@ import Screen, { clearHistory, goToScreen } from './index.js'
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
 import { initChart, renderChart } from "../chart.js";
-import {balanceToHuman, formatAmount, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
+import { balanceToHuman, formatAmount, getAmountDecimal, sleep } from "@bitgreen/browser-wallet-utils";
 
 export default async function dashboardScreen(params = {
     imported: false,
@@ -25,40 +25,24 @@ export default async function dashboardScreen(params = {
     })
     await screen.init()
 
-    const balance = await sendMessage('get_balance')
-    const all_balances = await sendMessage('get_all_balances')
     const token_price_info = getAmountDecimal(bbbTokenPrice, 2)
 
-    const bbb_usd_amount = balanceToHuman(balance, 18) * bbbTokenPrice
-
-    let other_usd_amount = 0
-    for(const token of all_balances.tokens) {
-        if(token.token_name === 'BBB') continue
-        other_usd_amount += balanceToHuman(token.balance, 18) * token.price
-    }
-    for(const asset of all_balances.assets) {
-        other_usd_amount += asset.balance * asset.price
-    }
-
     await screen.set('#heading', 'dashboard/heading', {
-        bbb_usd_amount: formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0),
-        other_usd_amount: formatAmount(other_usd_amount, other_usd_amount < 1000000 ? 2 : 0),
         token_price: token_price_info.amount,
         token_price_decimals: token_price_info.decimals
     })
-    await screen.set('#bordered_content', 'dashboard/content', {
-        all_balance: formatAmount(all_balances.total, 2),
-        bbb_balance: formatAmount(balanceToHuman(balance, 2)),
-        token_balance: formatAmount(all_balances.tokens_total, 2)
-    })
 
-    await screen.set('#chart', 'dashboard/chart')
-    initChart({
-        bbb_token_amount: bbb_usd_amount,
-        other_amount: other_usd_amount
-    })
+    await screen.set('#bordered_content', 'dashboard/content')
 
     await clearHistory()
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 
     anime({
         targets: '#portfolio',
@@ -128,25 +112,51 @@ export default async function dashboardScreen(params = {
         },
     });
 
-    anime({
-        targets: '#bordered_content .button-item',
-        easing: 'easeInOutSine',
-        translateX: [-20, 0],
-        opacity: [0, 1],
-        // duration: 300,
-        duration: function(el, i) {
-            return (params.extend_delay ? 600 : 400) - i*(params.extend_delay ? 100 : 50)
-        },
-        delay: function(el, i) {
-            return i*200 + (params.extend_delay ? 800 : 200)
-        },
-    });
+    await sendMessage('get_all_balances').then(async(all_balances) => {
+        let bbb_balance = 0
+        let other_usd_amount = 0
+        for(const token of all_balances.tokens) {
+            if(token.token_name === 'BBB') {
+                bbb_balance = balanceToHuman(token.free, 18)
+            } else {
+                other_usd_amount += balanceToHuman(token.free, 18) * token.price
+            }
+        }
+        for(const asset of all_balances.assets) {
+            other_usd_amount += asset.balance * asset.price
+        }
 
-    if(params.extend_delay) {
-        setTimeout(await renderChart, 900)
-    } else {
-        await renderChart()
-    }
+        const bbb_usd_amount = bbb_balance * bbbTokenPrice
+
+        await screen.set('#chart', 'dashboard/chart')
+        initChart({
+            bbb_token_amount: bbb_usd_amount,
+            other_amount: other_usd_amount
+        })
+
+        screen.setParam('#portfolio .bbb_usd_amount', '$' + formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
+        screen.setParam('#portfolio .other_usd_amount', '$' + formatAmount(other_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
+
+        screen.setParam('#bordered_content .all_balance', formatAmount(all_balances.total, 2))
+        screen.setParam('#bordered_content .bbb_balance', formatAmount(bbb_balance, 2))
+        screen.setParam('#bordered_content .token_balance', formatAmount(all_balances.tokens_total, 2))
+    }).then(() => {
+        renderChart()
+    }).then(() => {
+        anime({
+            targets: '#bordered_content .button-item',
+            easing: 'easeInOutSine',
+            translateX: [-20, 0],
+            opacity: [0, 1],
+            // duration: 300,
+            duration: function(el, i) {
+                return (params.extend_delay ? 600 : 400) - i*(params.extend_delay ? 100 : 50)
+            },
+            delay: function(el, i) {
+                return i*200 + (params.extend_delay ? 800 : 200)
+            },
+        });
+    })
 
     screen.setListeners([
         {

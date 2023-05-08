@@ -21,9 +21,10 @@ export default async function walletScreen() {
 
     anime({
         targets: '#bordered_content',
-        duration: 800,
-        translateY: [50, 0],
-        easing: 'linear',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
     });
 
     screen.setListeners([

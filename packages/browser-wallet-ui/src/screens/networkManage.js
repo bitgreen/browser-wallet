@@ -1,5 +1,6 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
 import { NetworkStore } from "@bitgreen/browser-wallet-core";
+import anime from "animejs";
 
 export default async function networkManageScreen() {
     const screen = new Screen({
@@ -25,6 +26,14 @@ export default async function networkManageScreen() {
             network_url: network.url
         })
     }
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 
     screen.setListeners([
         {

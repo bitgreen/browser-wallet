@@ -2,6 +2,7 @@ import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
 import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
+import { hideNotification } from "../notifications.js";
 
 import anime from 'animejs';
 import * as jdenticon from "jdenticon";
@@ -32,8 +33,9 @@ import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
 import tokenAllScreen from "./tokenAll.js";
-
-import { hideNotification } from "../notifications.js";
+import stakingHomeScreen from "./stakingHome.js";
+import stakingIntroScreen from "./stakingIntro.js";
+import stakingCollatorsScreen from "./stakingCollators.js";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -134,6 +136,10 @@ class Screen {
         return await resetElement(element)
     }
 
+    setParam(element, value) {
+        document.querySelector(element).innerHTML = value
+    }
+
     setListeners(options = []) {
         for(let option of options) {
             if(option.element) {
@@ -197,6 +203,10 @@ class Screen {
             element.classList.remove('active')
 
             if(element.id === 'go_' + current_screen.name) {
+                element.classList.add('active')
+            }
+
+            if(element.id === 'go_stakingHomeScreen' && current_screen.name.includes('staking')) {
                 element.classList.add('active')
             }
         }
@@ -412,6 +422,9 @@ const screens = {
     networkCreateScreen,
     extrinsicSendScreen,
     tokenAllScreen,
+    stakingHomeScreen,
+    stakingIntroScreen,
+    stakingCollatorsScreen
 }
 
 let screen_history = []
@@ -443,6 +456,25 @@ const goToScreen = async(name, params = {}, go_back = false, force = false) => {
 
     active_screen = {
         name, params
+    }
+
+    if(!force) {
+        anime({
+            targets: '#root',
+            opacity: [1, 0],
+            easing: 'easeInOutSine',
+            duration: 150
+        });
+
+        anime({
+            targets: '#root',
+            opacity: [0, 1],
+            easing: 'easeInOutSine',
+            duration: 1,
+            delay: 300
+        });
+
+        await sleep(300)
     }
 
     await screens[name](params)

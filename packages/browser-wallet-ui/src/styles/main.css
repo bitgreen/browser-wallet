@@ -72,7 +72,8 @@ body {
     font-size: 14px;
     line-height: 14px;
     overflow: hidden;
-    background-color: #224851;
+    background: linear-gradient(to bottom, #224851, #133948);
+
 }
 h1 {
     font-weight: 500;
@@ -803,6 +804,7 @@ label.label {
     color: #ffffff;
 }
 #bordered_content {
+    opacity: 0;
     position: fixed;
     top: 124px;
     left: 0;
@@ -1283,7 +1285,6 @@ label.label {
     width: 100%;
     height: 60px;
     padding: 12px 64px 12px 24px;
-    background-color: #224851;
     color: #ffffff;
     user-select: none;
     -webkit-user-select: none;
@@ -1313,6 +1314,10 @@ label.label {
 }
 #full_page .content.full-content {
     height: 100%;
+}
+#full_page .content.full-content.secondary-bg {
+    background: linear-gradient(to bottom, #224851, #133948);
+    padding-top: 60px;
 }
 #full_page .content .icon-huge {
     font-size: 53px;
@@ -1539,6 +1544,14 @@ label.label {
 }
 #main_footer .item.item-send.active svg path {
     fill: transparent;
+    stroke: #C0FF00;
+}
+#main_footer .item:hover rect,
+#main_footer .item:focus rect,
+#main_footer .item:active rect {
+    stroke: #C0FF00;
+}
+#main_footer .item.active rect {
     stroke: #C0FF00;
 }
 .tooltip.tooltip-footer.show {
@@ -1959,14 +1972,16 @@ label.label {
     color: #667085;
     font-size: 14px;
 }
-#review_transaction .amount {
+#review_transaction .amount,
+#apy_info .amount {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
     font-size: 26px;
 
     padding: 0 1px 4px;
 }
-#review_transaction .decimals {
+#review_transaction .decimals,
+#apy_info .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-size: 16px;
 
@@ -2026,13 +2041,13 @@ label.label {
     border-radius: 4px;
 }
 #transaction_info .dot.dot-green {
-    border: 1px solid #C0FF00;
+    border: 1px solid #9ECC00;
 }
 #transaction_info .dot.dot-green:after {
-    background-color: #C0FF00;
+    background-color: #9ECC00;
 }
 #transaction_info .dot.dot-green .dot-line {
-    background-color: #C0FF00;
+    background-color: #9ECC00;
 }
 #qrcode {
     position: relative;
@@ -2204,4 +2219,110 @@ label.label {
 }
 #accounts_modal #wallet_list {
     max-height: 290px;
+}
+#apy_info {
+    width: 112px;
+    height: 112px;
+    margin: 0 auto;
+    border: 1px solid #FFFFFF;
+    border-radius: 56px;
+    padding-top: 24px;
+}
+#apy_info .text {
+    font-weight: 500;
+    margin-top: -6px;
+}
+#staking_intro .step {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 60px;
+}
+#staking_intro .step.step-active {
+    pointer-events: auto;
+}
+#staking_intro .step .image {
+    opacity: 0;
+    height: 260px;
+    text-align: center;
+}
+#staking_intro .step .image svg {
+    width: 90%;
+    height: 100%;
+}
+#staking_intro .step .info .step-number {
+    opacity: 0;
+    display: block;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    border-radius: 12px;
+    border: 1px solid #FFFFFF;
+    margin: 8px auto 12px;
+}
+#staking_intro .step .info h3 {
+    opacity: 0;
+}
+#staking_intro .step .info p {
+    opacity: 0;
+    padding: 0 16px;
+    height: 86px;
+}
+#staking_intro .step .info .btn {
+    opacity: 0;
+}
+#staking_intro .dots {
+    opacity: 0;
+    position: fixed;
+    top: 540px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+#staking_intro .dots .dot {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+    margin-right: 30px;
+    background-color: #FFFFFF;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    z-index: 99;
+    transition: all ease-in-out 0.4s;
+}
+#staking_intro .dots .dot:after {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    border: 1px solid #FFFFFF;
+    content: "";
+    transition: all ease-in-out 0.4s;
+}
+#staking_intro .dots .dot .dot-line {
+    position: absolute;
+    top: 3px;
+    left: -60px;
+    width: 56px;
+    height: 1px;
+    background: linear-gradient(to left, #FFFFFF 50%, #C0FF00 50%) right;
+
+    transition: all ease-in-out 0.4s;
+    background-size: 200% 100%;
+    z-index: 1;
+}
+#staking_intro .dots .dot.dot-active {
+    background-color: #C0FF00;
+}
+#staking_intro .dots .dot.dot-active:after {
+    border-color: #C0FF00;
+}
+#staking_intro .dots .dot.dot-active .dot-line {
+    background-position: left;
 }
