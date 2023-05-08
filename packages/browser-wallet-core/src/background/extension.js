@@ -23,6 +23,7 @@ import {addressValid, balanceToHuman, humanToBalance} from "@bitgreen/browser-wa
 
 import {bbbTokenPrice, passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
+import BigNumber from "bignumber.js";
 
 class Extension {
     #password
@@ -227,7 +228,13 @@ class Extension {
 
         const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
 
-        return balance.free.toString()
+        return {
+            free: new BigNumber(balance.free),
+            reserved: new BigNumber(balance.reserved),
+            miscFrozen: new BigNumber(balance.miscFrozen),
+            feeFrozen: new BigNumber(balance.feeFrozen),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen))
+        }
     }
 
     async getAllBalances() {
@@ -261,7 +268,7 @@ class Extension {
             const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
             balances.assets.push({
                 asset_name: asset,
-                balance: data.balance.toString(),
+                balance: parseFloat(data.balance),
                 price: price
             })
 
@@ -272,10 +279,14 @@ class Extension {
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
         balances.tokens.push({
             token_name: 'BBB',
-            balance: balance.free.toString(),
+            free: new BigNumber(balance.free),
+            reserved: new BigNumber(balance.reserved),
+            miscFrozen: new BigNumber(balance.miscFrozen),
+            feeFrozen: new BigNumber(balance.feeFrozen),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
             price: bbbTokenPrice
         })
-        balances.total += parseFloat(balanceToHuman(balance.free.toString()))
+        balances.total += parseFloat(balanceToHuman(new BigNumber(balance.free)))
 
         for(const token of result.tokens) {
             let price = 0
@@ -283,17 +294,18 @@ class Extension {
                 price = 0.9898
             }
 
-            const { free } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+            const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
             balances.tokens.push({
                 token_name: token,
-                balance: free.toString(),
+                free: new BigNumber(free),
+                reserved: new BigNumber(reserved),
+                frozen: new BigNumber(frozen),
                 price: price
             })
 
-            balances.total += parseFloat(balanceToHuman(free.toString()))
-            balances.tokens_total += parseFloat(balanceToHuman(free.toString()))
+            balances.total += parseFloat(balanceToHuman(new BigNumber(free)))
+            balances.tokens_total += parseFloat(balanceToHuman(new BigNumber(free)))
         }
-
 
         return balances
     }
