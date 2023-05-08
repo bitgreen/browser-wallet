@@ -142,14 +142,16 @@ const getOperatingSystem = () => {
 
     if (userAgent.match(/Windows/i)) {
         osName = "windows";
-    } else if (userAgent.match(/Macintosh/i)) {
-        osName = "macos";
-    } else if (userAgent.match(/iPhone|iPad/i)) {
-        osName = "ios";
     } else if (userAgent.match(/Linux/i)) {
         osName = "linux";
     } else if (userAgent.match(/Android/i)) {
         osName = "android";
+    } else if (userAgent.match(/iPad/i) || navigator.platform === 'iPad' || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        osName = "ipad";
+    } else if (userAgent.match(/iPhone/i)) {
+        osName = "ios";
+    } else if (userAgent.match(/Macintosh/i)) {
+        osName = "macos";
     }
 
     return osName;
@@ -165,6 +167,10 @@ const isMacOs = () => {
 
 const isIOs = () => {
     return getOperatingSystem() === 'ios'
+}
+
+const isIPad = () => {
+    return getOperatingSystem() === 'ipad'
 }
 
 export {
@@ -186,5 +192,6 @@ export {
     getOperatingSystem,
     isWindows,
     isMacOs,
-    isIOs
+    isIOs,
+    isIPad
 }

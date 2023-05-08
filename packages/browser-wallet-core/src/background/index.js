@@ -1,6 +1,6 @@
 import Extension from './extension.js'
 import Tabs from './tabs.js'
-import {isFirefox, isIOs, isMacOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import {isFirefox, isIOs, isIPad, isMacOs, isSafari} from "@bitgreen/browser-wallet-utils";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -65,7 +65,7 @@ const showPopup = async(command, params = {}) => {
 
             current_browser.tabs.create({
                 url: current_browser.runtime.getURL(url),
-                active: isIOs()
+                active: isIOs() || isIPad()
             }, (tab) => {
                 // adjust position
                 top = top + 80;
