@@ -21,6 +21,10 @@ const sendMessage = (command, params = {}, subscribe = false) => {
     })
 }
 
+const open = async() => {
+    return await sendMessage('open', { domain: origin }, false);
+}
+
 // the enable function, called by the dapp to allow access
 const enablePage = async() => {
     const title = document.querySelector('title')?.innerText
@@ -79,6 +83,7 @@ const pageMessageResponseHandler = (data) => {
 
 export {
     sendMessage,
+    open,
     enablePage,
     signIn,
     send,

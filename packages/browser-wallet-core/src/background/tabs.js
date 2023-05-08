@@ -4,6 +4,8 @@ import { polkadotApi } from "../polkadotApi.js";
 class Tabs {
     async handle(data, from, port) {
         switch(data.command) {
+            case 'open':
+                return await this.open(data.params)
             case 'sign_in':
                 return await this.signIn(data.params)
             case 'send':
@@ -15,6 +17,14 @@ class Tabs {
             default:
                 return false
         }
+    }
+
+    open(params) {
+        return new Promise(async(resolve, reject) => {
+            await showPopup('open', params);
+
+            resolve(true)
+        })
     }
 
     signIn(params) {

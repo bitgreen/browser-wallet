@@ -199,28 +199,14 @@ module.exports = (
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
             name(module) {
-              const module_full = module.identifier().split("|")[1];
-              let moduleFileName = "undefined";
-              if (module_full) {
-                moduleFileName = module_full
-                  .split("/")
-                  .reduceRight((item) => item)
-                  .split(".");
-              }
+              return 'default'
             },
           },
           default: {
             priority: -20,
             reuseExistingChunk: true,
             name(module) {
-              const module_full = module.identifier().split("|")[1];
-              let moduleFileName = "undefined";
-              if (module_full) {
-                moduleFileName = module_full
-                  .split("/")
-                  .reduceRight((item) => item)
-                  .split(".");
-              }
+              return 'main'
             },
           },
         },

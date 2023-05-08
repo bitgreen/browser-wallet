@@ -1,4 +1,4 @@
-import { enablePage, signIn, send, query, extrinsic, pageMessageResponseHandler } from "@bitgreen/browser-wallet-core";
+import { enablePage, open, signIn, send, query, extrinsic, pageMessageResponseHandler } from "@bitgreen/browser-wallet-core";
 
 const version = process.env.PKG_VERSION
 
@@ -9,6 +9,7 @@ async function injectExtension(enable, { name, version }) {
     // add our enable function
     window.injectedWeb3[name] = {
         // enable: () => enable(), // Temp disable
+        open: () => open(),
         signIn: () => signIn(),
         send: (amount = 0, recipient = false, kill_popup = true) => send(amount, recipient, kill_popup),
         extrinsic: (pallet, call, call_parameters, kill_popup = true) => extrinsic(pallet, call, call_parameters, kill_popup),

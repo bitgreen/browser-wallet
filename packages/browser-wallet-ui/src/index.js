@@ -51,6 +51,7 @@ class userInterface {
         await updateElement('#header', 'shared/header', {
             account_jdenticon: jdenticon.toSvg(this.current_account.address,56),
             account_address: formatAddress(this.current_account?.address, 8, 8),
+            full_account_address: this.current_account?.address,
             account_name: (this.current_account?.name && this.current_account?.name?.length) > 14 ? this.current_account?.name?.substring(0,14)+'...' : this.current_account?.name
         }, false)
 
@@ -72,8 +73,12 @@ class userInterface {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
         })
-        document.querySelector("#header #go_copy").addEventListener("click", async() => this.copyCurrentAddress());
-        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async() => this.copyCurrentAddress());
+        document.querySelector("#header #go_copy").addEventListener("click", async(e) => {
+            await this.copyCurrentAddress(e.target.dataset.address)
+        });
+        document.querySelector("#accounts_modal #copy_address").addEventListener("click", async(e) => {
+            await this.copyCurrentAddress(e.target.dataset.address)
+        });
         document.querySelector("#accounts_modal #lock_wallet").addEventListener("click", async(e) => {
             accounts_modal_el.classList.remove('fade')
             accounts_modal_el.classList.remove('show')
@@ -92,8 +97,8 @@ class userInterface {
         })
     }
 
-    copyCurrentAddress = async() =>  {
-        await copyText(this.current_account.address)
+    copyCurrentAddress = async(address) =>  {
+        await copyText(address)
         await showNotification('Account address copied to clipboard.', 'info')
     }
 
@@ -103,6 +108,7 @@ class userInterface {
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
+            full_account_address: current_account?.address,
             is_primary: current_account?.id === 'main' ? '' : 'hidden'
         }, false)
 

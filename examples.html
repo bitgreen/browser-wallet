@@ -7,11 +7,13 @@
 <h4>Wallet Status: <span class="wallet-status"></span></h4>
 <a href="https://bitgreen.org" title="Bitgreen">Bitgreen</a>
 <hr>
+<button id="portfolio">Portfolio</button>
 <button id="sign_in">Sign In</button>
 <button id="send">Send 1 BBB</button>
 <button id="create_asset">Create Asset</button>
 <button id="batch_call">Batch Call</button>
 <button id="query_balance">Query Balance</button>
+<button id="sell_order">Create Sell Order</button>
 <script>
     window.addEventListener('load', async() => {
         const bitgreen_wallet = window.injectedWeb3?.['bitgreen-wallet-js']
@@ -24,6 +26,10 @@
             document.querySelector('.wallet-status').innerHTML = 'installed'
             document.querySelector('.wallet-status').classList.add('green-text')
         }
+
+        document.querySelector('#portfolio').addEventListener('click', () => {
+            bitgreen_wallet.open()
+        })
 
         document.querySelector('#sign_in').addEventListener('click', () => {
             bitgreen_wallet.signIn().then((response) => {
@@ -79,6 +85,20 @@
                     '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
                     1
                 ]]
+            ]).then((response) => {
+                if(response.success) {
+                    alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
+                } else {
+                    alert(`Transaction failed. Status: ${response.status}. Error: ${response.error}`)
+                }
+            })
+        })
+
+        document.querySelector('#sell_order').addEventListener('click', () => {
+            bitgreen_wallet.extrinsic('dex', 'createSellOrder', [
+                7,
+                100,
+                Math.pow(10, 18).toString()
             ]).then((response) => {
                 if(response.success) {
                     alert(`Successfully sent transaction at block: ${response.data.block_hash}`)
