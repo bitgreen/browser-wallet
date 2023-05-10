@@ -13,7 +13,7 @@ export default async function tokenAllScreen(params) {
   });
   await screen.init();
 
-  await screen.set('#heading', 'asset/all/heading')
+  await screen.set('#heading', 'token/all/heading')
 
   await screen.set("#bordered_content", "token/all/content");
 
