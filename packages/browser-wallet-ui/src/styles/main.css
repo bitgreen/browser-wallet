@@ -475,6 +475,9 @@ label.label {
 #header #actions #go_copy:hover {
     transform: scale(1.15);
 }
+#header #actions #go_copy * {
+    pointer-events: none !important;
+}
 #header #actions #go_settings {
     transition: all ease-out 0.22s;
 }
