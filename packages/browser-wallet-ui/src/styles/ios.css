@@ -14,8 +14,7 @@ body.ios * {
     touch-action: pan-y;
 }
 body.ios #login_screen {
-    background-image: none;
-    background-color: #224851;
+    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
 }
 body.ios #login_screen .bitgreen-svg {
     position: absolute;
@@ -59,8 +58,7 @@ body.ios #login_screen.mini .footer {
     width: calc(100% - 32px);
 }
 body.ios #init_screen {
-    background-image: none;
-    background-color: #224851;
+    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
     overflow: hidden;
 }
 body.ios #full_page,
@@ -69,8 +67,7 @@ body.ios #bordered_content {
     position: fixed;
 }
 body.ios #root .full-only {
-    background-image: none;
-    background-color: #224851;
+    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
 }
 body.ios #root .bitgreen-svg {
     position: fixed;
@@ -95,3 +92,11 @@ body.ios #root #get_started {
 body.ios #main_footer.disabled {
     pointer-events: none !important;
 }
+body.ios #accounts_modal {
+    width: 100%;
+    left: 0;
+    padding: 8px;
+}
+body.ios #accounts_modal .modal-header {
+     border: 1px solid transparent;
+ }
