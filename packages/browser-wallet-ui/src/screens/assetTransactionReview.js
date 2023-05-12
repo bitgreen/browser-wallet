@@ -43,7 +43,7 @@ export default async function assetTransactionReviewScreen(params) {
     await screen.append('.content', 'global/loading', {
         title: 'processing transaction',
         desc: 'Hold tight while we get confirmation of this transaction.',
-        top: '60px;',
+        top: '0;',
         padding_top: '100px'
     });
 
