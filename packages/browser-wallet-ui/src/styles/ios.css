@@ -14,7 +14,8 @@ body.ios * {
     touch-action: pan-y;
 }
 body.ios #login_screen {
-    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
+    background-image: none;
+    background-color: #224851;
 }
 body.ios #login_screen .bitgreen-svg {
     position: absolute;
@@ -58,7 +59,8 @@ body.ios #login_screen.mini .footer {
     width: calc(100% - 32px);
 }
 body.ios #init_screen {
-    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
+    background-image: none;
+    background-color: #224851;
     overflow: hidden;
 }
 body.ios #full_page,
@@ -67,7 +69,8 @@ body.ios #bordered_content {
     position: fixed;
 }
 body.ios #root .full-only {
-    background: linear-gradient(to bottom, #224851 0%, #224851 60%, #133948);
+    background-image: none;
+    background-color: #224851;
 }
 body.ios #root .bitgreen-svg {
     position: fixed;
