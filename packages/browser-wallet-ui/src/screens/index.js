@@ -503,8 +503,6 @@ const goBackScreen = async() => {
 
     const previous_screen = screen_history[screen_history.length - 1]
 
-    console.log(previous_screen)
-
     if(previous_screen) {
         return await goToScreen(previous_screen.name, previous_screen.params, true)
     } else {
