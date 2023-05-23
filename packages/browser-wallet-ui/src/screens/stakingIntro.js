@@ -5,14 +5,20 @@ import { AccountStore, checkIfAppIsKnown, SettingsStore, WalletStore } from "@bi
 
 import anime from "animejs";
 import { showNotification } from "../notifications.js";
+import { getTotalStakedByAddress } from "@bitgreen/browser-wallet-utils";
 
-export default async function stakingIntroScreen() {
+export default async function stakingIntroScreen(params) {
     const settings_store = new SettingsStore()
 
-    // TEMP: remove
-    // settings_store.remove('staking_intro')
+    const accounts_store = new AccountStore()
+    const current_account = await accounts_store.current()
 
-    if(await settings_store.asyncGet('staking_intro') === 'true') return await goToScreen('stakingCollatorsScreen', {}, false, true)
+    const all_collators = await sendMessage('get_collators')
+    const my_total_stake = getTotalStakedByAddress(all_collators, current_account.address)
+
+    if(my_total_stake > 0) {
+        return await goToScreen('stakingHomeScreen', params, false, true)
+    }
 
     const screen = new Screen({
         template_name: 'layouts/full_page_secondary',

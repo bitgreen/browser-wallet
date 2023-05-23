@@ -68,9 +68,9 @@ export default async function assetSendScreen(params) {
         recipient,
         from_name: current_account.name,
         from_address: formatAddress(current_account.address, 16, 8),
-        balance: formatAmount(balanceToHuman(original_balance.free, 2)),
+        balance: formatAmount(balanceToHuman(original_balance.free, 2), 2),
         bbb_fee: formatAmount(bbbTxFee, 18),
-        total_bbb: formatAmount(parseFloat(params.amount) + bbbTxFee, 2),
+        // total_bbb: formatAmount(parseFloat(params.amount) + bbbTxFee, 2),
         max_balance: balanceToHuman(original_balance.free, 18)
     })
 

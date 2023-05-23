@@ -36,6 +36,7 @@ import tokenAllScreen from "./tokenAll.js";
 import stakingHomeScreen from "./stakingHome.js";
 import stakingIntroScreen from "./stakingIntro.js";
 import stakingCollatorsScreen from "./stakingCollators.js";
+import stakingCollatorScreen from "./stakingCollator.js";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -424,7 +425,8 @@ const screens = {
     tokenAllScreen,
     stakingHomeScreen,
     stakingIntroScreen,
-    stakingCollatorsScreen
+    stakingCollatorsScreen,
+    stakingCollatorScreen
 }
 
 let screen_history = []
@@ -500,6 +502,8 @@ const goBackScreen = async() => {
     screen_history.pop()
 
     const previous_screen = screen_history[screen_history.length - 1]
+
+    console.log(previous_screen)
 
     if(previous_screen) {
         return await goToScreen(previous_screen.name, previous_screen.params, true)

@@ -1,0 +1,46 @@
+<div id="amounts" class="d-flex align-items-center mt-3 pt-3 pb-2">
+    <div class="collator-image">${collator_jdenticon}</div>
+    <div class="w-100 text-center">
+        <div class="amount">${total_stake}</div>
+        <div class="title">BBB STAKED</div>
+    </div>
+    <div class="w-100 text-center">
+        <div class="amount">${apy_amount}<span class="decimals">.${apy_decimals}%</span></div>
+        <div class="title">APY</div>
+    </div>
+    <div class="w-100 text-center">
+        <div class="amount">10<span class="decimals">%</span></div>
+        <div class="title">COMMISSION</div>
+    </div>
+</div>
+<div class="box mt-2">
+    <div class="header">My nomination</div>
+    <div class="content">
+        <div class="w-100 d-flex align-items-center">
+            <div class="w-50 text-center">
+                <div class="text-biggest text-bold text-dark-blue mb-2">${my_stake}</div>
+                <div class="text-gray text-small text-bold">BBB STAKED</div>
+            </div>
+            <div class="w-50 text-right">
+                <button id="unbond" class="w-75 btn btn-sm btn-rounded btn-outline-danger disabled d-inline-flex align-items-center"><span class="icon icon-break-chain icon-large me-2"></span>Unbond</button>
+            </div>
+        </div>
+        <div class="separator-line mt-4"></div>
+        <div class="w-100 d-flex align-items-center">
+            <div id="choose_quantity" class="w-50 d-flex select-none">
+                <div class="w-100">
+                    <div class="form-group custom-border">
+                        <input id="amount" type="number" class="form-control" value="0.00">
+                        <label class="d-flex label w-100" for="amount"><span class="w-100">BBB Tokens</span><span id="max_amount" class="text-right click">MAX</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="w-50 text-right">
+                <button id="nominate" class="w-75 btn btn-sm btn-rounded btn-primary disabled">Nominate<span class="icon icon-right-arrow ms-2"></span></button>
+            </div>
+        </div>
+        <div class="w-100 d-block text-center">
+            <span class="text-gray text-small"><span class="icon icon-wallet-outline me-2"></span>${balance} BBB Available</span>
+        </div>
+    </div>
+</div>

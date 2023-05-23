@@ -1,4 +1,4 @@
-import Screen, {clearHistory, goToScreen, scrollToBottom} from './index.js'
+import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
 
@@ -14,6 +14,11 @@ export default async function extrinsicSendScreen(params) {
         return await goToScreen('walletScreen', {}, false, true)
     }
 
+    let win_height = 600
+    if(params?.message_id && params?.tab_id) {
+        win_height = 700
+    }
+
     const screen = new Screen({
         template_name: 'layouts/default',
         login: false,
@@ -21,7 +26,7 @@ export default async function extrinsicSendScreen(params) {
         footer: false,
         tab_id: params?.tab_id,
         message_id: params?.message_id,
-        win_height: 700
+        win_height: win_height
     })
     await screen.init()
 
@@ -44,12 +49,17 @@ export default async function extrinsicSendScreen(params) {
         call_parameters: call_parameters ? JSON.stringify(call_parameters).substring(0, 150) : '[]'
     })
 
-    await screen.set('#app_info', 'app_info', {
-        domain,
-        title: params?.title?.substring(0, 60)
-    });
-    if(checkIfAppIsKnown(domain)) {
-        document.querySelector('#app_info').classList.add('known')
+    if(params?.message_id && params?.tab_id) {
+        await screen.set('#app_info', 'app_info', {
+            domain,
+            title: params?.title?.substring(0, 60)
+        });
+        if(checkIfAppIsKnown(domain)) {
+            document.querySelector('#app_info').classList.add('known')
+        }
+    } else {
+        document.querySelector('#app_info').classList.remove('d-flex')
+        document.querySelector('#app_info').classList.add('d-none')
     }
 
     await screen.append('#bordered_content', 'global/loading', {
@@ -104,15 +114,17 @@ export default async function extrinsicSendScreen(params) {
         {
             element: '#deny_extrinsic',
             listener: async() => {
-                screen.sendMessageToTab({
-                    success: false,
-                    status: 'denied',
-                    error: 'User has denied this request.'
-                })
+                if(params?.message_id && params?.tab_id) {
+                    screen.sendMessageToTab({
+                        success: false,
+                        status: 'denied',
+                        error: 'User has denied this request.'
+                    })
 
-                window.close()
-
-                return await goToScreen('dashboardScreen')
+                    window.close()
+                } else {
+                    await goBackScreen()
+                }
             }
         }
     ])

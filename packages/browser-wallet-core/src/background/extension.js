@@ -79,6 +79,10 @@ class Extension {
                 return await this.submitExtrinsic(data?.id, data?.params)
             case 'change_setting':
                 return await this.changeSetting(data?.params)
+            case 'get_collators':
+                return await this.getCollators()
+            case 'get_staking_info':
+                return await this.getStakingInfo()
             default:
                 return false
         }
@@ -793,6 +797,24 @@ class Extension {
     async changeSetting(params) {
         for(const [key, value] of Object.entries(params)) {
             await this.settings_store.asyncSet(key, value)
+        }
+    }
+
+    async getCollators() {
+        const polkadot_api = await polkadotApi()
+
+        const data = await polkadot_api.query.parachainStaking.candidates()
+
+        return data.toJSON()
+    }
+
+    async getStakingInfo() {
+        const polkadot_api = await polkadotApi()
+
+        const inflation_amount = await polkadot_api.query.parachainStaking.inflationAmountPerBlock()
+
+        return {
+            inflation_amount: inflation_amount.toString()
         }
     }
 }

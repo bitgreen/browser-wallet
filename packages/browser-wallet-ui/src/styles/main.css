@@ -68,7 +68,7 @@ body {
     width: 400px;
     min-height: 600px;
     height: 100%;
-    color: #181818;
+    color: #224851;
     font-size: 14px;
     line-height: 14px;
     overflow: hidden;
@@ -126,11 +126,17 @@ p {
 .text-dark {
     color: #181818;
 }
+.text-dark-blue {
+    color: #224851;
+}
 .text-small {
     font-size: 13px;
 }
 .text-bigger {
     font-size: 16px;
+}
+.text-biggest {
+    font-size: 20px;
 }
 .text-very-small {
     font-size: 11px;
@@ -199,6 +205,20 @@ p {
     border-color: #e12e00 !important;
     color: #FFFFFF !important;
 }
+.btn-outline-danger {
+    background-color: #FFFFFF;
+    border-color: #F53400;
+    color: #F53400;
+}
+.btn-outline-danger:hover, .btn-outline-danger:active {
+    background-color: #e12e00 !important;
+    border-color: #e12e00 !important;
+    color: #FFFFFF !important;
+}
+.btn.btn-outline-danger.disabled {
+    background-color: #FFFFFF !important;
+    border-color: #D5D6DA !important;
+}
 .btn-dark {
     background-color: #224851;
     border-color: #224851;
@@ -212,12 +232,12 @@ p {
 .btn-secondary-outline {
     background-color: #F8F8F9;
     border-color: #224851;
-    color: #181818;
+    color: #224851;
 }
 .btn-secondary-outline:hover, .btn-secondary-outline:active {
     background-color: #D5D6DA !important;
     border-color: #224851 !important;
-    color: #181818 !important;
+    color: #224851 !important;
 }
 .btn-secondary {
     background-color: #224851;
@@ -232,7 +252,7 @@ p {
 .btn-text {
     background-color: transparent;
     border: none !important;
-    color: #181818;
+    color: #224851;
 }
 .btn-text:hover, .btn-text:active {
     color: #0c0c0c;
@@ -425,9 +445,20 @@ label.label {
     border-radius: 8px;
     padding: 0 8px;
 }
+.badge.badge-circle {
+    width: 20px;
+    height: 20px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 10px;
+}
 .badge.badge-primary {
     background-color: #C0FF00;
     color: #263300;
+}
+.badge.bade-gray {
+    background-color: #F2F4F7;
+    color: #24293A;
 }
 .badge.badge-secondary {
     background-color: #224851;
@@ -998,6 +1029,9 @@ label.label {
     -moz-user-select: none;
     overflow: hidden;
 }
+.button-item.bordered {
+    border: 1px solid rgba(17, 20, 30, 0.03);
+}
 .button-item.disabled {
     cursor: auto !important;
 }
@@ -1096,6 +1130,8 @@ label.label {
     height: 65px;
     overflow: hidden;
 
+    border: 1px solid rgba(17, 20, 30, 0.03);
+
     transition: all ease-in-out 0.2s;
 }
 .button-item.transaction-item.active {
@@ -1113,7 +1149,7 @@ label.label {
     font-weight: 500;
     border-radius: 16px;
     padding-left: 2px;
-    margin: 0 8px 0 16px;
+    margin: 0 16px 0 16px;
 
     transition: all ease-in-out 0.1s;
 }
@@ -1227,6 +1263,9 @@ label.label {
 .button-item.transaction-item .transaction-details .element .icon.icon-code {
     font-size: 26px;
 }
+.button-item.collator-item {
+    min-height: 70px;
+}
 #transactions {
     min-height: 300px;
     height: calc(100% - 5px);
@@ -1238,7 +1277,7 @@ label.label {
 #transactions.smaller {
     height: 320px;
 }
-#transactions_end {
+.transactions-end {
     position: absolute;
     margin-top: -45px;
     left: 0;
@@ -1274,7 +1313,8 @@ label.label {
     text-align: center;
     text-transform: uppercase;
 }
-#transactions .button-item .icon.icon-small {
+#transactions .button-item .icon.icon-small,
+.button-item .icon.icon-small {
     width: 10%;
     font-size: 12px;
 }
@@ -1307,6 +1347,7 @@ label.label {
     color: #ffffff;
 }
 #full_page .content {
+    position: relative;
     width: 100%;
     height: calc(100% - 60px);
     padding: 16px;
@@ -1967,6 +2008,7 @@ label.label {
 #review_transaction .estimated_fees {
     padding-right: 32px;
 }
+#amounts .title,
 #review_transaction .title {
     margin-top: 6px;
     font-family: 'Neue Haas Unica Pro', sans-serif;
@@ -1974,6 +2016,7 @@ label.label {
     color: #667085;
     font-size: 14px;
 }
+#amounts .amount,
 #review_transaction .amount,
 #apy_info .amount {
     font-family: 'Neue Haas Unica Pro', sans-serif;
@@ -1982,6 +2025,7 @@ label.label {
 
     padding: 0 1px 4px;
 }
+#amounts .decimals,
 #review_transaction .decimals,
 #apy_info .decimals {
     font-family: 'Neue Haas Unica Pro', sans-serif;
@@ -1993,6 +2037,7 @@ label.label {
 
     letter-spacing: -0.05em;
 }
+#amounts .dollar,
 #review_transaction .dollar {
     font-family: 'Neue Haas Unica Pro', sans-serif;
     font-weight: 500;
@@ -2087,7 +2132,7 @@ label.label {
     border-radius: 8px !important;
     max-width: 100% !important;
     width: calc(100% - 28px) !important;
-    color: #181818 !important;
+    color: #224851 !important;
     padding: 24px 12px !important;
     font-size: 16px !important;
     user-select: none !important;
@@ -2134,7 +2179,7 @@ label.label {
 }
 .modal .modal-header {
     position: relative;
-    background-color: #181818;
+    background-color: #224851;
     border-radius: 0 !important;
     border-bottom: 0 !important;
 }
@@ -2327,4 +2372,110 @@ label.label {
 }
 #staking_intro .dots .dot.dot-active .dot-line {
     background-position: left;
+}
+#staking_collators {
+    position: relative;
+    height: 100%;
+}
+#staking_collators .btn {
+    transition: all linear 0.2s;
+
+    border-bottom: 2px solid #FFFFFF !important;
+}
+#staking_collators .btn.active {
+    border-bottom: 2px solid #224851 !important;
+}
+#staking_collators .btn .badge {
+    margin-left: 4px;
+    transition: all linear 0.1s;
+}
+#staking_collators .btn:hover .badge,
+#staking_collators .btn:active .badge,
+#staking_collators .btn:focus .badge,
+#staking_collators .btn.active .badge {
+    background-color: #224851;
+    color: #FFFFFF;
+}
+#staking_collators .slide {
+    position: absolute;
+    top: 40px;
+    opacity: 0;
+    width: 100%;
+    height: calc(100% - 100px);
+    pointer-events: none;
+}
+#staking_collators .slide.active {
+    pointer-events: auto;
+}
+#staking_collators .staking-info {
+    background-color: #224851;
+    color: #FFFFFF;
+    padding: 8px;
+    width: 100%;
+    border-radius: 8px;
+    height: 70px;
+    margin-top: 8px;
+}
+#staking_collators .list-header {
+    padding: 8px 0;
+    font-size: 10px;
+    font-weight: 500;
+    color: #667085;
+}
+#staking_collators .collator-list {
+    height: calc(100% - 106px);
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 8px;
+    padding-bottom: 8px;
+}
+#staking_collators .collator-list .button-item {
+    position: relative;
+}
+#staking_collators .collator-list .button-item .jdenticon {
+    text-align: center;
+    width: 70px;
+}
+#staking_collators .collator-list .button-item .collator-name {
+    position: absolute;
+    top: 12px;
+    left: 70px;
+}
+#bordered_content .collator-image {
+    position: absolute;
+    top: -41px;
+    left: calc(50% - 41px);
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    padding-top: 10px;
+    background-color: #FFFFFF;
+    border-radius: 40px;
+    border: 2px solid #224851;
+}
+.box {
+    border-radius: 8px;
+    border: 1px solid #224851;
+    overflow: hidden;
+}
+.box.box-white {
+    border: 1px solid #FFFFFF;
+}
+.box .header {
+    color: #FFFFFF;
+    background-color: #224851;
+    padding: 12px;
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+}
+.box .content {
+    padding: 16px;
+}
+#staking_info {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+    padding: 0 22px;
 }
