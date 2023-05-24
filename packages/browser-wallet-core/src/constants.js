@@ -20,5 +20,9 @@ export const knownApps = [
     {
         title: 'Habbit - Bitgreen',
         domain: 'https://habbit.bitgreen.org'
+    },
+    {
+        title: 'Carbon Marketplace - Bitgreen',
+        domain: 'https://carbonmarkets.bitgreen.org'
     }
 ]
