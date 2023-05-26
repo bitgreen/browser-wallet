@@ -81,8 +81,6 @@ class Extension {
                 return await this.changeSetting(data?.params)
             case 'get_collators':
                 return await this.getCollators()
-            case 'get_staking_info':
-                return await this.getStakingInfo()
             default:
                 return false
         }
@@ -806,16 +804,6 @@ class Extension {
         const data = await polkadot_api.query.parachainStaking.candidates()
 
         return data.toJSON()
-    }
-
-    async getStakingInfo() {
-        const polkadot_api = await polkadotApi()
-
-        const inflation_amount = await polkadot_api.query.parachainStaking.inflationAmountPerBlock()
-
-        return {
-            inflation_amount: inflation_amount.toString()
-        }
     }
 }
 

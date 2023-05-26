@@ -1,7 +1,7 @@
 import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import { AccountStore, checkIfAppIsKnown, WalletStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, CacheStore, checkIfAppIsKnown, NetworkStore, WalletStore } from "@bitgreen/browser-wallet-core";
 
 import anime from "animejs";
 import { showNotification } from "../notifications.js";
@@ -27,17 +27,19 @@ export default async function stakingHomeScreen() {
 
     const accounts_store = new AccountStore()
     const current_account = await accounts_store.current()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
 
     const all_collators = await sendMessage('get_collators')
 
     const balance = await sendMessage('get_balance')
-    const staking_info = await sendMessage('get_staking_info')
+    const inflation_amount = await cache_store.asyncGet('inflation_amount')
 
     const my_total_stake = getTotalStakedByAddress(all_collators, current_account.address)
-    const average_user_apy = getApyByAddress(all_collators, current_account.address, staking_info.inflation_amount)
+    const average_user_apy = getApyByAddress(all_collators, current_account.address, inflation_amount)
 
     if(my_total_stake > 0) {
-        let reward_per_block = calculateUserRewardPerBlock(my_total_stake, average_user_apy, staking_info.inflation_amount)
+        let reward_per_block = calculateUserRewardPerBlock(my_total_stake, average_user_apy, inflation_amount)
         let reward_base = 'BBB'
 
         if(reward_per_block.isLessThan(new BigNumber(1000000 / Math.pow(10, 18))) ) {
@@ -62,7 +64,7 @@ export default async function stakingHomeScreen() {
             reward_base: reward_base
         })
     } else {
-        const average_apy = getAverageApy(all_collators, staking_info.inflation_amount)
+        const average_apy = getAverageApy(all_collators, inflation_amount)
         const collator_apy_data = getAmountDecimal(formatAmount(average_apy.toString(), 2), 2)
 
         await screen.set('.content', 'staking/home/inactive', {

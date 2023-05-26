@@ -1,5 +1,5 @@
 import Screen, { goToScreen, updateCurrentParams } from './index.js'
-import { AccountStore, NetworkStore, SettingsStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, CacheStore, NetworkStore, SettingsStore } from "@bitgreen/browser-wallet-core";
 import { sendMessage } from "../messaging.js";
 
 import {
@@ -31,6 +31,8 @@ export default async function stakingCollatorsScreen(params) {
 
     const accounts_store = new AccountStore()
     const current_account = await accounts_store.current()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
 
     if(params?.target === 'my_nominations') {
         showMyNominations()
@@ -39,14 +41,14 @@ export default async function stakingCollatorsScreen(params) {
     }
 
     const balance = await sendMessage('get_balance')
-    const staking_info = await sendMessage('get_staking_info')
+    const inflation_amount = await cache_store.asyncGet('inflation_amount')
 
     const all_collators = await sendMessage('get_collators')
     let total_my_nominations = 0
 
     let my_stake = new BigNumber(0)
     for(const [key, collator] of Object.entries(all_collators)) {
-        const collator_apy = calculateCollatorApy(all_collators, collator, staking_info.inflation_amount)
+        const collator_apy = calculateCollatorApy(all_collators, collator, inflation_amount)
         const collator_apy_data = getAmountDecimal(formatAmount(collator_apy.toString(), 2), 2)
 
         for(const [key, delegator] of Object.entries(collator.delegators)) {

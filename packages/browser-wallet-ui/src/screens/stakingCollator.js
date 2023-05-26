@@ -1,5 +1,5 @@
 import Screen, { goBackScreen, goToScreen, reloadScreen } from './index.js'
-import { AccountStore, bbbTxFee, NetworkStore, SettingsStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, bbbTxFee, CacheStore, NetworkStore, SettingsStore } from "@bitgreen/browser-wallet-core";
 import { sendMessage } from "../messaging.js";
 
 import { showNotification } from "../notifications.js";
@@ -32,6 +32,9 @@ export default async function stakingCollatorScreen(params) {
 
     const accounts_store = new AccountStore()
     const current_account = await accounts_store.current()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
+
 
     const all_collators = await sendMessage('get_collators')
 
@@ -44,10 +47,9 @@ export default async function stakingCollatorScreen(params) {
     })
 
     const original_balance = await sendMessage('get_balance')
-    const balance = balanceToHuman(original_balance.free, 18)
-    const staking_info = await sendMessage('get_staking_info')
+    const inflation_amount = await cache_store.asyncGet('inflation_amount')
 
-    const collator_apy = calculateCollatorApy(all_collators, collator, staking_info.inflation_amount)
+    const collator_apy = calculateCollatorApy(all_collators, collator, inflation_amount)
     const collator_apy_data = getAmountDecimal(formatAmount(collator_apy.toString(), 2), 2)
 
     await screen.set('#bordered_content', 'staking/collator/content', {
