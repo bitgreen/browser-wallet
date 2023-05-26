@@ -6,4 +6,5 @@ export { default as SessionStore } from './session.js';
 export { default as TransactionStore } from './transaction.js';
 export { default as AssetStore } from './asset.js';
 export { default as TokenStore } from './token.js';
+export { default as CacheStore } from './cache.js';
 

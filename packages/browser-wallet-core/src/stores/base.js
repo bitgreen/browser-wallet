@@ -10,7 +10,7 @@ class BaseStore {
     }
 
     get(_key, update) {
-        const key = `${this.#prefix}${_key}`;
+        const key = `${this.#prefix}${_key.toLowerCase()}`;
 
         current_browser.storage.local.get([key], (result) => {
             lastError('get');
@@ -36,7 +36,7 @@ class BaseStore {
     }
 
     set(_key, value, update) {
-        const key = `${this.#prefix}${_key}`;
+        const key = `${this.#prefix}${_key.toLowerCase()}`;
 
         current_browser.storage.local.set({ [key]: value }, () => {
             lastError('set');
