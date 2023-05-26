@@ -1,6 +1,6 @@
 import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
-import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
+import { AccountStore, checkIfAppIsKnown, NetworkStore, WalletStore, CacheStore } from "@bitgreen/browser-wallet-core";
 
 import DOMPurify from "dompurify";
 import { showNotification } from "../notifications.js";
@@ -32,11 +32,23 @@ export default async function extrinsicSendScreen(params) {
 
     const domain = params?.domain
     const pallet = params?.pallet
-    const call = params?.call
+    const call = params?.call?.replaceAll('_', '')
     const call_parameters = params?.call_parameters ? JSON.parse(params.call_parameters) : []
 
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
     const current_account = await accounts_store.current()
+    const docs = await cache_store.asyncGet(`docs_${pallet}:${call}`)
+
+    // show request params
+    let raw_request = {}
+    for(const [key, field] of Object.entries(docs?.fields)) {
+        raw_request = {
+            ...raw_request,
+            [field.name]: call_parameters[key]
+        }
+    }
 
     await screen.set('#heading', 'shared/heading', {
         title: 'Confirm Transaction'
@@ -46,7 +58,8 @@ export default async function extrinsicSendScreen(params) {
         domain,
         pallet,
         call,
-        call_parameters: call_parameters ? JSON.stringify(call_parameters).substring(0, 150) : '[]'
+        docs: docs?.docs[0] || '',
+        raw_request: JSON.stringify(raw_request).length >= 150 ? JSON.stringify(raw_request).substring(0, 150) + '...' : JSON.stringify(raw_request)
     })
 
     if(params?.message_id && params?.tab_id) {

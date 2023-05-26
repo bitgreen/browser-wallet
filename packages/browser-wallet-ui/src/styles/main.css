@@ -150,8 +150,11 @@ p {
 .text-grotesk.text-bold {
     font-weight: 500;
 }
+.text-left {
+    text-align: left !important;
+}
 .text-right {
-    text-align: right;
+    text-align: right !important;
 }
 .select-none {
     user-select: none;
