@@ -113,7 +113,7 @@ export default async function stakingHomeScreen() {
         easing: 'easeInOutSine',
         duration: 400,
         delay: function(el, i) {
-            return i*200 + 200
+            return i*200 + 100
         },
     });
 
@@ -122,6 +122,6 @@ export default async function stakingHomeScreen() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: 800
+        delay: 400
     });
 }
