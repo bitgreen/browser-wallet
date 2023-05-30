@@ -23,6 +23,6 @@ export const knownApps = [
     },
     {
         title: 'Carbon Marketplace - Bitgreen',
-        domain: 'https://carbonmarkets.bitgreen.org'
+        domain: 'https://carbon.bitgreen.org'
     }
 ]
