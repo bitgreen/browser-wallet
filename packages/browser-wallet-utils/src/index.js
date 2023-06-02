@@ -127,7 +127,7 @@ const getAmountDecimal = (amount, decimals = 2) => {
     }
 
     const regex = /[^0-9]$/;
-    const match = amount_info[1].match(regex);
+    const match = amount_info[1] ? amount_info[1].match(regex) : null
 
     let decimal_info = amount_info[1]?.substring(0, decimals) || '00'
     if(match) {
