@@ -57,10 +57,14 @@ class Extension {
                 return await this.saveNetwork(data?.params)
             case 'change_network':
                 return await this.changeNetwork(data?.params)
+            case 'get_last_block':
+                return await this.getLastBlock()
             case 'get_balance':
                 return await this.getBalance()
             case 'get_all_balances':
                 return await this.getAllBalances()
+            case 'get_vesting_contract':
+                return await this.getVestingContract()
             case 'get_transactions':
                 return await this.getTransactions()
             case 'get_asset_transactions':
@@ -224,6 +228,14 @@ class Extension {
         await polkadotApi(true) // reload polkadot API
     }
 
+    async getLastBlock() {
+        const polkadot_api = await polkadotApi()
+
+        const block = await polkadot_api.rpc.chain.getBlock()
+
+        return block.toJSON().block
+    }
+
     async getBalance() {
         const polkadot_api = await polkadotApi()
         const account = await this.accounts_store.current()
@@ -235,7 +247,8 @@ class Extension {
             reserved: new BigNumber(balance.reserved),
             miscFrozen: new BigNumber(balance.miscFrozen),
             feeFrozen: new BigNumber(balance.feeFrozen),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen))
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
         }
     }
 
@@ -260,8 +273,8 @@ class Extension {
             tokens: [],
             assets: [],
 
-            total: 0,
-            tokens_total: 0
+            total: new BigNumber(0),
+            tokens_total: new BigNumber(0)
         }
 
         for(const asset of result.assets) {
@@ -274,7 +287,7 @@ class Extension {
                 price: price
             })
 
-            balances.total += parseFloat(data.balance)
+            balances.total = balances.total.plus(new BigNumber(data.balance))
         }
 
         // Add BBB on the list
@@ -286,9 +299,10 @@ class Extension {
             miscFrozen: new BigNumber(balance.miscFrozen),
             feeFrozen: new BigNumber(balance.feeFrozen),
             frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
             price: bbbTokenPrice
         })
-        balances.total += parseFloat(balanceToHuman(new BigNumber(balance.free)))
+        balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
 
         for(const token of result.tokens) {
             let price = 0
@@ -302,14 +316,29 @@ class Extension {
                 free: new BigNumber(free),
                 reserved: new BigNumber(reserved),
                 frozen: new BigNumber(frozen),
+                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)),
                 price: price
             })
 
-            balances.total += parseFloat(balanceToHuman(new BigNumber(free)))
-            balances.tokens_total += parseFloat(balanceToHuman(new BigNumber(free)))
+            balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+            balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
         }
 
         return balances
+    }
+
+    async getVestingContract() {
+        const polkadot_api = await polkadotApi()
+        const current_account = await this.accounts_store.current()
+
+        let contract = await polkadot_api.query.vestingContract.vestingContracts(current_account.address)
+        contract = contract.toJSON()
+
+        if(contract && contract.amount) {
+            return contract
+        }
+
+        return false
     }
 
     async getBalanceByAddress(account_address) {

@@ -104,8 +104,6 @@ export default async function stakingCollatorScreen(params) {
             element: '#root #unbond',
             listener: async() => {
                 await goToScreen('extrinsicSendScreen', {
-                    domain: 'domain',
-                    title: 'title',
                     pallet: 'parachainStaking',
                     call: 'undelegate',
                     call_parameters: JSON.stringify([
@@ -118,8 +116,6 @@ export default async function stakingCollatorScreen(params) {
             element: '#root #nominate',
             listener: async() => {
                 await goToScreen('extrinsicSendScreen', {
-                    domain: 'domain',
-                    title: 'title',
                     pallet: 'parachainStaking',
                     call: 'delegate',
                     call_parameters: JSON.stringify([

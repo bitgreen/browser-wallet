@@ -1,7 +1,14 @@
 import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import { AccountStore, CacheStore, checkIfAppIsKnown, NetworkStore, WalletStore } from "@bitgreen/browser-wallet-core";
+import {
+    AccountStore,
+    CacheStore,
+    checkIfAppIsKnown,
+    NetworkStore,
+    WalletStore,
+    polkadotApi
+} from "@bitgreen/browser-wallet-core";
 
 import anime from "animejs";
 import { showNotification } from "../notifications.js";
@@ -12,9 +19,8 @@ import {
     formatAmount,
     getAmountDecimal, getApyByAddress, getAverageApy, getTotalStakedByAddress
 } from "@bitgreen/browser-wallet-utils";
-import * as jdenticon from "jdenticon";
-import { hexToBigInt, hexToBn, hexToString } from "@polkadot/util";
 import BigNumber from "bignumber.js";
+import { hexToBn } from "@polkadot/util";
 
 export default async function stakingHomeScreen() {
     const screen = new Screen({
@@ -63,6 +69,36 @@ export default async function stakingHomeScreen() {
             reward_decimals: reward_data.decimals,
             reward_base: reward_base
         })
+
+        anime({
+            targets: '#root .content #change_nominations',
+            opacity: [0, 1],
+            translateX: [-20, 0],
+            easing: 'easeInOutSine',
+            duration: 400,
+            delay: 200
+        });
+
+        polkadotApi().then((polkadot_api) => {
+            polkadot_api.query.parachainStaking.unbondedDelegates(current_account.address).then((data) => {
+                data = data.toJSON()
+
+                const deposit = hexToBn(data.deposit)
+
+                if(deposit > 0) {
+                    screen.setParam('#root .content .unbonded-amount', formatAmount(balanceToHuman(deposit), 2))
+
+                    anime({
+                        targets: '#root .content #withdraw_unbonded',
+                        opacity: [0, 1],
+                        translateX: [-20, 0],
+                        easing: 'easeInOutSine',
+                        duration: 400,
+                        delay: 400
+                    });
+                }
+            })
+        })
     } else {
         const average_apy = getAverageApy(all_collators, inflation_amount)
         const collator_apy_data = getAmountDecimal(formatAmount(average_apy.toString(), 2), 2)
@@ -71,6 +107,15 @@ export default async function stakingHomeScreen() {
             apy_amount: collator_apy_data.amount,
             apy_decimals: collator_apy_data.decimals
         })
+
+        anime({
+            targets: '#root .content #get_started_staking',
+            opacity: [0, 1],
+            translateX: [-20, 0],
+            easing: 'easeInOutSine',
+            duration: 400,
+            delay: 200
+        });
     }
 
     await screen.set('.content #staking_info', 'staking/home/info', {
@@ -89,6 +134,13 @@ export default async function stakingHomeScreen() {
                 target: 'my_nominations'
             })
         },
+        {
+            element: '#root .content #withdraw_unbonded',
+            listener: () => goToScreen('extrinsicSendScreen', {
+                pallet: 'parachainStaking',
+                call: 'withdrawUnbonded'
+            })
+        },
     ])
 
     anime({
@@ -96,15 +148,6 @@ export default async function stakingHomeScreen() {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400
-    });
-
-    anime({
-        targets: '#root .content .btn',
-        opacity: [0, 1],
-        translateX: [-20, 0],
-        easing: 'easeInOutSine',
-        duration: 400,
-        delay: 200
     });
 
     anime({

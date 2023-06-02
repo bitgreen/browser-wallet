@@ -1,0 +1,40 @@
+<div id="amounts" class="d-flex pt-3 pb-3 mt-1 mb-3">
+    <div class="w-50">
+        <span class="amount d-block text-center"><span class="bbb-amount">0</span><span class="decimals">.<span class="bbb-decimals">00</span></span></span>
+        <div class="title w-100 text-center">BBB TOKENS</div>
+    </div>
+    <div class="w-50">
+        <span class="amount d-block text-center"><span class="dollar me-1">$</span><span class="usd-amount">0</span><span class="decimals">.<span class="usd-decimals">00</span></span></span>
+        <div class="title w-100 text-center">VALUE (USD)</div>
+    </div>
+</div>
+<div>
+    <div class="button-item transaction-item transaction-item-big d-flex align-items-center display-only">
+        <div class="transaction-info w-100 d-flex align-items-center">
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="bbb-available-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-available-decimals"></span></span></span><span class="desc d-block w-100">BBB AVAILABLE</span></div>
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="dollar">$</span><span class="bbb-available-usd-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-available-usd-decimals"></span></span></span><span class="desc d-block w-100">VALUE (USD)</span></div>
+            <div class="col-4 d-flex align-items-center justify-content-center ps-1 pe-3"><button id="bbb_send" class="w-100 btn btn-primary btn-sm btn-rounded d-flex align-items-center justify-content-center disabled">Send <span class="icon icon-right-up-arrow icon-small text-dark m-0"></span></button></div>
+        </div>
+    </div>
+
+    <div id="vesting_info" class="button-item transaction-item transaction-item-big transaction-item-disabled d-flex align-items-center display-only d-none">
+        <div class="transaction-info w-100 d-flex align-items-center">
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="bbb-vesting-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-vesting-decimals"></span></span></span><span class="desc d-block w-100">BBB VESTING</span></div>
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="dollar">$</span><span class="bbb-vesting-usd-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-vesting-usd-decimals"></span></span></span><span class="desc d-block w-100">VALUE (USD)</span></div>
+            <div class="col-4 d-flex align-items-center justify-content-center ps-1 pe-3">
+                <button id="vesting_withdraw" class="w-100 btn btn-primary btn-sm btn-rounded d-flex align-items-center justify-content-center d-none">Withdraw</button>
+                <div id="vesting_unlocks" class="d-none text-bold text-gray text-center">
+                    Unlocks from<br><span class="unlocks-from">11/30/2023</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-item transaction-item transaction-item-big transaction-item-disabled d-flex align-items-center display-only">
+        <div class="transaction-info w-100 d-flex align-items-center">
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="bbb-locked-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-locked-decimals"></span></span></span><span class="desc d-block w-100">BBB LOCKED</span></div>
+            <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount"><span class="dollar">$</span><span class="bbb-locked-usd-amount"></span><span class="d-inline-block digits text-gray">.<span class="bbb-locked-usd-decimals"></span></span></span><span class="desc d-block w-100">VALUE (USD)</span></div>
+            <div class="col-4 d-flex align-items-center justify-content-center ps-1 pe-3"></div>
+        </div>
+    </div>
+</div>

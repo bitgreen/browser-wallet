@@ -33,6 +33,7 @@ import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
 import tokenAllScreen from "./tokenAll.js";
+import tokenBBBScreen from "./tokenBBB.js";
 import stakingHomeScreen from "./stakingHome.js";
 import stakingIntroScreen from "./stakingIntro.js";
 import stakingCollatorsScreen from "./stakingCollators.js";
@@ -423,6 +424,7 @@ const screens = {
     networkCreateScreen,
     extrinsicSendScreen,
     tokenAllScreen,
+    tokenBBBScreen,
     stakingHomeScreen,
     stakingIntroScreen,
     stakingCollatorsScreen,
