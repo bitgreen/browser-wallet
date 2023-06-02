@@ -24,10 +24,7 @@ export default async function assetTransactionReviewScreen(params) {
 
     const recipient = params?.recipient
     const asset_amount = params?.amount
-
-    console.log(params)
     const asset_info = getAmountDecimal(asset_amount, 2)
-    console.log(asset_info)
     const usd_info = getAmountDecimal(asset_amount * bbbTokenPrice, 2) // TODO: update price!
     const fee_info = getAmountDecimal(0.27, 2) // TODO: calculate fees!
 
