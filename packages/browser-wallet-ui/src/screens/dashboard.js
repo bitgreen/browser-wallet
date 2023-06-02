@@ -8,8 +8,7 @@ import { balanceToHuman, formatAmount, getAmountDecimal, humanToBalance, sleep }
 import BigNumber from "bignumber.js";
 
 export default async function dashboardScreen(params = {
-    imported: false,
-    extend_delay: false
+    imported: false
 }) {
     const wallet_store = new WalletStore()
     if(!await wallet_store.exists()) {
@@ -22,7 +21,7 @@ export default async function dashboardScreen(params = {
         header: true,
         footer: true,
         freeze_root: true,
-        freeze_root_delay: params?.extend_delay ? 1200 : 800
+        freeze_root_delay: 800
     })
     await screen.init()
 
@@ -49,8 +48,7 @@ export default async function dashboardScreen(params = {
         targets: '#portfolio',
         opacity: [0, 1],
         easing: 'easeInOutSine',
-        duration: 200,
-        delay: params.extend_delay ? 200 : 0
+        duration: 200
     });
 
     anime({
@@ -59,7 +57,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 300,
-        delay: params.extend_delay ? 600 : 200
+        delay: 200
     });
 
     anime({
@@ -68,7 +66,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 600 : 300
+        delay: 300
     });
 
     anime({
@@ -77,7 +75,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 800 : 400
+        delay: 400
     });
 
     anime({
@@ -87,7 +85,7 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*400 + (params.extend_delay ? 400 : 100)
+            return i*400 + 100
         },
     });
 
@@ -98,7 +96,7 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*400 + (params.extend_delay ? 400 : 100)
+            return i*400 + 100
         },
     });
 
@@ -109,7 +107,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'linear',
         delay: function(el, i) {
-            return i*300 + (params.extend_delay ? 600 : 200)
+            return i*300 + 200
         },
     });
 
@@ -165,12 +163,11 @@ export default async function dashboardScreen(params = {
             easing: 'easeInOutSine',
             translateX: [-20, 0],
             opacity: [0, 1],
-            // duration: 300,
             duration: function(el, i) {
-                return (params.extend_delay ? 600 : 400) - i*(params.extend_delay ? 100 : 50)
+                return 400 - i*50
             },
             delay: function(el, i) {
-                return i*200 + (params.extend_delay ? 800 : 200)
+                return i*200 + 200
             },
         });
     })

@@ -70,6 +70,11 @@ export default async function stakingHomeScreen() {
             reward_base: reward_base
         })
 
+        await screen.set('.content #staking_info', 'staking/home/info', {
+            'locked_amount': formatAmount(balanceToHuman(balance.frozen + balance.reserved), 2),
+            'available_amount': formatAmount(balanceToHuman(balance.free), 2)
+        })
+
         anime({
             targets: '#root .content #change_nominations',
             opacity: [0, 1],
@@ -86,6 +91,8 @@ export default async function stakingHomeScreen() {
                 const deposit = hexToBn(data.deposit)
 
                 if(deposit > 0) {
+                    document.querySelector('#root .content #withdraw_unbonded').classList.remove('d-none')
+
                     screen.setParam('#root .content .unbonded-amount', formatAmount(balanceToHuman(deposit), 2))
 
                     anime({
@@ -108,6 +115,11 @@ export default async function stakingHomeScreen() {
             apy_decimals: collator_apy_data.decimals
         })
 
+        await screen.set('.content #staking_info', 'staking/home/info', {
+            'locked_amount': formatAmount(balanceToHuman(balance.frozen + balance.reserved), 2),
+            'available_amount': formatAmount(balanceToHuman(balance.free), 2)
+        })
+
         anime({
             targets: '#root .content #get_started_staking',
             opacity: [0, 1],
@@ -117,11 +129,6 @@ export default async function stakingHomeScreen() {
             delay: 200
         });
     }
-
-    await screen.set('.content #staking_info', 'staking/home/info', {
-        'locked_amount': formatAmount(balanceToHuman(balance.frozen + balance.reserved), 2),
-        'available_amount': formatAmount(balanceToHuman(balance.free), 2)
-    })
 
     screen.setListeners([
         {

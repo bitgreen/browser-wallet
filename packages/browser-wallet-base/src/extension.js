@@ -59,9 +59,7 @@ const extension = async() => {
         })
     }
 
-    return await ui.goToScreen('dashboardScreen', {
-        extend_delay: true
-    })
+    return await ui.goToScreen('dashboardScreen')
 }
 
 extension().then()
