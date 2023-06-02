@@ -34,8 +34,8 @@ export default async function assetAllScreen(params) {
       if(token.token_name === 'USDC') icon = usdcIcon
       if(token.token_name === 'DOT') icon = dotIcon
 
-      const balance_info = getAmountDecimal(balanceToHuman(token.free), 2)
-      const balance_usd_info = getAmountDecimal(balanceToHuman(token.free) * token.price, 2)
+      const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
+      const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
       const price_info = getAmountDecimal(token.price, 2)
 
       await screen.append("#root #transactions", "token/all/list_item", {

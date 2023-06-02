@@ -1,10 +1,13 @@
-import { databaseService } from '@bitgreen/browser-wallet-core'
+import { databaseService, polkadotApi } from '@bitgreen/browser-wallet-core'
 import userInterface from '@bitgreen/browser-wallet-ui'
 
 const db = new databaseService()
 const ui = new userInterface()
 
 const extension = async() => {
+    // preload
+    polkadotApi().then()
+
     await ui.initUi()
 
     const params = new URLSearchParams(window.location.search)

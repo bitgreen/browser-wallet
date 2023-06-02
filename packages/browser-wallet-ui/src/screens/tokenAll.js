@@ -35,8 +35,8 @@ export default async function tokenAllScreen(params) {
       // Skip BBB here
       if(token.token_name === 'BBB') continue
 
-      const balance_info = getAmountDecimal(balanceToHuman(token.free), 2)
-      const balance_usd_info = getAmountDecimal(balanceToHuman(token.free) * token.price, 2)
+      const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
+      const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
       const price_info = getAmountDecimal(token.price, 2)
 
       await screen.append("#root #transactions", "token/all/list_item", {

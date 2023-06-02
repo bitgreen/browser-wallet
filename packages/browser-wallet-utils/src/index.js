@@ -66,7 +66,7 @@ const randomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const balanceToHuman = (balance, decimals = 2) => {
+const balanceToHuman = (balance, decimals = 4) => {
     const calc_decimals = Math.pow(10, decimals)
     return (Math.floor(balance / 1000000000000000000 * calc_decimals) / calc_decimals).toFixed(decimals);
 }
@@ -126,9 +126,17 @@ const getAmountDecimal = (amount, decimals = 2) => {
         amount_info = parseFloat(amount).toFixed(decimals).toString().split('.')
     }
 
+    const regex = /[^0-9]$/;
+    const match = amount_info[1].match(regex);
+
+    let decimal_info = amount_info[1]?.substring(0, decimals) || '00'
+    if(match) {
+        decimal_info = decimal_info + match[0]
+    }
+
     return {
         amount: amount_info[0],
-        decimals: amount_info[1]?.substring(0, decimals) || '00'
+        decimals: decimal_info
     }
 }
 
@@ -228,6 +236,8 @@ const getAverageApy = (all_collators, block_reward) => {
     for(const [key, collator] of Object.entries(all_collators)) {
         total_apy = total_apy.plus(calculateCollatorApy(all_collators, collator, block_reward))
     }
+
+    if(total_apy.isEqualTo(0)) return 0
     
     return total_apy.dividedBy(new BigNumber(all_collators.length))
 }

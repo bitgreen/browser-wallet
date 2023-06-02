@@ -79,7 +79,7 @@ export default async function extrinsicSendScreen(params) {
         title: 'processing transaction',
         desc: 'Hold tight while we get confirmation of this transaction.',
         top: '5px',
-        padding_top: '100px'
+        padding_top: '60px'
     });
 
     document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {

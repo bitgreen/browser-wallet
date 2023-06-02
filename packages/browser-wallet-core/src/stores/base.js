@@ -26,7 +26,7 @@ class BaseStore {
     }
 
     remove(_key, update) {
-        const key = `${this.#prefix}${_key}`;
+        const key = `${this.#prefix}${_key.toLowerCase()}`;
 
         current_browser.storage.local.remove(key, () => {
             lastError('remove');
