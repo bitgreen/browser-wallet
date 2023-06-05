@@ -5,7 +5,13 @@ const chrome = extractGlobal('chrome', xglobal.browser);
 const browser = extractGlobal('browser', xglobal.browser);
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
-const port_content = current_browser.runtime.connect({ name: 'PORT_CONTENT' });
+
+let port_content
+function connectContent() {
+    port_content = current_browser.runtime.connect({ name: 'PORT_CONTENT' });
+    port_content.onDisconnect.addListener(connectContent)
+}
+connectContent()
 
 // This code is inject in all the pages to intercept the messages for the browser wallet
 // the code injection is managed by the manifest.json of the extension: "content_scripts"
