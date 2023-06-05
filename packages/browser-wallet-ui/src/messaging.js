@@ -11,6 +11,8 @@ const url_params = new URLSearchParams(window.location.search)
 port.onMessage.addListener((data) => {
     const handler = handlers[data.id];
 
+    const urlParams = new URLSearchParams(window.location.search)
+
     // Receives this signal from background page, triggered when origin tab was changed/closed.
     if(data.command === 'kill_popup' && url_params.get('kill_popup') === 'true' && urlParams.get('tab_id').toString() === data?.tab_id.toString()) {
         if(port) port.disconnect()
