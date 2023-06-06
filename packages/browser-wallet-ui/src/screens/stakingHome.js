@@ -23,6 +23,13 @@ import BigNumber from "bignumber.js";
 import { hexToBn } from "@polkadot/util";
 
 export default async function stakingHomeScreen() {
+    const wallet_store = new WalletStore()
+    if(!await wallet_store.exists()) {
+        await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
+        await clearHistory()
+        return await goToScreen('walletScreen', {}, false, true)
+    }
+
     const screen = new Screen({
         template_name: 'layouts/full_page_secondary',
         login: true,
