@@ -2518,6 +2518,11 @@ label.label {
 /* for full screen */
 @media screen and (min-width: 600px) {
     body,
+    #init_screen,
+    #login_screen {
+        background: radial-gradient(circle at center top, #224851, #0C232D) !important;
+    }
+    body,
     #header,
     #full_page,
     #bordered_content,
@@ -2531,6 +2536,9 @@ label.label {
         text-align: left;
         width: 100%;
     }
+    /*#bordered_content {*/
+    /*    box-shadow: 0 0 0 12px rgba(14, 42, 54, 0.4);*/
+    /*}*/
     #bordered_content #top_items button {
         width: 208px;
     }
