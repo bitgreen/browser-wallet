@@ -33,14 +33,14 @@ module.exports = (
   entry,
   alias = {},
   useSplitChunk = false,
-  browser = "chrome"
+  platform = "chrome"
 ) => {
-  if (!["chrome", "firefox", "safari"].includes(browser)) {
-    browser = "chrome";
+  if (!["chrome", "firefox", "safari", "ios"].includes(platform)) {
+      platform = "chrome";
   }
 
-  const manifest = require(`./manifest-${browser}.json`);
-  let output_dir = path.join(__dirname, `../../build/${browser}`);
+  const manifest = platform !== 'ios' ? require(`./manifest-${platform}.json`) : null
+  let output_dir = path.join(__dirname, `../../build/${platform}`);
 
     let plugins = [
         new webpack.ProvidePlugin({
@@ -77,28 +77,40 @@ module.exports = (
                 to: 'components'
             }]
         }),
-        new ManifestPlugin({
+        new MiniCssExtractPlugin()
+    ]
+
+  if (useSplitChunk) {
+      if(platform === 'ios') {
+          plugins.push(
+              new HtmlWebpackPlugin({
+                  filename: "index.html",
+                  template: "public/app.html",
+                  chunks: ["app"],
+              })
+          );
+      } else {
+          plugins.push(
+              new HtmlWebpackPlugin({
+                  filename: "index.html",
+                  template: "public/index.html",
+                  chunks: ["extension"],
+              })
+          );
+      }
+  }
+    if(platform !== 'ios') {
+        plugins.push(new ManifestPlugin({
             config: {
                 base: manifest,
                 extend: {
                     version: pkgJson.version.split('-')[0] // remove possible -beta.xx
                 }
             }
-        }),
-        new MiniCssExtractPlugin()
-    ]
+        }))
+    }
 
-  if (useSplitChunk) {
-    plugins.push(
-      new HtmlWebpackPlugin({
-        filename: "index.html",
-        template: "public/index.html",
-        chunks: ["extension"],
-      })
-    );
-  }
-
-    if(browser === 'safari') {
+    if(platform === 'safari') {
         // copy necessary files
         plugins.push(new CopyPlugin({
             patterns: [{
@@ -116,7 +128,10 @@ module.exports = (
         }))
 
         // change output directory
-        output_dir = path.join(__dirname, `../../build/${browser}/Shared (Extension)`)
+        output_dir = path.join(__dirname, `../../build/safari/Shared (Extension)`)
+    } else if(platform === 'ios') {
+        // change output directory
+        output_dir = path.join(__dirname, `../../build/safari/Shared (App)/Resources`)
     } else {
         plugins.push(new CopyPlugin({
             patterns: [{
