@@ -2,7 +2,7 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
 import {AccountStore, bbbTokenPrice} from "@bitgreen/browser-wallet-core";
-import { getAmountDecimal } from "@bitgreen/browser-wallet-utils";
+import { addressValid, balanceToHuman, formatAmount, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 export default async function assetTransactionReviewScreen(params) {
@@ -26,15 +26,27 @@ export default async function assetTransactionReviewScreen(params) {
     const asset_amount = params?.amount
     const asset_info = getAmountDecimal(asset_amount, 2)
     const usd_info = getAmountDecimal(asset_amount * bbbTokenPrice, 2) // TODO: update price!
-    const fee_info = getAmountDecimal(0.27, 2) // TODO: calculate fees!
+
+    const estimated_fee = await sendMessage('get_estimated_fee', {
+        pallet: 'balances',
+        call: 'transfer',
+        call_parameters: [
+            params?.recipient,
+            params?.amount,
+        ],
+        account_address: account.address
+    })
+
+    const fee_usd = balanceToHuman(estimated_fee, 4) * bbbTokenPrice
+    const fee_info = getAmountDecimal(fee_usd, 4)
 
     await screen.set('.content', 'asset/review_transaction', {
         asset_amount: asset_info.amount,
         asset_decimals: asset_info.decimals,
         usd_amount: usd_info.amount,
         usd_decimals: usd_info.decimals,
-        fee_amount: fee_info.amount,
-        fee_decimals: fee_info.decimals,
+        fee_amount: fee_usd < 0.0001 ? '0' : fee_info.amount,
+        fee_decimals: fee_usd < 0.0001 ? '0001' : fee_info.decimals,
         account_name: (account.name.length > 14 ? account.name.substring(0,14)+'...' : account.name),
         account_address: account.address,
         recipient_address: recipient
@@ -94,7 +106,7 @@ export default async function assetTransactionReviewScreen(params) {
             })
         } else if(response?.status === 'failed' && response.error) {
             hideProcessing()
-            await showNotification(response.error, 'error', 3200)
+            await showNotification(response.error, 'error', 5000)
         } else {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')

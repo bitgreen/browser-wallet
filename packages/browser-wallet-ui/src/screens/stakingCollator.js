@@ -1,19 +1,17 @@
-import Screen, { goBackScreen, goToScreen, reloadScreen } from './index.js'
-import { AccountStore, bbbTxFee, CacheStore, NetworkStore, SettingsStore } from "@bitgreen/browser-wallet-core";
+import Screen, { goBackScreen, goToScreen } from './index.js'
+import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { sendMessage } from "../messaging.js";
 
-import { showNotification } from "../notifications.js";
 import {
     addressValid,
-    balanceToHuman, calculateCollatorApy,
+    balanceToHuman,
+    calculateCollatorApy,
     formatAddress,
-    formatAmount, getAmountDecimal, humanToBalance,
-    isFirefox,
-    isIOs,
-    isSafari
+    formatAmount,
+    getAmountDecimal,
+    humanToBalance,
 } from "@bitgreen/browser-wallet-utils";
-import { hexToBn, hexToNumber, hexToString } from "@polkadot/util";
-import BigNumber from "bignumber.js";
+import { hexToBn } from "@polkadot/util";
 import anime from "animejs";
 import * as jdenticon from "jdenticon";
 
@@ -34,7 +32,6 @@ export default async function stakingCollatorScreen(params) {
     const current_account = await accounts_store.current()
     const networks_store = new NetworkStore()
     const cache_store = new CacheStore(await networks_store.current())
-
 
     const all_collators = await sendMessage('get_collators')
 
@@ -127,11 +124,28 @@ export default async function stakingCollatorScreen(params) {
         }
     ])
 
+    let estimated_fee = 0
+    const getEstimatedFee = async() => {
+        const amount = humanToBalance(amount_el.value)
+        estimated_fee = await sendMessage('get_estimated_fee', {
+            pallet: 'parachainStaking',
+            call: 'delegate',
+            call_parameters: [
+                collator.who,
+                amount
+            ],
+            account_address: current_account.address
+        })
+
+        estimated_fee = formatAmount(balanceToHuman(estimated_fee , 18), 18)
+    }
+    getEstimatedFee().then()
+
     const syncAmount = () => {
         const button_el = document.querySelector("#root #nominate")
 
         if(parseFloat(amount_el.value) > 0
-            && (parseFloat(amount_el.value) + bbbTxFee) <= parseFloat(balanceToHuman(original_balance.free, 18))
+            && (parseFloat(amount_el.value) + parseFloat(balanceToHuman(estimated_fee, 4))) <= parseFloat(balanceToHuman(original_balance.free, 18))
         ) {
             button_el.classList.remove('disabled')
             button_el.classList.add('btn-primary')
@@ -141,16 +155,18 @@ export default async function stakingCollatorScreen(params) {
             button_el.classList.remove('btn-primary')
             button_el.classList.add('disabled')
 
-            if((parseFloat(amount_el.value) + bbbTxFee) > parseFloat(balanceToHuman(original_balance.free, 18))) {
+            if((parseFloat(amount_el.value) + parseFloat(balanceToHuman(estimated_fee, 4))) > parseFloat(balanceToHuman(original_balance.free, 18))) {
                 amount_el.classList.add('error')
             } else {
                 amount_el.classList.remove('error')
             }
         }
+
+        getEstimatedFee().then()
     }
 
     const maxAmount = () => {
-        let max_amount = parseFloat(balanceToHuman(original_balance.free, 18)) - bbbTxFee
+        let max_amount = parseFloat(balanceToHuman(original_balance.free, 18)) - parseFloat(balanceToHuman(estimated_fee, 4))
 
         if(max_amount <= 0) {
             max_amount = 0.00

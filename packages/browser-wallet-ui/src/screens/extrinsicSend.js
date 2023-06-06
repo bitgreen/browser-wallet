@@ -162,7 +162,7 @@ export default async function extrinsicSendScreen(params) {
 
             showProcessingDone()
 
-            hideProcessing(2200)
+            hideProcessing(2000)
         } else if(response?.status === 'failed' && response.error) {
             // send message to tab if response is successful
             screen.sendMessageToTab({
@@ -170,7 +170,7 @@ export default async function extrinsicSendScreen(params) {
             })
 
             hideProcessing()
-            await showNotification(response.error, 'error', 3200)
+            await showNotification(response.error, 'error', 5000)
         } else {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')

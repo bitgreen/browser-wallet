@@ -85,6 +85,8 @@ class Extension {
                 return await this.changeSetting(data?.params)
             case 'get_collators':
                 return await this.getCollators()
+            case 'get_estimated_fee':
+                return await this.getEstimatedFee(data?.params)
             default:
                 return false
         }
@@ -833,6 +835,15 @@ class Extension {
         const data = await polkadot_api.query.parachainStaking.candidates()
 
         return data.toJSON()
+    }
+
+    async getEstimatedFee(params) {
+        const polkadot_api = await polkadotApi()
+
+        let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
+        info = info.toJSON()
+
+        return info.partialFee
     }
 }
 
