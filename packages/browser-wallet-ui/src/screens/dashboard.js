@@ -4,11 +4,11 @@ import Screen, { clearHistory, goToScreen } from './index.js'
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
 import { initChart, renderChart } from "../chart.js";
-import {balanceToHuman, formatAmount, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
+import { balanceToHuman, formatAmount, getAmountDecimal, humanToBalance, sleep } from "@bitgreen/browser-wallet-utils";
+import BigNumber from "bignumber.js";
 
 export default async function dashboardScreen(params = {
-    imported: false,
-    extend_delay: false
+    imported: false
 }) {
     const wallet_store = new WalletStore()
     if(!await wallet_store.exists()) {
@@ -21,51 +21,34 @@ export default async function dashboardScreen(params = {
         header: true,
         footer: true,
         freeze_root: true,
-        freeze_root_delay: params?.extend_delay ? 1800 : 1200
+        freeze_root_delay: 800
     })
     await screen.init()
 
-    const balance = await sendMessage('get_balance')
-    const all_balances = await sendMessage('get_all_balances')
     const token_price_info = getAmountDecimal(bbbTokenPrice, 2)
 
-    const bbb_usd_amount = balanceToHuman(balance, 18) * bbbTokenPrice
-
-    let other_usd_amount = 0
-    for(const token of all_balances.tokens) {
-        if(token.token_name === 'BBB') continue
-        other_usd_amount += balanceToHuman(token.balance, 18) * token.price
-    }
-    for(const asset of all_balances.assets) {
-        other_usd_amount += asset.balance * asset.price
-    }
-
     await screen.set('#heading', 'dashboard/heading', {
-        bbb_usd_amount: formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0),
-        other_usd_amount: formatAmount(other_usd_amount, other_usd_amount < 1000000 ? 2 : 0),
         token_price: token_price_info.amount,
         token_price_decimals: token_price_info.decimals
     })
-    await screen.set('#bordered_content', 'dashboard/content', {
-        all_balance: formatAmount(all_balances.total, 2),
-        bbb_balance: formatAmount(balanceToHuman(balance, 2)),
-        token_balance: formatAmount(all_balances.tokens_total, 2)
-    })
 
-    await screen.set('#chart', 'dashboard/chart')
-    initChart({
-        bbb_token_amount: bbb_usd_amount,
-        other_amount: other_usd_amount
-    })
+    await screen.set('#bordered_content', 'dashboard/content')
 
     await clearHistory()
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 
     anime({
         targets: '#portfolio',
         opacity: [0, 1],
         easing: 'easeInOutSine',
-        duration: 200,
-        delay: params.extend_delay ? 400 : 200
+        duration: 200
     });
 
     anime({
@@ -74,7 +57,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 300,
-        delay: params.extend_delay ? 1000 : 200
+        delay: 200
     });
 
     anime({
@@ -83,7 +66,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 1200 : 400
+        delay: 300
     });
 
     anime({
@@ -92,7 +75,7 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'easeInOutSine',
         duration: 400,
-        delay: params.extend_delay ? 1400 : 600
+        delay: 400
     });
 
     anime({
@@ -102,18 +85,18 @@ export default async function dashboardScreen(params = {
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*400 + (params.extend_delay ? 1200 : 400)
+            return i*400 + 100
         },
     });
 
     anime({
-        targets: '#portfolio .info p .icon',
+        targets: '#portfolio .info p .icon.icon-circle',
         translateX: [20, 0],
         scale: [1.5, 1],
         easing: 'easeInOutSine',
         duration: 300,
         delay: function(el, i) {
-            return i*400 + (params.extend_delay ? 1200 : 400)
+            return i*400 + 100
         },
     });
 
@@ -124,29 +107,70 @@ export default async function dashboardScreen(params = {
         opacity: [0, 1],
         easing: 'linear',
         delay: function(el, i) {
-            return i*300 + (params.extend_delay ? 1400 : 600)
+            return i*300 + 200
         },
     });
 
-    anime({
-        targets: '#bordered_content .button-item',
-        easing: 'easeInOutSine',
-        translateX: [-20, 0],
-        opacity: [0, 1],
-        // duration: 300,
-        duration: function(el, i) {
-            return (params.extend_delay ? 600 : 400) - i*(params.extend_delay ? 100 : 50)
-        },
-        delay: function(el, i) {
-            return i*200 + (params.extend_delay ? 800 : 200)
-        },
-    });
+    sendMessage('get_all_balances').then(async(all_balances) => {
+        let bbb_balance = 0
+        let other_usd_amount = 0
+        for(const token of all_balances.tokens) {
+            if(token.token_name === 'BBB') {
+                bbb_balance = balanceToHuman(token.total, 18)
+            } else {
+                other_usd_amount += balanceToHuman(token.total, 18) * token.price
+            }
+        }
+        for(const asset of all_balances.assets) {
+            other_usd_amount += asset.balance * asset.price
+        }
 
-    if(params.extend_delay) {
-        setTimeout(await renderChart, 900)
-    } else {
-        await renderChart()
-    }
+        const bbb_usd_amount = bbb_balance * bbbTokenPrice
+
+        const vesting_contract = await sendMessage('get_vesting_contract')
+
+        let vesting_balance = new BigNumber(0)
+        if(vesting_contract) {
+            vesting_balance = balanceToHuman(vesting_contract?.amount, 18)
+        }
+
+        const vesting_usd_amount = vesting_balance * bbbTokenPrice
+
+        if(vesting_usd_amount > 0) {
+            document.querySelector('#portfolio #vesting_info').classList.remove('d-none')
+            document.querySelector('#portfolio #vesting_info').classList.add('d-flex')
+
+            screen.setParam('#portfolio .vesting_usd_amount', '$' + formatAmount(vesting_usd_amount, vesting_usd_amount < 1000000 ? 2 : 0))
+        }
+
+        await screen.set('#chart', 'dashboard/chart')
+        initChart({
+            bbb_token_amount: bbb_usd_amount + vesting_usd_amount,
+            other_amount: other_usd_amount
+        })
+
+        screen.setParam('#portfolio .bbb_usd_amount', '$' + formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
+        screen.setParam('#portfolio .other_usd_amount', '$' + formatAmount(other_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
+
+        screen.setParam('#bordered_content .all_balance', formatAmount(balanceToHuman(all_balances.total), 2))
+        screen.setParam('#bordered_content .bbb_balance', formatAmount(bbb_balance, 2))
+        screen.setParam('#bordered_content .token_balance', formatAmount(balanceToHuman(all_balances.tokens_total), 2))
+    }).then(() => {
+        renderChart()
+    }).then(() => {
+        anime({
+            targets: '#bordered_content .button-item',
+            easing: 'easeInOutSine',
+            translateX: [-20, 0],
+            opacity: [0, 1],
+            duration: function(el, i) {
+                return 400 - i*50
+            },
+            delay: function(el, i) {
+                return i*200 + 200
+            },
+        });
+    })
 
     screen.setListeners([
         {
@@ -168,6 +192,10 @@ export default async function dashboardScreen(params = {
         {
             element: '#all_assests',
             listener: () => goToScreen('assetAllScreen')
+        },
+        {
+            element: '#bbb_tokens',
+            listener: () => goToScreen('tokenBBBScreen')
         },
         {
             element: '#other_tokens',

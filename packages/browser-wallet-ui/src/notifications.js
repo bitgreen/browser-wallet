@@ -2,7 +2,7 @@ import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
 
 let notification
-const showNotification = async(message, type, duration = 1800, offset = 40) => {
+const showNotification = async(message, type, duration = 2000, offset = 40) => {
     let classes, icon_classes
     if(type === 'success') {
         classes = 'notification notification-success'

@@ -1,11 +1,18 @@
 import Screen, { clearHistory, goToScreen, updateCurrentParams } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
-import {AccountStore, bbbTokenPrice, bbbTxFee, WalletStore} from "@bitgreen/browser-wallet-core";
-import {addressValid, balanceToHuman, formatAddress, formatAmount} from "@bitgreen/browser-wallet-utils";
+import {AccountStore, bbbTokenPrice, WalletStore} from "@bitgreen/browser-wallet-core";
+import {
+    addressValid,
+    balanceToHuman,
+    formatAddress,
+    formatAmount,
+    humanToBalance
+} from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from "dompurify";
 import {Tooltip} from 'bootstrap'
+import anime from "animejs";
 
 export default async function assetSendScreen(params) {
     const wallet_store = new WalletStore()
@@ -36,8 +43,16 @@ export default async function assetSendScreen(params) {
         title: 'Send'
     })
 
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
+
     const original_balance = await sendMessage('get_balance')
-    const balance = balanceToHuman(original_balance, 18)
+    const balance = balanceToHuman(original_balance.free, 18)
 
     const balance_info = balance.toString().split('.')
     let balance_decimals = 4
@@ -59,10 +74,8 @@ export default async function assetSendScreen(params) {
         recipient,
         from_name: current_account.name,
         from_address: formatAddress(current_account.address, 16, 8),
-        balance: formatAmount(balanceToHuman(original_balance, 2)),
-        bbb_fee: formatAmount(bbbTxFee, 18),
-        total_bbb: formatAmount(parseFloat(params.amount) + bbbTxFee, 2),
-        max_balance: balanceToHuman(original_balance, 18)
+        balance: formatAmount(balanceToHuman(original_balance.free, 2), 2),
+        max_balance: balanceToHuman(original_balance.free, 18)
     })
 
     const amount_el = document.querySelector("#root #amount")
@@ -135,7 +148,7 @@ export default async function assetSendScreen(params) {
 
         if(parseFloat(amount_el.value) > 0
             && addressValid(address)
-            && (parseFloat(amount_el.value) + bbbTxFee) <= parseFloat(balanceToHuman(original_balance, 18))
+            && (parseFloat(amount_el.value) + parseFloat(estimated_fee)) <= parseFloat(balanceToHuman(original_balance.free, 18))
         ) {
             button_el.classList.remove('disabled')
             button_el.classList.add('btn-primary')
@@ -148,7 +161,7 @@ export default async function assetSendScreen(params) {
             button_el.classList.remove('btn-primary')
             button_el.classList.add('disabled')
 
-            if((parseFloat(amount_el.value) + bbbTxFee) > parseFloat(balanceToHuman(original_balance, 18))) {
+            if((parseFloat(amount_el.value) + parseFloat(estimated_fee)) > parseFloat(balanceToHuman(original_balance.free, 18))) {
                 amount_el.classList.add('error')
 
                 send_info_el.classList.remove('d-block')
@@ -161,6 +174,26 @@ export default async function assetSendScreen(params) {
             }
         }
     }
+
+    let estimated_fee = 0
+    const getEstimatedFee = async() => {
+        const amount = humanToBalance(amount_el.value)
+        const address = recipient_el.value
+        estimated_fee = await sendMessage('get_estimated_fee', {
+            pallet: 'balances',
+            call: 'transfer',
+            call_parameters: [
+                addressValid(address) ? address : current_account.address,
+                amount
+            ],
+            account_address: current_account.address
+        })
+
+        estimated_fee = formatAmount(balanceToHuman(estimated_fee , 18), 18)
+
+        document.querySelector('#bordered_content #go_review_transaction').dataset.bsOriginalTitle = `Transaction Fee:<br>${estimated_fee.toString()} BBB`
+    }
+    getEstimatedFee().then()
 
     let decimals = 2
     const syncAmount = (type = 'both') => {
@@ -201,7 +234,7 @@ export default async function assetSendScreen(params) {
 
         amount = parseFloat(amount).toFixed(decimals)
         usd_amount = parseFloat(usd_amount).toFixed(2)
-        total_amount = (parseFloat(amount) + bbbTxFee).toFixed(decimals)
+        total_amount = (parseFloat(amount) + parseFloat(estimated_fee)).toFixed(decimals)
 
         if(type === 'amount' || type === 'both') usd_amount_el.value = usd_amount
         if(type === 'usd_amount' || type === 'both') amount_el.value = amount
@@ -209,11 +242,12 @@ export default async function assetSendScreen(params) {
         total_amount_el.innerHTML = total_amount
 
         checkAddress()
+        getEstimatedFee().then()
     }
     syncAmount()
 
     const maxAmount = () => {
-        let max_amount = parseFloat(balanceToHuman(original_balance, 18)) - bbbTxFee
+        let max_amount = parseFloat(balanceToHuman(original_balance.free, 18)) - parseFloat(estimated_fee)
 
         if(max_amount <= 0) {
             max_amount = 0.00

@@ -64,6 +64,14 @@ export default async function signInScreen(params) {
         icon: 'hidden m-0'
     });
 
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
+    
     screen.setListeners([
         {
             element: '#execute_sign_in',

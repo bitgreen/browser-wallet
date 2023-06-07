@@ -18,7 +18,9 @@ export default async function settingsScreen(params) {
     })
     await screen.init()
 
-    await screen.set('.content', 'settings/index')
+    await screen.set('.content', 'settings/index', {
+        version: process.env.PKG_VERSION
+    })
 
     const accounts_store = new AccountStore()
     const current_account = await accounts_store.current()

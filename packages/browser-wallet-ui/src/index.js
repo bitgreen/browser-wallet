@@ -127,6 +127,10 @@ class userInterface {
             await clearHistory()
             await goToScreen('transactionHistoryScreen')
         })
+        document.querySelector("#main_footer #go_stakingHomeScreen").addEventListener("click", async() => {
+            await clearHistory()
+            await goToScreen('stakingHomeScreen')
+        })
 
         const dashboardTooltip = new Tooltip('#main_footer #go_dashboardScreen', {
             html: true,
@@ -165,6 +169,24 @@ class userInterface {
         })
 
         const transactionHistoryTooltip = new Tooltip('#main_footer #go_transactionHistoryScreen', {
+            html: true,
+            offset: [0, -8],
+            placement: 'top',
+            container: 'body',
+            popperConfig: (config) => {
+                const flip = config.modifiers.find(({ name }) => name === 'flip')
+
+                flip.options = {
+                    ...flip.options,
+                    boundary: document.querySelector('#root'),
+                }
+
+                return config
+            },
+            template: '<div class="tooltip tooltip-footer" role="tooltip"><div class="tooltip-arrow d-none"></div><div class="tooltip-inner"></div></div>'
+        })
+
+        const stakeHomeTooltip = new Tooltip('#main_footer #go_stakingHomeScreen', {
             html: true,
             offset: [0, -8],
             placement: 'top',

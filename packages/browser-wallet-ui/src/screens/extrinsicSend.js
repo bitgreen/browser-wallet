@@ -1,6 +1,6 @@
-import Screen, {clearHistory, goToScreen, scrollToBottom} from './index.js'
+import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
-import {AccountStore, checkIfAppIsKnown, WalletStore} from "@bitgreen/browser-wallet-core";
+import { AccountStore, checkIfAppIsKnown, NetworkStore, WalletStore, CacheStore } from "@bitgreen/browser-wallet-core";
 
 import DOMPurify from "dompurify";
 import { showNotification } from "../notifications.js";
@@ -14,6 +14,11 @@ export default async function extrinsicSendScreen(params) {
         return await goToScreen('walletScreen', {}, false, true)
     }
 
+    let win_height = 600
+    if(params?.message_id && params?.tab_id) {
+        win_height = 700
+    }
+
     const screen = new Screen({
         template_name: 'layouts/default',
         login: false,
@@ -21,17 +26,29 @@ export default async function extrinsicSendScreen(params) {
         footer: false,
         tab_id: params?.tab_id,
         message_id: params?.message_id,
-        win_height: 700
+        win_height: win_height
     })
     await screen.init()
 
     const domain = params?.domain
     const pallet = params?.pallet
-    const call = params?.call
+    const call = params?.call?.replaceAll('_', '')
     const call_parameters = params?.call_parameters ? JSON.parse(params.call_parameters) : []
 
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
     const current_account = await accounts_store.current()
+    const docs = await cache_store.asyncGet(`docs_${pallet}:${call}`)
+
+    // show request params
+    let raw_request = {}
+    for(const [key, field] of Object.entries(docs?.fields)) {
+        raw_request = {
+            ...raw_request,
+            [field.name]: call_parameters[key]
+        }
+    }
 
     await screen.set('#heading', 'shared/heading', {
         title: 'Confirm Transaction'
@@ -41,22 +58,28 @@ export default async function extrinsicSendScreen(params) {
         domain,
         pallet,
         call,
-        call_parameters: call_parameters ? JSON.stringify(call_parameters).substring(0, 150) : '[]'
+        docs: docs?.docs[0] || '',
+        raw_request: JSON.stringify(raw_request).length >= 150 ? JSON.stringify(raw_request).substring(0, 150) + '...' : JSON.stringify(raw_request)
     })
 
-    await screen.set('#app_info', 'app_info', {
-        domain,
-        title: params?.title?.substring(0, 60)
-    });
-    if(checkIfAppIsKnown(domain)) {
-        document.querySelector('#app_info').classList.add('known')
+    if(params?.message_id && params?.tab_id) {
+        await screen.set('#app_info', 'app_info', {
+            domain,
+            title: params?.title?.substring(0, 60)
+        });
+        if(checkIfAppIsKnown(domain)) {
+            document.querySelector('#app_info').classList.add('known')
+        }
+    } else {
+        document.querySelector('#app_info').classList.remove('d-flex')
+        document.querySelector('#app_info').classList.add('d-none')
     }
 
     await screen.append('#bordered_content', 'global/loading', {
         title: 'processing transaction',
         desc: 'Hold tight while we get confirmation of this transaction.',
         top: '5px',
-        padding_top: '100px'
+        padding_top: '60px'
     });
 
     document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
@@ -68,6 +91,14 @@ export default async function extrinsicSendScreen(params) {
             }
         })
     })
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 
     screen.setListeners([
         {
@@ -96,15 +127,17 @@ export default async function extrinsicSendScreen(params) {
         {
             element: '#deny_extrinsic',
             listener: async() => {
-                screen.sendMessageToTab({
-                    success: false,
-                    status: 'denied',
-                    error: 'User has denied this request.'
-                })
+                if(params?.message_id && params?.tab_id) {
+                    screen.sendMessageToTab({
+                        success: false,
+                        status: 'denied',
+                        error: 'User has denied this request.'
+                    })
 
-                window.close()
-
-                return await goToScreen('dashboardScreen')
+                    window.close()
+                } else {
+                    await goBackScreen()
+                }
             }
         }
     ])
@@ -129,7 +162,7 @@ export default async function extrinsicSendScreen(params) {
 
             showProcessingDone()
 
-            hideProcessing(2200)
+            hideProcessing(2000)
         } else if(response?.status === 'failed' && response.error) {
             // send message to tab if response is successful
             screen.sendMessageToTab({
@@ -137,7 +170,7 @@ export default async function extrinsicSendScreen(params) {
             })
 
             hideProcessing()
-            await showNotification(response.error, 'error', 3200)
+            await showNotification(response.error, 'error', 5000)
         } else {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')

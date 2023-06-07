@@ -1,29 +1,18 @@
-<div id="app_info" class="d-flex align-items-center">
-    <div class="left align-items-center">
-        <span class="icon icon-known"></span>
-        <div class="message">Known App</div>
-        </div>
-    <div class="right align-items-center">
-        <div class="app-name"><h3>Ecosystem Services Marketplace</h3></div>
-        <p class="app-name">${domain}</p>
-    </div>
-</div>
+<div id="app_info" class="d-flex align-items-center"></div>
 <div class="button-item transaction-item" data-id="1">
     <div class="d-flex align-items-center">
         <span class="status">1</span>
-        <div class="transaction-info d-flex align-items-center">
-            <div class="col align-items-center"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">${pallet}</span></div>
-            <div class="col align-items-center"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">${call}</span></div>
-<!--            <div class="col align-items-center"><span class="d-block w-100 amount">1</span><span class="desc d-block w-100">Project</span></div>-->
-            </div>
+        <div class="transaction-info w-100 d-flex align-items-center justify-content-center pe-5">
+            <div class="align-items-center pe-2"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">${pallet}</span></div>
+            <div class="align-items-center ps-2"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">${call}</span></div>
+        </div>
         <span class="icon icon-right icon-down-arrow"></span>
         </div>
     <div class="transaction-details d-block w-100">
-        <h4>${call}</h4>
-        <p class="text-gray mt-2 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam massa consectetur elementum nullam morbi phasellus.</p>
-<!--        <div class="element d-flex align-items-center"><div class="col-2 pe-3 text-center"><span class="icon icon-cog"></span></div><div class="col-7"><h4>Contract Interaction</h4></div></div>-->
+        <h4 class="text-uppercase text-bold text-small">${pallet}:${call}</h4>
+        <p class="text-gray mt-2 mb-2">${docs}</p>
         <div class="element d-flex align-items-center"><div class="col-2 pe-3 text-center"><span class="icon icon-code"></span></div><div class="col-7"><h4>Raw Request</h4></div></div>
-        <div class="parameters d-flex text-gray text-small"><div class="col-2"></div><div class="col-10">${call_parameters}...</div></div>
+        <div class="parameters d-flex text-gray text-small"><div class="col-2"></div><div class="col-10">${raw_request}</div></div>
         </div>
     </div>
 <div class="footer flex-row-reverse pt-0 pb-0">

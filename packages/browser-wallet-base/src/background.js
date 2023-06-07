@@ -16,7 +16,8 @@ current_browser.runtime.onConnect.addListener((port) => {
     console.info(`Connected to ${port.name}`);
 
     if(port.name === 'PORT_EXTENSION') {
-        polkadotApi(true).then() // reload on every wallet opening
+        // reload on every wallet opening
+        polkadotApi(true).then()
 
         openCount += 1;
 

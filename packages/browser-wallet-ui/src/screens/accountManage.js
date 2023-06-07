@@ -3,6 +3,7 @@ import { AccountStore } from "@bitgreen/browser-wallet-core";
 
 import * as jdenticon from 'jdenticon'
 import {formatAddress} from "@bitgreen/browser-wallet-utils";
+import anime from "animejs";
 
 export default async function accountManageScreen() {
     const screen = new Screen({
@@ -52,4 +53,12 @@ export default async function accountManageScreen() {
             }
         }
     ])
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 }

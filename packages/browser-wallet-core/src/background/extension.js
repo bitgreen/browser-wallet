@@ -23,6 +23,7 @@ import {addressValid, balanceToHuman, humanToBalance} from "@bitgreen/browser-wa
 
 import {bbbTokenPrice, passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
+import BigNumber from "bignumber.js";
 
 class Extension {
     #password
@@ -56,10 +57,14 @@ class Extension {
                 return await this.saveNetwork(data?.params)
             case 'change_network':
                 return await this.changeNetwork(data?.params)
+            case 'get_last_block':
+                return await this.getLastBlock()
             case 'get_balance':
                 return await this.getBalance()
             case 'get_all_balances':
                 return await this.getAllBalances()
+            case 'get_vesting_contract':
+                return await this.getVestingContract()
             case 'get_transactions':
                 return await this.getTransactions()
             case 'get_asset_transactions':
@@ -78,6 +83,10 @@ class Extension {
                 return await this.submitExtrinsic(data?.id, data?.params)
             case 'change_setting':
                 return await this.changeSetting(data?.params)
+            case 'get_collators':
+                return await this.getCollators()
+            case 'get_estimated_fee':
+                return await this.getEstimatedFee(data?.params)
             default:
                 return false
         }
@@ -221,13 +230,28 @@ class Extension {
         await polkadotApi(true) // reload polkadot API
     }
 
+    async getLastBlock() {
+        const polkadot_api = await polkadotApi()
+
+        const block = await polkadot_api.rpc.chain.getBlock()
+
+        return block.toJSON().block
+    }
+
     async getBalance() {
         const polkadot_api = await polkadotApi()
         const account = await this.accounts_store.current()
 
         const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
 
-        return balance.free.toString()
+        return {
+            free: new BigNumber(balance.free),
+            reserved: new BigNumber(balance.reserved),
+            miscFrozen: new BigNumber(balance.miscFrozen),
+            feeFrozen: new BigNumber(balance.feeFrozen),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
+        }
     }
 
     async getAllBalances() {
@@ -251,8 +275,8 @@ class Extension {
             tokens: [],
             assets: [],
 
-            total: 0,
-            tokens_total: 0
+            total: new BigNumber(0),
+            tokens_total: new BigNumber(0)
         }
 
         for(const asset of result.assets) {
@@ -261,21 +285,26 @@ class Extension {
             const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
             balances.assets.push({
                 asset_name: asset,
-                balance: data.balance.toString(),
+                balance: parseFloat(data.balance),
                 price: price
             })
 
-            balances.total += parseFloat(data.balance)
+            balances.total = balances.total.plus(new BigNumber(data.balance))
         }
 
         // Add BBB on the list
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
         balances.tokens.push({
             token_name: 'BBB',
-            balance: balance.free.toString(),
+            free: new BigNumber(balance.free),
+            reserved: new BigNumber(balance.reserved),
+            miscFrozen: new BigNumber(balance.miscFrozen),
+            feeFrozen: new BigNumber(balance.feeFrozen),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
             price: bbbTokenPrice
         })
-        balances.total += parseFloat(balanceToHuman(balance.free.toString()))
+        balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
 
         for(const token of result.tokens) {
             let price = 0
@@ -283,19 +312,35 @@ class Extension {
                 price = 0.9898
             }
 
-            const { free } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+            const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
             balances.tokens.push({
                 token_name: token,
-                balance: free.toString(),
+                free: new BigNumber(free),
+                reserved: new BigNumber(reserved),
+                frozen: new BigNumber(frozen),
+                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)),
                 price: price
             })
 
-            balances.total += parseFloat(balanceToHuman(free.toString()))
-            balances.tokens_total += parseFloat(balanceToHuman(free.toString()))
+            balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+            balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
         }
 
-
         return balances
+    }
+
+    async getVestingContract() {
+        const polkadot_api = await polkadotApi()
+        const current_account = await this.accounts_store.current()
+
+        let contract = await polkadot_api.query.vestingContract.vestingContracts(current_account.address)
+        contract = contract.toJSON()
+
+        if(contract && contract.amount) {
+            return contract
+        }
+
+        return false
     }
 
     async getBalanceByAddress(account_address) {
@@ -782,6 +827,23 @@ class Extension {
         for(const [key, value] of Object.entries(params)) {
             await this.settings_store.asyncSet(key, value)
         }
+    }
+
+    async getCollators() {
+        const polkadot_api = await polkadotApi()
+
+        const data = await polkadot_api.query.parachainStaking.candidates()
+
+        return data.toJSON()
+    }
+
+    async getEstimatedFee(params) {
+        const polkadot_api = await polkadotApi()
+
+        let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
+        info = info.toJSON()
+
+        return info.partialFee
     }
 }
 

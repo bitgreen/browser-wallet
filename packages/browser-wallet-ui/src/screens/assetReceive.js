@@ -2,6 +2,7 @@ import Screen, { copyText, goToScreen } from './index.js'
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 import QRCode from 'qrcode'
+import anime from "animejs";
 
 export default async function assetReceiveScreen() {
     const screen = new Screen({
@@ -44,4 +45,12 @@ export default async function assetReceiveScreen() {
             }
         }
     ])
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
 }

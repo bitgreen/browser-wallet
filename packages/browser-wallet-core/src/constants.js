@@ -9,8 +9,6 @@ export const idleTime = 60000*2 // 2 minutes
 
 export const bbbTokenPrice = 0.35 // price of bbb token
 
-export const bbbTxFee = 0.00000027 // fee for sending bbb token
-
 // list of all known apps
 export const knownApps = [
     {
@@ -20,5 +18,9 @@ export const knownApps = [
     {
         title: 'Habbit - Bitgreen',
         domain: 'https://habbit.bitgreen.org'
+    },
+    {
+        title: 'Carbon Marketplace - Bitgreen',
+        domain: 'https://carbon.bitgreen.org'
     }
 ]

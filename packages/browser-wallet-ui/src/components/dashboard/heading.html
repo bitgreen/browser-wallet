@@ -1,7 +1,7 @@
-<div id="portfolio" class="d-flex align-items-center">
+<div id="portfolio" class="d-flex">
     <div id="chart" class="col-5"></div>
-    <div class="col-7 info pe-2">
-        <h1 class="text-white">Portfolio</h1>
+    <div class="col-7 info pe-2 pt-2">
+        <h1 class="text-white m-0">Portfolio</h1>
         <div id="bbb_token_info" class="d-flex align-items-center mt-2 mb-2">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="32" height="32" rx="16" fill="#C0FF00"/>
@@ -9,7 +9,8 @@
             </svg>
             <span class="amounts"><span class="dollar">$</span>${token_price}<span class="decimals">.${token_price_decimals}</span></span>
         </div>
-        <p class="d-flex"><span class="icon icon-circle" style="color: #C0FF00"></span><span class="w-100">BBB Tokens</span><span class="w-100 text-right">$${bbb_usd_amount}</span></p>
-        <p class="d-flex"><span class="icon icon-circle" style="color: #D5D6DA"></span><span class="w-100">Other</span><span class="w-100 text-right">$${other_usd_amount}</span></p>
+        <p class="d-flex"><span class="icon icon-circle" style="color: #C0FF00"></span><span class="w-100">BBB Tokens</span><span class="bbb_usd_amount w-100 text-right"></span></p>
+        <p id="vesting_info" class="d-none"><span class="icon icon-circle" style="color: transparent"></span><span class="w-100"><span class="icon icon-lock me-1"></span>Vesting</span><span class="vesting_usd_amount w-100 text-right"></span></p>
+        <p class="d-flex"><span class="icon icon-circle" style="color: #D5D6DA"></span><span class="w-100">Other</span><span class="other_usd_amount w-100 text-right"></span></p>
     </div>
 </div>

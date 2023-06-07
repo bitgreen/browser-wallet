@@ -1,6 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { NetworkStore } from "./stores/index.js";
 import { isIOs } from "@bitgreen/browser-wallet-utils";
+import { getChainMetaData, getInflationAmount } from "./cache.js";
 
 let ws_provider_url = null;
 let ws_provider = null;
@@ -280,6 +281,10 @@ const initPolkadotApi = async() => {
                     }
             });
             await api_promise.isReady
+
+            // cache data we need
+            getChainMetaData(api_promise).then()
+            getInflationAmount(api_promise).then()
 
             resolve(api_promise)
         })

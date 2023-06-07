@@ -7,6 +7,7 @@ body.ios {
     left: 0;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
+    background-color: #224851 !important;
 }
 body.ios * {
     -webkit-overflow-scrolling: touch;
@@ -94,3 +95,11 @@ body.ios #root #get_started {
 body.ios #main_footer.disabled {
     pointer-events: none !important;
 }
+body.ios #accounts_modal {
+    width: 100%;
+    left: 0;
+    padding: 8px;
+}
+body.ios #accounts_modal .modal-header {
+     border: 1px solid transparent;
+ }
