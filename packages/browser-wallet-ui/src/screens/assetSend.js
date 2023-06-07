@@ -13,6 +13,7 @@ import { showNotification } from "../notifications.js";
 import DOMPurify from "dompurify";
 import {Tooltip} from 'bootstrap'
 import anime from "animejs";
+import { renderTemplate } from "../screens.js";
 
 export default async function assetSendScreen(params) {
     const wallet_store = new WalletStore()
@@ -87,6 +88,25 @@ export default async function assetSendScreen(params) {
 
     const feeTooltip = new Tooltip('#root #go_review_transaction')
 
+    sendMessage('get_all_balances').then(async(balances) => {
+        const defaultIcon = await renderTemplate('shared/icons/default')
+
+        const bbbIcon = await renderTemplate('shared/icons/bbb')
+        const usdtIcon = await renderTemplate('shared/icons/usdt')
+        const usdcIcon = await renderTemplate('shared/icons/usdc')
+        const dotIcon = await renderTemplate('shared/icons/dot')
+
+        for (const token of balances.tokens) {
+            let icon = defaultIcon
+            if(token.token_name === 'BBB') icon = bbbIcon
+            if(token.token_name === 'USDT') icon = usdtIcon
+            if(token.token_name === 'USDC') icon = usdcIcon
+            if(token.token_name === 'DOT') icon = dotIcon
+
+            const available_balance = balanceToHuman(token.free)
+        }
+    })
+
     screen.setListeners([
         {
             element: '#root #from_account',
@@ -99,6 +119,18 @@ export default async function assetSendScreen(params) {
                 } else {
                     accounts_modal_el.classList.add('fade')
                     accounts_modal_el.classList.add('show')
+                }
+            }
+        },
+        {
+            element: '#root #asset_info',
+            listener: () => {
+                let dropdown_el = document.querySelector("#asset_info");
+
+                if(dropdown_el.classList.contains('active')) {
+                    dropdown_el.classList.remove('active')
+                } else {
+                    dropdown_el.classList.add('active')
                 }
             }
         },
