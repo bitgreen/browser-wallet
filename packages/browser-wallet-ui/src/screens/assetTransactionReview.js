@@ -2,7 +2,13 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
 import {AccountStore, bbbTokenPrice} from "@bitgreen/browser-wallet-core";
-import { addressValid, balanceToHuman, formatAmount, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
+import {
+    addressValid,
+    balanceToHuman,
+    formatAmount,
+    getAmountDecimal,
+    humanToBalance
+} from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 export default async function assetTransactionReviewScreen(params) {
@@ -32,7 +38,7 @@ export default async function assetTransactionReviewScreen(params) {
         call: 'transfer',
         call_parameters: [
             params?.recipient,
-            params?.amount,
+            humanToBalance(params?.amount)
         ],
         account_address: account.address
     })
