@@ -83,12 +83,14 @@ export default async function transactionHistoryScreen() {
         if(!transaction.value) continue
 
         let asset_name = 'BBB' // Default
+        let asset_type = 'TOKENS' // Default
         let human_balance = balanceToHuman(transaction.value.amount)
         if(transaction.type === 'token') asset_name = transaction.value.tokenId
 
         if(transaction.type === 'asset') {
             asset_name = 'CO2'
             human_balance = transaction.value.amount
+            asset_type = 'CREDITS'
         }
 
         const asset_info = getAmountDecimal(human_balance, 2)
@@ -102,6 +104,7 @@ export default async function transactionHistoryScreen() {
             created_at_month: created_at.toLocaleString('default', { month: 'short' }),
             asset_amount: (sent ? '-' : '+') + asset_info.amount,
             asset_decimals: asset_info.decimals,
+            asset_type: asset_type,
             sent: sent ? '' : 'd-none hidden',
             received: !sent ? '' : 'd-none hidden',
         })
