@@ -1929,6 +1929,11 @@ label.label {
 }
 .custom-dropdown .asset-icon {
     width: 54px;
+    margin-right: 16px;
+    text-align: center;
+}
+.custom-dropdown .asset-icon svg {
+    width: 100%;
 }
 .custom-dropdown .name {
     color: #224851;
@@ -1950,22 +1955,52 @@ label.label {
     top: calc(100% - 1px);
     left: -1px;
     width: calc(100% + 2px);
-    height: 0;
-    overflow: hidden;
-    transition: all ease-in-out 0.3s;
+    transition: height linear 0.3s, opacity linear 0.1s 0.1s, visibility linear 0.3s;
     background-color: #FFFFFF;
-    opacity: 0;
-    max-height: 10px;
+    height: 0;
     z-index: 99;
-    border-bottom: 1px solid #D5D6DA;
-    border-left: 1px solid #D5D6DA;
-    border-right: 1px solid #D5D6DA;
+    border: 1px solid #D5D6DA;
     border-radius: 0 0 4px 4px;
+    padding: 6px 8px;
+    cursor: auto;
+    visibility: hidden;
+    opacity: 0;
 }
 .custom-dropdown.active .dropdown {
     max-height: 190px;
     height: 190px;
+    visibility: visible;
     opacity: 1;
+    /*transition: height ease-in-out 0.3s, opacity ease-in-out 0.3s 0.2s;*/
+}
+.custom-dropdown .dropdown .content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 8px;
+}
+.custom-dropdown .dropdown .custom-dropdown-item {
+    display: flex;
+    pointer-events: auto;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: all ease-in-out 0.1s;
+}
+.custom-dropdown .dropdown .custom-dropdown-item:hover,
+.custom-dropdown .dropdown .custom-dropdown-item:active,
+.custom-dropdown .dropdown .custom-dropdown-item:focus {
+    background-color: #F8F8F9;
+}
+.custom-dropdown .dropdown .custom-dropdown-item * {
+    pointer-events: none;
+}
+.custom-dropdown.disabled {
+    cursor: default !important;
+}
+.custom-dropdown.disabled .icon.icon-down-arrow {
+    opacity: 0;
 }
 #choose_quantity {
     margin-bottom: 8px;
@@ -2540,6 +2575,16 @@ label.label {
     left: 0;
     width: 100%;
     padding: 0 22px;
+}
+#asset_info .selected .asset-icon svg {
+    transition: all ease-out 0.3s;
+    transform: rotateY(-90deg);
+}
+#asset_info .selected .asset-icon.animate-in svg {
+    transform: rotateY(0deg);
+}
+#asset_info .selected .asset-icon.animate-out svg {
+    transform: rotateY(90deg);
 }
 
 /* for full screen */
