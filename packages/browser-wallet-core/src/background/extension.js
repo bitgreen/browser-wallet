@@ -297,7 +297,7 @@ class Extension {
                 price: price
             })
 
-            balances.total = balances.total.plus(new BigNumber(data.balance))
+            balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
         }
 
         // Add BBB on the list
