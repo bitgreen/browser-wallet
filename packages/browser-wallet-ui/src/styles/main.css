@@ -1181,8 +1181,8 @@ label.label {
     min-height: 65px;
 }
 .button-item.transaction-item .transaction-info .icon,
-.button-item.transaction-item .transaction-info .amount,
-.button-item.transaction-item .transaction-info .amount .digits {
+.button-item.transaction-item .amount,
+.button-item.transaction-item .amount .digits {
     text-align: center;
     min-width: 28px;
     height: 28px;
@@ -1190,19 +1190,19 @@ label.label {
     margin-bottom: 2px;
     color: #224851;
 }
-.button-item.transaction-item .transaction-info .amount .digits {
+.button-item.transaction-item .amount .digits {
     min-width: 0;
 }
 .button-item.transaction-item.transaction-item-big {
     height: 72px;
 }
-.button-item.transaction-item.transaction-item-big .transaction-info .amount {
+.button-item.transaction-item.transaction-item-big .amount {
     font-size: 26px;
 }
-.button-item.transaction-item.transaction-item-big .transaction-info .amount .digits {
+.button-item.transaction-item.transaction-item-big .amount .digits {
     font-size: 16px;
 }
-.button-item.transaction-item.transaction-item-big .transaction-info .desc {
+.button-item.transaction-item.transaction-item-big .desc {
     font-size: 12px;
 }
 .button-item.transaction-item.transaction-item-disabled {
@@ -1220,7 +1220,7 @@ label.label {
     font-size: 18px;
     color: #039855;
 }
-.button-item.transaction-item .transaction-info .desc {
+.button-item.transaction-item .desc {
     color: #667085;
     text-transform: uppercase;
     font-weight: 500;
@@ -1240,15 +1240,15 @@ label.label {
 .button-item.transaction-item .transaction-info .icon.icon-error {
     color: #CC2400;
 }
-.button-item.transaction-item .transaction-info .amount {
+.button-item.transaction-item .amount {
     font-size: 20px;
 }
-.button-item.transaction-item .transaction-info .amount .digits {
+.button-item.transaction-item .amount .digits {
     position: relative;
     font-size: 16px;
     top: -2px;
 }
-.button-item.transaction-item .transaction-info .amount .dollar {
+.button-item.transaction-item .amount .dollar {
     position: relative;
     font-size: 16px;
     top: 0;
@@ -1275,6 +1275,12 @@ label.label {
     overflow: hidden;
     cursor: default;
     transition: all 0.3s;
+}
+.button-item.transaction-item.small .transaction-details {
+    height: 80px;
+}
+.button-item.transaction-item.small.active {
+    min-height: 140px;
 }
 .button-item.transaction-item .transaction-details h4 {
     margin: 0;

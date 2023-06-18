@@ -242,7 +242,7 @@ export default async function assetSendScreen(params) {
                 call_parameters: [
                     current_asset.name,
                     addressValid(address) ? address : current_account.address,
-                    amount_el.value
+                    parseInt(amount_el.value)
                 ],
                 account_address: current_account.address
             })

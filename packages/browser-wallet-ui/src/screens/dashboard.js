@@ -21,7 +21,7 @@ export default async function dashboardScreen(params = {
         header: true,
         footer: true,
         freeze_root: true,
-        freeze_root_delay: 800
+        freeze_root_delay: 1200
     })
     await screen.init()
 
@@ -151,6 +151,8 @@ export default async function dashboardScreen(params = {
 
         screen.setParam('#portfolio .bbb_usd_amount', '$' + formatAmount(bbb_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
         screen.setParam('#portfolio .other_usd_amount', '$' + formatAmount(other_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
+
+        console.log(all_balances)
 
         screen.setParam('#bordered_content .all_balance', formatAmount(balanceToHuman(all_balances.total), 2))
         screen.setParam('#bordered_content .bbb_balance', formatAmount(bbb_balance, 2))

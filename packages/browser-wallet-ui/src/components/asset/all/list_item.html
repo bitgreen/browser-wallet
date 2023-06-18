@@ -1,9 +1,24 @@
-<div class="button-item transaction-item d-flex align-items-center">
-    <div class="transaction-info d-flex align-items-center">
+<div class="button-item transaction-item small p-0">
+    <div class="transaction-info d-flex align-items-center ps-2">
         <div class="col-2"><span class="icon text-center">${assetLogo}</span></div>
         <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount">${balance}<span class="d-inline-block digits text-gray">.${decimal}</span></span><span class="desc d-block w-100">CREDITS</span></div>
-        <div class="col align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount">${price}<span class="d-inline-block digits text-gray">${priceDecimal}</span></span><span class="desc d-block w-100">EACH</span></div>
+        <div class="col-2 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount">${price}<span class="d-inline-block digits text-gray">${priceDecimal}</span></span><span class="desc d-block w-100">EACH</span></div>
         <div class="col-4 align-items-center"><span class="d-flex align-items-center justify-content-center w-100 amount">${balanceUsd}<span class="d-inline-block digits text-gray">${balanceUsdDecimal}</span></span><span class="desc d-block w-100">VALUE (USD)</span></div>
+        <span class="icon icon-down-arrow icon-right text-center text-dark"></span>
     </div>
-    <span class="icon icon-small icon-arrow-right-2 text-center"></span>
+    <div class="transaction-details d-flex w-100">
+        <div class="col-6 align-items-center">
+            <span class="d-flex align-items-center justify-content-center w-100 amount">
+                ${free}
+                <span class="d-inline-block digits text-gray">.<span class="bbb-locked-decimals">${freeDecimal}</span></span>
+            </span>
+            <span class="desc d-block w-100 text-center">CREDITS AVAILABLE</span>
+        </div>
+        <div class="col-2">
+
+        </div>
+        <div class="col-4 align-items-center">
+            <button class="w-100 btn btn-send btn-primary btn-sm btn-rounded d-flex align-items-center justify-content-center" data-asset="${assetName}">Send <span class="icon icon-right-up-arrow icon-small text-dark m-0"></span></button>
+        </div>
+    </div>
 </div>
