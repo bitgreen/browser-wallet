@@ -99,7 +99,9 @@ export default async function tokenBBBScreen(params) {
         },
         {
             element: "#bordered_content #bbb_send",
-            listener: () => goToScreen('assetSendScreen')
+            listener: () => goToScreen('assetSendScreen', {
+                asset: 'bbb'
+            })
         },
         {
             element: "#bordered_content #vesting_withdraw",
