@@ -21,7 +21,7 @@ export default async function dashboardScreen(params = {
         header: true,
         footer: true,
         freeze_root: true,
-        freeze_root_delay: 800
+        freeze_root_delay: 1200
     })
     await screen.init()
 

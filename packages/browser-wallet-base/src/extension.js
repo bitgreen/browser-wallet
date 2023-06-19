@@ -5,10 +5,10 @@ const db = new databaseService()
 const ui = new userInterface()
 
 const extension = async() => {
-    // preload
-    polkadotApi().then()
-
     await ui.initUi()
+
+    // preload polkadot api
+    await polkadotApi()
 
     const params = new URLSearchParams(window.location.search)
 

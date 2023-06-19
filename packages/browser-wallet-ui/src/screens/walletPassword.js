@@ -2,6 +2,7 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 
 import DOMPurify from 'dompurify';
 import { sendMessage } from "../messaging.js";
+import { showNotification } from "../notifications.js";
 
 export default async function walletPasswordScreen(params) {
     const screen = new Screen({
@@ -41,12 +42,17 @@ export default async function walletPasswordScreen(params) {
             element: '#set_password',
             listener: async() => {
                 // TODO: set loading screen?
-                await sendMessage('save_wallet', {
+                const result = await sendMessage('save_wallet', {
                     mnemonic: params.mnemonic,
                     password: DOMPurify.sanitize(document.querySelector('#root #password')?.value),
                     name: DOMPurify.sanitize(document.querySelector('#root #wallet_name')?.value)
                 })
-                await goToScreen('walletFinishScreen', params)
+
+                if(result) {
+                    await goToScreen('walletFinishScreen', params)
+                } else {
+                    await showNotification('Something went wrong. Please try again or contact us.', 'error', 2800, 0)
+                }
             }
         }
     ])

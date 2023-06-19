@@ -1,7 +1,6 @@
 import Screen, { goBackScreen, goToScreen, reloadScreen } from "./index.js";
 import {balanceToHuman, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 import {sendMessage} from "../messaging.js";
-import {bbbTokenPrice} from "@bitgreen/browser-wallet-core";
 import {renderTemplate} from "../screens.js";
 import anime from "animejs";
 
@@ -37,6 +36,8 @@ export default async function assetAllScreen(params) {
       const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
       const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
       const price_info = getAmountDecimal(token.price, 2)
+      const free_info = getAmountDecimal(balanceToHuman(token.free), 2)
+      const locked_info = getAmountDecimal(balanceToHuman(token.reserved), 2)
 
       await screen.append("#root #transactions", "token/all/list_item", {
         tokenName: token.token_name,
@@ -48,7 +49,11 @@ export default async function assetAllScreen(params) {
         price: token.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
         priceDecimal: token.price > 0 ? '.' + price_info.decimals : 'N/A',
         balanceUsd: token.price > 0 ? `<span class="dollar">$</span>${balance_usd_info.amount}` : '',
-        balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A'
+        balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A',
+        free: free_info.amount,
+        freeDecimal: free_info.decimals,
+        locked: locked_info.amount,
+        lockedDecimal: locked_info.decimals
       });
     }
 
@@ -57,7 +62,10 @@ export default async function assetAllScreen(params) {
       const balance_usd_info = getAmountDecimal(asset.balance * asset.price, 2)
       const price_info = getAmountDecimal(asset.price, 2)
 
+      const free_info = getAmountDecimal(asset.balance, 2)
+
       await screen.append("#root #transactions", "asset/all/list_item", {
+        assetName: asset.asset_name,
         balance: balance_info.amount,
         decimal: balance_info.decimals,
 
@@ -66,9 +74,31 @@ export default async function assetAllScreen(params) {
         price: asset.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
         priceDecimal: asset.price > 0 ? '.' + price_info.decimals : 'N/A',
         balanceUsd: asset.price > 0 ? `<span class="dollar">$</span>${balance_usd_info.amount}` : '',
-        balanceUsdDecimal: asset.price > 0 ? '.' + balance_usd_info.decimals : 'N/A'
+        balanceUsdDecimal: asset.price > 0 ? '.' + balance_usd_info.decimals : 'N/A',
+        free: free_info.amount,
+        freeDecimal: free_info.decimals
       });
     }
+
+    document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
+      t.querySelector('.btn-send').addEventListener("click", async(e) => {
+        await goToScreen('assetSendScreen', {
+          asset: e.target?.dataset?.token ? e.target.dataset.token : e.target?.dataset?.asset
+        })
+      })
+
+      t.addEventListener("click", function(e) {
+        if(t.classList.contains('active')) {
+          t.classList.remove('active')
+        } else {
+          document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
+            t.classList.remove('active')
+          })
+
+          t.classList.add('active')
+        }
+      })
+    })
 
     anime({
       targets: '#transactions .button-item',

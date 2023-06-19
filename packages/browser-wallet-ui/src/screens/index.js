@@ -42,6 +42,7 @@ import stakingCollatorScreen from "./stakingCollator.js";
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
 let logged_in = false
+let lock_timeout = null
 
 class Screen {
     initialized = false
@@ -73,6 +74,8 @@ class Screen {
     }
 
     async init() {
+        logged_in = await this.fastCheckLogin(true)
+
         this.options.login ? await showLogin(true) : hideLogin()
 
         this.resizeTo(this.options.win_width, this.options.win_height)
@@ -91,6 +94,21 @@ class Screen {
         this.initialized = true
 
         return this.initialized
+    }
+
+    async fastCheckLogin(init = true) {
+        if(init) {
+            clearTimeout(lock_timeout)
+        }
+
+        // refresh status every 10 seconds
+        lock_timeout = setTimeout(async() => {
+            logged_in = await this.fastCheckLogin(false)
+
+            if(this.options.login && !logged_in) await showLogin()
+        }, 10000)
+
+        return await sendMessage('fast_check_login')
     }
 
     resizeTo(width, height) {
@@ -234,11 +252,11 @@ class Screen {
     hideInit() {
         setTimeout(function() {
             document.querySelector("#init_screen").classList.add("fade-out");
-        }, 300);
+        }, 200);
         setTimeout(function() {
             document.querySelector("#init_screen").classList.add("inactive")
             document.querySelector("#init_screen").classList.remove("fade-out")
-        }, 600)
+        }, 400)
     }
 
     async loadTab() {
@@ -268,15 +286,7 @@ class Screen {
     }
 }
 
-const checkLogin = async() => {
-    return await sendMessage('check_login')
-}
-
 const showLogin = async(instant = false, force = false) => {
-    if(!logged_in && !force) {
-        logged_in = await checkLogin()
-    }
-
     if(logged_in && !force) {
         return hideLogin()
     }
@@ -321,20 +331,20 @@ const showLogin = async(instant = false, force = false) => {
             translateY: [-20, 0],
             opacity: [0, 1]
         });
+
+        if(!instant) {
+            anime({
+                targets: '#login_screen',
+                easing: 'linear',
+                duration: 200,
+                opacity: [0, 1]
+            });
+        }
     }
 
     setTimeout(() => {
         if(!isIOs()) document.querySelector("#login_screen #password").focus();
     }, 100)
-
-    if(!instant) {
-        anime({
-            targets: '#login_screen',
-            easing: 'linear',
-            duration: 200,
-            opacity: [0, 1]
-        });
-    }
 }
 
 const doLogin = async(password) => {

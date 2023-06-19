@@ -38,6 +38,8 @@ export default async function tokenAllScreen(params) {
       const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
       const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
       const price_info = getAmountDecimal(token.price, 2)
+      const free_info = getAmountDecimal(balanceToHuman(token.free), 2)
+      const locked_info = getAmountDecimal(balanceToHuman(token.reserved), 2)
 
       await screen.append("#root #transactions", "token/all/list_item", {
         tokenName: token.token_name,
@@ -49,9 +51,33 @@ export default async function tokenAllScreen(params) {
         price: token.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
         priceDecimal: token.price > 0 ? '.' + price_info.decimals : 'N/A',
         balanceUsd: token.price > 0 ? `<span class="dollar">$</span>${balance_usd_info.amount}` : '',
-        balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A'
+        balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A',
+        free: free_info.amount,
+        freeDecimal: free_info.decimals,
+        locked: locked_info.amount,
+        lockedDecimal: locked_info.decimals
       });
     }
+
+    document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
+      t.querySelector('.btn-send').addEventListener("click", async(e) => {
+        await goToScreen('assetSendScreen', {
+          asset: e.target?.dataset?.token
+        })
+      })
+
+      t.addEventListener("click", function(e) {
+        if(t.classList.contains('active')) {
+          t.classList.remove('active')
+        } else {
+          document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
+            t.classList.remove('active')
+          })
+
+          t.classList.add('active')
+        }
+      })
+    })
 
     anime({
       targets: '#transactions .button-item',
