@@ -677,7 +677,7 @@ label.label {
 }
 #loading_content #checkmark {
     position: absolute;
-    top: 148px;
+    top: 108px;
     left: calc(50% - 22px);
     opacity: 0;
 
