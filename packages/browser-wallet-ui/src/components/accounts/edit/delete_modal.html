@@ -3,12 +3,12 @@
         <div class="modal-content">
             <div class="modal-header modal-header-danger"><h3 class="modal-title w-100 text-white text-center">Are you sure?</h3></div>
             <div class="modal-body">
-                <h4 class="text-center">${account_name}</h4>
-                <p class="text-center text-gray text-small mb-4">${account_address}</p>
-                <p class="text-center text-gray text-small">This action cannot be undone. Ensure you have the secret phrase for this wallet backed up securely.</p>
+                <h4 class="text-center">Forget ${account_name}</h4>
+                <p class="text-center text-gray text-very-small mb-4">${account_address}</p>
+                <p class="text-center text-gray text-small">Ensure you have the secret phrase for this wallet backed up securely so you can restore it in future.</p>
                 </div>
             <div class="modal-footer justify-content-center">
-                <button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-rounded btn-danger d-flex align-items-center" data-id="${account_id}"><span class="icon icon-left icon-trash icon-large"></span> Yes, delete</button>
+                <button id="confirm_delete_wallet" type="button" class="btn btn-sm btn-rounded btn-danger d-flex align-items-center" data-id="${account_id}"><span class="icon icon-left icon-invisible icon-large"></span> Yes, forget</button>
                 <button id="hide_modal" type="button" class="btn btn-sm btn-rounded btn-text btn-bordered">Cancel</button>
             </div>
         </div>

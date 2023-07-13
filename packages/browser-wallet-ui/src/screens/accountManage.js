@@ -1,5 +1,5 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 
 import * as jdenticon from 'jdenticon'
 import {formatAddress} from "@bitgreen/browser-wallet-utils";
@@ -17,6 +17,8 @@ export default async function accountManageScreen() {
     await screen.set('#bordered_content', 'accounts/manage/content')
 
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
     const current_account = await accounts_store.current()
     const all_accounts = await accounts_store.asyncAll()
 
@@ -31,7 +33,8 @@ export default async function accountManageScreen() {
             account_name: (account?.name && account?.name.length > 10) ? account?.name.substring(0,10)+'...' : account?.name,
             account_address: formatAddress(account?.address, 16, 8),
             is_main: account_id?.toString() === 'main' ? '' : 'hidden',
-            is_current: account_id?.toString() === current_account?.id?.toString() ? '' : 'hidden'
+            is_current: account_id?.toString() === current_account?.id?.toString() ? '' : 'hidden',
+            is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified'
         })
     }
 

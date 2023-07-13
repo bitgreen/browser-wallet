@@ -5,6 +5,26 @@ class AccountStore extends BaseStore {
         super('account');
     }
 
+    getByAddress(address, update) {
+        if(!address) return update(null)
+
+        this.asyncAll().then(all_accounts => {
+            for(const account of all_accounts) {
+                if(account.value.address.toLowerCase() === address.toString().toLowerCase()) {
+                    update(this.asyncGet(account.key))
+                }
+            }
+
+            update(null)
+        })
+    }
+
+    async asyncGetByAddress(address) {
+        return new Promise((resolve) => {
+            this.getByAddress(address, resolve);
+        });
+    }
+
     async exists() {
         return await this.asyncTotal() > 0
     }

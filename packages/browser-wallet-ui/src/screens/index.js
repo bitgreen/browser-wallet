@@ -1,7 +1,7 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
 import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
 import anime from 'animejs';
@@ -38,6 +38,8 @@ import stakingHomeScreen from "./stakingHome.js";
 import stakingIntroScreen from "./stakingIntro.js";
 import stakingCollatorsScreen from "./stakingCollators.js";
 import stakingCollatorScreen from "./stakingCollator.js";
+import kycStartScreen from "./kycStart.js";
+import kycBasicScreen from "./kycBasic.js";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -438,7 +440,9 @@ const screens = {
     stakingHomeScreen,
     stakingIntroScreen,
     stakingCollatorsScreen,
-    stakingCollatorScreen
+    stakingCollatorScreen,
+    kycStartScreen,
+    kycBasicScreen
 }
 
 let screen_history = []
@@ -559,6 +563,8 @@ const reloadScreen = async() => {
 
 const updateAccounts = async(current_account_id = null) => {
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
 
     if(current_account_id) {
         await accounts_store.asyncSet('current', current_account_id)
@@ -595,9 +601,15 @@ const updateAccounts = async(current_account_id = null) => {
             const is_current = account_id?.toString() === current_account?.id?.toString()
 
             if(is_current) {
-                current_account_el.querySelector('.jdenticon').innerHTML = account_jdenticon
+                current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
+
+                if(account.is_kyc) {
+                    current_account_el.querySelector('.kyc-status').classList.add('verified')
+                } else {
+                    current_account_el.querySelector('.kyc-status').classList.remove('verified')
+                }
 
                 go_copy_el.dataset.address = account?.address;
                 accounts_modal_el.querySelector('#copy_address .btn').dataset.address = account?.address
@@ -617,7 +629,8 @@ const updateAccounts = async(current_account_id = null) => {
                 account_name: (account.name && account.name.length > 10) ? account.name.substring(0,10)+'...' : account.name,
                 account_address: formatAddress(account?.address, 16, 8),
                 is_main: account_id?.toString() === 'main' ? '' : 'hidden',
-                is_current: is_current ? '' : 'hidden'
+                is_current: is_current ? '' : 'hidden',
+                is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified',
             }, true)
         }
 

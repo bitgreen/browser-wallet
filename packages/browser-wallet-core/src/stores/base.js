@@ -10,6 +10,8 @@ class BaseStore {
     }
 
     get(_key, update) {
+        if(!_key) return update(null)
+
         const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
         current_browser.storage.local.get([key], (result) => {
