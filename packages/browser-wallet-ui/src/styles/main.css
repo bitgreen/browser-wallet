@@ -342,6 +342,9 @@ p {
     border-color: #DC6803;
     color: #DC6803;
 }
+.alert-dismissible {
+    padding-right: 8px !important;
+}
 .alert .icon {
     width: 60px;
     color: #ffffff;
@@ -356,6 +359,31 @@ p {
 .alert .icon span {
     width: 100%;
     font-size: 26px;
+}
+.alert .close-alert {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 6px;
+    font-size: 12px;
+
+    transition: all linear 0.2s;
+}
+.alert.alert-danger .close-alert {
+    color: #6c1301;
+}
+.alert.alert-danger .close-alert:hover,
+.alert.alert-danger .close-alert:focus,
+.alert.alert-danger .close-alert:active {
+    color: #991900;
+}
+.alert.alert-warning .close-alert {
+    color: #b05200;
+}
+.alert.alert-warning .close-alert:hover,
+.alert.alert-warning .close-alert:focus,
+.alert.alert-warning .close-alert:active {
+    color: #DC6803;
 }
 label.label {
     font-weight: 500;
