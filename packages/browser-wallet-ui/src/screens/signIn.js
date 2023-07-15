@@ -159,20 +159,25 @@ export default async function signInScreen(params) {
         const loading_el = document.querySelector("#loading_content")
         const checkmark_el = loading_el.querySelector("#checkmark")
         const content_done_el = loading_el.querySelector("#content .done")
+        const content_init_text_el = loading_el.querySelector("#content .init .text")
+        const content_init_desc_el = loading_el.querySelector("#content .init .desc")
         const content_done_text_el = loading_el.querySelector("#content .done .text")
         const content_done_desc_el = loading_el.querySelector("#content .done .desc")
 
-        const dark_element = document.querySelector('#loading_content #dark')
+        const primary_element = document.querySelector('#loading_content #primary')
 
-        dark_element.style.transition = "stroke-dasharray 1.2s ease-out, stroke-dashoffset 1.2s ease-out";
-        dark_element.style.strokeDasharray = "100 0";
-        dark_element.style.strokeDashoffset = "0";
+        primary_element.style.transition = "stroke-dasharray 1.2s ease-out, stroke-dashoffset 1.2s ease-out";
+        primary_element.style.strokeDasharray = "100 0";
+        primary_element.style.strokeDashoffset = "0";
 
         setTimeout(() => {
             content_done_el.classList.add('active')
 
             content_done_text_el.innerHTML = 'Sign in approved'
             content_done_desc_el.innerHTML = 'You can close this window and continue with the application that made the sign in request.'
+
+            content_init_text_el.classList.add('d-none')
+            content_init_desc_el.classList.add('d-none')
         }, 600)
 
         setTimeout(() => {

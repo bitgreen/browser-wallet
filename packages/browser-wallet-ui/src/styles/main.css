@@ -287,6 +287,14 @@ p {
 .btn.btn-rounded {
     border-radius: 4px;
 }
+.btn-white {
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF;
+}
+.btn-white:hover, .btn-white:active {
+    color: #D5D6DA !important;
+    border-color: #D5D6DA !important;
+}
 .rounded-left {
     border-top-left-radius: 4px !important;
     border-bottom-left-radius: 4px !important;
@@ -701,13 +709,16 @@ label.label {
     text-align: center;
     padding-top: 80px;
     background-color: #FFFFFF;
-    transition: all linear 0.2s;
+    transition: all linear 0.4s;
     visibility: hidden;
     opacity: 0;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 
-    z-index: 98;
+    z-index: 100;
+}
+#loading_content.no-border-radius {
+    border-radius: 0 !important;
 }
 #loading_content.active {
     opacity: 1;
@@ -754,10 +765,12 @@ label.label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ffffff;
     transition: all ease-in-out 0.4s;
 
     opacity: 0;
+}
+#loading_content #content .done .desc {
+    margin-bottom: 30px;
 }
 #loading_content #content .done.active {
     opacity: 1;
@@ -773,7 +786,7 @@ label.label {
 }
 #loading_content.circle .text {
     color: #224851;
-    font-size: 20px;
+    font-size: 22px;
     text-transform: capitalize;
 }
 #loading_content .desc {
@@ -785,6 +798,12 @@ label.label {
 #loading_content #loading_circle {
     animation: rotation 3.333s linear infinite;
 }
+#loading_content #loading_circle #primary {
+    stroke: #224851;
+}
+#loading_content #loading_circle #secondary {
+    stroke: #D5D6DA;
+}
 #loading_content #checkmark {
     position: absolute;
     top: 108px;
@@ -793,11 +812,34 @@ label.label {
 
     transition: all ease-in-out 0.4s;
 }
+#loading_content #checkmark path {
+    fill: #224851;
+
+    transition: all ease-in-out 0.4s;
+}
 #loading_content.done #loading_circle {
     animation: none;
 }
 #loading_content #checkmark.show {
     opacity: 1;
+}
+#loading_content.dark {
+    background-color: #224851;
+}
+#loading_content.dark #loading_circle #primary {
+    stroke: #FFFFFF;
+}
+#loading_content.dark #loading_circle #secondary {
+    stroke: transparent;
+}
+#loading_content.dark.circle .text {
+    color: #FFFFFF;
+}
+#loading_content.dark .desc {
+    color: #FFFFFF;
+}
+#loading_content.dark #checkmark path {
+    fill: #FFFFFF;
 }
 
 #root {
@@ -873,6 +915,9 @@ label.label {
 }
 .hidden {
     visibility: hidden;
+    opacity: 0;
+}
+.transparent-element {
     opacity: 0;
 }
 #get_started {
