@@ -599,13 +599,14 @@ const updateAccounts = async(current_account_id = null) => {
             const account_id = a?.key
             const account_jdenticon = jdenticon.toSvg(account.address,56)
             const is_current = account_id?.toString() === current_account?.id?.toString()
+            const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
 
             if(is_current) {
                 current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
 
-                if(account.is_kyc) {
+                if(is_kyced) {
                     current_account_el.querySelector('.kyc-status').classList.add('verified')
                 } else {
                     current_account_el.querySelector('.kyc-status').classList.remove('verified')
@@ -616,6 +617,15 @@ const updateAccounts = async(current_account_id = null) => {
 
                 accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 accounts_modal_el.querySelector('.address').innerHTML = formatAddress(account?.address, 12, 8)
+
+                if(is_kyced) {
+                    accounts_modal_el.querySelector('.kyc-status').classList.add('verified')
+                    accounts_modal_el.querySelector('.kyc-status').classList.remove('unverified')
+                } else {
+                    accounts_modal_el.querySelector('.kyc-status').classList.remove('verified')
+                    accounts_modal_el.querySelector('.kyc-status').classList.add('unverified')
+                }
+
                 if(account_id?.toString() === 'main') {
                     accounts_modal_el.querySelector('.badge-primary').classList.remove('hidden')
                 } else {
