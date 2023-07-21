@@ -10,7 +10,7 @@ import {
 } from '@polkadot/util-crypto'
 import {
     AccountStore,
-    AssetStore,
+    AssetStore, CacheStore,
     NetworkStore,
     SettingsStore,
     TokenStore,
@@ -35,6 +35,12 @@ class Extension {
         this.settings_store = new SettingsStore()
         this.#password = null
         this.password_timer = null
+
+        this.init().then()
+    }
+
+    async init() {
+        this.cache_store = new CacheStore(await this.networks_store.current())
     }
 
     async handle(data, from, port) {
@@ -623,6 +629,8 @@ class Extension {
             "address": keypair.address,
             "name": name
         })
+
+        await this.cache_store.remove('last_fetch_kyc')
 
         return account_id
     }
