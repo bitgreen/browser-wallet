@@ -1,5 +1,5 @@
 import { databaseService, polkadotApi } from '@bitgreen/browser-wallet-core'
-import userInterface from '@bitgreen/browser-wallet-ui'
+import userInterface, { showNotification } from '@bitgreen/browser-wallet-ui'
 
 const db = new databaseService()
 const ui = new userInterface()
@@ -21,7 +21,10 @@ const extension = async() => {
     // Break if there is no wallet created/imported, and return to welcome screen.
     if(!await db.stores.wallets.exists()) {
         if(await db.stores.settings.asyncGet('skip_intro')) {
-            return await ui.goToScreen('walletScreen')
+            if(!params.has('popup')) {
+                await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 2000)
+            }
+            return await ui.goToScreen('walletScreen', {}, true)
         } else {
             return await ui.goToScreen('welcomeScreen')
         }

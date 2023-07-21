@@ -246,8 +246,8 @@ class userInterface {
         }
     }
 
-    goToScreen = async(name, params) => {
-        return goToScreen(name, params)
+    goToScreen = async(name, params = {}, force = false) => {
+        return goToScreen(name, params, false, force)
     }
 
     initCustomActions = async() => {

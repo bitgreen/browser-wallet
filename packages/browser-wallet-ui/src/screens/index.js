@@ -210,6 +210,8 @@ class Screen {
     showFooter() {
         const current_screen = currentScreen()
 
+        if(!logged_in) return false
+
         if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
             anime({
                 targets: '#main_footer',
