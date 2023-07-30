@@ -57,7 +57,8 @@ module.exports = (
             'process.env': {
                 NODE_ENV: JSON.stringify(mode),
                 PKG_NAME: JSON.stringify(pkgJson.name),
-                PKG_VERSION: JSON.stringify(pkgJson.version)
+                PKG_VERSION: JSON.stringify(pkgJson.version),
+                PLATFORM: JSON.stringify(platform)
             }
         }),
         new CopyPlugin({
@@ -80,13 +81,13 @@ module.exports = (
         new MiniCssExtractPlugin()
     ]
 
-  if (useSplitChunk) {
+    if (useSplitChunk) {
       if(platform === 'ios') {
           plugins.push(
               new HtmlWebpackPlugin({
                   filename: "index.html",
                   template: "public/app.html",
-                  chunks: ["app"],
+                  chunks: ["app"]
               })
           );
       } else {
@@ -94,11 +95,12 @@ module.exports = (
               new HtmlWebpackPlugin({
                   filename: "index.html",
                   template: "public/index.html",
-                  chunks: ["extension"],
+                  chunks: ["extension"]
               })
           );
       }
-  }
+    }
+
     if(platform !== 'ios') {
         plugins.push(new ManifestPlugin({
             config: {
@@ -114,7 +116,7 @@ module.exports = (
         // copy necessary files
         plugins.push(new CopyPlugin({
             patterns: [{
-                from: 'src/safari',
+                from: 'src/apple',
                 to: '../',
                 noErrorOnMissing: true
             }]
@@ -128,10 +130,10 @@ module.exports = (
         }))
 
         // change output directory
-        output_dir = path.join(__dirname, `../../build/safari/Shared (Extension)`)
+        output_dir = path.join(__dirname, `../../build/apple/Shared (Extension)`)
     } else if(platform === 'ios') {
         // change output directory
-        output_dir = path.join(__dirname, `../../build/safari/Shared (App)/Resources`)
+        output_dir = path.join(__dirname, `../../build/apple/iOS (App)/public`)
     } else {
         plugins.push(new CopyPlugin({
             patterns: [{
@@ -208,7 +210,7 @@ module.exports = (
     result.optimization = {
       splitChunks: {
         chunks: "all",
-        maxSize: 2000000,
+        maxSize: 6000000,
         cacheGroups: {
           vendors: {
             test: /[\\/]node_modules[\\/]/,
