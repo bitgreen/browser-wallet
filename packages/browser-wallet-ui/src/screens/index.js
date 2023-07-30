@@ -1,6 +1,15 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
+import {
+    formatAddress,
+    getCurrentBrowser,
+    isFirefox,
+    isIOs,
+    isMacOs,
+    isSafari,
+    isWindows,
+    sleep
+} from "@bitgreen/browser-wallet-utils";
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
@@ -39,7 +48,7 @@ import stakingIntroScreen from "./stakingIntro.js";
 import stakingCollatorsScreen from "./stakingCollators.js";
 import stakingCollatorScreen from "./stakingCollator.js";
 
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+const current_browser = getCurrentBrowser()
 
 let logged_in = false
 
@@ -73,7 +82,7 @@ class Screen {
     }
 
     async init() {
-        this.options.login ? await showLogin(true) : hideLogin()
+        this.options.login ? await showLogin(true) : hideLogin(true)
 
         this.resizeTo(this.options.win_width, this.options.win_height)
 
@@ -83,7 +92,7 @@ class Screen {
         this.options.footer ? this.showFooter() : this.hideFooter()
 
         if(this.options.smooth_load) this.resetRoot()
-        if(this.options.auto_load) await this.set() && this.hideInit()
+        if(this.options.auto_load) await this.set() && hideInit()
         if(this.options.tab_id && this.options.message_id) await this.loadTab()
 
         setTimeout(this.unFreezeRoot, this.options.freeze_root_delay)
@@ -231,16 +240,6 @@ class Screen {
         this.footer_el.classList.remove('visible')
     }
 
-    hideInit() {
-        setTimeout(function() {
-            document.querySelector("#init_screen").classList.add("fade-out");
-        }, 300);
-        setTimeout(function() {
-            document.querySelector("#init_screen").classList.add("inactive")
-            document.querySelector("#init_screen").classList.remove("fade-out")
-        }, 600)
-    }
-
     async loadTab() {
         this.options.tab_id = parseInt(this.options.tab_id)
         this.options.message_id = parseFloat(this.options.message_id)
@@ -265,6 +264,32 @@ class Screen {
         } catch(e) {
             return false
         }
+    }
+}
+
+const showInit = (locked = false) => {
+    document.querySelector("#init_screen").classList.remove("inactive")
+    document.querySelector("#init_screen").classList.add("fade-in")
+
+    if(locked) {
+        document.querySelector("#init_screen").classList.add("locked")
+    }
+
+    document.querySelector("#init_screen").classList.add("loaded")
+}
+
+const hideInit = (unlocked = false) => {
+    const isLoaded = document.querySelector("#init_screen").classList.contains("loaded")
+
+    if(unlocked || !document.querySelector("#init_screen").classList.contains("locked")) {
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.remove("fade-in")
+            document.querySelector("#init_screen").classList.add("fade-out");
+        }, unlocked & isLoaded ? 0 : 300);
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.add("inactive")
+            document.querySelector("#init_screen").classList.remove("fade-out")
+        }, unlocked & isLoaded ? 300 : 600)
     }
 }
 
@@ -364,10 +389,10 @@ const hideLogin = (instant = false) => {
     }
 }
 
-const enableFooter = async() => {
+const enableFooter = () => {
     const footer_el = document.querySelector('#main_footer')
 
-    if(footer_el.classList.contains('disabled')) {
+    if(footer_el.classList.contains('disabled') && footer_el.classList.contains('visible')) {
         anime({
             targets: '#main_footer',
             duration: 300,
@@ -381,7 +406,7 @@ const enableFooter = async() => {
     footer_el.classList.remove('disabled')
 }
 
-const disableFooter = async() => {
+const disableFooter = () => {
     const footer_el = document.querySelector('#main_footer')
 
     if(!footer_el.classList.contains('disabled')) {
@@ -661,5 +686,7 @@ export {
     copyText,
     enableFooter,
     disableFooter,
-    scrollToBottom
+    scrollToBottom,
+    showInit,
+    hideInit
 }

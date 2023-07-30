@@ -11,7 +11,9 @@ import {
     reloadScreen,
     scrollToBottom,
     disableFooter,
-    enableFooter
+    enableFooter,
+    showInit,
+    hideInit
 } from './screens/index.js'
 import { sendMessage } from "./messaging.js";
 import { hideNotification, showNotification } from "./notifications.js";
@@ -29,7 +31,7 @@ import './styles/main.css'
 import './styles/ios.css'
 import './styles/icomoon.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import {formatAddress, isIOs} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isIOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
 
 class userInterface {
     constructor() {
@@ -80,14 +82,7 @@ class userInterface {
             await this.copyCurrentAddress(e.target.dataset.address)
         });
         document.querySelector("#accounts_modal #lock_wallet").addEventListener("click", async(e) => {
-            accounts_modal_el.classList.remove('fade')
-            accounts_modal_el.classList.remove('show')
-
-            await showLogin(false, true)
-            await sendMessage('lock_wallet')
-            setTimeout(async() => {
-                return await goToScreen('dashboardScreen')
-            }, 1200) // redirect to dashboard
+            return await this.lockWallet()
         })
         document.querySelector("#accounts_modal #manage_accounts").addEventListener("click", async() => {
             accounts_modal_el.classList.remove('fade')
@@ -95,6 +90,19 @@ class userInterface {
 
             return await goToScreen('accountManageScreen')
         })
+    }
+
+    lockWallet = async() => {
+        let accounts_modal_el = document.querySelector("#accounts_modal");
+
+        accounts_modal_el.classList.remove('fade')
+        accounts_modal_el.classList.remove('show')
+
+        await showLogin(false, true)
+        await sendMessage('lock_wallet')
+        setTimeout(async() => {
+            return await goToScreen('dashboardScreen')
+        }, 1200) // redirect to dashboard
     }
 
     copyCurrentAddress = async(address) =>  {
@@ -117,20 +125,6 @@ class userInterface {
 
     initFooter = async() => {
         await updateElement('#main_footer', 'shared/footer', {}, false)
-
-        document.querySelector("#main_footer #go_dashboardScreen").addEventListener("click", () => goToScreen('dashboardScreen'))
-        document.querySelector("#main_footer #go_assetSendScreen").addEventListener("click", async() => {
-            await clearHistory()
-            await goToScreen('assetSendScreen')
-        })
-        document.querySelector("#main_footer #go_transactionHistoryScreen").addEventListener("click", async() => {
-            await clearHistory()
-            await goToScreen('transactionHistoryScreen')
-        })
-        document.querySelector("#main_footer #go_stakingHomeScreen").addEventListener("click", async() => {
-            await clearHistory()
-            await goToScreen('stakingHomeScreen')
-        })
 
         const dashboardTooltip = new Tooltip('#main_footer #go_dashboardScreen', {
             html: true,
@@ -203,10 +197,44 @@ class userInterface {
             },
             template: '<div class="tooltip tooltip-footer" role="tooltip"><div class="tooltip-arrow d-none"></div><div class="tooltip-inner"></div></div>'
         })
+
+        document.querySelector("#main_footer #go_dashboardScreen").addEventListener("click", async() => {
+            setTimeout(() => {
+                dashboardTooltip.hide()
+            }, 600)
+
+            await goToScreen('dashboardScreen')
+        })
+        document.querySelector("#main_footer #go_assetSendScreen").addEventListener("click", async() => {
+            setTimeout(() => {
+                assetSendTooltip.hide()
+            }, 800)
+
+            await clearHistory()
+            await goToScreen('assetSendScreen')
+        })
+        document.querySelector("#main_footer #go_transactionHistoryScreen").addEventListener("click", async() => {
+            setTimeout(() => {
+                transactionHistoryTooltip.hide()
+            }, 800)
+
+            await clearHistory()
+            await goToScreen('transactionHistoryScreen')
+        })
+        document.querySelector("#main_footer #go_stakingHomeScreen").addEventListener("click", async() => {
+            setTimeout(() => {
+                stakeHomeTooltip.hide()
+            }, 800)
+
+            await clearHistory()
+            await goToScreen('stakingHomeScreen')
+        })
     }
 
     initLogin = async() => {
-        await updateElement('#login_screen', 'login', {}, false)
+        await updateElement('#login_screen', 'login', {
+            wallet_title: isStandaloneApp() ? 'WALLET APP' : 'BROWSER WALLET'
+        }, false)
 
         document.querySelector("#login_screen #do_login").addEventListener("click", () => this.doLoginEvent())
         document.querySelector("#login_screen #password").addEventListener("keypress", async(e) => {
@@ -214,18 +242,6 @@ class userInterface {
                 return await this.doLoginEvent();
             }
             await scrollToBottom()
-        })
-
-        document.querySelector("#login_screen #password").addEventListener("focus", async() => {
-            document.querySelector("#login_screen").classList.add('focused')
-
-            await scrollToBottom()
-            await scrollToBottom(200)
-            await scrollToBottom(1600)
-        })
-
-        document.querySelector("#login_screen #password").addEventListener("blur", async() => {
-            document.querySelector("#login_screen").classList.remove('focused')
         })
     }
 
@@ -240,7 +256,7 @@ class userInterface {
             await hideLogin()
             if(current_screen.name === 'dashboardScreen') await reloadScreen()
         } else {
-            await showNotification('Password is wrong!', 'error', 1800, 0)
+            await showNotification('Password is wrong!', 'error', 1800, isStandaloneApp() ? 60 : 0)
         }
     }
 
@@ -249,7 +265,7 @@ class userInterface {
     }
 
     initCustomActions = async() => {
-        if(isIOs()) {
+        if(isIOs() || isStandaloneApp()) {
             const url_params = new URLSearchParams(window.location.search)
             if(url_params.has('popup')) {
                 document.querySelector("#login_screen").classList.add('mini')
@@ -258,7 +274,7 @@ class userInterface {
             }
 
             this.disableDoubleClickZoom()
-            this.limitScroll()
+            // this.limitScroll()
             await this.handleFooterVisibility()
         }
     }
@@ -321,6 +337,24 @@ class userInterface {
                 ticking = true;
             }
         })
+    }
+
+    enableFooter = () => {
+        this.db.stores.wallets.exists().then(r => {
+            if(r) enableFooter()
+        })
+    }
+
+    disableFooter = () => {
+        return disableFooter()
+    }
+
+    showInit = (locked = false) => {
+        return showInit(locked)
+    }
+
+    hideInit = (unlocked = false) => {
+        return hideInit(unlocked)
     }
 }
 

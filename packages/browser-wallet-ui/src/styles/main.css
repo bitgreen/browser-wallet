@@ -269,8 +269,8 @@ p {
 }
 .btn.disabled {
     background-color: #D5D6DA !important;
+    opacity: 1;
     pointer-events: none;
-    opacity: .65;
     border-color: transparent !important;
     color: #181818 !important;
 }
@@ -530,7 +530,7 @@ label.label {
     background-position: center;
     opacity: 1;
 
-    z-index: 9999;
+    z-index: 9998;
 }
 #login_screen.fade-out {
     opacity: 0;
@@ -541,7 +541,7 @@ label.label {
     z-index: -1;
 }
 #init_screen {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -552,15 +552,19 @@ label.label {
     background-position: center;
     opacity: 1;
 
-    z-index: 9999;
+    z-index: 99999;
 }
 #init_screen.fade-out {
     opacity: 0;
     transition: all ease-in 0.3s;
 }
 #init_screen.inactive {
-    display: none !important;
-    z-index: -1;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+#init_screen.fade-in {
+    opacity: 1 !important;
+    transition: all ease-in 0.3s;
 }
 #init_screen .init-logo {
     position: absolute;
@@ -720,15 +724,16 @@ label.label {
 }
 
 .bitgreen-svg {
-    position: absolute;
+    position: fixed;
     top: 180px;
     left: 0;
     right: 0;
     margin: auto;
+    z-index: 99;
 }
 
 .separator {
-    position: absolute;
+    position: fixed;
     top: 250px;
     left: 0;
     right: 0;
@@ -736,6 +741,7 @@ label.label {
     width: 50px;
     height: 2px;
     background: #ffffff;
+    z-index: 99;
 }
 .separator-line {
     margin: 0 auto 8px;
@@ -745,7 +751,7 @@ label.label {
 }
 
 .browser-wallet {
-    position: absolute;
+    position: fixed;
     top: 260px;
     left: 0;
     right: 0;
@@ -757,6 +763,7 @@ label.label {
     letter-spacing: 0;
     text-align: center;
     user-select: none !important;
+    z-index: 99;
 }
 .animated {
     transition: all linear 0.2s;
@@ -766,7 +773,7 @@ label.label {
     opacity: 0;
 }
 #get_started {
-    position: absolute;
+    position: fixed;
     top: 380px;
     left: 0;
     right: 0;
@@ -1628,6 +1635,9 @@ label.label {
 }
 #main_footer .item.active rect {
     stroke: #C0FF00;
+}
+#main_footer .item * {
+    pointer-events: none;
 }
 .tooltip.tooltip-footer.show {
     opacity: 1 !important;

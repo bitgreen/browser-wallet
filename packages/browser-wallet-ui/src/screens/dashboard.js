@@ -33,6 +33,7 @@ export default async function dashboardScreen(params = {
     })
 
     await screen.set('#bordered_content', 'dashboard/content')
+    document.querySelector('#bordered_content').classList.add('no-overflow')
 
     await clearHistory()
 

@@ -1,10 +1,6 @@
-import { extractGlobal, xglobal } from '@polkadot/x-global';
-import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import {getCurrentBrowser} from "@bitgreen/browser-wallet-utils";
 
-const chrome = extractGlobal('chrome', xglobal.browser);
-const browser = extractGlobal('browser', xglobal.browser);
-
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+const current_browser = getCurrentBrowser()
 
 let port_content
 function connectContent() {

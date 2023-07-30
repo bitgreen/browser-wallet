@@ -1,14 +1,23 @@
-import {generateMessageId, isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import {
+    customReviver,
+    generateMessageId,
+    getCurrentBrowser,
+    isFirefox,
+    isIOs,
+    isSafari,
+    isStandaloneApp
+} from "@bitgreen/browser-wallet-utils";
+import {appMessageHandler} from "@bitgreen/browser-wallet-core";
 
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
-const port = current_browser.runtime.connect({ name: 'PORT_EXTENSION' });
+const current_browser = getCurrentBrowser()
+const port = current_browser?.runtime?.connect({ name: 'PORT_EXTENSION' });
 const handlers = {};
 let kill_popup = true
 
 const url_params = new URLSearchParams(window.location.search)
 
 // Set up the listener for messages, any incoming resolves the promise.
-port.onMessage.addListener((data) => {
+port?.onMessage?.addListener((data) => {
     const handler = handlers[data.id];
 
     const urlParams = new URLSearchParams(window.location.search)
@@ -40,13 +49,47 @@ port.onMessage.addListener((data) => {
 });
 
 // Listen for messages from background
-current_browser.runtime.onMessage.addListener((data) => {
+current_browser?.runtime?.onMessage?.addListener((data) => {
     if(data.command === 'kill_popup' && url_params.get('kill_popup') === 'true') {
         window.close()
 
         return;
     }
 })
+
+// Handle messages from background on standalone app
+if(isStandaloneApp()) {
+    window.addEventListener('message', async(event) => {
+        const data = event.data;
+
+        const handler = handlers[data.id];
+
+        if(data.source !== 'bg') return false
+
+        if(!handler) {
+            console.error(`Unknown response: ${JSON.stringify(data)}`);
+
+            return;
+        }
+
+        if(!handler.subscriber) {
+            delete handlers[data.id];
+        }
+
+        if(data.error) {
+            handler.reject(new Error(data.error));
+        } else {
+            let response = data.response
+            try {
+                response = JSON.parse(data.response, customReviver)
+            } catch {
+
+            }
+
+            handler.resolve(response);
+        }
+    });
+}
 
 // port.onDisconnect.addListener((obj) => {
 //     console.log('disconnected port');
@@ -61,13 +104,22 @@ const sendMessage = (command, params = {}, message_id = null) => {
         handlers[message_id] = { reject, resolve };
 
         try {
-            if(port.name) {
-                port.postMessage({
-                    id: message_id,
-                    type: "BITGREEN-BROWSER-WALLET",
-                    command: command,
-                    params: params
+            const message = {
+                id: message_id,
+                type: "BITGREEN-BROWSER-WALLET",
+                command: command,
+                params: params
+            }
+
+            if(isStandaloneApp()) {
+                window.postMessage({
+                    source: 'ui',
+                    ...message
                 });
+            } else {
+                if(port.name) {
+                    port.postMessage(message);
+                }
             }
         } catch(e) {
             resolve({})

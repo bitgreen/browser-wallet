@@ -17,42 +17,6 @@ body.ios #login_screen {
     background-image: none;
     background-color: #224851;
 }
-body.ios #login_screen .bitgreen-svg {
-    position: absolute;
-    top: auto;
-    bottom: calc(50% + 50px);
-
-    transition: all linear 0.3s;
-}
-body.ios #login_screen .separator {
-    position: absolute;
-    top: auto;
-    bottom: calc(50% + 35px);
-
-    transition: all linear 0.3s;
-}
-body.ios #login_screen .browser-wallet {
-    position: absolute;
-    top: auto;
-    bottom: calc(50%);
-
-    transition: all linear 0.3s;
-}
-body.ios #login_screen.focused .bitgreen-svg {
-    position: absolute;
-    top: auto;
-    bottom: calc(30% + 50px);
-}
-body.ios #login_screen.focused .separator {
-    position: absolute;
-    top: auto;
-    bottom: calc(30% + 35px);
-}
-body.ios #login_screen.focused .browser-wallet {
-    position: absolute;
-    top: auto;
-    bottom: calc(30%);
-}
 body.ios #login_screen.mini .footer {
     bottom: 16px;
     left: 16px;
@@ -66,32 +30,33 @@ body.ios #init_screen {
 body.ios #full_page,
 body.ios #heading,
 body.ios #bordered_content {
-    position: fixed;
+    position: absolute;
+    width: 100vw;
 }
 body.ios #root .full-only {
     background-image: none;
     background-color: #224851;
 }
-body.ios #root .bitgreen-svg {
-    position: fixed;
-    top: auto;
-    bottom: 70%;
-}
-body.ios #root .separator {
-    position: fixed;
-    top: auto;
-    bottom: calc(70% - 20px);
-}
-body.ios #root .browser-wallet {
-    position: fixed;
-    top: auto;
-    bottom: calc(70% - 60px);
-}
-body.ios #root #get_started {
-    position: fixed;
-    top: auto;
-    bottom: calc(70% - 200px);
- }
+/*body.ios #root .bitgreen-svg {*/
+/*    position: fixed;*/
+/*    top: auto;*/
+/*    bottom: 70%;*/
+/*}*/
+/*body.ios #root .separator {*/
+/*    position: fixed;*/
+/*    top: auto;*/
+/*    bottom: calc(70% - 20px);*/
+/*}*/
+/*body.ios #root .browser-wallet {*/
+/*    position: fixed;*/
+/*    top: auto;*/
+/*    bottom: calc(70% - 60px);*/
+/*}*/
+/*body.ios #root #get_started {*/
+/*    position: fixed;*/
+/*    top: auto;*/
+/*    bottom: calc(70% - 200px);*/
+/* }*/
 body.ios #main_footer.disabled {
     pointer-events: none !important;
 }
@@ -102,4 +67,104 @@ body.ios #accounts_modal {
 }
 body.ios #accounts_modal .modal-header {
      border: 1px solid transparent;
- }
+}
+body.app {
+    position: relative;
+    height: 100vh;
+    min-height: 400px;
+    padding-top: 44px;
+    transition: all ease-out 0.33s;
+}
+body.app #header {
+    top: 44px
+}
+body.app #login_screen {
+    position: absolute !important;
+    width: 100vw;
+    background-color: transparent;
+}
+body.app #login_screen:after {
+    background: linear-gradient(to bottom, #224851, #133948);
+    content: "";
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 98;
+}
+body.app #init_screen {
+    position: fixed;
+    background: linear-gradient(to bottom, #224851, #133948);
+}
+body.app #init_screen .init-logo {
+    position: fixed;
+    bottom: auto;
+    top: 300px;
+}
+body.app #bordered_content {
+    padding: 16px 16px 94px;
+    height: calc(100% - 168px);
+    top: 168px;
+    overflow: scroll;
+}
+body.app.keyboard-opened #bordered_content {
+    padding-bottom: 16px;
+}
+body.app #bordered_content.smaller {
+    height: calc(100% - 300px);
+    top: 300px;
+    padding-top: 40px;
+}
+body.app #bordered_content.medium {
+    height: calc(100% - 200px);
+    top: 200px;
+}
+body.app #bordered_content.no-overflow {
+    overflow: unset;
+}
+body.app #main_footer,
+body.app .footer {
+    position: absolute;
+    bottom: 24px;
+    width: calc(100vw - 32px);
+    left: 16px;
+}
+body.app.keyboard-opened .footer {
+    bottom: 8px !important;
+}
+body.app .footer {
+    pointer-events: none;
+}
+body.app .footer > div {
+    pointer-events: all;
+}
+body.app .footer.double-footer {
+    bottom: 86px;
+}
+body.app #accounts_modal {
+    padding-top: 50px !important;
+}
+body.app #full_page {
+    height: calc(100% - 44px);
+}
+body.app #full_page .content.full-content {
+    height: 100%;
+    padding-top: 80px;
+}
+body.app #staking_intro .step {
+    padding-top: 140px
+}
+body.app #staking_intro .dots {
+    top: auto;
+    bottom: 120px;
+}
+body.app #staking_info {
+    padding: 0 16px;
+    bottom: 100px;
+}
+body.app #full_page .content {
+    height: calc(100% - 60px);
+}
+body.app #root .full-only {
+    background: linear-gradient(to bottom, #224851, #133948);
+}
