@@ -1,19 +1,14 @@
-import { databaseService } from '@bitgreen/browser-wallet-core'
+import { databaseService, appMessageHandler } from '@bitgreen/browser-wallet-core'
 import userInterface from '@bitgreen/browser-wallet-ui'
+
+import { Keyboard } from '@capacitor/keyboard';
+import { App } from '@capacitor/app';
 
 const db = new databaseService()
 const ui = new userInterface()
 
-const extension = async() => {
+async function extension() {
     await ui.initUi()
-
-    const params = new URLSearchParams(window.location.search)
-
-    const command = params.has('command') ? params.get('command') : null
-
-    if(command === 'new_wallet') {
-        return await ui.goToScreen('walletCreateScreen')
-    }
 
     // Break if there is no wallet created/imported, and return to welcome screen.
     if(!await db.stores.wallets.exists()) {
@@ -24,43 +19,52 @@ const extension = async() => {
         }
     }
 
-    if(command === 'sign_in' && params.get('origin')) {
-        return await ui.goToScreen('signInScreen', {
-            message_id: params.get('id'),
-            tab_id: params.get('tab_id'),
-            domain: params.get('origin'),
-            title: params.get('title')
-        })
-    }
-
-    if(command === 'send') {
-        return await ui.goToScreen('assetSendScreen', {
-            message_id: params.get('id'),
-            tab_id: params.get('tab_id'),
-            kill_popup: params.get('kill_popup'),
-            amount: params.get('amount'),
-            recipient: params.get('recipient')
-        })
-    }
-
-    if(command === 'extrinsic') {
-        return await ui.goToScreen('extrinsicSendScreen', {
-            message_id: params.get('id'),
-            tab_id: params.get('tab_id'),
-            kill_popup: params.get('kill_popup'),
-            domain: params.get('domain'),
-            title: params.get('title'),
-            pallet: params.get('pallet'),
-            call: params.get('call'),
-            call_parameters: params.get('call_parameters')
-        })
-    }
-
     return await ui.goToScreen('dashboardScreen', {
         extend_delay: true
     })
 }
 
-document.addEventListener('deviceready', async function () {
+document.addEventListener('deviceready', async() => {
     await extension()
-})
+
+    App.addListener('appStateChange', async({ isActive }) => {
+        if(isActive) {
+            ui.hideInit(true)
+        } else {
+            ui.showInit(true)
+
+            await Keyboard.hide()
+
+            // reset body
+            document.body.style.height = '';
+            document.body.classList.remove('keyboard-opened')
+        }
+    });
+
+    Keyboard.addListener('keyboardWillShow', info => {
+        const bodyHeight = window.innerHeight - info.keyboardHeight
+
+        // update body height and add class
+        document.body.style.height = bodyHeight + 'px';
+        document.body.classList.add('keyboard-opened')
+
+        ui.disableFooter()
+    });
+
+    Keyboard.addListener('keyboardWillHide', info => {
+        // reset body
+        document.body.style.height = '';
+        document.body.classList.remove('keyboard-opened')
+
+        ui.enableFooter()
+    });
+}, false)
+
+// request message
+window.addEventListener('message', async(event) => {
+    const data = event.data;
+
+    if(data.source !== 'ui') return false
+
+    return appMessageHandler(data)
+});
