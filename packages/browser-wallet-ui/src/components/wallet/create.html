@@ -1,5 +1,5 @@
 <h2>Save your secret phrase now</h2>
-<p class="text-gray pb-2">Carefully write down and store these secret words in order. These are your wallet private keys used to recover your wallet. They are the only method for wallet recovery or to move your wallet to a different device.</p>
+<p class="text-gray text-small pb-2">Carefully write down and store these secret words in order. These are your wallet private keys used to recover your wallet. They are the only method for wallet recovery or to move your wallet to a different device.</p>
 <div class="row">
     <div class="col-6 d-flex align-items-center">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,20 +22,25 @@
     </div>
 </div>
 <div class="separator-line mt-2 mb-2"></div>
-<div class="row d-flex align-items-center mb-1">
-    <div class="choose-words col-6 d-flex">
+<div class="d-flex align-items-center mb-1">
+    <div class="choose-words d-flex flex-grow-1">
         <button type="button" class="btn btn-xs btn-left btn-secondary-outline btn-secondary pe-3 ps-3" data-words="12">12 words</button>
         <button type="button" class="btn btn-xs btn-right btn-secondary-outline pe-3 ps-3" data-words="24">24 words</button>
     </div>
-    <div class="col-6 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-text btn-rounded"><span class="icon icon-left icon-copy"></span>Copy secret phrase</button></div>
+    <div class="d-flex flex-grow-1 flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-text btn-rounded"><span class="icon icon-left icon-copy"></span>Copy secret phrase</button></div>
 </div>
 <div id="mnemonics" class="mnemonics d-block mt-2" style="opacity: 0;">
 
 </div>
-<div class="footer flex-row-reverse pt-0 pb-0">
-    <div class="alert alert-warning d-flex align-items-stretch"><div class="icon d-flex align-items-center"><span class="icon-warning"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can irrevocably transfer your funds! Store them securely and do not share with untrusted parties.</p></div>
+<div class="footer flex-row-reverse pt-0 pb-0" style="min-height: 40px;">
+    <div class="alert alert-warning d-flex align-items-stretch alert-dismissible">
+        <div class="icon d-flex align-items-center"><span class="icon-warning"></span></div><p class="w-100 m-0 p-2">Anyone with access to your secret words can irrevocably transfer your funds! Store them securely and do not share with untrusted parties.</p>
+        <button type="button" class="close-alert btn-text" data-bs-dismiss="alert">
+            <span class="icon-close"></span>
+        </button>
+    </div>
     <div class="w-100 d-flex align-items-sketch align-items-center mb-2">
-        <div class="col-8 p-0 pt-1 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key" class="text-small">I have safely stored my secret phrase<br><span class="text-gray fw-light">You must confirm in order to proceed.</span></label></p></div>
+        <div class="col-8 p-0 pt-1 ps-2 select-none"><p class="d-flex align-items-center text-dark fw-bold"><input id="agree_new_key" type="checkbox" class="me-2"><label for="agree_new_key" class="text-small text-semibold">I have stored my secret phrase<br><span class="text-gray fw-light text-very-small">You must confirm in order to proceed.</span></label></p></div>
         <div class="col-4 p-0 d-flex flex-row-reverse"><button id="continue_new_key" class="btn btn-sm btn-rounded disabled ps-3 pe-3">Continue <span class="icon icon-right-arrow"></span></button></div>
     </div>
 </div>

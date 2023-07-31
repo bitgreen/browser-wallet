@@ -38,7 +38,7 @@ export default async function assetReceiveScreen() {
 
     screen.setListeners([
         {
-            element: '#copy_qrcode, #copy_address',
+            element: '#bordered_content #copy_qrcode, #bordered_content #copy_address',
             listener: async() => {
                 await copyText(current_account.address)
                 await showNotification('Account address copied to clipboard.', 'info')

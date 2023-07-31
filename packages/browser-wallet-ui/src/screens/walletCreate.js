@@ -27,7 +27,8 @@ export default async function walletCreateScreen(params) {
     const screen = new Screen({
         template_name: 'layouts/full_page',
         template_params: {
-            title: 'Create Wallet'
+            title: 'Create Wallet',
+            equal_padding: ''
         },
         login: false,
         header: false

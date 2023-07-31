@@ -48,7 +48,7 @@ export default async function networkCreateScreen(params) {
             listener: async(e) => {
                 const network_name = DOMPurify.sanitize(network_name_el.value)
                 const network_url = DOMPurify.sanitize(network_url_el.value)
-                const switch_network = switch_network_el?.value === 'on'
+                const switch_network = switch_network_el?.checked === true
 
                 await sendMessage('save_network', {
                     network_id,

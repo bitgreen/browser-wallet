@@ -1,14 +1,16 @@
-import Screen, { goBackScreen, goToScreen } from './index.js'
+import Screen, { goBackScreen, goToScreen, updateAccounts } from './index.js'
 
 import DOMPurify from 'dompurify';
 import { sendMessage } from "../messaging.js";
 import { showNotification } from "../notifications.js";
+import anime from "animejs";
 
 export default async function walletPasswordScreen(params) {
     const screen = new Screen({
         template_name: 'layouts/full_page',
         template_params: {
-            title: 'Create Wallet'
+            title: 'Create Wallet',
+            equal_padding: ''
         },
         login: false,
         header: false
@@ -17,6 +19,38 @@ export default async function walletPasswordScreen(params) {
     await screen.init()
 
     await screen.set('.content', 'wallet/password')
+
+    await screen.append('#root', 'global/loading', {
+        title: 'Wallet Setup in Progress',
+        desc: 'Hold on tight as we prepare your wallet for use. Please be patient.',
+        top: '0',
+        padding_top: '80px',
+        checkmark_top: '128px'
+    });
+
+    if(params?.imported) {
+        // do not show for now
+        await screen.append('#loading_content #content .done', 'global/button', {
+            id: 'new_account',
+            title: 'Import another wallet',
+            class: 'btn-white btn-sm w-75 mt-2 d-none transparent-element',
+            icon: 'icon-import me-2'
+        })
+    } else {
+        await screen.append('#loading_content #content .done', 'global/button', {
+            id: 'new_account',
+            title: 'Create another account',
+            class: 'btn-white btn-sm w-75 mt-2 transparent-element',
+            icon: 'icon-plus me-2'
+        })
+    }
+
+    await screen.append('#loading_content #content .done', 'global/button_right_icon', {
+        id: 'go_to_dashboard',
+        title: 'View Portfolio',
+        class: 'btn-primary btn-rounded btn-sm w-75 mt-2 transparent-element',
+        icon: 'icon-right-arrow me-2'
+    })
 
     screen.setListeners([
         {
@@ -41,7 +75,8 @@ export default async function walletPasswordScreen(params) {
         {
             element: '#set_password',
             listener: async() => {
-                // TODO: set loading screen?
+                showProcessing()
+
                 const result = await sendMessage('save_wallet', {
                     mnemonic: params.mnemonic,
                     password: DOMPurify.sanitize(document.querySelector('#root #password')?.value),
@@ -49,13 +84,90 @@ export default async function walletPasswordScreen(params) {
                 })
 
                 if(result) {
-                    await goToScreen('walletFinishScreen', params)
+                    setTimeout(() => {
+                        showProcessingDone()
+                    }, 10000)
                 } else {
                     await showNotification('Something went wrong. Please try again or contact us.', 'error', 2800, 0)
                 }
             }
+        },
+        {
+            element: '#go_to_dashboard',
+            listener: () => goToScreen('dashboardScreen')
+        },
+        {
+            element: '#new_account',
+            listener: () => goToScreen('accountCreateScreen')
         }
     ])
+
+    const showProcessing = () => {
+        const loading_el = document.querySelector("#loading_content")
+
+        loading_el.classList.add('active')
+        loading_el.classList.add('no-border-radius')
+
+        screen.freezeRoot()
+    }
+
+    const showProcessingDone = () => {
+        screen.unFreezeRoot()
+
+        const loading_el = document.querySelector("#loading_content")
+        const checkmark_el = loading_el.querySelector("#checkmark")
+        const content_done_el = loading_el.querySelector("#content .done")
+        const content_init_text_el = loading_el.querySelector("#content .init .text")
+        const content_init_desc_el = loading_el.querySelector("#content .init .desc")
+        const content_done_text_el = loading_el.querySelector("#content .done .text")
+        const content_done_desc_el = loading_el.querySelector("#content .done .desc")
+
+        const primary_element = document.querySelector('#loading_content #primary')
+
+        primary_element.style.transition = "stroke-dasharray 0.4s ease-out, stroke-dashoffset 0.4s ease-out, stroke 0.4s ease-out";
+        primary_element.style.strokeDasharray = "100 0";
+        primary_element.style.strokeDashoffset = "0";
+
+        setTimeout(async() => {
+            loading_el.classList.add('dark')
+
+            content_done_el.classList.add('active')
+
+            if(params?.imported) {
+                content_done_text_el.innerHTML = 'Successfully imported wallet'
+            } else {
+                content_done_text_el.innerHTML = 'Successfully created wallet'
+            }
+
+            content_done_desc_el.innerHTML = 'Congratulations, your wallet is ready to use.'
+
+            content_init_text_el.classList.add('d-none')
+            content_init_desc_el.classList.add('d-none')
+
+            anime({
+                targets: '#loading_content #content .done .btn',
+                translateY: [-30, 0],
+                opacity: [0, 1],
+                easing: 'easeInOutSine',
+                duration: function(el, i) {
+                    return 400
+                },
+                delay: function(el, i) {
+                    return i*300 + 100
+                },
+            });
+        }, 200)
+
+        setTimeout(() => {
+            checkmark_el.classList.add('show')
+        }, 200)
+
+        setTimeout(() => {
+            loading_el.classList.add('done')
+        }, 600)
+
+        updateAccounts()
+    }
 }
 
 function checkPassword() {

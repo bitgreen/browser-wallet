@@ -193,7 +193,7 @@ module.exports = (
     result.optimization = {
       splitChunks: {
         chunks: "all",
-        maxSize: 2000000,
+        maxSize: 6000000,
         cacheGroups: {
           vendors: {
             test: /[\\/]node_modules[\\/]/,
