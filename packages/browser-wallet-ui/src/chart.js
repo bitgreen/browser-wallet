@@ -88,28 +88,32 @@ const renderChart = (init_render = false) => {
 
     if (!init_render) {
         setTimeout(() => {
-            bbb_token_el.style.transition = "stroke-dasharray 0.6s ease-in-out 0.6s";
+            bar_el.style.transition = "stroke-opacity 0.6s ease-in-out";
+            bar_el.style.strokeOpacity = "1";
+        }, 200)
+
+        setTimeout(() => {
+            text_el.style.transition = "fill-opacity 0.6s ease-in-out";
+            text_el.style.fillOpacity = "1";
+        }, 1000)
+
+        setTimeout(() => {
+            bbb_token_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
             bbb_token_el.style.strokeDasharray = per_1 + " " + (100 - per_1);
             bbb_token_el.style.strokeDashoffset = offset;
 
-            nature_based_el.style.transition = "stroke-dasharray 0.6s ease-in-out 0.6s";
+            nature_based_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
             nature_based_el.style.strokeDasharray = per_2 + " " + (100 - per_2);
             nature_based_el.style.strokeDashoffset = 100 - per_1 + offset;
 
-            impact_bonds_el.style.transition = "stroke-dasharray 0.6s ease-in-out 0.6s";
+            impact_bonds_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
             impact_bonds_el.style.strokeDasharray = per_3 + " " + (100 - per_3);
             impact_bonds_el.style.strokeDashoffset = 100 - (per_1 + per_2) + offset;
 
-            other_el.style.transition = "stroke-dasharray 0.6s ease-in-out 0.6s";
+            other_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
             other_el.style.strokeDasharray = per_4 + " " + (100 - per_4);
             other_el.style.strokeDashoffset = 100 - (per_1 + per_2 + per_3) + offset;
-
-            bar_el.style.transition = "stroke-opacity 0.6s ease-in-out 0.3s";
-            bar_el.style.strokeOpacity = "1";
-
-            text_el.style.transition = "fill-opacity 0.6s ease-in-out 0.9s";
-            text_el.style.fillOpacity = "1";
-        }, 20);
+        }, 600);
     }
 }
 

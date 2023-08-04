@@ -18,7 +18,9 @@ class BaseStore {
     }
 
     get(_key, update) {
-        const key = `${this.#prefix}${_key.toLowerCase()}`;
+        if(!_key) return update(null)
+
+        const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
         if(isStandaloneApp()) {
             let value
@@ -46,7 +48,7 @@ class BaseStore {
     }
 
     remove(_key, update) {
-        const key = `${this.#prefix}${_key.toLowerCase()}`;
+        const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
         if(isStandaloneApp()) {
             localStorage.removeItem(key);
@@ -62,7 +64,7 @@ class BaseStore {
     }
 
     set(_key, value, update) {
-        const key = `${this.#prefix}${_key.toLowerCase()}`;
+        const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
         if(isStandaloneApp()) {
             localStorage.setItem(key, JSON.stringify(value));

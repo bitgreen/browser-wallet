@@ -117,7 +117,8 @@ class userInterface {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
             full_account_address: current_account?.address,
-            is_primary: current_account?.id === 'main' ? '' : 'hidden'
+            is_primary: current_account?.id === 'main' ? '' : 'hidden',
+            is_kyc_verified: await this.db.stores.cache.asyncGet('kyc_' + current_account.address) ? 'verified' : 'unverified'
         }, false)
 
         await updateAccounts(current_account?.id)
@@ -260,8 +261,8 @@ class userInterface {
         }
     }
 
-    goToScreen = async(name, params) => {
-        return goToScreen(name, params)
+    goToScreen = async(name, params = {}, force = false) => {
+        return goToScreen(name, params, false, force)
     }
 
     initCustomActions = async() => {

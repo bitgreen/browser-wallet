@@ -10,7 +10,7 @@ import {
 } from '@polkadot/util-crypto'
 import {
     AccountStore,
-    AssetStore,
+    AssetStore, CacheStore,
     NetworkStore,
     SettingsStore,
     TokenStore,
@@ -35,10 +35,16 @@ class Extension {
         this.settings_store = new SettingsStore()
         this.#password = null
         this.password_timer = null
+
+        this.init().then()
+    }
+
+    async init() {
+        this.cache_store = new CacheStore(await this.networks_store.current())
     }
 
     async handle(data, from, port) {
-        await this.refreshPassword()
+        await this.refreshPassword(data.command)
 
         switch(data.command) {
             case 'new_wallet_screen':
@@ -75,6 +81,8 @@ class Extension {
                 return await this.revealMnemonic(data?.params)
             case 'check_login':
                 return await this.checkLogin()
+            case 'fast_check_login':
+                return await this.fastCheckLogin()
             case 'sign_in':
                 return await this.signIn(data?.id, data?.params)
             case 'transfer':
@@ -98,8 +106,14 @@ class Extension {
         await this.refreshPassword()
     }
 
-    async refreshPassword() {
-        if(!this.#password) return false
+    async refreshPassword(command = null) {
+        let skip = false
+
+        if(command && command === 'fast_check_login') {
+            skip = true
+        }
+
+        if(!this.#password || skip) return false
 
         // refresh password - extend its time
         clearTimeout(this.password_timer);
@@ -289,7 +303,7 @@ class Extension {
                 price: price
             })
 
-            balances.total = balances.total.plus(new BigNumber(data.balance))
+            balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
         }
 
         // Add BBB on the list
@@ -434,6 +448,10 @@ class Extension {
 
     async checkLogin() {
         return await this.decryptWallet(this.#password)
+    }
+
+    async fastCheckLogin() {
+        return !!this.#password
     }
 
     async encryptWallet(mnemonic, password) {
@@ -612,6 +630,8 @@ class Extension {
             "name": name
         })
 
+        await this.cache_store.remove('last_fetch_kyc')
+
         return account_id
     }
 
@@ -674,7 +694,6 @@ class Extension {
 
     async transfer(message_id, params) {
         const polkadot_api = await polkadotApi()
-        const amount = humanToBalance(params?.amount)
 
         let response = {}
 
@@ -684,8 +703,21 @@ class Extension {
             return false
         }
 
+        const asset = params?.asset
+
         return new Promise(async(resolve) => {
-            await polkadot_api.tx.balances.transfer(params?.recipient, amount)
+            let transaction = null
+            if(asset.is_token) {
+                if(asset.name === 'bbb') {
+                    transaction = polkadot_api.tx.balances.transfer(params?.recipient, humanToBalance(params?.amount))
+                } else {
+                    transaction = polkadot_api.tx.tokens.transfer(params?.recipient, asset.name, humanToBalance(params?.amount))
+                }
+            } else {
+                transaction = polkadot_api.tx.assets.transfer(asset.name, params?.recipient, params?.amount)
+            }
+
+            await transaction
                 .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
                     if(dispatchError) {
                         // for module errors, we have the section indexed, lookup

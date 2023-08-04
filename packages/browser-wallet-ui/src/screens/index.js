@@ -1,16 +1,7 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {
-    formatAddress,
-    getCurrentBrowser,
-    isFirefox,
-    isIOs,
-    isMacOs,
-    isSafari,
-    isWindows,
-    sleep
-} from "@bitgreen/browser-wallet-utils";
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import {formatAddress, isIOs, isMacOs, isWindows, sleep, getCurrentBrowser} from "@bitgreen/browser-wallet-utils";
+import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
 import anime from 'animejs';
@@ -47,10 +38,13 @@ import stakingHomeScreen from "./stakingHome.js";
 import stakingIntroScreen from "./stakingIntro.js";
 import stakingCollatorsScreen from "./stakingCollators.js";
 import stakingCollatorScreen from "./stakingCollator.js";
+import kycStartScreen from "./kycStart.js";
+import kycBasicScreen from "./kycBasic.js";
 
 const current_browser = getCurrentBrowser()
 
 let logged_in = false
+let lock_timeout = null
 
 class Screen {
     initialized = false
@@ -82,6 +76,8 @@ class Screen {
     }
 
     async init() {
+        logged_in = await this.fastCheckLogin(true)
+
         this.options.login ? await showLogin(true) : hideLogin(true)
 
         this.resizeTo(this.options.win_width, this.options.win_height)
@@ -100,6 +96,21 @@ class Screen {
         this.initialized = true
 
         return this.initialized
+    }
+
+    async fastCheckLogin(init = true) {
+        if(init) {
+            clearTimeout(lock_timeout)
+        }
+
+        // refresh status every 10 seconds
+        lock_timeout = setTimeout(async() => {
+            logged_in = await this.fastCheckLogin(false)
+
+            if(this.options.login && !logged_in) await showLogin()
+        }, 10000)
+
+        return await sendMessage('fast_check_login')
     }
 
     resizeTo(width, height) {
@@ -199,6 +210,8 @@ class Screen {
     showFooter() {
         const current_screen = currentScreen()
 
+        if(!logged_in) return false
+
         if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
             anime({
                 targets: '#main_footer',
@@ -238,6 +251,16 @@ class Screen {
         }
 
         this.footer_el.classList.remove('visible')
+    }
+
+    hideInit() {
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.add("fade-out");
+        }, 200);
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.add("inactive")
+            document.querySelector("#init_screen").classList.remove("fade-out")
+        }, 400)
     }
 
     async loadTab() {
@@ -298,10 +321,6 @@ const checkLogin = async() => {
 }
 
 const showLogin = async(instant = false, force = false) => {
-    if(!logged_in && !force) {
-        logged_in = await checkLogin()
-    }
-
     if(logged_in && !force) {
         return hideLogin()
     }
@@ -346,20 +365,20 @@ const showLogin = async(instant = false, force = false) => {
             translateY: [-20, 0],
             opacity: [0, 1]
         });
+
+        if(!instant) {
+            anime({
+                targets: '#login_screen',
+                easing: 'linear',
+                duration: 200,
+                opacity: [0, 1]
+            });
+        }
     }
 
     setTimeout(() => {
         if(!isIOs()) document.querySelector("#login_screen #password").focus();
     }, 100)
-
-    if(!instant) {
-        anime({
-            targets: '#login_screen',
-            easing: 'linear',
-            duration: 200,
-            opacity: [0, 1]
-        });
-    }
 }
 
 const doLogin = async(password) => {
@@ -453,7 +472,9 @@ const screens = {
     stakingHomeScreen,
     stakingIntroScreen,
     stakingCollatorsScreen,
-    stakingCollatorScreen
+    stakingCollatorScreen,
+    kycStartScreen,
+    kycBasicScreen
 }
 
 let screen_history = []
@@ -574,6 +595,8 @@ const reloadScreen = async() => {
 
 const updateAccounts = async(current_account_id = null) => {
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
 
     if(current_account_id) {
         await accounts_store.asyncSet('current', current_account_id)
@@ -608,17 +631,33 @@ const updateAccounts = async(current_account_id = null) => {
             const account_id = a?.key
             const account_jdenticon = jdenticon.toSvg(account.address,56)
             const is_current = account_id?.toString() === current_account?.id?.toString()
+            const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
 
             if(is_current) {
-                current_account_el.querySelector('.jdenticon').innerHTML = account_jdenticon
+                current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
                 current_account_el.querySelector('.name').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
+
+                if(is_kyced) {
+                    current_account_el.querySelector('.kyc-status').classList.add('verified')
+                } else {
+                    current_account_el.querySelector('.kyc-status').classList.remove('verified')
+                }
 
                 go_copy_el.dataset.address = account?.address;
                 accounts_modal_el.querySelector('#copy_address .btn').dataset.address = account?.address
 
                 accounts_modal_el.querySelector('.title').innerHTML = (account.name && account.name.length > 14) ? account.name.substring(0,14)+'...' : account.name
                 accounts_modal_el.querySelector('.address').innerHTML = formatAddress(account?.address, 12, 8)
+
+                if(is_kyced) {
+                    accounts_modal_el.querySelector('.kyc-status').classList.add('verified')
+                    accounts_modal_el.querySelector('.kyc-status').classList.remove('unverified')
+                } else {
+                    accounts_modal_el.querySelector('.kyc-status').classList.remove('verified')
+                    accounts_modal_el.querySelector('.kyc-status').classList.add('unverified')
+                }
+
                 if(account_id?.toString() === 'main') {
                     accounts_modal_el.querySelector('.badge-primary').classList.remove('hidden')
                 } else {
@@ -632,7 +671,8 @@ const updateAccounts = async(current_account_id = null) => {
                 account_name: (account.name && account.name.length > 10) ? account.name.substring(0,10)+'...' : account.name,
                 account_address: formatAddress(account?.address, 16, 8),
                 is_main: account_id?.toString() === 'main' ? '' : 'hidden',
-                is_current: is_current ? '' : 'hidden'
+                is_current: is_current ? '' : 'hidden',
+                is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified',
             }, true)
         }
 

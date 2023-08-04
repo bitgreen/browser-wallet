@@ -71,6 +71,12 @@ export default async function settingsScreen(params) {
             listener: async() => {
                 const network_id = DOMPurify.sanitize(document.querySelector("#change_network").value);
 
+                screen.freezeRoot()
+
+                await sendMessage('change_network', {
+                    network_id
+                })
+
                 setTimeout(async() => {
                     const current_network = await networks_store.current()
 
@@ -80,12 +86,12 @@ export default async function settingsScreen(params) {
                         })
                         await reloadScreen()
                         await showNotification('Cannot connect to this network. Reverted back to mainnet.', 'error')
+                    } else {
+                        window.top.location.reload()
                     }
-                }, 800)
 
-                await sendMessage('change_network', {
-                    network_id
-                })
+                    screen.unFreezeRoot()
+                }, 800)
             }
         },
         {

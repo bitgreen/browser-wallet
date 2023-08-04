@@ -37,7 +37,7 @@ port?.onMessage?.addListener((data) => {
         return;
     }
 
-    if(!handler.subscriber) {
+    if(!handler?.subscriber) {
         delete handlers[data.id];
     }
 

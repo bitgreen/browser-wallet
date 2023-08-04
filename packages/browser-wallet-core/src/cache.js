@@ -1,4 +1,5 @@
 import { databaseService } from "./index.js";
+import { polkadot } from "@polkadot/types/extrinsic/signedExtensions/polkadot";
 
 const db = new databaseService()
 
@@ -46,8 +47,32 @@ const getInflationAmount = async(polkadot_api) => {
     db.stores.cache.set('last_fetch_inflation', now)
 }
 
+const getKycAddresses = async(polkadot_api) => {
+    // return await db.stores.cache.asyncRemoveAll();
+    const now = new Date().getTime()
+
+    const last_fetch = await db.stores.cache.asyncGet('last_fetch_kyc') || 0
+
+    // One call per 30 minutes
+    if(now < (last_fetch + 1000 * 60 * 30)) return false
+
+    const kyc_accounts = await polkadot_api.query.kyc.authorizedAccounts()
+    for(const address of kyc_accounts.toJSON()) {
+        const account = await db.stores.accounts.asyncGetByAddress(address.toString())
+        if(account) {
+            db.stores.cache.set('kyc_' + address.toString(), true)
+        } else {
+            db.stores.cache.remove('kyc_' + address.toString())
+
+        }
+    }
+
+    db.stores.cache.set('last_fetch_kyc', now)
+}
+
 export {
     getChainMetaData,
-    getInflationAmount
+    getInflationAmount,
+    getKycAddresses
 }
 

@@ -8,14 +8,11 @@ import BigNumber from "bignumber.js";
 
 export default async function tokenBBBScreen(params) {
     const screen = new Screen({
-        template_name: "layouts/default_custom_header",
+        template_name: "layouts/default_custom_header_medium",
         header: false,
         footer: true,
     });
     await screen.init();
-
-    document.querySelector("#heading").classList.add('medium')
-    document.querySelector("#bordered_content").classList.add('medium')
 
     await screen.set('#heading', 'token/bbb/heading')
 
@@ -99,7 +96,9 @@ export default async function tokenBBBScreen(params) {
         },
         {
             element: "#bordered_content #bbb_send",
-            listener: () => goToScreen('assetSendScreen')
+            listener: () => goToScreen('assetSendScreen', {
+                asset: 'bbb'
+            })
         },
         {
             element: "#bordered_content #vesting_withdraw",

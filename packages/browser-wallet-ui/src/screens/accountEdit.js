@@ -1,12 +1,14 @@
-import Screen, { goBackScreen, goToScreen, updateAccounts } from './index.js'
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import Screen, { copyText, goBackScreen, goToScreen, updateAccounts } from './index.js'
+import { AccountStore, NetworkStore, CacheStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from 'dompurify';
+import anime from "animejs";
+import { formatAddress } from "@bitgreen/browser-wallet-utils";
 
 export default async function accountEditScreen(params) {
     const screen = new Screen({
-        template_name: 'layouts/full_page',
+        template_name: 'layouts/default_custom_header_medium',
         template_params: {
             title: 'Manage Account',
             equal_padding: 'equal-padding'
@@ -19,21 +21,48 @@ export default async function accountEditScreen(params) {
     const account_id = params?.account_id
 
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
+    const cache_store = new CacheStore(await networks_store.current())
+
     const account = await accounts_store.asyncGet(account_id)
 
-    if(account_id !== 'main') await screen.append('.heading', 'accounts/edit/delete_button')
-
-    await screen.set('.content', 'accounts/edit/content', {
-        account_id,
+    await screen.set('#heading', 'accounts/edit/heading', {
         account_name: account?.name,
-        account_address: account?.address
+        current_account_address: formatAddress(account?.address, 16, 8)
     })
+
+    const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
+
+    await screen.set('#bordered_content', 'accounts/edit/content', {
+        account_id,
+        account_address: account?.address,
+        derivation_path: account_id !== 'main' ? account_id : ''
+    })
+
+    if(is_kyced) {
+        const go_kyc_el = document.querySelector('#heading #go_kyc')
+
+        go_kyc_el.querySelector('.kyc-status .icon').classList.add('text-green')
+        go_kyc_el.querySelector('.kyc-status .text').innerHTML = 'Basic (KYC)'
+    }
+
+    if(account_id !== 'main') await screen.set('#bordered_content .footer .forget-account', 'accounts/edit/delete_button')
 
     await screen.append('#root', 'accounts/edit/delete_modal', {
         account_id,
         account_name: account?.name,
         account_address: account?.address
     })
+
+    anime({
+        targets: '#bordered_content',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeInOutSine',
+        duration: 400
+    });
+
+    const switch_account_el = document.querySelector("#switch_to_this")
 
     screen.setListeners([
         {
@@ -57,22 +86,27 @@ export default async function accountEditScreen(params) {
             }
         },
         {
+            element: '#heading #copy_address',
+            listener: async() => {
+                await copyText(account.address)
+                await showNotification('Account address copied to clipboard.', 'info', 2000, 58)
+            }
+        },
+        {
             element: '#root #save_wallet',
             listener: async(e) => {
                 const id = e.target.dataset.id;
                 const name = DOMPurify.sanitize(document.querySelector("#root #wallet_name").value)
+                const switch_account = switch_account_el?.checked === true
 
                 await accounts_store.asyncSet(id, {
                     ...account,
                     name
                 })
 
-                await updateAccounts(id)
+                await updateAccounts(switch_account ? id : null)
 
-                await goToScreen('accountEditScreen', {
-                    account_id
-                }, false, true)
-                await showNotification('Account data saved successfully.', 'success')
+                await showNotification('Account data saved successfully.', 'success', 2000, 58)
             }
         },
         {
@@ -80,6 +114,20 @@ export default async function accountEditScreen(params) {
             listener: async() => {
                 document.querySelector("#delete_modal").classList.add('fade')
                 document.querySelector("#delete_modal").classList.add('show')
+            }
+        },
+        {
+            element: '#root #go_kyc',
+            listener: () => {
+                if(is_kyced) {
+                    return goToScreen('kycBasicScreen', {
+                        account_id: account_id
+                    })
+                } else {
+                    return goToScreen('kycStartScreen', {
+                        account_id: account_id
+                    })
+                }
             }
         },
         {
@@ -97,7 +145,7 @@ export default async function accountEditScreen(params) {
                 accounts_store.remove(id, async() => {
                     await updateAccounts()
                     await goToScreen('accountManageScreen', {}, true)
-                    await showNotification('Account deleted successfully.', 'info')
+                    await showNotification('Account deleted successfully.', 'info', 2000, 58)
                 })
             }
         }

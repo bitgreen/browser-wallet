@@ -43,6 +43,9 @@
 .icon-arrow-right-2:before {
   content: "\e931";
 }
+.icon-shield:before {
+  content: "\e939";
+}
 .icon-click-radial:before {
   content: "\e91b";
 }
@@ -148,6 +151,9 @@
 .icon-import:before {
   content: "\e907";
 }
+.icon-invisible:before {
+  content: "\e93b";
+}
 .icon-clock:before {
   content: "\e938";
 }
@@ -177,6 +183,9 @@
 }
 .icon-password:before {
   content: "\e901";
+}
+.icon-slashes:before {
+  content: "\e93a";
 }
 .icon-cicircle:before {
   content: "\e920";

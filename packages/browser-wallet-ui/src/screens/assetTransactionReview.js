@@ -1,8 +1,14 @@
-import Screen, { goBackScreen, goToScreen } from './index.js'
+import Screen, { currentScreen, goBackScreen, goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
 import {AccountStore, bbbTokenPrice} from "@bitgreen/browser-wallet-core";
-import { addressValid, balanceToHuman, formatAmount, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
+import {
+    addressValid,
+    balanceToHuman,
+    formatAmount,
+    getAmountDecimal,
+    humanToBalance
+} from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
 export default async function assetTransactionReviewScreen(params) {
@@ -25,26 +31,61 @@ export default async function assetTransactionReviewScreen(params) {
     const recipient = params?.recipient
     const asset_amount = params?.amount
     const asset_info = getAmountDecimal(asset_amount, 2)
-    const usd_info = getAmountDecimal(asset_amount * bbbTokenPrice, 2) // TODO: update price!
+    const usd_info = getAmountDecimal(asset_amount * params?.current_asset?.price, 2) // TODO: update price!
 
-    const estimated_fee = await sendMessage('get_estimated_fee', {
-        pallet: 'balances',
-        call: 'transfer',
-        call_parameters: [
-            params?.recipient,
-            params?.amount,
-        ],
-        account_address: account.address
-    })
+    let estimated_fee = 0
+    if(params?.current_asset.is_token) {
+        if(params?.current_asset.name.toLowerCase() === 'bbb') {
+            estimated_fee = await sendMessage('get_estimated_fee', {
+                pallet: 'balances',
+                call: 'transfer',
+                call_parameters: [
+                    params?.recipient,
+                    humanToBalance(params?.amount)
+                ],
+                account_address: account.address
+            })
+        } else {
+            estimated_fee = await sendMessage('get_estimated_fee', {
+                pallet: 'tokens',
+                call: 'transfer',
+                call_parameters: [
+                    params?.recipient,
+                    params?.current_asset.name,
+                    humanToBalance(params?.amount)
+                ],
+                account_address: account.address
+            })
+        }
+    } else {
+        estimated_fee = await sendMessage('get_estimated_fee', {
+            pallet: 'assets',
+            call: 'transfer',
+            call_parameters: [
+                params?.current_asset?.name,
+                params?.recipient,
+                params?.amount
+            ],
+            account_address: account.address
+        })
+    }
 
     const fee_usd = balanceToHuman(estimated_fee, 4) * bbbTokenPrice
     const fee_info = getAmountDecimal(fee_usd, 4)
 
+    let asset_name = ''
+    if(params?.current_asset?.is_token) {
+        asset_name = params?.current_asset?.name?.toUpperCase()
+    } else {
+        asset_name = 'CREDITS'
+    }
+
     await screen.set('.content', 'asset/review_transaction', {
+        asset_name: asset_name,
         asset_amount: asset_info.amount,
         asset_decimals: asset_info.decimals,
-        usd_amount: usd_info.amount,
-        usd_decimals: usd_info.decimals,
+        usd_amount: params?.current_asset?.price > 0 ? '<span class="dollar">$</span>' + usd_info.amount : 'N/A',
+        usd_decimals: params?.current_asset?.price > 0 ? '.' + usd_info.decimals : '',
         fee_amount: fee_usd < 0.0001 ? '0' : fee_info.amount,
         fee_decimals: fee_usd < 0.0001 ? '0001' : fee_info.decimals,
         account_name: (account.name.length > 14 ? account.name.substring(0,14)+'...' : account.name),
@@ -87,6 +128,7 @@ export default async function assetTransactionReviewScreen(params) {
         const response = await sendMessage('transfer', {
             password: DOMPurify.sanitize(password_el?.value),
             account_id: params?.account_id,
+            asset: params?.current_asset,
             amount: params?.amount,
             recipient: params?.recipient,
             tab_id: params?.tab_id

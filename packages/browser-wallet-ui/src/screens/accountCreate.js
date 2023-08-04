@@ -8,7 +8,7 @@ export default async function accountCreateScreen() {
     const screen = new Screen({
         template_name: 'layouts/full_page',
         template_params: {
-            title: 'Create Account'
+            title: 'New Account'
         },
         header: false,
         footer: false
