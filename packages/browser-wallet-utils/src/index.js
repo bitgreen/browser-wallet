@@ -195,6 +195,10 @@ const isIPad = () => {
     return getOperatingSystem() === 'ipad'
 }
 
+const isStandaloneApp = () => {
+    return process.env.PLATFORM === 'ios'
+}
+
 const getTotalStakedByAddress = (all_collators, address) => {
     let total_take = new BigNumber(0)
 
@@ -310,6 +314,26 @@ const calculateUserRewardPerBlock = (stake, apy, block_reward) => {
     return reward_per_year.dividedBy(blocks_per_year).dividedBy(block_reward)
 }
 
+const getCurrentBrowser = () => {
+    let current_browser = null
+
+    try {
+        current_browser = (isFirefox() || isSafari()) ? browser : chrome
+    } catch (e) {
+        // console.log('undefined')
+    }
+
+    return current_browser
+}
+
+// Custom reviver function to handle BigNumber instances
+const customReviver = (key, value) => {
+    if (typeof value === 'object' && value !== null && value._isBigNumber) {
+        return new BigNumber(value);
+    }
+    return value;
+}
+
 export {
     getBrowser,
     isChrome,
@@ -331,10 +355,13 @@ export {
     isMacOs,
     isIOs,
     isIPad,
+    isStandaloneApp,
     getTotalStakedByAddress,
     getApyByAddress,
     getAverageApy,
     calculateCollatorApy,
     calculateUserApy,
-    calculateUserRewardPerBlock
+    calculateUserRewardPerBlock,
+    getCurrentBrowser,
+    customReviver
 }

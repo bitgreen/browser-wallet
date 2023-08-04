@@ -59,6 +59,7 @@ export default async function stakingCollatorScreen(params) {
         apy_decimals: collator_apy_data.decimals
     })
     document.querySelector('#bordered_content').classList.add('medium')
+    document.querySelector('#bordered_content').classList.add('no-overflow')
 
     if(balanceToHuman(hexToBn(delegator?.deposit)) > 0) {
         document.querySelector('#bordered_content #unbond').classList.remove('disabled')

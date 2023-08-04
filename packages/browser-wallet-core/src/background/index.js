@@ -1,13 +1,41 @@
 import Extension from './extension.js'
 import Tabs from './tabs.js'
-import {isFirefox, isIOs, isIPad, isMacOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import {
+    customReviver,
+    getCurrentBrowser,
+    isFirefox,
+    isIOs,
+    isIPad,
+    isMacOs,
+    isSafari
+} from "@bitgreen/browser-wallet-utils";
 
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+const current_browser = getCurrentBrowser()
 
 const extension = new Extension()
 const tabs = new Tabs()
 
 let opened_tabs = []
+
+const appMessageHandler = (data) => {
+    let promise = extension.handle(data);
+
+    if(!promise) {
+        return false
+    }
+
+    promise.then((response) => {
+        // return response to frontend
+        window.postMessage({
+            source: 'bg',
+            id: data.id,
+            response: JSON.stringify(response)
+        });
+    }).catch((error) => {
+        console.error(error);
+        window.postMessage({ error: error.message, errorCode: error.code, errorData: error.data, id: data.id });
+    });
+}
 
 const backgroundMessageHandler = (data, port) => {
     const isExtension = port.name === 'PORT_EXTENSION'
@@ -161,6 +189,7 @@ if(isSafari()) {
 }
 
 export {
+    appMessageHandler,
     backgroundMessageHandler,
     showPopup,
     getCurrentTabId,

@@ -1,6 +1,14 @@
-import {isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import {
+    customReviver,
+    getCurrentBrowser,
+    isFirefox,
+    isIOs,
+    isSafari,
+    isStandaloneApp
+} from "@bitgreen/browser-wallet-utils";
+import BigNumber from "bignumber.js";
 
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+const current_browser = getCurrentBrowser()
 
 class BaseStore {
     #prefix = '';
@@ -14,11 +22,23 @@ class BaseStore {
 
         const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
-        current_browser.storage.local.get([key], (result) => {
-            lastError('get');
+        if(isStandaloneApp()) {
+            let value
 
-            update(result[key]);
-        });
+            try {
+                value = JSON.parse(localStorage.getItem(key), customReviver)
+            } catch (e) {
+                value = localStorage.getItem(key)
+            }
+
+            update(value)
+        } else {
+            current_browser.storage.local.get([key], (result) => {
+                lastError('get');
+
+                update(result[key]);
+            });
+        }
     }
 
     async asyncGet(_key) {
@@ -30,21 +50,33 @@ class BaseStore {
     remove(_key, update) {
         const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
-        current_browser.storage.local.remove(key, () => {
-            lastError('remove');
+        if(isStandaloneApp()) {
+            localStorage.removeItem(key);
 
-            update && update();
-        });
+            update && update()
+        } else {
+            current_browser.storage.local.remove(key, () => {
+                lastError('remove');
+
+                update && update();
+            });
+        }
     }
 
     set(_key, value, update) {
         const key = `${this.#prefix}${_key.toString().toLowerCase()}`;
 
-        current_browser.storage.local.set({ [key]: value }, () => {
-            lastError('set');
+        if(isStandaloneApp()) {
+            localStorage.setItem(key, JSON.stringify(value));
 
             update && update();
-        });
+        } else {
+            current_browser.storage.local.set({ [key]: value }, () => {
+                lastError('set');
+
+                update && update();
+            });
+        }
     }
 
     async asyncSet(_key, value) {
@@ -72,14 +104,18 @@ class BaseStore {
     }
 
     allMap(update) {
-        current_browser.storage.local.get(null, (result) => {
-            lastError('all');
-
-            const entries = Object.entries(result);
+        if(isStandaloneApp()) {
             const map = {};
 
-            for(let i = 0; i < entries.length; i++) {
-                const [key, value] = entries[i];
+            for(let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                let value
+
+                try {
+                    value = JSON.parse(localStorage.getItem(key), customReviver)
+                } catch (e) {
+                    value = localStorage.getItem(key)
+                }
 
                 if(key.startsWith(this.#prefix)) {
                     map[key.replace(this.#prefix, '')] = value;
@@ -87,7 +123,24 @@ class BaseStore {
             }
 
             update(map);
-        });
+        } else {
+            current_browser.storage.local.get(null, (result) => {
+                lastError('all');
+
+                const entries = Object.entries(result);
+                const map = {};
+
+                for(let i = 0; i < entries.length; i++) {
+                    const [key, value] = entries[i];
+
+                    if(key.startsWith(this.#prefix)) {
+                        map[key.replace(this.#prefix, '')] = value;
+                    }
+                }
+
+                update(map);
+            });
+        }
     }
 
     async asyncAllMap() {

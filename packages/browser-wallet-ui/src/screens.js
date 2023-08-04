@@ -1,4 +1,4 @@
-import {isIOs, isMacOs} from "@bitgreen/browser-wallet-utils";
+import {isIOs, isMacOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
 
 const renderTemplate = async(template, params = {}) => {
     let template_data = await loadTemplate(template)
@@ -12,15 +12,15 @@ const renderTemplate = async(template, params = {}) => {
 }
 
 const loadTemplate = async(template) => {
-    const response = await fetch(`./components/${template}.html`).catch(function(e) {
+    let result = await fetch(`./components/${template}.html`).catch(function(e) {
         return false
     })
 
-    if(!response) {
+    if(!result) {
         return false
     }
 
-    return response.text()
+    return result.text()
 }
 
 const interpolate = (template_data, params) => {
@@ -57,6 +57,10 @@ const updateElement = async(element, template_name = 'false', params = {}, appen
             el.classList.add('ios')
         } else if(isMacOs() && !url_params.get('popup')) {
             el.classList.add('macos')
+        }
+
+        if(isStandaloneApp()) {
+            el.classList.add('app')
         }
     } else if(element) {
         el = document.querySelector(element)

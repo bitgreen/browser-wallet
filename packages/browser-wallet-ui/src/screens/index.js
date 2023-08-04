@@ -1,6 +1,6 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isIOs, isMacOs, isWindows, sleep, getCurrentBrowser} from "@bitgreen/browser-wallet-utils";
 import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
@@ -41,7 +41,7 @@ import stakingCollatorScreen from "./stakingCollator.js";
 import kycStartScreen from "./kycStart.js";
 import kycBasicScreen from "./kycBasic.js";
 
-const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+const current_browser = getCurrentBrowser()
 
 let logged_in = false
 let lock_timeout = null
@@ -78,7 +78,7 @@ class Screen {
     async init() {
         logged_in = await this.fastCheckLogin(true)
 
-        this.options.login ? await showLogin(true) : hideLogin()
+        this.options.login ? await showLogin(true) : hideLogin(true)
 
         this.resizeTo(this.options.win_width, this.options.win_height)
 
@@ -88,7 +88,7 @@ class Screen {
         this.options.footer ? this.showFooter() : this.hideFooter()
 
         if(this.options.smooth_load) this.resetRoot()
-        if(this.options.auto_load) await this.set() && this.hideInit()
+        if(this.options.auto_load) await this.set() && hideInit()
         if(this.options.tab_id && this.options.message_id) await this.loadTab()
 
         setTimeout(this.unFreezeRoot, this.options.freeze_root_delay)
@@ -290,6 +290,36 @@ class Screen {
     }
 }
 
+const showInit = (locked = false) => {
+    document.querySelector("#init_screen").classList.remove("inactive")
+    document.querySelector("#init_screen").classList.add("fade-in")
+
+    if(locked) {
+        document.querySelector("#init_screen").classList.add("locked")
+    }
+
+    document.querySelector("#init_screen").classList.add("loaded")
+}
+
+const hideInit = (unlocked = false) => {
+    const isLoaded = document.querySelector("#init_screen").classList.contains("loaded")
+
+    if(unlocked || !document.querySelector("#init_screen").classList.contains("locked")) {
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.remove("fade-in")
+            document.querySelector("#init_screen").classList.add("fade-out");
+        }, unlocked & isLoaded ? 0 : 300);
+        setTimeout(function() {
+            document.querySelector("#init_screen").classList.add("inactive")
+            document.querySelector("#init_screen").classList.remove("fade-out")
+        }, unlocked & isLoaded ? 300 : 600)
+    }
+}
+
+const checkLogin = async() => {
+    return await sendMessage('check_login')
+}
+
 const showLogin = async(instant = false, force = false) => {
     if(logged_in && !force) {
         return hideLogin()
@@ -378,10 +408,10 @@ const hideLogin = (instant = false) => {
     }
 }
 
-const enableFooter = async() => {
+const enableFooter = () => {
     const footer_el = document.querySelector('#main_footer')
 
-    if(footer_el.classList.contains('disabled')) {
+    if(footer_el.classList.contains('disabled') && footer_el.classList.contains('visible')) {
         anime({
             targets: '#main_footer',
             duration: 300,
@@ -395,7 +425,7 @@ const enableFooter = async() => {
     footer_el.classList.remove('disabled')
 }
 
-const disableFooter = async() => {
+const disableFooter = () => {
     const footer_el = document.querySelector('#main_footer')
 
     if(!footer_el.classList.contains('disabled')) {
@@ -696,5 +726,7 @@ export {
     copyText,
     enableFooter,
     disableFooter,
-    scrollToBottom
+    scrollToBottom,
+    showInit,
+    hideInit
 }

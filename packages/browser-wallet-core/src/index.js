@@ -1,6 +1,6 @@
 export { AccountStore, SettingsStore, WalletStore, NetworkStore, TransactionStore, AssetStore, TokenStore, CacheStore } from './stores/index.js';
 
-export { backgroundMessageHandler, findTab } from './background/index.js'
+export { appMessageHandler, backgroundMessageHandler, findTab } from './background/index.js'
 
 export { polkadotApi } from './polkadotApi.js'
 

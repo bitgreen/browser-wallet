@@ -16,14 +16,14 @@
 <div id="choose_quantity" class="d-flex select-none">
     <div class="w-100">
         <div class="form-group custom-border">
-            <input id="amount" type="number" class="form-control">
-            <label class="d-flex label w-100" for="amount"><span class="w-100"><span class="asset-name"></span></span><span id="max_amount" class="text-right click">MAX</span></label>
+            <input id="amount" type="number" class="form-control" value="${amount}" inputmode="decimal">
+            <label class="d-flex label w-100" for="amount"><span class="w-100">BBB Tokens</span><span id="max_amount" class="text-right click">MAX</span></label>
         </div>
     </div>
     <div class="equals d-flex align-items-center">=</div>
     <div class="w-100">
         <div class="form-group custom-border">
-            <input id="usd_amount" type="number" class="form-control">
+            <input id="usd_amount" type="number" class="form-control" inputmode="decimal">
             <label class="label w-100 text-center" for="usd_amount">USD</label>
         </div>
     </div>

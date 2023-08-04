@@ -69,3 +69,7 @@ extension().then()
 // document.addEventListener('DOMContentLoaded', async function () {
 //     await extension()
 // })
+
+// document.addEventListener('deviceready', async function () {
+//     await extension()
+// })

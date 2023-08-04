@@ -7,17 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0432DBDF29F21C590011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
-		0432DBE229F21C6A0011FCE0 /* main.html in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBE129F21C6A0011FCE0 /* main.html */; };
-		0432DBE329F21C6A0011FCE0 /* main.html in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBE129F21C6A0011FCE0 /* main.html */; };
-		0432DBE529F21C720011FCE0 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBE429F21C720011FCE0 /* style.css */; };
-		0432DBE829F21D230011FCE0 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBE429F21C720011FCE0 /* style.css */; };
-		0432DBE929F21D230011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
-		0432DBEA29F21D230011FCE0 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843A2872B34D0037E6C9 /* script.js */; };
+		041114892A17305F0083C227 /* BitgreenWallet Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		041114932A17C28F0083C227 /* BitgreenWallet Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0411149E2A17D0B50083C227 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0411149D2A17D0B50083C227 /* config.xml */; };
+		041114BF2A17D29F0083C227 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041114BE2A17D29F0083C227 /* ViewController.swift */; };
+		041114C42A17D2E10083C227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041114BA2A17D1DB0083C227 /* AppDelegate.swift */; };
+		041115072A17F6D60083C227 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 041114B22A17D1AD0083C227 /* icon.png */; };
+		041115082A17F6D60083C227 /* main.html in Resources */ = {isa = PBXBuildFile; fileRef = 041114B32A17D1AD0083C227 /* main.html */; };
+		041115092A17F6D60083C227 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = 041114B12A17D1AD0083C227 /* script.js */; };
+		0411150A2A17F6D60083C227 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 041114B42A17D1AD0083C227 /* style.css */; };
 		0432DBEC29F21DFE0011FCE0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8684592872B3500037E6C9 /* Main.storyboard */; };
 		0432DBEF29F21EB40011FCE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
-		0432DBF229F220900011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
-		0432DBF329F220BB0011FCE0 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0432DBDE29F21C590011FCE0 /* icon.png */; };
+		047C28702A7169B600F81F5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 047C286C2A7169B600F81F5E /* LaunchScreen.storyboard */; };
+		047C28712A7169B600F81F5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 047C286E2A7169B600F81F5E /* Main.storyboard */; };
+		047C28732A7169C400F81F5E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047C28722A7169C400F81F5E /* AppDelegate.swift */; };
+		047C28752A7169CE00F81F5E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 047C28742A7169CE00F81F5E /* capacitor.config.json */; };
+		047C28782A716A4800F81F5E /* public in Resources */ = {isa = PBXBuildFile; fileRef = 047C28772A716A4800F81F5E /* public */; };
+		047C28DA2A71D99E00F81F5E /* CapacitorKeyboard in Frameworks */ = {isa = PBXBuildFile; fileRef = 047C28D92A71D99E00F81F5E /* CapacitorKeyboard */; };
+		047C28FF2A75C26E00F81F5E /* CapacitorApp in Frameworks */ = {isa = PBXBuildFile; fileRef = 047C28FE2A75C26E00F81F5E /* CapacitorApp */; };
 		047D48EE2A040A1B00C416FC /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 047D48E92A040A1B00C416FC /* icons */; };
 		047D48EF2A040A1B00C416FC /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 047D48E92A040A1B00C416FC /* icons */; };
 		047D48F02A040A1B00C416FC /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EA2A040A1B00C416FC /* default.css */; };
@@ -30,6 +37,7 @@
 		047D48F72A040A1B00C416FC /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 047D48ED2A040A1B00C416FC /* main.js */; };
 		04B0525B29F9EC730049B197 /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525629F9EC730049B197 /* inject.js */; };
 		04B0525C29F9EC730049B197 /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525629F9EC730049B197 /* inject.js */; };
+		04C9ADAE2A14451600EFF193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
 		271FBF1129B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
 		271FBF1229B8DB52001D0940 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0329B8DB52001D0940 /* manifest.json */; };
 		271FBF1529B8DB52001D0940 /* components in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0429B8DB52001D0940 /* components */; };
@@ -46,30 +54,53 @@
 		271FBF3A29B8DB52001D0940 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0D29B8DB52001D0940 /* assets */; };
 		271FBF3D29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
 		271FBF3E29B8DB52001D0940 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 271FBF0E29B8DB52001D0940 /* index.html */; };
-		8E77E44928754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
-		8E77E44A28754AA80020A55D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 8E77E44628754AA80020A55D /* icons */; };
-		8E8684472872B3500037E6C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684462872B3500037E6C9 /* AppDelegate.swift */; };
-		8E8684492872B3500037E6C9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684482872B3500037E6C9 /* SceneDelegate.swift */; };
-		8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */; };
-		8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E86844D2872B3500037E6C9 /* Main.storyboard */; };
-		8E8684582872B3500037E6C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8684572872B3500037E6C9 /* AppDelegate.swift */; };
-		8E8684632872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8E8684622872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8E86846D2872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8E8684792872B3500037E6C9 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843A2872B34D0037E6C9 /* script.js */; };
-		8E86847B2872B3500037E6C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843B2872B34D0037E6C9 /* ViewController.swift */; };
-		8E86847C2872B3500037E6C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843B2872B34D0037E6C9 /* ViewController.swift */; };
-		8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E86843C2872B3500037E6C9 /* Assets.xcassets */; };
+		27751DC978D5825FA52507C7 /* Pods_BitgreenWallet__iOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B976C688D8DD970F490FF3F6 /* Pods_BitgreenWallet__iOS_.framework */; };
 		8E86847F2872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
 		8E8684802872B3500037E6C9 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8E8684642872B3500037E6C9 /* PBXContainerItemProxy */ = {
+		0411148A2A17305F0083C227 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8E8684302872B34D0037E6C9 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8E8684612872B3500037E6C9;
 			remoteInfo = "BitgreenWallet Extension (iOS)";
+		};
+		047C28AE2A716CD500F81F5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 44D6062E8C618EC2B8F1D7229E8AD501;
+			remoteInfo = Capacitor;
+		};
+		047C28B02A716CD500F81F5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1ABFDA3391AEBA42EFB0FEBF824A6E34;
+			remoteInfo = CapacitorCordova;
+		};
+		047C28BA2A7173A400F81F5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B7F9F70473009360419B24AC94D17877;
+			remoteInfo = "Pods-BitgreenWallet (iOS)";
+		};
+		047C28D82A71D99E00F81F5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43F80CDA05D5624A6B812123E023B138;
+			remoteInfo = CapacitorKeyboard;
+		};
+		047C28FD2A75C26E00F81F5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDFF4A7EE78A2AC8170A2DC20868DF1F;
+			remoteInfo = CapacitorApp;
 		};
 		8E86846E2872B3500037E6C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -81,40 +112,51 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8E8684862872B3500037E6C9 /* Embed App Extensions */ = {
+		0411148C2A1730600083C227 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				8E8684632872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */,
+				041114892A17305F0083C227 /* BitgreenWallet Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8E86848D2872B3500037E6C9 /* Embed App Extensions */ = {
+		8E86848D2872B3500037E6C9 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				8E86846D2872B3500037E6C9 /* BitgreenWallet Extension.appex in Embed App Extensions */,
+				041114932A17C28F0083C227 /* BitgreenWallet Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0432DBDE29F21C590011FCE0 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		0432DBE129F21C6A0011FCE0 /* main.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = main.html; sourceTree = "<group>"; };
-		0432DBE429F21C720011FCE0 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		0411149D2A17D0B50083C227 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		041114B12A17D1AD0083C227 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = script.js; path = Resources/script.js; sourceTree = "<group>"; };
+		041114B22A17D1AD0083C227 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
+		041114B32A17D1AD0083C227 /* main.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = main.html; path = Resources/main.html; sourceTree = "<group>"; };
+		041114B42A17D1AD0083C227 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = style.css; path = Resources/style.css; sourceTree = "<group>"; };
+		041114BA2A17D1DB0083C227 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		041114BE2A17D29F0083C227 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		047C286D2A7169B600F81F5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		047C286F2A7169B600F81F5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		047C28722A7169C400F81F5E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		047C28742A7169CE00F81F5E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
+		047C28772A716A4800F81F5E /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		047C28A82A716CD500F81F5E /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		047D48E92A040A1B00C416FC /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
 		047D48EA2A040A1B00C416FC /* default.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = default.css; sourceTree = "<group>"; };
 		047D48EB2A040A1B00C416FC /* default.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = default.js; sourceTree = "<group>"; };
 		047D48EC2A040A1B00C416FC /* main.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = main.css; sourceTree = "<group>"; };
 		047D48ED2A040A1B00C416FC /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		04B0525629F9EC730049B197 /* inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = inject.js; sourceTree = "<group>"; };
+		04C9AD792A13080B00EFF193 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		271FBF0329B8DB52001D0940 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
 		271FBF0429B8DB52001D0940 /* components */ = {isa = PBXFileReference; lastKnownFileType = folder; path = components; sourceTree = "<group>"; };
 		271FBF0829B8DB52001D0940 /* page.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
@@ -123,19 +165,12 @@
 		271FBF0C29B8DB52001D0940 /* extension.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = extension.js; sourceTree = "<group>"; };
 		271FBF0D29B8DB52001D0940 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		271FBF0E29B8DB52001D0940 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		621754D54963E544190F54C9 /* Pods-BitgreenWallet (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitgreenWallet (iOS).release.xcconfig"; path = "Target Support Files/Pods-BitgreenWallet (iOS)/Pods-BitgreenWallet (iOS).release.xcconfig"; sourceTree = "<group>"; };
 		8E77E44628754AA80020A55D /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
-		8E86843A2872B34D0037E6C9 /* script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
-		8E86843B2872B34D0037E6C9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8E86843C2872B3500037E6C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E86843E2872B3500037E6C9 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		8E8684432872B3500037E6C9 /* BitgreenWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BitgreenWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E8684462872B3500037E6C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8E8684482872B3500037E6C9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8E86844B2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8E86844E2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		8E8684502872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E8684552872B3500037E6C9 /* BitgreenWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BitgreenWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E8684572872B3500037E6C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E86845A2872B3500037E6C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8E86845C2872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E86845D2872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
@@ -144,6 +179,8 @@
 		8E86846C2872B3500037E6C9 /* BitgreenWallet Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BitgreenWallet Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E8684712872B3500037E6C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E8684722872B3500037E6C9 /* BitgreenWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BitgreenWallet.entitlements; sourceTree = "<group>"; };
+		B976C688D8DD970F490FF3F6 /* Pods_BitgreenWallet__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BitgreenWallet__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACF023E3802523EACD15DE1 /* Pods-BitgreenWallet (iOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitgreenWallet (iOS).debug.xcconfig"; path = "Target Support Files/Pods-BitgreenWallet (iOS)/Pods-BitgreenWallet (iOS).debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +188,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				047C28FF2A75C26E00F81F5E /* CapacitorApp in Frameworks */,
+				047C28DA2A71D99E00F81F5E /* CapacitorKeyboard in Frameworks */,
+				27751DC978D5825FA52507C7 /* Pods_BitgreenWallet__iOS_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,9 +218,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041114B02A17D19D0083C227 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				041114B22A17D1AD0083C227 /* icon.png */,
+				041114B32A17D1AD0083C227 /* main.html */,
+				041114B12A17D1AD0083C227 /* script.js */,
+				041114B42A17D1AD0083C227 /* style.css */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		047C28A92A716CD500F81F5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				047C28AF2A716CD500F81F5E /* Capacitor */,
+				047C28FE2A75C26E00F81F5E /* CapacitorApp */,
+				047C28B12A716CD500F81F5E /* CapacitorCordova */,
+				047C28D92A71D99E00F81F5E /* CapacitorKeyboard */,
+				047C28BB2A7173A400F81F5E /* Pods-BitgreenWallet (iOS) */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		04C9ADD02A1507DE00EFF193 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B976C688D8DD970F490FF3F6 /* Pods_BitgreenWallet__iOS_.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		463C928A7F2C66B33B4978B9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FACF023E3802523EACD15DE1 /* Pods-BitgreenWallet (iOS).debug.xcconfig */,
+				621754D54963E544190F54C9 /* Pods-BitgreenWallet (iOS).release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		8E86842F2872B34D0037E6C9 = {
 			isa = PBXGroup;
 			children = (
+				047C28A82A716CD500F81F5E /* Pods.xcodeproj */,
 				8E8684342872B34D0037E6C9 /* Shared (App) */,
 				8E86843D2872B3500037E6C9 /* Shared (Extension) */,
 				8E8684452872B3500037E6C9 /* iOS (App) */,
@@ -188,28 +269,17 @@
 				8E8684662872B3500037E6C9 /* iOS (Extension) */,
 				8E8684702872B3500037E6C9 /* macOS (Extension) */,
 				8E8684442872B3500037E6C9 /* Products */,
+				04C9ADD02A1507DE00EFF193 /* Frameworks */,
+				463C928A7F2C66B33B4978B9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
 		8E8684342872B34D0037E6C9 /* Shared (App) */ = {
 			isa = PBXGroup;
 			children = (
-				8E86843B2872B34D0037E6C9 /* ViewController.swift */,
 				8E86843C2872B3500037E6C9 /* Assets.xcassets */,
-				8E8684352872B34D0037E6C9 /* Resources */,
 			);
 			path = "Shared (App)";
-			sourceTree = "<group>";
-		};
-		8E8684352872B34D0037E6C9 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				0432DBE429F21C720011FCE0 /* style.css */,
-				0432DBE129F21C6A0011FCE0 /* main.html */,
-				0432DBDE29F21C590011FCE0 /* icon.png */,
-				8E86843A2872B34D0037E6C9 /* script.js */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		8E86843D2872B3500037E6C9 /* Shared (Extension) */ = {
@@ -235,11 +305,13 @@
 		8E8684452872B3500037E6C9 /* iOS (App) */ = {
 			isa = PBXGroup;
 			children = (
-				8E8684462872B3500037E6C9 /* AppDelegate.swift */,
-				8E8684482872B3500037E6C9 /* SceneDelegate.swift */,
-				8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */,
-				8E86844D2872B3500037E6C9 /* Main.storyboard */,
-				8E8684502872B3500037E6C9 /* Info.plist */,
+				047C28772A716A4800F81F5E /* public */,
+				047C28742A7169CE00F81F5E /* capacitor.config.json */,
+				047C28722A7169C400F81F5E /* AppDelegate.swift */,
+				047C286C2A7169B600F81F5E /* LaunchScreen.storyboard */,
+				047C286E2A7169B600F81F5E /* Main.storyboard */,
+				0411149D2A17D0B50083C227 /* config.xml */,
+				04C9AD792A13080B00EFF193 /* Info.plist */,
 			);
 			path = "iOS (App)";
 			sourceTree = "<group>";
@@ -247,7 +319,9 @@
 		8E8684562872B3500037E6C9 /* macOS (App) */ = {
 			isa = PBXGroup;
 			children = (
-				8E8684572872B3500037E6C9 /* AppDelegate.swift */,
+				041114B02A17D19D0083C227 /* Resources */,
+				041114BE2A17D29F0083C227 /* ViewController.swift */,
+				041114BA2A17D1DB0083C227 /* AppDelegate.swift */,
 				8E8684592872B3500037E6C9 /* Main.storyboard */,
 				8E86845C2872B3500037E6C9 /* Info.plist */,
 				8E86845D2872B3500037E6C9 /* BitgreenWallet.entitlements */,
@@ -302,15 +376,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8E8684872872B3500037E6C9 /* Build configuration list for PBXNativeTarget "BitgreenWallet (iOS)" */;
 			buildPhases = (
+				041114BD2A17D23B0083C227 /* [CP] Check Pods Manifest.lock */,
 				8E86843F2872B3500037E6C9 /* Sources */,
 				8E8684402872B3500037E6C9 /* Frameworks */,
 				8E8684412872B3500037E6C9 /* Resources */,
-				8E8684862872B3500037E6C9 /* Embed App Extensions */,
+				0411148C2A1730600083C227 /* Embed Foundation Extensions */,
+				047C28922A716C3000F81F5E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8E8684652872B3500037E6C9 /* PBXTargetDependency */,
+				0411148B2A17305F0083C227 /* PBXTargetDependency */,
 			);
 			name = "BitgreenWallet (iOS)";
 			productName = "BitgreenWallet (iOS)";
@@ -324,7 +400,7 @@
 				8E8684512872B3500037E6C9 /* Sources */,
 				8E8684522872B3500037E6C9 /* Frameworks */,
 				8E8684532872B3500037E6C9 /* Resources */,
-				8E86848D2872B3500037E6C9 /* Embed App Extensions */,
+				8E86848D2872B3500037E6C9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -378,14 +454,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1340;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					8E8684422872B3500037E6C9 = {
 						CreatedOnToolsVersion = 13.4.1;
+						LastSwiftMigration = 1430;
 					};
 					8E8684542872B3500037E6C9 = {
 						CreatedOnToolsVersion = 13.4.1;
+						LastSwiftMigration = 1430;
 					};
 					8E8684612872B3500037E6C9 = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -406,6 +484,12 @@
 			mainGroup = 8E86842F2872B34D0037E6C9;
 			productRefGroup = 8E8684442872B3500037E6C9 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 047C28A92A716CD500F81F5E /* Products */;
+					ProjectRef = 047C28A82A716CD500F81F5E /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8E8684422872B3500037E6C9 /* BitgreenWallet (iOS) */,
@@ -416,18 +500,59 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		047C28AF2A716CD500F81F5E /* Capacitor */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = Capacitor;
+			path = Capacitor.framework;
+			remoteRef = 047C28AE2A716CD500F81F5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		047C28B12A716CD500F81F5E /* CapacitorCordova */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = CapacitorCordova;
+			path = Cordova.framework;
+			remoteRef = 047C28B02A716CD500F81F5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		047C28BB2A7173A400F81F5E /* Pods-BitgreenWallet (iOS) */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_BitgreenWallet__iOS_.framework;
+			remoteRef = 047C28BA2A7173A400F81F5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		047C28D92A71D99E00F81F5E /* CapacitorKeyboard */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = CapacitorKeyboard;
+			path = CapacitorKeyboard.framework;
+			remoteRef = 047C28D82A71D99E00F81F5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		047C28FE2A75C26E00F81F5E /* CapacitorApp */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = CapacitorApp;
+			path = CapacitorApp.framework;
+			remoteRef = 047C28FD2A75C26E00F81F5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		8E8684412872B3500037E6C9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0432DBE229F21C6A0011FCE0 /* main.html in Resources */,
-				8E86844C2872B3500037E6C9 /* LaunchScreen.storyboard in Resources */,
-				8E8684792872B3500037E6C9 /* script.js in Resources */,
-				0432DBDF29F21C590011FCE0 /* icon.png in Resources */,
-				8E86847D2872B3500037E6C9 /* Assets.xcassets in Resources */,
-				8E86844F2872B3500037E6C9 /* Main.storyboard in Resources */,
-				0432DBE529F21C720011FCE0 /* style.css in Resources */,
+				047C28712A7169B600F81F5E /* Main.storyboard in Resources */,
+				047C28702A7169B600F81F5E /* LaunchScreen.storyboard in Resources */,
+				047C28752A7169CE00F81F5E /* capacitor.config.json in Resources */,
+				04C9ADAE2A14451600EFF193 /* Assets.xcassets in Resources */,
+				0411149E2A17D0B50083C227 /* config.xml in Resources */,
+				047C28782A716A4800F81F5E /* public in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,12 +560,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041115072A17F6D60083C227 /* icon.png in Resources */,
+				041115082A17F6D60083C227 /* main.html in Resources */,
+				041115092A17F6D60083C227 /* script.js in Resources */,
+				0411150A2A17F6D60083C227 /* style.css in Resources */,
 				0432DBEF29F21EB40011FCE0 /* Assets.xcassets in Resources */,
 				0432DBEC29F21DFE0011FCE0 /* Main.storyboard in Resources */,
-				0432DBE829F21D230011FCE0 /* style.css in Resources */,
-				0432DBE929F21D230011FCE0 /* icon.png in Resources */,
-				0432DBEA29F21D230011FCE0 /* script.js in Resources */,
-				0432DBE329F21C6A0011FCE0 /* main.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,7 +575,6 @@
 			files = (
 				047D48F62A040A1B00C416FC /* main.js in Resources */,
 				047D48F42A040A1B00C416FC /* main.css in Resources */,
-				0432DBF229F220900011FCE0 /* icon.png in Resources */,
 				047D48EE2A040A1B00C416FC /* icons in Resources */,
 				04B0525B29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3D29B8DB52001D0940 /* index.html in Resources */,
@@ -459,7 +583,6 @@
 				271FBF2D29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1129B8DB52001D0940 /* manifest.json in Resources */,
 				271FBF2929B8DB52001D0940 /* background.js in Resources */,
-				8E77E44928754AA80020A55D /* icons in Resources */,
 				271FBF3929B8DB52001D0940 /* assets in Resources */,
 				271FBF3529B8DB52001D0940 /* extension.js in Resources */,
 				271FBF1529B8DB52001D0940 /* components in Resources */,
@@ -473,7 +596,6 @@
 			files = (
 				047D48F72A040A1B00C416FC /* main.js in Resources */,
 				047D48F52A040A1B00C416FC /* main.css in Resources */,
-				0432DBF329F220BB0011FCE0 /* icon.png in Resources */,
 				047D48EF2A040A1B00C416FC /* icons in Resources */,
 				04B0525C29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3E29B8DB52001D0940 /* index.html in Resources */,
@@ -482,7 +604,6 @@
 				271FBF2E29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1229B8DB52001D0940 /* manifest.json in Resources */,
 				271FBF2A29B8DB52001D0940 /* background.js in Resources */,
-				8E77E44A28754AA80020A55D /* icons in Resources */,
 				271FBF3A29B8DB52001D0940 /* assets in Resources */,
 				271FBF3629B8DB52001D0940 /* extension.js in Resources */,
 				271FBF1629B8DB52001D0940 /* components in Resources */,
@@ -493,6 +614,43 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		041114BD2A17D23B0083C227 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BitgreenWallet (iOS)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		047C28922A716C3000F81F5E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BitgreenWallet (iOS)/Pods-BitgreenWallet (iOS)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8EF31D9C28745F0A0069BECA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -517,9 +675,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E86847B2872B3500037E6C9 /* ViewController.swift in Sources */,
-				8E8684472872B3500037E6C9 /* AppDelegate.swift in Sources */,
-				8E8684492872B3500037E6C9 /* SceneDelegate.swift in Sources */,
+				047C28732A7169C400F81F5E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,8 +683,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E86847C2872B3500037E6C9 /* ViewController.swift in Sources */,
-				8E8684582872B3500037E6C9 /* AppDelegate.swift in Sources */,
+				041114BF2A17D29F0083C227 /* ViewController.swift in Sources */,
+				041114C42A17D2E10083C227 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,10 +707,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8E8684652872B3500037E6C9 /* PBXTargetDependency */ = {
+		0411148B2A17305F0083C227 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8E8684612872B3500037E6C9 /* BitgreenWallet Extension (iOS) */;
-			targetProxy = 8E8684642872B3500037E6C9 /* PBXContainerItemProxy */;
+			targetProxy = 0411148A2A17305F0083C227 /* PBXContainerItemProxy */;
 		};
 		8E86846F2872B3500037E6C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -564,18 +720,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		8E86844A2872B3500037E6C9 /* LaunchScreen.storyboard */ = {
+		047C286C2A7169B600F81F5E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				8E86844B2872B3500037E6C9 /* Base */,
+				047C286D2A7169B600F81F5E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		8E86844D2872B3500037E6C9 /* Main.storyboard */ = {
+		047C286E2A7169B600F81F5E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				8E86844E2872B3500037E6C9 /* Base */,
+				047C286F2A7169B600F81F5E /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -627,7 +783,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -641,9 +797,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -685,7 +840,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -693,9 +848,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -766,60 +920,89 @@
 		};
 		8E8684882872B3500037E6C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FACF023E3802523EACD15DE1 /* Pods-BitgreenWallet (iOS).debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 554R43WPXX;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iOS (App)/Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bitgreen Wallet";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet1";
 				PRODUCT_NAME = BitgreenWallet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Debug;
 		};
 		8E8684892872B3500037E6C9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 621754D54963E544190F54C9 /* Pods-BitgreenWallet (iOS).release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 554R43WPXX;
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iOS (App)/Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"WK_WEB_VIEW_ONLY=$(WK_WEB_VIEW_ONLY)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = BitgreenWallet;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bitgreen Wallet";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -830,14 +1013,17 @@
 					SafariServices,
 					"-framework",
 					WebKit,
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet1";
 				PRODUCT_NAME = BitgreenWallet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Release;
 		};
@@ -849,6 +1035,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 554R43WPXX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -860,7 +1047,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -886,6 +1073,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 554R43WPXX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -897,7 +1085,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -926,6 +1114,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 554R43WPXX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -947,8 +1136,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet1";
 				PRODUCT_NAME = BitgreenWallet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -964,6 +1155,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 554R43WPXX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -985,6 +1177,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.bitgreen.browser-wallet1";
 				PRODUCT_NAME = BitgreenWallet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
