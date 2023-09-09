@@ -2,7 +2,7 @@
   "name": "bitgreen-browser-wallet",
   "author": "Bitgreen",
   "description": "Bitgreen browser extension with wallet functionalities.",
-  "version": "1.2.2.1",
+  "version": "1.2.2.2",
   "homepage": "https://github.com/bitgreen/browser-wallet#readme",
   "license": "GPL-3.0-or-later",
   "bugs": {
