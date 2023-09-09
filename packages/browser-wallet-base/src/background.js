@@ -73,15 +73,6 @@ current_browser.runtime.onConnect.addListener((port) => {
     });
 });
 
-current_browser.runtime.onInstalled.addListener((details) => {
-    if(isIOs() && details.reason === 'install' && process.env.NODE_ENV === 'production') {
-        current_browser.runtime.setUninstallURL('', () => {
-            // Clear data on uninstall
-            current_browser.storage.local.clear()
-        })
-    }
-})
-
 function forceReconnect(port) {
     deleteTimer(port);
     port.disconnect();

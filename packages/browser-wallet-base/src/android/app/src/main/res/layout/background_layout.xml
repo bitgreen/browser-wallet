@@ -1,0 +1,14 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <!-- You can also add an ImageView or other UI elements if desired -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="128dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp"
+        android:src="@drawable/b_logo" />
+</RelativeLayout>

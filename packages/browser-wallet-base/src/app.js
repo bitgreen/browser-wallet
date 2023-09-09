@@ -3,6 +3,7 @@ import userInterface from '@bitgreen/browser-wallet-ui'
 
 import { Keyboard } from '@capacitor/keyboard';
 import { App } from '@capacitor/app';
+import { isAndroid, isIOs } from "@bitgreen/browser-wallet-utils";
 
 const db = new databaseService()
 const ui = new userInterface()
@@ -29,7 +30,19 @@ document.addEventListener('deviceready', async() => {
 
     App.addListener('appStateChange', async({ isActive }) => {
         if(isActive) {
-            ui.hideInit(true)
+            const logged_in = await ui.fastCheckLogin()
+
+            if(await ui.db.stores.wallets.exists() && !logged_in) {
+                await ui.showLogin(true, true)
+            }
+
+            if(isAndroid()) {
+                setTimeout(() => {
+                    ui.hideInit(true)
+                }, 600)
+            } else {
+                ui.hideInit(true)
+            }
         } else {
             ui.showInit(true)
 
@@ -45,7 +58,7 @@ document.addEventListener('deviceready', async() => {
         const bodyHeight = window.innerHeight - info.keyboardHeight
 
         // update body height and add class
-        document.body.style.height = bodyHeight + 'px';
+        if(isIOs()) document.body.style.height = bodyHeight + 'px';
         document.body.classList.add('keyboard-opened')
 
         ui.disableFooter()
@@ -53,7 +66,7 @@ document.addEventListener('deviceready', async() => {
 
     Keyboard.addListener('keyboardWillHide', info => {
         // reset body
-        document.body.style.height = '';
+        if(isIOs()) document.body.style.height = '';
         document.body.classList.remove('keyboard-opened')
 
         ui.enableFooter()

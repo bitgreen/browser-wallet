@@ -195,8 +195,12 @@ const isIPad = () => {
     return getOperatingSystem() === 'ipad'
 }
 
+const isAndroid = () => {
+    return process.env.PLATFORM === 'android'
+}
+
 const isStandaloneApp = () => {
-    return process.env.PLATFORM === 'ios'
+    return isIOs() || isIPad() || isAndroid()
 }
 
 const getTotalStakedByAddress = (all_collators, address) => {
@@ -355,6 +359,7 @@ export {
     isMacOs,
     isIOs,
     isIPad,
+    isAndroid,
     isStandaloneApp,
     getTotalStakedByAddress,
     getApyByAddress,

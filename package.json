@@ -30,6 +30,7 @@
     "build:safari": "webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode production",
     "build:ios": "webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode production && cd build/apple && pod install",
     "build:apple": "npm run build:safari && npm run build:ios",
+    "build:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode production",
     "dev:chrome": "webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode development --watch ",
     "dev:firefox": "webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode development --watch",
     "dev:safari": "webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode development --watch",
@@ -38,6 +39,7 @@
   },
   "dependencies": {
     "@bitgreen/browser-wallet-base": "^1.0.0",
+    "@capacitor/android": "^5.2.2",
     "@capacitor/app": "^5.0.6",
     "@capacitor/core": "^5.2.2",
     "@capacitor/ios": "^5.2.2",

@@ -1,4 +1,4 @@
-import {isIOs, isMacOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
+import { isAndroid, isIOs, isMacOs, isStandaloneApp } from "@bitgreen/browser-wallet-utils";
 
 const renderTemplate = async(template, params = {}) => {
     let template_data = await loadTemplate(template)
@@ -55,6 +55,8 @@ const updateElement = async(element, template_name = 'false', params = {}, appen
         // Add class to body, so we can apply custom CSS.
         if(isIOs()) {
             el.classList.add('ios')
+        } else if(isAndroid()) {
+            el.classList.add('android')
         } else if(isMacOs() && !url_params.get('popup')) {
             el.classList.add('macos')
         }

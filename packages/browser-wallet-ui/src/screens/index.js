@@ -1,6 +1,14 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isIOs, isMacOs, isWindows, sleep, getCurrentBrowser} from "@bitgreen/browser-wallet-utils";
+import {
+    formatAddress,
+    isIOs,
+    isMacOs,
+    isWindows,
+    sleep,
+    getCurrentBrowser,
+    isStandaloneApp
+} from "@bitgreen/browser-wallet-utils";
 import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
@@ -377,7 +385,7 @@ const showLogin = async(instant = false, force = false) => {
     }
 
     setTimeout(() => {
-        if(!isIOs()) document.querySelector("#login_screen #password").focus();
+        if(!isStandaloneApp()) document.querySelector("#login_screen #password").focus();
     }, 100)
 }
 

@@ -28,7 +28,7 @@ import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
 
 /* import all css files */
 import './styles/main.css'
-import './styles/ios.css'
+import './styles/app.css'
 import './styles/icomoon.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import {formatAddress, isIOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
@@ -356,6 +356,20 @@ class userInterface {
 
     hideInit = (unlocked = false) => {
         return hideInit(unlocked)
+    }
+
+    fastCheckLogin = async() => {
+        const logged_in = await sendMessage('fast_check_login')
+
+        return !!logged_in
+    }
+
+    showLogin = async(instant = false, force = false) => {
+        await showLogin(instant, force)
+
+        setTimeout(async() => {
+            return await goToScreen('dashboardScreen')
+        }, 1200) // redirect to dashboard
     }
 }
 

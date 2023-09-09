@@ -1,0 +1,17 @@
+{
+  "appId": "com.bitgreen.wallet",
+  "appName": "Bitgreen Wallet",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "scrollEnabled": false,
+    "contentInset": "never"
+  },
+  "backgroundColor": "#224851",
+  "plugins": {
+    "Keyboard": {
+      "resize": "none"
+    }
+  }
+}

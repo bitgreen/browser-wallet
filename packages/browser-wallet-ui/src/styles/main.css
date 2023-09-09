@@ -679,6 +679,7 @@ label.label {
 #init_screen.inactive {
     opacity: 0 !important;
     pointer-events: none !important;
+    z-index: -1;
 }
 #init_screen.fade-in {
     opacity: 1 !important;

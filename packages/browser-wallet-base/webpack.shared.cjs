@@ -35,12 +35,13 @@ module.exports = (
   useSplitChunk = false,
   platform = "chrome"
 ) => {
-  if (!["chrome", "firefox", "safari", "ios"].includes(platform)) {
+    if (!["chrome", "firefox", "safari", "ios", "android"].includes(platform)) {
       platform = "chrome";
-  }
+    }
 
-  const manifest = platform !== 'ios' ? require(`./manifest-${platform}.json`) : null
-  let output_dir = path.join(__dirname, `../../build/${platform}`);
+    const is_app = !!["ios", "android"].includes(platform)
+    const manifest = !is_app ? require(`./manifest-${platform}.json`) : null
+    let output_dir = path.join(__dirname, `../../build/${platform}`);
 
     let plugins = [
         new webpack.ProvidePlugin({
@@ -82,7 +83,7 @@ module.exports = (
     ]
 
     if (useSplitChunk) {
-      if(platform === 'ios') {
+      if(is_app) {
           plugins.push(
               new HtmlWebpackPlugin({
                   filename: "index.html",
@@ -101,7 +102,7 @@ module.exports = (
       }
     }
 
-    if(platform !== 'ios') {
+    if(!is_app) {
         plugins.push(new ManifestPlugin({
             config: {
                 base: manifest,
@@ -132,8 +133,34 @@ module.exports = (
         // change output directory
         output_dir = path.join(__dirname, `../../build/apple/Shared (Extension)`)
     } else if(platform === 'ios') {
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: 'capacitor.config.json',
+                to: path.resolve(__dirname, '../../build/apple/iOS (App)')
+            }]
+        }))
+
         // change output directory
         output_dir = path.join(__dirname, `../../build/apple/iOS (App)/public`)
+    } else if(platform === 'android') {
+        // copy necessary files
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: 'src/android',
+                to: path.resolve(__dirname, '../../build/android/'),
+                noErrorOnMissing: true
+            }]
+        }))
+
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: 'capacitor.config.json',
+                to: path.resolve(__dirname, '../../build/android/app/src/main/assets')
+            }]
+        }))
+
+        // change output directory
+        output_dir = path.join(__dirname, `../../build/android/app/src/main/assets/public`)
     } else {
         plugins.push(new CopyPlugin({
             patterns: [{
