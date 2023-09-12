@@ -259,12 +259,12 @@ class Extension {
         const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
 
         return {
-            free: new BigNumber(balance.free),
-            reserved: new BigNumber(balance.reserved),
-            miscFrozen: new BigNumber(balance.miscFrozen),
-            feeFrozen: new BigNumber(balance.feeFrozen),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
+            free: new BigNumber(balance.free).toString(),
+            reserved: new BigNumber(balance.reserved).toString(),
+            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
+            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
         }
     }
 
@@ -310,12 +310,12 @@ class Extension {
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
         balances.tokens.push({
             token_name: 'BBB',
-            free: new BigNumber(balance.free),
-            reserved: new BigNumber(balance.reserved),
-            miscFrozen: new BigNumber(balance.miscFrozen),
-            feeFrozen: new BigNumber(balance.feeFrozen),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
+            free: new BigNumber(balance.free).toString(),
+            reserved: new BigNumber(balance.reserved).toString(),
+            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
+            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
+            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
             price: bbbTokenPrice
         })
         balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
@@ -332,13 +332,16 @@ class Extension {
                 free: new BigNumber(free),
                 reserved: new BigNumber(reserved),
                 frozen: new BigNumber(frozen),
-                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)),
+                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
                 price: price
             })
 
             balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
             balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
         }
+
+        balances.total = balances.total.toString()
+        balances.tokens_total = balances.tokens_total.toString()
 
         return balances
     }

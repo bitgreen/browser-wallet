@@ -98,7 +98,13 @@ module.exports = (
     );
   }
 
-    if(browser === 'safari') {
+    if(browser === 'firefox') {
+        plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+            /@polkadot\/api\/packageInfo\.js$/,
+            '../../../packages/browser-wallet-base/src/polkadot/packageInfoApi.js'
+        ))
+    } else if(browser === 'safari') {
         // copy necessary files
         plugins.push(new CopyPlugin({
             patterns: [{
