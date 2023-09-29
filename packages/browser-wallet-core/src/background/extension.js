@@ -297,13 +297,15 @@ class Extension {
             let price = 0
 
             const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
-            balances.assets.push({
-                asset_name: asset,
-                balance: parseFloat(data.balance),
-                price: price
-            })
+            if(data) {
+                balances.assets.push({
+                    asset_name: asset,
+                    balance: parseFloat(data.balance),
+                    price: price
+                })
 
-            balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
+                balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
+            }
         }
 
         // Add BBB on the list
