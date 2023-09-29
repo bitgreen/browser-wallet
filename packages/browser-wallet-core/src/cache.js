@@ -56,7 +56,7 @@ const getKycAddresses = async(polkadot_api) => {
     // One call per 30 minutes
     if(now < (last_fetch + 1000 * 60 * 30)) return false
 
-    const kyc_accounts = await polkadot_api.query.kyc.authorizedAccounts()
+    const kyc_accounts = await polkadot_api.query.kyc.members()
     for(const address of kyc_accounts.toJSON()) {
         const account = await db.stores.accounts.asyncGetByAddress(address.toString())
         if(account) {
