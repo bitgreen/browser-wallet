@@ -418,7 +418,7 @@ label.label {
     border-radius: 6px !important;
 }
 .form-group .input-group .input-group-text {
-    border-right: 1px solid #D5D6DA;
+    /*border-right: 1px solid #D5D6DA;*/
     border-radius: 4px 0 0 4px;
 }
 .form-group .input-group .form-control {

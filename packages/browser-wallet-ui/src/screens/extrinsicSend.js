@@ -378,6 +378,9 @@ export default async function extrinsicSendScreen(params) {
             loading_el.classList.add('done')
         }, 1200)
 
+        // show alert
+        document.querySelector('#error_alert').classList.remove('d-none')
+
         prepareSummary()
     }
 
@@ -385,9 +388,6 @@ export default async function extrinsicSendScreen(params) {
         // hide app info
         document.querySelector('#app_info').classList.remove('d-flex')
         document.querySelector('#app_info').classList.add('d-none')
-
-        // show alert
-        document.querySelector('#error_alert').classList.remove('d-none')
 
         // expand transactions
         document.querySelector('#transactions').style.height = 'calc(100% - 30px)'
