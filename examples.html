@@ -75,15 +75,18 @@
 
         document.querySelector('#batch_call').addEventListener('click', () => {
             bitgreen_wallet.extrinsic('utility', 'batch', [
+                ['balances', 'transfer', [
+                    '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ',
+                    10
+                ]],
                 ['assets', 'create', [
-                    100001,
+                    100003,
                     '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ',
                     1
                 ]],
-                ['assets', 'create', [
-                    100002,
-                    '5GGoUgUtw7tvQyJ7tknapdXkmZnduJbk2RJQNPMKqe7ufRCj',
-                    1
+                ['balances', 'transfer', [
+                    '5GqFxK56NW4gTsuLC6xhHVSLp5xURYuQJHoJA6NGVy259fSJ',
+                    20
                 ]]
             ]).then((response) => {
                 if(response.success) {

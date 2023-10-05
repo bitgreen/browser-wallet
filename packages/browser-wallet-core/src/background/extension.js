@@ -297,13 +297,15 @@ class Extension {
             let price = 0
 
             const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
-            balances.assets.push({
-                asset_name: asset,
-                balance: parseFloat(data.balance),
-                price: price
-            })
+            if(data) {
+                balances.assets.push({
+                    asset_name: asset,
+                    balance: parseFloat(data.balance),
+                    price: price
+                })
 
-            balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
+                balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
+            }
         }
 
         // Add BBB on the list
@@ -774,7 +776,7 @@ class Extension {
         const pallet = params?.pallet
         const call = params?.call
         const call_parameters = params?.call_parameters
-        let call_request = call_parameters
+        let call_request = JSON.parse(call_parameters)
 
         let response = {}
 
@@ -785,12 +787,22 @@ class Extension {
         }
 
         if(pallet === 'utility' && (call === 'batch' || call === 'batchAll' || call === 'forceBatch')) {
-            call_request = []
-            for(const extrinsic of call_parameters) {
-                call_request.push(await polkadot_api.tx[extrinsic[0]][extrinsic[1]](...extrinsic[2]))
+            try {
+                call_request = []
+
+                for(const extrinsic of JSON.parse(call_parameters)) {
+                    call_request.push(await polkadot_api.tx[extrinsic[0]][extrinsic[1]](...extrinsic[2]))
+                }
+
+                call_request = [call_request]
+            } catch (e) {
+                return {
+                    success: false,
+                    status: 'failed',
+                    error: e.message
+                }
             }
 
-            call_request = [call_request]
         }
 
         return new Promise(async(resolve) => {
@@ -810,51 +822,91 @@ class Extension {
                 }
                 return resolve(response)
             }
-            await polkadot_api.tx[pallet][call](...call_request)
-                .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
-                    if(dispatchError) {
-                        // for module errors, we have the section indexed, lookup
-                        const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
-                        const { docs, method, section } = decoded
 
-                        if(dispatchError.isModule) {
-                            response = {
-                                success: false,
-                                status: 'failed',
-                                error: section + '.' + method + ' ' + docs.join(' '),
-                                data: {
-                                    section,
-                                    method
+            try {
+                await polkadot_api.tx[pallet][call](...call_request)
+                    .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
+                        events.forEach((e) => {
+                            const ex = e.toHuman()
+
+                            // handle batch interrupted case
+                            if((pallet === 'utility' && (call === 'batch' || call === 'batchAll' || call === 'forceBatch'))
+                                && (ex.event.section === 'utility' && ex.event.method === 'BatchInterrupted')) {
+
+                                const failedIndex = e.event.data[0];
+                                const error = e.event.data[1];
+
+                                console.log(`Batch failed at call index: ${failedIndex}`);
+
+                                if (error) {
+                                    const decoded = polkadot_api.registry.findMetaError(error.asModule);
+                                    const { docs, method, section } = decoded;
+
+                                    // console.log("Error Details:", error, decoded);
+
+                                    if(error.isModule) {
+                                        resolve({
+                                            success: false,
+                                            status: 'failed',
+                                            error: section + '.' + method + ' - ' + docs.join(' '),
+                                            data: {
+                                                failedIndex: failedIndex.toString()
+                                            }
+                                        })
+                                    }
                                 }
                             }
-                        } else {
-                            // Other, CannotLookup, BadOrigin, no extra info
-                            response = {
-                                success: false,
-                                status: 'failed',
-                                error: dispatchError.toString()
+                        })
+                        if(dispatchError) {
+                            // for module errors, we have the section indexed, lookup
+                            const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
+                            const { docs, method, section } = decoded
+
+                            if(dispatchError.isModule) {
+                                response = {
+                                    success: false,
+                                    status: 'failed',
+                                    error: section + '.' + method + ' - ' + docs.join(' '),
+                                    data: {
+                                        section,
+                                        method
+                                    }
+                                }
+                            } else {
+                                // Other, CannotLookup, BadOrigin, no extra info
+                                response = {
+                                    success: false,
+                                    status: 'failed',
+                                    error: dispatchError.toString()
+                                }
                             }
+
+                            resolve(response)
                         }
 
-                        resolve(response)
-                    }
 
-
-                    if(status.isInBlock) {
+                        if(status.isInBlock) {
+                            resolve({
+                                success: true,
+                                data: {
+                                    block_hash: status.asInBlock.toHex()
+                                }
+                            })
+                        }
+                    }).catch(err => {
                         resolve({
-                            success: true,
-                            data: {
-                                block_hash: status.asInBlock.toHex()
-                            }
+                            success: false,
+                            status: 'failed',
+                            error: err.message
                         })
-                    }
-                }).catch(err => {
-                    resolve({
-                        success: false,
-                        status: 'failed',
-                        error: err.message
-                    })
-                });
+                    });
+            } catch (e) {
+                resolve({
+                    success: false,
+                    status: 'failed',
+                    error: e.message
+                })
+            }
         });
     }
 

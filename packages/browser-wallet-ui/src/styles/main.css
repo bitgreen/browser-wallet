@@ -127,6 +127,9 @@ p {
 .text-dark {
     color: #181818;
 }
+.text-danger {
+    color: #CC2400;
+}
 .text-dark-blue {
     color: #224851 !important;
 }
@@ -358,6 +361,9 @@ p {
     color: #ffffff;
     text-align: center;
 }
+.alert .icon .icon-small {
+    font-size: 20px !important;
+}
 .alert.alert-danger .icon {
     background-color: #991900;
 }
@@ -412,7 +418,7 @@ label.label {
     border-radius: 6px !important;
 }
 .form-group .input-group .input-group-text {
-    border-right: 1px solid #D5D6DA;
+    /*border-right: 1px solid #D5D6DA;*/
     border-radius: 4px 0 0 4px;
 }
 .form-group .input-group .form-control {
@@ -804,7 +810,8 @@ label.label {
 #loading_content #loading_circle #secondary {
     stroke: #D5D6DA;
 }
-#loading_content #checkmark {
+#loading_content #checkmark,
+#loading_content #failed {
     position: absolute;
     top: 108px;
     left: calc(50% - 22px);
@@ -812,15 +819,25 @@ label.label {
 
     transition: all ease-in-out 0.4s;
 }
+#loading_content #failed {
+    top: 90px;
+    left: calc(50% - 30px);
+}
 #loading_content #checkmark path {
     fill: #224851;
+
+    transition: all ease-in-out 0.4s;
+}
+#loading_content #failed path {
+    fill: #CC2400;
 
     transition: all ease-in-out 0.4s;
 }
 #loading_content.done #loading_circle {
     animation: none;
 }
-#loading_content #checkmark.show {
+#loading_content #checkmark.show,
+#loading_content #failed.show {
     opacity: 1;
 }
 #loading_content.dark {
@@ -1363,22 +1380,39 @@ label.label {
     text-align: center;
     min-width: 32px;
     height: 32px;
-    line-height: 32px;
+    line-height: 30px;
     background-color: #F8F8F9;
     color: #4F586E;
     font-size: 16px;
     font-weight: 500;
     border-radius: 16px;
-    padding-left: 2px;
+    padding-left: 1px;
     margin: 0 16px 0 16px;
 
     transition: all ease-in-out 0.1s;
 }
 .button-item.transaction-item .status.success {
-    background-color: #039855;
+    background-color: #9ECC00;
+    color: #ffffff;
+}
+.button-item.transaction-item .status.pending {
+    font-size: 16px;
+    background-color: #D9D9D9;
+    color: #ffffff;
+}
+.button-item.transaction-item .status.error {
+    background-color: #CC2400;
     color: #ffffff;
 }
 .button-item.transaction-item .status.success .icon {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+}
+.button-item.transaction-item .status.error .icon {
     position: absolute;
     top: 10px;
     left: 0;
@@ -1428,7 +1462,7 @@ label.label {
     padding: 0;
     text-align: center;
     font-size: 18px;
-    color: #039855;
+    color: #383a41;
 }
 .button-item.transaction-item .desc {
     color: #667085;
@@ -1480,7 +1514,7 @@ label.label {
 }
 .button-item.transaction-item .transaction-details {
     background: #F8F8F9;
-    height: 200px;
+    height: 190px;
     padding: 16px;
     overflow: hidden;
     cursor: default;
@@ -1521,6 +1555,7 @@ label.label {
     overflow-y: scroll;
     padding-right: 8px;
     padding-bottom: 8px;
+    scroll-behavior: smooth;
 }
 #transactions.smaller {
     height: 320px;
