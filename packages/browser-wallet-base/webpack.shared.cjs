@@ -104,6 +104,13 @@ module.exports = (
             /@polkadot\/api\/packageInfo\.js$/,
             '../../../packages/browser-wallet-base/src/polkadot/packageInfoApi.js'
         ))
+
+        plugins.push(new CopyPlugin({
+            patterns: [{
+                from: path.resolve(__dirname, '../browser-wallet-ui/src/assets/icons/normal'),
+                to: 'icons'
+            }]
+        }))
     } else if(browser === 'safari') {
         // copy necessary files
         plugins.push(new CopyPlugin({
