@@ -296,15 +296,19 @@ class Extension {
         for(const asset of result.assets) {
             let price = 0
 
-            const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
-            if(data) {
-                balances.assets.push({
-                    asset_name: asset,
-                    balance: parseFloat(data.balance),
-                    price: price
-                })
+            try {
+                const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
+                if(data) {
+                    balances.assets.push({
+                        asset_name: asset,
+                        balance: parseInt(data.balance.replaceAll(',', '')),
+                        price: price
+                    })
 
-                balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
+                    balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))
+                }
+            } catch (e) {
+                console.log('error getting asset balance')
             }
         }
 
@@ -328,18 +332,22 @@ class Extension {
                 price = 0.9898
             }
 
-            const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
-            balances.tokens.push({
-                token_name: token,
-                free: new BigNumber(free),
-                reserved: new BigNumber(reserved),
-                frozen: new BigNumber(frozen),
-                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
-                price: price
-            })
+            try {
+                const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+                balances.tokens.push({
+                    token_name: token,
+                    free: new BigNumber(free),
+                    reserved: new BigNumber(reserved),
+                    frozen: new BigNumber(frozen),
+                    total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
+                    price: price
+                })
 
-            balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
-            balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+            } catch (e) {
+                console.log('error getting token balance')
+            }
         }
 
         balances.total = balances.total.toString()

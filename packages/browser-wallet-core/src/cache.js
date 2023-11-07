@@ -53,17 +53,17 @@ const getKycAddresses = async(polkadot_api) => {
 
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_kyc') || 0
 
-    // One call per 30 minutes
-    if(now < (last_fetch + 1000 * 60 * 30)) return false
+    // One call per 10 minutes
+    if(now < (last_fetch + 1000 * 60 * 10)) return false
 
     const kyc_accounts = await polkadot_api.query.kyc.members()
+    // TODO: iterate over addresses
     for(const address of kyc_accounts.toJSON()) {
         const account = await db.stores.accounts.asyncGetByAddress(address.toString())
         if(account) {
             db.stores.cache.set('kyc_' + address.toString(), true)
         } else {
             db.stores.cache.remove('kyc_' + address.toString())
-
         }
     }
 
