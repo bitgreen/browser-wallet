@@ -784,7 +784,7 @@ class Extension {
         const pallet = params?.pallet
         const call = params?.call
         const call_parameters = params?.call_parameters
-        let call_request = JSON.parse(call_parameters)
+        let call_request = call_parameters ? JSON.parse(call_parameters) : []
 
         let response = {}
 
@@ -927,9 +927,10 @@ class Extension {
     async getCollators() {
         const polkadot_api = await polkadotApi()
 
-        const data = await polkadot_api.query.parachainStaking.candidates()
+        const candidates = await polkadot_api.query.parachainStaking.candidates()
+        const invulnerables = await polkadot_api.query.parachainStaking.invulnerables()
 
-        return data.toJSON()
+        return (candidates.toHuman()).concat(invulnerables.toHuman())
     }
 
     async getEstimatedFee(params) {
