@@ -23,7 +23,7 @@ export default async function transactionDetailsScreen(params) {
     const asset_info = getAmountDecimal(balanceToHuman(transaction.amount, 2), 2)
     const usd_info = getAmountDecimal(balanceToHuman(transaction.amount) * bbbTokenPrice, 2) // TODO: update price!
     const fee_info = getAmountDecimal(0.27, 2) // TODO: calculate fees!
-    const sent = transaction.sender.toLowerCase() === current_account.address.toLowerCase()
+    const sent = transaction.from.toLowerCase() === current_account.address.toLowerCase()
     const account_name = '(' + (current_account.name.length > 14 ? current_account.name.substring(0,14)+'...' : current_account.name) + ')'
 
     await screen.set('.content', 'transaction/details', {
@@ -33,10 +33,10 @@ export default async function transactionDetailsScreen(params) {
         usd_decimals: usd_info.decimals,
         fee_amount: fee_info.amount,
         fee_decimals: fee_info.decimals,
-        from_account_address: formatAddress(transaction.sender, 16, 16),
+        from_account_address: formatAddress(transaction.from, 16, 16),
         from_account_name: sent ? account_name : '',
         recipient_name: !sent ? account_name : '',
-        recipient_address: formatAddress(transaction.recipient, 16, 16),
+        recipient_address: formatAddress(transaction.to, 16, 16),
         wss_endpoint: encodeURI(current_network.url),
         block_number: transaction.blockNumber
     })
