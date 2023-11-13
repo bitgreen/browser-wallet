@@ -4,7 +4,6 @@ import DOMPurify from "dompurify";
 import {
     AccountStore,
     CacheStore,
-    checkIfAppIsKnown,
     NetworkStore,
     WalletStore,
     polkadotApi
@@ -20,7 +19,6 @@ import {
     getAmountDecimal, getApyByAddress, getAverageApy, getTotalStakedByAddress
 } from "@bitgreen/browser-wallet-utils";
 import BigNumber from "bignumber.js";
-import { hexToBn } from "@polkadot/util";
 
 export default async function stakingHomeScreen() {
     const wallet_store = new WalletStore()
@@ -66,14 +64,14 @@ export default async function stakingHomeScreen() {
             reward_per_block = reward_per_block.multipliedBy(new BigNumber(1000))
         }
 
-        const reward_data = getAmountDecimal(formatAmount(reward_per_block.toString(), 6), 6)
+        const reward_data = getAmountDecimal(formatAmount(!reward_per_block.isNaN() ? reward_per_block.toString() : 0, 6), 6)
         const collator_apy_data = getAmountDecimal(formatAmount(average_user_apy.toString(), 2), 2)
 
         await screen.set('.content', 'staking/home/active', {
             apy_amount: collator_apy_data.amount,
             apy_decimals: collator_apy_data.decimals,
-            reward_amount: reward_data.amount,
-            reward_decimals: reward_data.decimals,
+            reward_amount: reward_data?.amount || 0,
+            reward_decimals: reward_data?.decimals || 0,
             reward_base: reward_base
         })
 
@@ -90,29 +88,6 @@ export default async function stakingHomeScreen() {
             duration: 400,
             delay: 200
         });
-
-        polkadotApi().then((polkadot_api) => {
-            polkadot_api.query.parachainStaking.unbondedDelegates(current_account.address).then((data) => {
-                data = data.toJSON()
-
-                const deposit = hexToBn(data.deposit)
-
-                if(deposit > 0) {
-                    document.querySelector('#root .content #withdraw_unbonded').classList.remove('d-none')
-
-                    screen.setParam('#root .content .unbonded-amount', formatAmount(balanceToHuman(deposit), 2))
-
-                    anime({
-                        targets: '#root .content #withdraw_unbonded',
-                        opacity: [0, 1],
-                        translateX: [-20, 0],
-                        easing: 'easeInOutSine',
-                        duration: 400,
-                        delay: 400
-                    });
-                }
-            })
-        })
     } else {
         const average_apy = getAverageApy(all_collators, inflation_amount)
         const collator_apy_data = getAmountDecimal(formatAmount(average_apy.toString(), 2), 2)
@@ -136,6 +111,31 @@ export default async function stakingHomeScreen() {
             delay: 200
         });
     }
+
+    polkadotApi().then((polkadot_api) => {
+        polkadot_api.query.parachainStaking.unbondedDelegates(current_account.address).then((data) => {
+            data = data.toJSON()
+
+            const deposit = new BigNumber(data?.deposit?.replaceAll(',','') || 0)
+
+            console.log(deposit)
+
+            if(deposit > 0) {
+                document.querySelector('#root .content #withdraw_unbonded').classList.remove('d-none')
+
+                screen.setParam('#root .content .unbonded-amount', formatAmount(balanceToHuman(deposit), 2))
+
+                anime({
+                    targets: '#root .content #withdraw_unbonded',
+                    opacity: [0, 1],
+                    translateX: [-20, 0],
+                    easing: 'easeInOutSine',
+                    duration: 400,
+                    delay: 400
+                });
+            }
+        })
+    })
 
     screen.setListeners([
         {

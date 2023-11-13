@@ -465,7 +465,7 @@ export default async function assetSendScreen(params) {
                     await screen.set('#bordered_content #asset_info .selected', 'asset/list_item', {
                         asset: asset.asset_name,
                         asset_name: `Credits [${asset.asset_name}]`,
-                        balance: formatAmount(available_balance, 2),
+                        balance: available_balance,
                         icon: icon
                     })
 
@@ -481,7 +481,7 @@ export default async function assetSendScreen(params) {
                     screen.append('#bordered_content #asset_info .dropdown .content', 'asset/list_item', {
                         asset: asset.asset_name,
                         asset_name: `Credits [${asset.asset_name}]`,
-                        balance: formatAmount(available_balance, 2),
+                        balance: available_balance,
                         icon: icon
                     })
                 }, 400)

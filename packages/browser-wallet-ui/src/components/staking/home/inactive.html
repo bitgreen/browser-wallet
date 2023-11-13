@@ -1,6 +1,6 @@
 <h2 class="text-center text-white mt-4 mb-3">Stake your BBB Tokens</h2>
 <p class="text-center text-white text-bigger pe-3 ps-3">Securely stake your tokens on the Bitgreen network and earn a competitive rewards rate.</p>
-<div class="d-flex align-items-center" style="margin-top: 60px; margin-bottom: 120px;">
+<div class="d-flex align-items-center" style="margin-top: 60px; margin-bottom: 40px;">
     <div id="apy_info" class="row">
         <div class="d-flex align-items-center justify-content-center">
             <div class="amount text-white">${apy_amount}</div>
@@ -9,5 +9,8 @@
         <div class="text text-center text-white">APY</div>
     </div>
     <button id="get_started_staking" class="btn btn-sm btn-rounded btn-primary me-5 hidden visible">Get Started <span class="icon icon-right-arrow"></span></button>
+</div>
+<div class="d-flex w-100 justify-content-center mt-3">
+    <button id="withdraw_unbonded" class="d-flex align-items-center btn btn-sm btn-rounded btn-secondary-outline hidden visible d-none">Withdraw Unbonded (<span class="unbonded-amount">0.00</span>) BBB<span class="icon icon-break-chain icon-large"></span></button>
 </div>
 <div id="staking_info"></div>

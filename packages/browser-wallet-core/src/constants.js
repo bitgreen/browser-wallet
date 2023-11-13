@@ -12,6 +12,10 @@ export const bbbTokenPrice = 0.35 // price of bbb token
 // list of all known apps
 export const knownApps = [
     {
+        title: 'Bitgreen App',
+        domain: 'https://*.bitgreen.org'
+    },
+    {
         title: 'Bitgreen',
         domain: 'https://bitgreen.org'
     },

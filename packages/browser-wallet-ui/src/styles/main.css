@@ -1481,8 +1481,14 @@ label.label {
 .button-item.transaction-item .transaction-info .icon.icon-success {
     color: #039855;
 }
+.button-item.transaction-item .transaction-info .icon.icon-green {
+    color: #9ecc00;
+}
 .button-item.transaction-item .transaction-info .icon.icon-error {
     color: #CC2400;
+}
+.button-item.transaction-item .transaction-info .icon.icon-orange {
+    color: #cc8800;
 }
 .button-item.transaction-item .amount {
     font-size: 20px;

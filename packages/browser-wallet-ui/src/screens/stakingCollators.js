@@ -10,7 +10,6 @@ import {
     isIOs,
     isSafari
 } from "@bitgreen/browser-wallet-utils";
-import { hexToBigInt, hexToBn, hexToNumber, hexToString } from "@polkadot/util";
 import BigNumber from "bignumber.js";
 import anime from "animejs";
 import * as jdenticon from "jdenticon";
@@ -57,14 +56,14 @@ export default async function stakingCollatorsScreen(params) {
                     collator_jdenticon: jdenticon.toSvg(collator.who,56),
                     collator_address: formatAddress(collator.who, 8, 12),
                     collator_full_address: collator.who,
-                    total_stake: formatAmount(balanceToHuman(hexToBn(delegator.deposit)), 2, '', true),
+                    total_stake: formatAmount(balanceToHuman(new BigNumber(delegator.deposit.replaceAll(',',''))), 2, '', true),
                     apy_amount: collator_apy_data.amount,
                     apy_decimals: collator_apy_data.decimals
                 })
 
                 total_my_nominations++
 
-                my_stake = my_stake.plus(new BigNumber(hexToBigInt(delegator?.deposit).toString()))
+                my_stake = my_stake.plus(new BigNumber(delegator?.deposit.replaceAll(',','')))
             }
         }
 
@@ -72,7 +71,7 @@ export default async function stakingCollatorsScreen(params) {
             collator_jdenticon: jdenticon.toSvg(collator.who,56),
             collator_address: formatAddress(collator.who, 8, 12),
             collator_full_address: collator.who,
-            total_stake: formatAmount(balanceToHuman(hexToBn(collator.totalStake)), 2, '', true),
+            total_stake: formatAmount(balanceToHuman(new BigNumber(collator.totalStake.replaceAll(',',''))), 2, '', true),
             apy_amount: collator_apy_data.amount,
             apy_decimals: collator_apy_data.decimals
         })

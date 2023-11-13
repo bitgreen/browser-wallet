@@ -1,5 +1,5 @@
 import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
-import { hexToBigInt, hexToBn, hexToU8a, isHex } from "@polkadot/util";
+import { hexToU8a, isHex } from "@polkadot/util";
 import BigNumber from "bignumber.js";
 
 const getBrowser = () => {
@@ -201,7 +201,7 @@ const getTotalStakedByAddress = (all_collators, address) => {
     for(const [key, collator] of Object.entries(all_collators)) {
         for(const [key, delegator] of Object.entries(collator.delegators)) {
             if(delegator.who === address) {
-                total_take = total_take.plus(new BigNumber(hexToBigInt(delegator?.deposit).toString()))
+                total_take = total_take.plus(new BigNumber(delegator?.deposit.replaceAll(',', '')))
             }
         }
     }
@@ -238,7 +238,9 @@ const getAverageApy = (all_collators, block_reward) => {
     }
 
     if(total_apy.isEqualTo(0)) return 0
-    
+
+    console.log('total_apy', total_apy, total_apy.toString())
+
     return total_apy.dividedBy(new BigNumber(all_collators.length))
 }
 
@@ -247,7 +249,7 @@ const calculateCollatorApy = (all_collators, collator, block_reward) => {
 
     let total_stake = new BigNumber(0)
     for(const [key, collator] of Object.entries(all_collators)) {
-        total_stake = total_stake.plus(new BigNumber(hexToBigInt(collator?.totalStake).toString()))
+        total_stake = total_stake.plus(new BigNumber(collator?.totalStake.replaceAll(',', '')))
     }
 
     const apy_per_delegators = []
@@ -255,22 +257,29 @@ const calculateCollatorApy = (all_collators, collator, block_reward) => {
         let apy = new BigNumber(0)
         if(collator.delegators.length > 0) {
             apy = calculateUserApy(
-                hexToBn(delegator?.deposit),
-                hexToBn(collator.totalStake),
+                new BigNumber(delegator?.deposit.replaceAll(',', '')),
+                new BigNumber(collator.totalStake.replaceAll(',', '')),
                 total_stake,
                 new BigNumber(block_reward),
                 all_collators.length
             )
         }
 
-        apy_per_delegators.push(apy)
+        if(!apy.isNaN()) {
+            apy_per_delegators.push(apy)
+        }
     }
 
     let collator_apy = new BigNumber(0)
     for(const apy of apy_per_delegators) {
         collator_apy = collator_apy.plus(apy)
     }
-    collator_apy = collator_apy.dividedBy(apy_per_delegators.length)
+
+    if(!collator_apy.isNaN() && apy_per_delegators.length > 0) {
+        collator_apy = collator_apy.dividedBy(apy_per_delegators.length)
+    } else {
+        collator_apy = new BigNumber(0)
+    }
 
     return collator_apy
 }
