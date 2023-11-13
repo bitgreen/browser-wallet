@@ -4,7 +4,6 @@ import DOMPurify from "dompurify";
 import {
     AccountStore,
     CacheStore,
-    checkIfAppIsKnown,
     NetworkStore,
     WalletStore,
     polkadotApi

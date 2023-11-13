@@ -102,7 +102,10 @@ export default async function extrinsicSendScreen(params) {
             domain,
             title: params?.title?.substring(0, 60)
         });
-        if(checkIfAppIsKnown(domain)) {
+
+        const app = checkIfAppIsKnown(domain)
+        if(app) {
+            screen.setParam('#app_info h3', app.title)
             document.querySelector('#app_info').classList.add('known')
         }
     } else {
