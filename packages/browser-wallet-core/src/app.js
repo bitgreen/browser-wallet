@@ -11,7 +11,7 @@ export const checkIfAppIsKnown = (domain) => {
     // Check for wildcard domains
     for(const app of knownApps) {
         // Create a regex pattern from the domain, replacing '*' with a regex wildcard
-        const pattern = app.domain.replace(/\*/g, '.*');
+        const pattern = app.domain.replace(/\./g, '\\.').replace(/\*/g, '.*')
         const regex = new RegExp(`^${pattern}$`);
 
         if (regex.test(domain)) {
