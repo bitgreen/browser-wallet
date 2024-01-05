@@ -261,10 +261,8 @@ class Extension {
         return {
             free: new BigNumber(balance.free).toString(),
             reserved: new BigNumber(balance.reserved).toString(),
-            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
-            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
+            frozen: new BigNumber(balance?.frozen || 0).toString(),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance?.frozen || 0)).toString(),
         }
     }
 
@@ -314,17 +312,16 @@ class Extension {
 
         // Add BBB on the list
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
+        const bbb_balance = balance.toPrimitive()
         balances.tokens.push({
             token_name: 'BBB',
-            free: new BigNumber(balance.free).toString(),
-            reserved: new BigNumber(balance.reserved).toString(),
-            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
-            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
+            free: new BigNumber(bbb_balance.free).toString(),
+            reserved: new BigNumber(bbb_balance.reserved).toString(),
+            frozen: new BigNumber(bbb_balance?.frozen || 0).toString(),
+            total: new BigNumber(bbb_balance.free).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0)).toString(),
             price: bbbTokenPrice
         })
-        balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
+        balances.total = balances.total.plus(new BigNumber(bbb_balance.free)).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0))
 
         for(const token of result.tokens) {
             let price = 0
