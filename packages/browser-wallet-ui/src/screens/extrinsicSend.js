@@ -266,12 +266,6 @@ export default async function extrinsicSendScreen(params) {
                     } else if(parseInt(t.dataset.id) === parseInt(response.data.failedIndex)) {
                         t.querySelector('.status').classList.add('error')
                         t.querySelector('.status').innerHTML = '<span class="icon icon-close"></span>'
-
-                        const error_el = document.createElement('div');
-                        error_el.classList.add('mt-1', 'mb-2', 'px-2', 'text-gray', 'text-center');
-                        error_el.innerHTML = '<span class="text-bold text-danger">Transaction interrupted with error: </span><br>' + response.error;
-
-                        t.insertAdjacentElement('afterend', error_el)
                     } else {
                         t.querySelector('.status').classList.add('pending')
                         t.querySelector('.status').innerHTML = '?'
@@ -280,6 +274,15 @@ export default async function extrinsicSendScreen(params) {
                     t.querySelector('.status').classList.add('error')
                     t.querySelector('.status').innerHTML = '<span class="icon icon-close"></span>'
                 }
+
+                const error_el = document.createElement('div');
+                error_el.classList.add('mt-1', 'mb-2', 'px-2', 'text-gray', 'text-center');
+                if(response.data?.failedIndex) {
+                    error_el.innerHTML = '<span class="text-bold text-danger">Transaction interrupted with error: </span><br>' + response.error;
+                } else {
+                    error_el.innerHTML = '<span class="text-bold text-danger">Transaction failed with error: </span><br>' + response.error;
+                }
+                t.insertAdjacentElement('afterend', error_el)
             })
 
             showProcessingFail()
