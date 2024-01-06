@@ -358,7 +358,7 @@ class Extension {
         const current_account = await this.accounts_store.current()
 
         let contract = await polkadot_api.query.vestingContract.vestingContracts(current_account.address)
-        contract = contract.toJSON()
+        contract = contract.toPrimitive()
 
         if(contract && contract.amount) {
             return contract
@@ -863,11 +863,11 @@ class Extension {
                             }
                         })
                         if(dispatchError) {
-                            // for module errors, we have the section indexed, lookup
-                            const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
-                            const { docs, method, section } = decoded
-
                             if(dispatchError.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
+                                const { docs, method, section } = decoded
+
                                 response = {
                                     success: false,
                                     status: 'failed',
@@ -933,10 +933,15 @@ class Extension {
     async getEstimatedFee(params) {
         const polkadot_api = await polkadotApi()
 
-        let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
-        info = info.toJSON()
+        try {
+            let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
+            info = info.toJSON()
 
-        return info.partialFee
+            return info.partialFee
+        } catch (e) {
+            console.log('Error getting estimated fee: ', e)
+            return 0
+        }
     }
 }
 
