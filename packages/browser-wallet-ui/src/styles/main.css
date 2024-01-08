@@ -1080,7 +1080,22 @@ label.label {
 .current-wallet .kyc-status.verified:after {
     bottom: 5px;
     color: #224851;
-    content: "B"
+}
+#wallet_list .button-item .kyc-status.verified.verified-1:after,
+.current-wallet .kyc-status.verified.verified-1:after {
+    content: "1"
+}
+#wallet_list .button-item .kyc-status.verified.verified-2:after,
+.current-wallet .kyc-status.verified.verified-2:after {
+    content: "2"
+}
+#wallet_list .button-item .kyc-status.verified.verified-3:after,
+.current-wallet .kyc-status.verified.verified-3:after {
+    content: "3"
+}
+#wallet_list .button-item .kyc-status.verified.verified-4:after,
+.current-wallet .kyc-status.verified.verified-4:after {
+    content: "4"
 }
 #wallet_list .button-item .kyc-status.unverified:after,
 .current-wallet .kyc-status.unverified:after {
@@ -2883,6 +2898,12 @@ label.label {
 }
 #kyc_shield .text .verified {
     font-size: 20px;
+    font-weight: 500;
+    fill: #224851;
+}
+#kyc_shield .text .level {
+    font-size: 10px;
+    text-transform: uppercase;
     font-weight: 500;
     fill: #224851;
 }

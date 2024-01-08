@@ -31,7 +31,7 @@ export default async function accountEditScreen(params) {
         current_account_address: formatAddress(account?.address, 16, 8)
     })
 
-    const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
+    const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
 
     await screen.set('#bordered_content', 'accounts/edit/content', {
         account_id,
@@ -39,11 +39,19 @@ export default async function accountEditScreen(params) {
         derivation_path: account_id !== 'main' ? account_id : ''
     })
 
-    if(is_kyced) {
+    if(kyc_level) {
         const go_kyc_el = document.querySelector('#heading #go_kyc')
 
         go_kyc_el.querySelector('.kyc-status .icon').classList.add('text-green')
-        go_kyc_el.querySelector('.kyc-status .text').innerHTML = 'Basic (KYC)'
+        if(typeof kyc_level === 'string') {
+            if(parseInt(kyc_level) === 4) {
+                go_kyc_el.querySelector('.kyc-status .text').innerHTML = `Accredited (LVL ${kyc_level.toString()})`
+            } else if(parseInt(kyc_level) > 1) {
+                go_kyc_el.querySelector('.kyc-status .text').innerHTML = `Advanced (LVL ${kyc_level.toString()})`
+            } else {
+                go_kyc_el.querySelector('.kyc-status .text').innerHTML = `Basic (LVL ${kyc_level.toString()})`
+            }
+        }
     }
 
     if(account_id !== 'main') await screen.set('#bordered_content .footer .forget-account', 'accounts/edit/delete_button')
@@ -119,7 +127,7 @@ export default async function accountEditScreen(params) {
         {
             element: '#root #go_kyc',
             listener: () => {
-                if(is_kyced) {
+                if(kyc_level) {
                     return goToScreen('kycBasicScreen', {
                         account_id: account_id
                     })

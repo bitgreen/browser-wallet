@@ -635,6 +635,8 @@ const updateAccounts = async(current_account_id = null) => {
                 }
             }
 
+            const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+
             await updateElement('#accounts_modal #wallet_list', 'accounts/modal_item', {
                 account_id,
                 account_jdenticon,
@@ -642,7 +644,7 @@ const updateAccounts = async(current_account_id = null) => {
                 account_address: formatAddress(account?.address, 16, 8),
                 is_main: account_id?.toString() === 'main' ? '' : 'hidden',
                 is_current: is_current ? '' : 'hidden',
-                is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified',
+                is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
             }, true)
         }
 

@@ -1,10 +1,10 @@
 import Screen, { copyText, goBackScreen, goToScreen, updateAccounts } from './index.js'
-import { AccountStore } from "@bitgreen/browser-wallet-core";
+import {AccountStore, NetworkStore} from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 
 import DOMPurify from 'dompurify';
 import anime from "animejs";
-import { formatAddress } from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox, isSafari} from "@bitgreen/browser-wallet-utils";
 
 export default async function kycBasicScreen(params) {
     const screen = new Screen({
@@ -20,9 +20,9 @@ export default async function kycBasicScreen(params) {
     const account_id = params?.account_id
 
     const accounts_store = new AccountStore()
+    const networks_store = new NetworkStore()
     const account = await accounts_store.asyncGet(account_id)
-
-    console.log('hererere')
+    const current_network = await networks_store.current()
 
     await screen.set('#heading', 'kyc/heading', {
         account_name: account?.name,
@@ -55,6 +55,20 @@ export default async function kycBasicScreen(params) {
             listener: async() => {
                 await copyText(account.address)
                 await showNotification('Account address copied to clipboard.', 'info', 2000, 58)
+            }
+        },
+        {
+            element: '#root #go_kyc_start',
+            listener: async() => {
+                const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+
+                const url = `${current_network.api_endpoint}/kyc/start?address=${account.address}&state=wallet&type=advanced`;
+                let result = await fetch(url, {
+                    mode: 'cors'
+                })
+                result = await result.json()
+
+                current_browser.tabs.create({ url: result.url })
             }
         }
     ])

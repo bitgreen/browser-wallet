@@ -105,13 +105,14 @@ class userInterface {
 
     initAccounts = async() => {
         const current_account = await this.db.stores.accounts.current()
+        const kyc_level = await this.db.stores.cache.asyncGet('kyc_' + current_account.address)
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
             full_account_address: current_account?.address,
             is_primary: current_account?.id === 'main' ? '' : 'hidden',
-            is_kyc_verified: await this.db.stores.cache.asyncGet('kyc_' + current_account.address) ? 'verified' : 'unverified'
+            is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
         }, false)
 
         await updateAccounts(current_account?.id)
