@@ -54,7 +54,7 @@ const getKycAddresses = async(polkadot_api) => {
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_kyc') || 0
 
     // One call per 10 minutes
-    // if(now < (last_fetch + 1000 * 60 * 10)) return false
+    if(now < (last_fetch + 1000 * 60 * 10)) return false
 
     const all_accounts = await db.stores.accounts.asyncAll()
 
