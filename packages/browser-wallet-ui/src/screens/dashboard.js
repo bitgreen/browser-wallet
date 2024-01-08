@@ -116,7 +116,7 @@ export default async function dashboardScreen(params = {
         let other_usd_amount = 0
         for(const token of all_balances.tokens) {
             if(token.token_name === 'BBB') {
-                bbb_balance = balanceToHuman(token.total, 18)
+                bbb_balance = new BigNumber(token.total)
             } else {
                 other_usd_amount += balanceToHuman(token.total, 18) * token.price
             }
@@ -125,7 +125,6 @@ export default async function dashboardScreen(params = {
             other_usd_amount += asset.balance * asset.price
         }
 
-        const bbb_usd_amount = bbb_balance * bbbTokenPrice
 
         const vesting_contract = await sendMessage('get_vesting_contract')
 
@@ -133,6 +132,10 @@ export default async function dashboardScreen(params = {
         if(vesting_contract) {
             vesting_balance = balanceToHuman(vesting_contract?.amount, 18)
         }
+
+        const total_bbb_balance = balanceToHuman(bbb_balance.plus(new BigNumber(vesting_contract?.amount | 0)), 18)
+
+        const bbb_usd_amount = balanceToHuman(bbb_balance, 18) * bbbTokenPrice
 
         const vesting_usd_amount = vesting_balance * bbbTokenPrice
 
@@ -153,7 +156,7 @@ export default async function dashboardScreen(params = {
         screen.setParam('#portfolio .other_usd_amount', '$' + formatAmount(other_usd_amount, bbb_usd_amount < 1000000 ? 2 : 0))
 
         screen.setParam('#bordered_content .all_balance', formatAmount(balanceToHuman(all_balances.total), 2))
-        screen.setParam('#bordered_content .bbb_balance', formatAmount(bbb_balance, 2))
+        screen.setParam('#bordered_content .bbb_balance', formatAmount(total_bbb_balance, 2))
         screen.setParam('#bordered_content .token_balance', formatAmount(balanceToHuman(all_balances.tokens_total), 2))
     }).then(() => {
         renderChart()
