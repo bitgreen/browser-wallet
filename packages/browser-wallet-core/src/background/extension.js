@@ -95,6 +95,10 @@ class Extension {
                 return await this.getCollators()
             case 'get_estimated_fee':
                 return await this.getEstimatedFee(data?.params)
+            case 'check_api_ready':
+                return await this.checkApiReady()
+            case 'reconnect_api':
+                return await this.reconnectApi()
             default:
                 return false
         }
@@ -942,6 +946,18 @@ class Extension {
             console.log('Error getting estimated fee: ', e)
             return 0
         }
+    }
+
+    async checkApiReady() {
+        const polkadot_api = await polkadotApi()
+
+        return !!polkadot_api?.isReady
+    }
+
+    async reconnectApi() {
+        const polkadot_api = await polkadotApi(true)
+
+        return !!polkadot_api?.isReady
     }
 }
 
