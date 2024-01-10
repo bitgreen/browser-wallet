@@ -353,6 +353,11 @@ p {
     border-color: #DC6803;
     color: #DC6803;
 }
+.alert-danger-transparent {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
+}
 .alert-dismissible {
     padding-right: 8px !important;
 }
@@ -369,6 +374,10 @@ p {
 }
 .alert.alert-warning .icon {
     background-color: #DC6803;
+}
+.alert.alert-danger-transparent .icon {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #F53400;
 }
 .alert .icon span {
     width: 100%;
@@ -691,16 +700,11 @@ label.label {
     left: 0;
     right: 0;
     top: 0;
-    bottom: 0;
+    bottom: 124px;
     margin: auto;
 
     width: 102px;
     height: 128px;
-
-    background-image: url('../assets/b.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: center;
 }
 #init_screen.fade-out .init-logo {
     transform: scale(30);
@@ -857,6 +861,67 @@ label.label {
 }
 #loading_content.dark #checkmark path {
     fill: #FFFFFF;
+}
+#bbb_loader {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+    background-color: transparent;
+    text-align: center;
+}
+#bbb_loader.centered {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+#bbb_loader .bbb-icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 124px;
+    margin: auto;
+
+    width: 102px;
+    height: 128px;
+    animation-duration: 2s;
+}
+#bbb_loader.active .bbb-icon {
+    font-size: 42px;
+    animation-name: beat-fade;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+}
+#bbb_loader.active .bbb-icon path {
+    stroke: #C0FF00;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+
+    animation-name: dash;
+    animation-iteration-count: infinite;
+    animation-duration: 20s;
+}
+#bbb_loader .text {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 12px;
+    text-align: center;
+    padding-top: 16px;
+    transition: all ease-in-out 0.4s;
+    opacity: 0;
+}
+#bbb_loader.active .text {
+    opacity: 1;
 }
 
 #root {
@@ -2906,6 +2971,14 @@ label.label {
     text-transform: uppercase;
     font-weight: 500;
     fill: #224851;
+}
+
+#connection_error {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    z-index: 10000;
 }
 
 /* for full screen */

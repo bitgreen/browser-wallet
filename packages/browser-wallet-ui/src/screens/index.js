@@ -1,7 +1,7 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
 import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
-import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
+import {AccountStore, CacheStore, NetworkStore} from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
 import anime from 'animejs';
@@ -40,6 +40,7 @@ import stakingCollatorsScreen from "./stakingCollators.js";
 import stakingCollatorScreen from "./stakingCollator.js";
 import kycStartScreen from "./kycStart.js";
 import kycBasicScreen from "./kycBasic.js";
+import connectionErrorScreen from "./connectionError.js";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -140,6 +141,10 @@ class Screen {
 
     unFreezeRoot() {
         document.querySelector('#root').classList.remove('freeze')
+    }
+
+    showInit() {
+        document.querySelector("#init_screen").classList.remove("inactive")
     }
 
     async set(element = this.options.element, template_name = this.options.template_name, params = this.options.template_params) {
@@ -444,7 +449,8 @@ const screens = {
     stakingCollatorsScreen,
     stakingCollatorScreen,
     kycStartScreen,
-    kycBasicScreen
+    kycBasicScreen,
+    connectionErrorScreen
 }
 
 let screen_history = []

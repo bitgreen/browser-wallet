@@ -22,13 +22,23 @@ const backgroundMessageHandler = (data, port) => {
     }
 
     promise.then((response) => {
-        if(port) port.postMessage({ id: data.id, response });
+        if(port) {
+            try {
+                port.postMessage({ id: data.id, response })
+            } catch (e) {
+                console.log('Error sending message.')
+            }
+        }
     }).catch((error) => {
         console.error(error);
 
         // only send message back to port if it's still connected
         if(port) {
-            port.postMessage({ error: error.message, errorCode: error.code, errorData: error.data, id: data.id });
+            try {
+                port.postMessage({ error: error.message, errorCode: error.code, errorData: error.data, id: data.id })
+            } catch (e) {
+                console.log('Error sending message back.')
+            }
         }
     });
 }

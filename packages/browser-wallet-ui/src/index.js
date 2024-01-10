@@ -22,7 +22,7 @@ import * as jdenticon from 'jdenticon'
 import {Tooltip} from 'bootstrap'
 
 /* import stores */
-import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
+import { databaseService } from "@bitgreen/browser-wallet-core";
 
 /* import all css files */
 import './styles/main.css'
