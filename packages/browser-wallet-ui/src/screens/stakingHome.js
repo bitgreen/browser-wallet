@@ -118,8 +118,6 @@ export default async function stakingHomeScreen() {
 
             const deposit = new BigNumber(data?.deposit?.replaceAll(',','') || 0)
 
-            console.log(deposit)
-
             if(deposit > 0) {
                 document.querySelector('#root .content #withdraw_unbonded').classList.remove('d-none')
 
