@@ -22,12 +22,15 @@ export default async function walletBackupScreen(params) {
     let copy_mnemonic = ''
 
     let index = 1
-    for(const w of Array(24).fill()) {
+    for(const w of Array(12).fill()) {
         const value = randomString(Math.floor(Math.random() * 4) + 3)
         await screen.append('#backup_mnemonics', 'wallet/partial/word', {
             index: index++, value
         })
     }
+
+    const input_field = document.querySelector("#root .footer #password")
+    const show_password = document.querySelector("#root .footer .show-password")
 
     screen.setListeners([
         {
@@ -55,6 +58,18 @@ export default async function walletBackupScreen(params) {
                 }
             }
         },
+        {
+            element: '#root .footer .show-password',
+            listener: () => {
+                if(input_field.type === 'password') {
+                    input_field.type = 'text'
+                    show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field.type = 'password'
+                    show_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
+        }
     ])
 
     const revealMnemonics = async() => {
@@ -106,5 +121,8 @@ export default async function walletBackupScreen(params) {
         } else {
             await showNotification('Password is wrong!', 'error')
         }
+
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
     }
 }

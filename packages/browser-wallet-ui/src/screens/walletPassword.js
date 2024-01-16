@@ -52,6 +52,11 @@ export default async function walletPasswordScreen(params) {
         icon: 'icon-right-arrow me-2'
     })
 
+    const input_field_password = document.querySelector("#root #password")
+    const show_password_password = document.querySelector("#root .show-password-password")
+    const input_field_password_repeat = document.querySelector("#root #password_repeat")
+    const show_password_password_repeat = document.querySelector("#root .show-password-repeat")
+
     screen.setListeners([
         {
             element: '.heading #go_back',
@@ -90,6 +95,11 @@ export default async function walletPasswordScreen(params) {
                 } else {
                     await showNotification('Something went wrong. Please try again or contact us.', 'error', 2800, 0)
                 }
+
+                show_password_password.innerHTML = '<span class="icon icon-eye"></span>'
+                input_field_password.type = 'password'
+                show_password_password_repeat.innerHTML = '<span class="icon icon-eye"></span>'
+                input_field_password_repeat.type = 'password'
             }
         },
         {
@@ -99,6 +109,30 @@ export default async function walletPasswordScreen(params) {
         {
             element: '#new_account',
             listener: () => goToScreen('accountCreateScreen')
+        },
+        {
+            element: '#root .show-password-password',
+            listener: () => {
+                if(input_field_password.type === 'password') {
+                    input_field_password.type = 'text'
+                    show_password_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field_password.type = 'password'
+                    show_password_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
+        },
+        {
+            element: '#root .show-password-repeat',
+            listener: () => {
+                if(input_field_password_repeat.type === 'password') {
+                    input_field_password_repeat.type = 'text'
+                    show_password_password_repeat.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field_password_repeat.type = 'password'
+                    show_password_password_repeat.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
         }
     ])
 

@@ -295,6 +295,14 @@ class Screen {
     }
 }
 
+const freezeRoot = () => {
+    document.querySelector('#root').classList.add('freeze')
+}
+
+const unFreezeRoot = () => {
+    document.querySelector('#root').classList.remove('freeze')
+}
+
 const showLogin = async(instant = false, force = false) => {
     if(logged_in && !force) {
         return hideLogin()
@@ -704,5 +712,7 @@ export {
     copyText,
     enableFooter,
     disableFooter,
-    scrollToBottom
+    scrollToBottom,
+    freezeRoot,
+    unFreezeRoot
 }

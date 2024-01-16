@@ -19,7 +19,7 @@ const extension = async() => {
 
                 await extension()
             })
-        }, 3000)
+        }, 2000)
     }
 
     const params = new URLSearchParams(window.location.search)

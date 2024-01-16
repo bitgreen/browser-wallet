@@ -558,68 +558,73 @@ class Extension {
             return false;
         }
 
-        // get ascii value of first 2 chars
-        const vb1 = password.charCodeAt(0);
-        const vb2 = password.charCodeAt(1);
+        try {
+            // get ascii value of first 2 chars
+            const vb1 = password.charCodeAt(0);
+            const vb2 = password.charCodeAt(1);
 
-        // position to derive other 3 passwords
-        const p = vb1*vb2;
+            // position to derive other 3 passwords
+            const p = vb1*vb2;
 
-        // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-        const enc = wallet_data;
-        let randomstring = enc.iv;
-        let dpwd1 = '';
-        let dpwd2 = '';
-        let dpwd3 = '';
-        let h = keccakAsU8a(password + randomstring);
-        for(let i = 0; i < 100000; i++) {
-            h = keccakAsU8a(h);
-            if(i === p) {
-                dpwd1 = h;
+            // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+            const enc = wallet_data;
+            let randomstring = enc.iv;
+            let dpwd1 = '';
+            let dpwd2 = '';
+            let dpwd3 = '';
+            let h = keccakAsU8a(password + randomstring);
+            for(let i = 0; i < 10000; i++) {
+                h = keccakAsU8a(h);
+                if(i === p) {
+                    dpwd1 = h;
+                }
+                h = sha512AsU8a(h);
+                if(i === p) {
+                    dpwd2 = h;
+                }
+                h = blake2AsU8a(h);
+                if(i === p) {
+                    dpwd3 = h;
+                }
             }
-            h = sha512AsU8a(h);
-            if(i === p) {
-                dpwd2 = h;
-            }
-            h = blake2AsU8a(h);
-            if(i === p) {
-                dpwd3 = h;
-            }
-        }
 
-        // decrypt AES-OFB
-        const ivaesofb = hexToU8a(enc.ivaesofb);
-        const keyaesofb = dpwd3.slice(0, 32);
-        let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-        const encryptedhex = enc.encrypted;
-        const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
-        let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+            // decrypt AES-OFB
+            const ivaesofb = hexToU8a(enc.ivaesofb);
+            const keyaesofb = dpwd3.slice(0, 32);
+            let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+            const encryptedhex = enc.encrypted;
+            const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
+            let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
 
-        // decrypt AES-CTR
-        const ivaesctr = hexToU8a(enc.ivaesctr);
-        const keyaesctr = dpwd2.slice(0, 32);
-        let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-        let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+            // decrypt AES-CTR
+            const ivaesctr = hexToU8a(enc.ivaesctr);
+            const keyaesctr = dpwd2.slice(0, 32);
+            let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+            let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
 
-        // decrypt AES-CFB
-        const ivaescfb = hexToU8a(enc.ivaescfb);
-        const keyaescfb = dpwd1.slice(0, 32);
-        let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-        let decrypted = aesCfb.decrypt(encryptedaescfb);
-        let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
+            // decrypt AES-CFB
+            const ivaescfb = hexToU8a(enc.ivaescfb);
+            const keyaescfb = dpwd1.slice(0, 32);
+            let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+            let decrypted = aesCfb.decrypt(encryptedaescfb);
+            let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
 
-        if(!decrypted_mnemonic) {
-            return false;
-        } else {
-            if(!mnemonicValidate(decrypted_mnemonic)) {
+            if(!decrypted_mnemonic) {
                 return false;
-            }
+            } else {
+                if(!mnemonicValidate(decrypted_mnemonic)) {
+                    return false;
+                }
 
-            if(mnemonic_only) {
-                return decrypted_mnemonic;
-            }
+                if(mnemonic_only) {
+                    return decrypted_mnemonic;
+                }
 
-            return true;
+                return true;
+            }
+        } catch (e) {
+            console.log('Error decoding wallet:', e)
+            return false
         }
     }
 

@@ -100,6 +100,9 @@ export default async function assetTransactionReviewScreen(params) {
         padding_top: '60px'
     });
 
+    const input_field = document.querySelector("#root .footer #password")
+    const show_password = document.querySelector("#root .footer .show-password")
+
     screen.setListeners([
         {
             element: '.heading #go_back',
@@ -118,6 +121,18 @@ export default async function assetTransactionReviewScreen(params) {
                 }
             }
         },
+        {
+            element: '#root .footer .show-password',
+            listener: () => {
+                if(input_field.type === 'password') {
+                    input_field.type = 'text'
+                    show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field.type = 'password'
+                    show_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
+        }
     ])
 
     const makeTransaction = async() => {
@@ -153,6 +168,9 @@ export default async function assetTransactionReviewScreen(params) {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')
         }
+
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
     }
 
     const showProcessing = () => {

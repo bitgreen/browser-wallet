@@ -17,6 +17,9 @@ export default async function accountCreateScreen() {
 
     await screen.set('.content', 'accounts/create')
 
+    const input_field = document.querySelector("#root #password")
+    const show_password = document.querySelector("#root .show-password")
+
     screen.setListeners([
         {
             element: '.heading #go_back',
@@ -39,6 +42,18 @@ export default async function accountCreateScreen() {
         {
             element: '#root #store_account',
             listener: () => storeAccount()
+        },
+        {
+            element: '#root .show-password',
+            listener: () => {
+                if(input_field.type === 'password') {
+                    input_field.type = 'text'
+                    show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field.type = 'password'
+                    show_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
         }
     ])
 
@@ -61,7 +76,10 @@ export default async function accountCreateScreen() {
             await goToScreen('accountManageScreen', {}, true)
             await showNotification('New account created!', 'success')
         } else {
-            await showNotification(response.error, 'error')
+            await showNotification(response.error || 'Password is wrong!', 'error')
         }
+
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
     }
 }
