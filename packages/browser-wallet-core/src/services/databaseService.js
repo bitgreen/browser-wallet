@@ -8,7 +8,8 @@ class DatabaseService {
 
     async init() {
         const networks_store = new NetworkStore()
-        const cache_store = new CacheStore(await networks_store.current())
+        const current_network = await networks_store.current()
+        const cache_store = new CacheStore(current_network)
 
         this.stores = {
             accounts: new AccountStore(),

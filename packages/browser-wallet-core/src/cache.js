@@ -1,9 +1,7 @@
 import {AccountStore, databaseService} from "./index.js";
 import { polkadot } from "@polkadot/types/extrinsic/signedExtensions/polkadot";
 
-const db = new databaseService()
-
-const getChainMetaData = async (polkadot_api) => {
+const getChainMetaData = async (polkadot_api, db) => {
     const now = new Date().getTime()
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_metadata') || 0
 
@@ -32,7 +30,7 @@ const getChainMetaData = async (polkadot_api) => {
     db.stores.cache.set('last_fetch_metadata', now)
 }
 
-const getInflationAmount = async(polkadot_api) => {
+const getInflationAmount = async(polkadot_api, db) => {
     const now = new Date().getTime()
 
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_inflation') || 0
@@ -47,7 +45,7 @@ const getInflationAmount = async(polkadot_api) => {
     db.stores.cache.set('last_fetch_inflation', now)
 }
 
-const getKycAddresses = async(polkadot_api) => {
+const getKycAddresses = async(polkadot_api, db) => {
     // return await db.stores.cache.asyncRemoveAll();
     const now = new Date().getTime()
 

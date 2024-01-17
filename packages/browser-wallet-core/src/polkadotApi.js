@@ -2,20 +2,23 @@ import { ApiPromise, WsProvider } from '@polkadot/api'
 import { NetworkStore } from "./stores/index.js";
 import { isIOs } from "@bitgreen/browser-wallet-utils";
 import { getChainMetaData, getInflationAmount, getKycAddresses } from "./cache.js";
+import DatabaseService from "./services/databaseService.js";
 
 let ws_provider_url = undefined;
 let ws_provider = undefined;
 let api = undefined
 
 const initPolkadotApi = async(force = false) => {
+    const db = new DatabaseService()
+
     return new Promise(async(resolve) => {
         const networks_store = new NetworkStore()
         const current_network = await networks_store.current()
 
         console.log('ws_provider.isConnected', ws_provider?.isConnected)
 
-        if(force && ws_provider?.isConnected) {
-            ws_provider.disconnect()
+        if(force) {
+            if(ws_provider?.isConnected) ws_provider.disconnect()
             ws_provider = null
         }
 
@@ -303,9 +306,9 @@ const initPolkadotApi = async(force = false) => {
                 resolve(api)
 
                 // cache data we need
-                getChainMetaData(api_promise).then()
-                getInflationAmount(api_promise).then()
-                getKycAddresses(api_promise).then()
+                getChainMetaData(api_promise, db).then()
+                getInflationAmount(api_promise, db).then()
+                getKycAddresses(api_promise, db).then()
             })
 
             ws_provider.on('error', async (e) => {
