@@ -598,6 +598,7 @@ label.label {
     line-height: 12px;
     text-align: center;
     border-radius: 10px;
+    padding: 4px 0;
 }
 .badge.badge-primary {
     background-color: #C0FF00;
