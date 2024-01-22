@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 import anime from "animejs";
 import {formatAddress, isFirefox, isSafari} from "@bitgreen/browser-wallet-utils";
 
-export default async function kycBasicScreen(params) {
+export default async function kycAdvancedScreen(params) {
     const screen = new Screen({
         template_name: 'layouts/default_custom_header',
         template_params: {
@@ -18,6 +18,7 @@ export default async function kycBasicScreen(params) {
     await screen.init()
 
     const account_id = params?.account_id
+    const kyc_level = params?.kyc_level
 
     const accounts_store = new AccountStore()
     const networks_store = new NetworkStore()
@@ -29,10 +30,11 @@ export default async function kycBasicScreen(params) {
         current_account_address: formatAddress(account?.address, 16, 8)
     })
 
-    await screen.set('#bordered_content', 'kyc/basic', {
+    await screen.set('#bordered_content', 'kyc/advanced', {
         account_id,
         account_address: account?.address,
-        derivation_path: account_id !== 'main' ? account_id : ''
+        derivation_path: account_id !== 'main' ? account_id : '',
+        kyc_level: kyc_level
     })
 
     await screen.set('#bordered_content .footer .fractal-logo', 'kyc/fractal')

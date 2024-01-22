@@ -128,6 +128,19 @@ export default async function accountEditScreen(params) {
             element: '#root #go_kyc',
             listener: () => {
                 if(kyc_level) {
+                    if(kyc_level === '4') {
+                        return goToScreen('kycAccreditedScreen', {
+                            account_id: account_id
+                        })
+                    }
+
+                    if(kyc_level === '2' || kyc_level === '3') {
+                        return goToScreen('kycAdvancedScreen', {
+                            account_id: account_id,
+                            kyc_level: kyc_level
+                        })
+                    }
+
                     return goToScreen('kycBasicScreen', {
                         account_id: account_id
                     })

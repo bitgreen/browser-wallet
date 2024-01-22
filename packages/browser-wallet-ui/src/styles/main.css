@@ -3028,8 +3028,8 @@ label.label {
     fill: #667085;
 }
 #kyc_shield .text .verified {
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 400;
     fill: #224851;
 }
 #kyc_shield .text .level {

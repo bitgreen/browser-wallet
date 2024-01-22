@@ -41,6 +41,8 @@ import stakingCollatorScreen from "./stakingCollator.js";
 import kycStartScreen from "./kycStart.js";
 import kycBasicScreen from "./kycBasic.js";
 import connectionErrorScreen from "./connectionError.js";
+import kycAdvancedScreen from "./kycAdvanced.js";
+import kycAccreditedScreen from "./kycAccredited.js";
 
 const current_browser = (isFirefox() || isSafari()) ? browser : chrome
 
@@ -458,6 +460,8 @@ const screens = {
     stakingCollatorScreen,
     kycStartScreen,
     kycBasicScreen,
+    kycAdvancedScreen,
+    kycAccreditedScreen,
     connectionErrorScreen
 }
 
