@@ -178,6 +178,13 @@ export default async function extrinsicSendScreen(params) {
         delay: function(el, i) { return (i * 150) > 1200 ? 1200 : (i * 150) },
     });
 
+    anime({
+        targets: '#bordered_content .footer',
+        translateY: 0,
+        duration: 1,
+        delay: 200
+    });
+
     screen.setListeners([
         {
             element: '#approve_extrinsic',
