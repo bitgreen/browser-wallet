@@ -74,10 +74,21 @@ export default async function transactionHistoryScreen() {
         })
     }
 
-    // Default sort by date
+    // Default sort by date with secondary sort by index (if available)
     all_transactions.sort((a, b) => {
-        return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
-    })
+        const dateA = new Date(a.value.createdAt);
+        const dateB = new Date(b.value.createdAt);
+
+        // Compare dates in descending order
+        if (dateB > dateA) return 1;
+        if (dateA > dateB) return -1;
+
+        // If dates are equal, compare indices in ascending order (treat undefined as Infinity)
+        const indexA = a.value.index || Infinity;
+        const indexB = b.value.index || Infinity;
+
+        return indexB - indexA;
+    });
 
     for(const transaction of all_transactions) {
         if(!transaction.value) continue
@@ -106,7 +117,7 @@ export default async function transactionHistoryScreen() {
 
             if(transaction.value.type === 'PURCHASED') {
                 icon = '<span class="d-block w-100 icon icon-cart icon-success"></span><span class="desc d-block w-100 text-gray">PURCHASED</span>'
-                asset_prefix = '-'
+                asset_prefix = '+'
             } else if(transaction.value.type === 'SOLD') {
                 icon = '<span class="d-block w-100 icon icon-cart icon-error"></span><span class="desc d-block w-100 text-gray">SOLD</span>'
                 asset_prefix = '-'

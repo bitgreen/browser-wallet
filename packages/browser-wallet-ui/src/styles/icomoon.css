@@ -208,3 +208,9 @@
 .icon-danger:before {
   content: "\e900";
 }
+.icon-eye:before {
+  content: "\e9ce";
+}
+.icon-eye-blocked:before {
+  content: "\e9d1";
+}

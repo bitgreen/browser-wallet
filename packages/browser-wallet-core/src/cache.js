@@ -1,9 +1,7 @@
-import { databaseService } from "./index.js";
+import {AccountStore, databaseService} from "./index.js";
 import { polkadot } from "@polkadot/types/extrinsic/signedExtensions/polkadot";
 
-const db = new databaseService()
-
-const getChainMetaData = async (polkadot_api) => {
+const getChainMetaData = async (polkadot_api, db) => {
     const now = new Date().getTime()
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_metadata') || 0
 
@@ -32,7 +30,7 @@ const getChainMetaData = async (polkadot_api) => {
     db.stores.cache.set('last_fetch_metadata', now)
 }
 
-const getInflationAmount = async(polkadot_api) => {
+const getInflationAmount = async(polkadot_api, db) => {
     const now = new Date().getTime()
 
     const last_fetch = await db.stores.cache.asyncGet('last_fetch_inflation') || 0
@@ -47,7 +45,7 @@ const getInflationAmount = async(polkadot_api) => {
     db.stores.cache.set('last_fetch_inflation', now)
 }
 
-const getKycAddresses = async(polkadot_api) => {
+const getKycAddresses = async(polkadot_api, db) => {
     // return await db.stores.cache.asyncRemoveAll();
     const now = new Date().getTime()
 
@@ -56,15 +54,24 @@ const getKycAddresses = async(polkadot_api) => {
     // One call per 10 minutes
     if(now < (last_fetch + 1000 * 60 * 10)) return false
 
-    const kyc_accounts = await polkadot_api.query.kyc.members()
-    // TODO: iterate over addresses
-    for(const address of kyc_accounts.toJSON()) {
-        const account = await db.stores.accounts.asyncGetByAddress(address.toString())
-        if(account) {
-            db.stores.cache.set('kyc_' + address.toString(), true)
-        } else {
-            db.stores.cache.remove('kyc_' + address.toString())
+    const all_accounts = await db.stores.accounts.asyncAll()
+
+    for(const account of all_accounts) {
+        try {
+            const kyc_data = await polkadot_api.query.kycPallet.members(account.value.address)
+
+            const match = kyc_data.toString().match(/KYCLevel(\d+)/);
+            const kycLevel = match ? match[1] : null;
+
+            if(kycLevel) {
+                db.stores.cache.set('kyc_' + account.value.address, kycLevel);
+            } else {
+                db.stores.cache.remove('kyc_' + account.value.address)
+            }
+        } catch {
+            db.stores.cache.remove('kyc_' + account.value.address)
         }
+
     }
 
     db.stores.cache.set('last_fetch_kyc', now)

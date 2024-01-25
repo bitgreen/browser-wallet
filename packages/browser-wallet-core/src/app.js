@@ -15,9 +15,6 @@ export const checkIfAppIsKnown = (domain) => {
         const pattern = escapeStringRegexp(app.domain.replace(/\*/g, '__WILDCARD__')).replace(/__WILDCARD__/g, '.*')
         const regex = new RegExp(`^${pattern}$`);
 
-        console.log(pattern)
-        console.log(domain)
-
         if (regex.test(domain)) {
             return app;
         }

@@ -40,6 +40,16 @@
         transform: scale(1.125)
     }
 }
+@keyframes beat-text-fade {
+    0%, to {
+        color: #D9D9D9;
+        fill: #D9D9D9;
+    }
+    50% {
+        color: #FFFFFF;
+        fill: #FFFFFF;
+    }
+}
 @keyframes dash {
     to {
         stroke-dashoffset: 1000;
@@ -353,6 +363,11 @@ p {
     border-color: #DC6803;
     color: #DC6803;
 }
+.alert-danger-transparent {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
+}
 .alert-dismissible {
     padding-right: 8px !important;
 }
@@ -369,6 +384,10 @@ p {
 }
 .alert.alert-warning .icon {
     background-color: #DC6803;
+}
+.alert.alert-danger-transparent .icon {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #F53400;
 }
 .alert .icon span {
     width: 100%;
@@ -431,7 +450,8 @@ label.label {
     border-left: 1px solid #D5D6DA;
     border-bottom: 1px solid #D5D6DA;
 }
-.form-group.custom-border .form-control {
+.form-group.custom-border .form-control,
+.form-group.custom-border .show-password {
     border-top: 1px solid #D5D6DA;
     border-bottom: 1px solid #D5D6DA;
 }
@@ -474,6 +494,9 @@ label.label {
 .form-control.custom-control:focus {
     border-bottom-color: rgba(255, 255, 255, 0.4);
 }
+.form-control.password-control {
+    position: relative;
+}
 .input-group.disabled {
     background-color: #F8F8F9;
 }
@@ -482,6 +505,7 @@ label.label {
     background-color: #F8F8F9 !important;
     color: #667085;
 }
+
 .form-group .input-group-text {
     background-color: #ffffff;
     border-radius: 0;
@@ -500,6 +524,18 @@ label.label {
     height: 32px;
     text-align: center;
     line-height: 32px;
+}
+.input-group .show-password {
+    color: #000000;
+    background-color: #FFFFFF;
+    width: 42px;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
+    font-size: 16px;
+}
+.input-group .show-password .icon {
+    cursor: pointer;
 }
 .form-switch {
     margin: 12px 0;
@@ -562,6 +598,7 @@ label.label {
     line-height: 12px;
     text-align: center;
     border-radius: 10px;
+    padding: 4px 0;
 }
 .badge.badge-primary {
     background-color: #C0FF00;
@@ -664,6 +701,37 @@ label.label {
     display: none !important;
     z-index: -1;
 }
+#login_screen #input_form {
+    transition: all ease-in 0.3s;
+    visibility: visible;
+}
+#login_screen #input_form.inactive {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+#login_screen #status_message {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    opacity: 0;
+    transition: all ease-in-out 0.4s;
+    color: #D9D9D9;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    animation-name: beat-text-fade;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+    animation-duration: 1s;
+}
+#login_screen #status_message.active {
+    opacity: 1;
+}
 #init_screen {
     position: fixed;
     top: 0;
@@ -691,16 +759,11 @@ label.label {
     left: 0;
     right: 0;
     top: 0;
-    bottom: 0;
+    bottom: 124px;
     margin: auto;
 
     width: 102px;
     height: 128px;
-
-    background-image: url('../assets/b.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: center;
 }
 #init_screen.fade-out .init-logo {
     transform: scale(30);
@@ -857,6 +920,74 @@ label.label {
 }
 #loading_content.dark #checkmark path {
     fill: #FFFFFF;
+}
+#bbb_loader {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+    background-color: transparent;
+    text-align: center;
+}
+#bbb_loader.centered {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+#bbb_loader .bbb-icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 124px;
+    margin: auto;
+
+    width: 102px;
+    height: 128px;
+    animation-duration: 2s;
+}
+#bbb_loader.active .bbb-icon {
+    font-size: 42px;
+    animation-name: beat-fade;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+}
+#bbb_loader.active .bbb-icon path {
+    stroke: #C0FF00;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+
+    animation-name: dash;
+    animation-iteration-count: infinite;
+    animation-duration: 20s;
+}
+#bbb_loader .text {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    color: #D9D9D9;
+
+    text-align: center;
+    padding-top: 16px;
+    transition: all ease-in-out 0.4s;
+    opacity: 0;
+
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    animation-name: beat-text-fade;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+    animation-duration: 1s;
+}
+#bbb_loader.active .text {
+    opacity: 1;
 }
 
 #root {
@@ -1080,7 +1211,22 @@ label.label {
 .current-wallet .kyc-status.verified:after {
     bottom: 5px;
     color: #224851;
-    content: "B"
+}
+#wallet_list .button-item .kyc-status.verified.verified-1:after,
+.current-wallet .kyc-status.verified.verified-1:after {
+    content: "1"
+}
+#wallet_list .button-item .kyc-status.verified.verified-2:after,
+.current-wallet .kyc-status.verified.verified-2:after {
+    content: "2"
+}
+#wallet_list .button-item .kyc-status.verified.verified-3:after,
+.current-wallet .kyc-status.verified.verified-3:after {
+    content: "3"
+}
+#wallet_list .button-item .kyc-status.verified.verified-4:after,
+.current-wallet .kyc-status.verified.verified-4:after {
+    content: "4"
 }
 #wallet_list .button-item .kyc-status.unverified:after,
 .current-wallet .kyc-status.unverified:after {
@@ -2882,9 +3028,23 @@ label.label {
     fill: #667085;
 }
 #kyc_shield .text .verified {
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 400;
+    fill: #224851;
+}
+#kyc_shield .text .level {
+    font-size: 10px;
+    text-transform: uppercase;
     font-weight: 500;
     fill: #224851;
+}
+
+#connection_error {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    z-index: 10000;
 }
 
 /* for full screen */

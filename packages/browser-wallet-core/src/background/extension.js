@@ -95,6 +95,10 @@ class Extension {
                 return await this.getCollators()
             case 'get_estimated_fee':
                 return await this.getEstimatedFee(data?.params)
+            case 'check_api_ready':
+                return await this.checkApiReady()
+            case 'reconnect_api':
+                return await this.reconnectApi()
             default:
                 return false
         }
@@ -261,10 +265,8 @@ class Extension {
         return {
             free: new BigNumber(balance.free).toString(),
             reserved: new BigNumber(balance.reserved).toString(),
-            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
-            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
+            frozen: new BigNumber(balance?.frozen || 0).toString(),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance?.frozen || 0)).toString(),
         }
     }
 
@@ -314,17 +316,16 @@ class Extension {
 
         // Add BBB on the list
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
+        const bbb_balance = balance.toPrimitive()
         balances.tokens.push({
             token_name: 'BBB',
-            free: new BigNumber(balance.free).toString(),
-            reserved: new BigNumber(balance.reserved).toString(),
-            miscFrozen: new BigNumber(balance.miscFrozen).toString(),
-            feeFrozen: new BigNumber(balance.feeFrozen).toString(),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)).toString(),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)).toString(),
+            free: new BigNumber(bbb_balance.free).toString(),
+            reserved: new BigNumber(bbb_balance.reserved).toString(),
+            frozen: new BigNumber(bbb_balance?.frozen || 0).toString(),
+            total: new BigNumber(bbb_balance.free).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0)).toString(),
             price: bbbTokenPrice
         })
-        balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
+        balances.total = balances.total.plus(new BigNumber(bbb_balance.free)).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0))
 
         for(const token of result.tokens) {
             let price = 0
@@ -361,7 +362,7 @@ class Extension {
         const current_account = await this.accounts_store.current()
 
         let contract = await polkadot_api.query.vestingContract.vestingContracts(current_account.address)
-        contract = contract.toJSON()
+        contract = contract.toPrimitive()
 
         if(contract && contract.amount) {
             return contract
@@ -557,68 +558,73 @@ class Extension {
             return false;
         }
 
-        // get ascii value of first 2 chars
-        const vb1 = password.charCodeAt(0);
-        const vb2 = password.charCodeAt(1);
+        try {
+            // get ascii value of first 2 chars
+            const vb1 = password.charCodeAt(0);
+            const vb2 = password.charCodeAt(1);
 
-        // position to derive other 3 passwords
-        const p = vb1*vb2;
+            // position to derive other 3 passwords
+            const p = vb1*vb2;
 
-        // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-        const enc = wallet_data;
-        let randomstring = enc.iv;
-        let dpwd1 = '';
-        let dpwd2 = '';
-        let dpwd3 = '';
-        let h = keccakAsU8a(password + randomstring);
-        for(let i = 0; i < 100000; i++) {
-            h = keccakAsU8a(h);
-            if(i === p) {
-                dpwd1 = h;
+            // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+            const enc = wallet_data;
+            let randomstring = enc.iv;
+            let dpwd1 = '';
+            let dpwd2 = '';
+            let dpwd3 = '';
+            let h = keccakAsU8a(password + randomstring);
+            for(let i = 0; i < 10000; i++) {
+                h = keccakAsU8a(h);
+                if(i === p) {
+                    dpwd1 = h;
+                }
+                h = sha512AsU8a(h);
+                if(i === p) {
+                    dpwd2 = h;
+                }
+                h = blake2AsU8a(h);
+                if(i === p) {
+                    dpwd3 = h;
+                }
             }
-            h = sha512AsU8a(h);
-            if(i === p) {
-                dpwd2 = h;
-            }
-            h = blake2AsU8a(h);
-            if(i === p) {
-                dpwd3 = h;
-            }
-        }
 
-        // decrypt AES-OFB
-        const ivaesofb = hexToU8a(enc.ivaesofb);
-        const keyaesofb = dpwd3.slice(0, 32);
-        let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-        const encryptedhex = enc.encrypted;
-        const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
-        let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+            // decrypt AES-OFB
+            const ivaesofb = hexToU8a(enc.ivaesofb);
+            const keyaesofb = dpwd3.slice(0, 32);
+            let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+            const encryptedhex = enc.encrypted;
+            const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
+            let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
 
-        // decrypt AES-CTR
-        const ivaesctr = hexToU8a(enc.ivaesctr);
-        const keyaesctr = dpwd2.slice(0, 32);
-        let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-        let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+            // decrypt AES-CTR
+            const ivaesctr = hexToU8a(enc.ivaesctr);
+            const keyaesctr = dpwd2.slice(0, 32);
+            let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+            let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
 
-        // decrypt AES-CFB
-        const ivaescfb = hexToU8a(enc.ivaescfb);
-        const keyaescfb = dpwd1.slice(0, 32);
-        let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-        let decrypted = aesCfb.decrypt(encryptedaescfb);
-        let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
+            // decrypt AES-CFB
+            const ivaescfb = hexToU8a(enc.ivaescfb);
+            const keyaescfb = dpwd1.slice(0, 32);
+            let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+            let decrypted = aesCfb.decrypt(encryptedaescfb);
+            let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
 
-        if(!decrypted_mnemonic) {
-            return false;
-        } else {
-            if(!mnemonicValidate(decrypted_mnemonic)) {
+            if(!decrypted_mnemonic) {
                 return false;
-            }
+            } else {
+                if(!mnemonicValidate(decrypted_mnemonic)) {
+                    return false;
+                }
 
-            if(mnemonic_only) {
-                return decrypted_mnemonic;
-            }
+                if(mnemonic_only) {
+                    return decrypted_mnemonic;
+                }
 
-            return true;
+                return true;
+            }
+        } catch (e) {
+            console.log('Error decoding wallet:', e)
+            return false
         }
     }
 
@@ -866,11 +872,11 @@ class Extension {
                             }
                         })
                         if(dispatchError) {
-                            // for module errors, we have the section indexed, lookup
-                            const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
-                            const { docs, method, section } = decoded
-
                             if(dispatchError.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
+                                const { docs, method, section } = decoded
+
                                 response = {
                                     success: false,
                                     status: 'failed',
@@ -936,10 +942,27 @@ class Extension {
     async getEstimatedFee(params) {
         const polkadot_api = await polkadotApi()
 
-        let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
-        info = info.toJSON()
+        try {
+            let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
+            info = info.toJSON()
 
-        return info.partialFee
+            return info.partialFee
+        } catch (e) {
+            console.log('Error getting estimated fee: ', e)
+            return 0
+        }
+    }
+
+    async checkApiReady() {
+        const polkadot_api = await polkadotApi()
+
+        return !!polkadot_api?.isReady
+    }
+
+    async reconnectApi() {
+        const polkadot_api = await polkadotApi(true)
+
+        return !!polkadot_api?.isReady
     }
 }
 

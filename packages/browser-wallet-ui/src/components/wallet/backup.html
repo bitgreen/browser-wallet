@@ -4,5 +4,15 @@
 <div class="row d-flex align-items-center mb-1"><h2 class="col-8 m-0">Secret phrase words</h2><div class="col-4 d-flex flex-row-reverse"><button id="copy_seed" type="button" class="btn btn-sm btn-rounded btn-secondary btn-hidden pe-3 ps-3" style="opacity: 0;"><span class="icon icon-left icon-copy"></span> Copy</button></div></div>
 <div id="backup_mnemonics" class="mnemonics mnemonics-hidden d-block mt-2"></div>
 <div id="password_input" class="footer d-flex align-items-sketch flex-row-reverse">
-    <div class="w-100"><label class="label text-dark">Enter your password to reveal secret phrase</label><div class="form-group custom-border"><div class="input-group"><span class="input-group-text rounded-left"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-sm btn-primary rounded-right">Reveal <span class="icon icon-right-arrow"></span></button></span></div></div></div>
+    <div class="w-100">
+        <label class="label text-dark">Enter your password to reveal secret phrase</label>
+        <div class="form-group custom-border">
+            <div class="input-group">
+                <span class="input-group-text rounded-left"><span class="icon icon-password"></span></span>
+                <input id="password" type="password" class="form-control" placeholder="Wallet Password">
+                <div class="show-password align-items-center"><span class="icon icon-eye"></span></div>
+                <span class="input-group-text p-0"><button id="reveal_mnemonics" type="button" class="btn btn-sm btn-primary rounded-right">Reveal <span class="icon icon-right-arrow"></span></button></span>
+            </div>
+        </div>
+    </div>
 </div>

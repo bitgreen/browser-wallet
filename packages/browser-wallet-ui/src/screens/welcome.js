@@ -30,7 +30,7 @@ export default async function welcomeScreen() {
             delay: 600,
             easing: 'linear',
             keyframes: [
-                { translateY: -100, scale: 0.323232, duration: 800 },
+                { translateY: -36, scale: 0.323232, duration: 800 },
                 { translateX: -290, duration: 600 },
             ]
         });

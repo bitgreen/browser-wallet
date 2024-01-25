@@ -18,7 +18,7 @@ class TokenStore extends BaseStore {
   async fetch() {
     if(!['mainnet', 'testnet'].includes(this.network.id)) return false;
 
-    const url = this.network.api_endpoint + '/token/transactions?account=' + this.account.address;
+    const url = this.network.api_endpoint + '/token/transactions?account=' + this.account.address + '&pageSize=10&page=1';
     let result = await fetch(url, {
       mode: 'cors'
     })

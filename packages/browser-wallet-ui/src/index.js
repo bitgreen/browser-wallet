@@ -11,7 +11,7 @@ import {
     reloadScreen,
     scrollToBottom,
     disableFooter,
-    enableFooter
+    enableFooter, freezeRoot, unFreezeRoot
 } from './screens/index.js'
 import { sendMessage } from "./messaging.js";
 import { hideNotification, showNotification } from "./notifications.js";
@@ -22,7 +22,7 @@ import * as jdenticon from 'jdenticon'
 import {Tooltip} from 'bootstrap'
 
 /* import stores */
-import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
+import { databaseService } from "@bitgreen/browser-wallet-core";
 
 /* import all css files */
 import './styles/main.css'
@@ -105,13 +105,14 @@ class userInterface {
 
     initAccounts = async() => {
         const current_account = await this.db.stores.accounts.current()
+        const kyc_level = await this.db.stores.cache.asyncGet('kyc_' + current_account.address)
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
             full_account_address: current_account?.address,
             is_primary: current_account?.id === 'main' ? '' : 'hidden',
-            is_kyc_verified: await this.db.stores.cache.asyncGet('kyc_' + current_account.address) ? 'verified' : 'unverified'
+            is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
         }, false)
 
         await updateAccounts(current_account?.id)
@@ -210,6 +211,20 @@ class userInterface {
     initLogin = async() => {
         await updateElement('#login_screen', 'login', {}, false)
 
+        const input_form = document.querySelector("#login_screen #input_form")
+        const input_field = input_form.querySelector("#password")
+        const show_password = input_form.querySelector(".show-password")
+
+        show_password.addEventListener("click", () => {
+            if(input_field.type === 'password') {
+                input_field.type = 'text'
+                show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+            } else {
+                input_field.type = 'password'
+                show_password.innerHTML = '<span class="icon icon-eye"></span>'
+            }
+        })
+
         document.querySelector("#login_screen #do_login").addEventListener("click", () => this.doLoginEvent())
         document.querySelector("#login_screen #password").addEventListener("keypress", async(e) => {
             if (e.key === "Enter") {
@@ -232,8 +247,18 @@ class userInterface {
     }
 
     doLoginEvent = async() => {
+        freezeRoot()
+
+        const status_message = document.querySelector("#login_screen #status_message")
+        const input_form = document.querySelector("#login_screen #input_form")
+        const input_field = input_form.querySelector("#password")
+        const show_password = input_form.querySelector(".show-password")
+
         const current_screen = currentScreen()
         const password = DOMPurify.sanitize(document.querySelector("#login_screen #password").value);
+
+        status_message.classList.add('active')
+        input_form.classList.add('inactive')
 
         const result = await doLogin(password)
 
@@ -242,8 +267,20 @@ class userInterface {
             await hideLogin()
             if(current_screen.name === 'dashboardScreen') await reloadScreen()
         } else {
+            input_form.classList.remove('inactive')
+
             await showNotification('Password is wrong!', 'error', 1800, 0)
         }
+
+        setTimeout(() => {
+            input_form.classList.remove('inactive')
+        }, 1000)
+
+        // reset to init screen
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
+        status_message.classList.remove('active')
+        unFreezeRoot()
     }
 
     goToScreen = async(name, params = {}, force = false) => {

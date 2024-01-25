@@ -2,7 +2,7 @@
   "name": "bitgreen-browser-wallet",
   "author": "Bitgreen",
   "description": "Bitgreen browser extension with wallet functionalities.",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "homepage": "https://github.com/bitgreen/browser-wallet#readme",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@bitgreen/browser-wallet-base": "^1.0.0",
-    "@polkadot/api": "^9.7.1",
+    "@polkadot/api": "^10.10.1",
     "@polkadot/keyring": "^10.1.11",
     "@polkadot/types": "^9.7.1",
     "@polkadot/util": "^10.1.11",

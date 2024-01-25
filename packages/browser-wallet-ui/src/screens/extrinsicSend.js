@@ -158,6 +158,9 @@ export default async function extrinsicSendScreen(params) {
         });
     }
 
+    const input_field = document.querySelector("#root .footer #password")
+    const show_password = document.querySelector("#root .footer .show-password")
+
     anime({
         targets: '#bordered_content',
         opacity: [0, 1],
@@ -175,10 +178,19 @@ export default async function extrinsicSendScreen(params) {
         delay: function(el, i) { return (i * 150) > 1200 ? 1200 : (i * 150) },
     });
 
+    anime({
+        targets: '#bordered_content .footer',
+        translateY: 0,
+        duration: 1,
+        delay: 200
+    });
+
     screen.setListeners([
         {
             element: '#approve_extrinsic',
-            listener: async() => await approveExtrinsic()
+            listener: async() => {
+                await approveExtrinsic()
+            }
         },
         {
             element: '#password',
@@ -230,6 +242,18 @@ export default async function extrinsicSendScreen(params) {
 
                 return await goToScreen('dashboardScreen')
             }
+        },
+        {
+            element: '#root .footer .show-password',
+            listener: () => {
+                if(input_field.type === 'password') {
+                    input_field.type = 'text'
+                    show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field.type = 'password'
+                    show_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
         }
     ])
 
@@ -266,12 +290,6 @@ export default async function extrinsicSendScreen(params) {
                     } else if(parseInt(t.dataset.id) === parseInt(response.data.failedIndex)) {
                         t.querySelector('.status').classList.add('error')
                         t.querySelector('.status').innerHTML = '<span class="icon icon-close"></span>'
-
-                        const error_el = document.createElement('div');
-                        error_el.classList.add('mt-1', 'mb-2', 'px-2', 'text-gray', 'text-center');
-                        error_el.innerHTML = '<span class="text-bold text-danger">Transaction interrupted with error: </span><br>' + response.error;
-
-                        t.insertAdjacentElement('afterend', error_el)
                     } else {
                         t.querySelector('.status').classList.add('pending')
                         t.querySelector('.status').innerHTML = '?'
@@ -280,6 +298,15 @@ export default async function extrinsicSendScreen(params) {
                     t.querySelector('.status').classList.add('error')
                     t.querySelector('.status').innerHTML = '<span class="icon icon-close"></span>'
                 }
+
+                const error_el = document.createElement('div');
+                error_el.classList.add('mt-1', 'mb-2', 'px-2', 'text-gray', 'text-center');
+                if(response.data?.failedIndex) {
+                    error_el.innerHTML = '<span class="text-bold text-danger">Transaction interrupted with error: </span><br>' + response.error;
+                } else {
+                    error_el.innerHTML = '<span class="text-bold text-danger">Transaction failed with error: </span><br>' + response.error;
+                }
+                t.insertAdjacentElement('afterend', error_el)
             })
 
             showProcessingFail()
@@ -287,6 +314,9 @@ export default async function extrinsicSendScreen(params) {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')
         }
+
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
     }
 
     const showProcessing = () => {
