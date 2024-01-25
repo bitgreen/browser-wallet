@@ -17,6 +17,13 @@ export default async function networkManageScreen() {
     const current_network = await network_store.current()
     const all_networks = await network_store.asyncAll()
 
+    if(all_networks?.length < 1) {
+        await screen.append('#root #wallet_list', 'shared/alert', {
+            message: 'No custom networks added.',
+            alert_type: 'alert-info'
+        })
+    }
+
     for(const n of all_networks) {
         const network_id = n?.key
         const network = n.value

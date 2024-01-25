@@ -35,6 +35,8 @@ export default async function transactionHistoryScreen() {
         padding_top: '40px',
     });
 
+    showLoading()
+
     anime({
         targets: '#bordered_content',
         opacity: [0, 1],
@@ -42,8 +44,6 @@ export default async function transactionHistoryScreen() {
         easing: 'easeInOutSine',
         duration: 400
     });
-
-    showLoading()
 
     const all_transactions = []
 
@@ -53,25 +53,31 @@ export default async function transactionHistoryScreen() {
       sendMessage('get_asset_transactions')
     ])
 
-    for(const t of transactions) {
-        all_transactions.push({
-            type: 'bbb',
-            ...t
-        })
+    if(transactions?.length) {
+        for(const t of transactions) {
+            all_transactions.push({
+                type: 'bbb',
+                ...t
+            })
+        }
     }
 
-    for(const t of token_transactions) {
-        all_transactions.push({
-            type: 'token',
-            ...t
-        })
+    if(token_transactions?.length) {
+        for (const t of token_transactions) {
+            all_transactions.push({
+                type: 'token',
+                ...t
+            })
+        }
     }
 
-    for(const t of asset_transactions) {
-        all_transactions.push({
-            type: 'asset',
-            ...t
-        })
+    if(asset_transactions?.length) {
+        for (const t of asset_transactions) {
+            all_transactions.push({
+                type: 'asset',
+                ...t
+            })
+        }
     }
 
     // Default sort by date with secondary sort by index (if available)
@@ -140,7 +146,7 @@ export default async function transactionHistoryScreen() {
                 asset_prefix = '-'
             } else {
                 icon = '<span class="d-block w-100 icon icon-left-down-arrow icon-success"></span><span class="desc d-block w-100 text-gray">RECEIVED</span>'
-                asset_prefix = '-'
+                asset_prefix = '+'
             }
         }
 
@@ -156,6 +162,14 @@ export default async function transactionHistoryScreen() {
             received: !sent ? '' : 'd-none hidden',
         })
     }
+
+    if(all_transactions?.length < 1) {
+        await screen.append('#bordered_content #transactions', 'shared/alert', {
+            message: 'No transactions found yet.',
+            alert_type: 'alert-info'
+        })
+    }
+
     // hide loading
     const loading_el = document.querySelector("#loading_content")
     setTimeout(() => {
@@ -183,7 +197,7 @@ export default async function transactionHistoryScreen() {
                 })
 
                 // TODO: temp disable asset transaction details.
-                if(transaction?.type === 'asset') return
+                if(transaction?.type === 'asset' || transaction?.type === 'token') return
 
                 return await goToScreen('transactionDetailsScreen', {
                     hash: e.target.dataset?.hash

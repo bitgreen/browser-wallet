@@ -46,62 +46,67 @@ class Extension {
     async handle(data, from, port) {
         await this.refreshPassword(data.command)
 
-        switch(data.command) {
-            case 'new_wallet_screen':
-                return await this.newWalletScreen()
-            case 'new_wallet':
-                return await this.newWallet(data?.params)
-            case 'save_wallet':
-                return await this.saveWallet(data?.params)
-            case 'unlock_wallet':
-                return await this.unlockWallet(data?.params)
-            case 'lock_wallet':
-                return await this.lockWallet()
-            case 'new_account':
-                return await this.newAccount(data?.params)
-            case 'save_network':
-                return await this.saveNetwork(data?.params)
-            case 'change_network':
-                return await this.changeNetwork(data?.params)
-            case 'get_last_block':
-                return await this.getLastBlock()
-            case 'get_balance':
-                return await this.getBalance()
-            case 'get_all_balances':
-                return await this.getAllBalances()
-            case 'get_vesting_contract':
-                return await this.getVestingContract()
-            case 'get_transactions':
-                return await this.getTransactions()
-            case 'get_asset_transactions':
-                return await this.getAssetTransactions()
-            case 'get_token_transactions':
-                return await this.getTokenTransactions()
-            case 'reveal_mnemonic':
-                return await this.revealMnemonic(data?.params)
-            case 'check_login':
-                return await this.checkLogin()
-            case 'fast_check_login':
-                return await this.fastCheckLogin()
-            case 'sign_in':
-                return await this.signIn(data?.id, data?.params)
-            case 'transfer':
-                return await this.transfer(data?.id, data?.params)
-            case 'extrinsic':
-                return await this.submitExtrinsic(data?.id, data?.params)
-            case 'change_setting':
-                return await this.changeSetting(data?.params)
-            case 'get_collators':
-                return await this.getCollators()
-            case 'get_estimated_fee':
-                return await this.getEstimatedFee(data?.params)
-            case 'check_api_ready':
-                return await this.checkApiReady()
-            case 'reconnect_api':
-                return await this.reconnectApi()
-            default:
-                return false
+        try {
+            switch(data.command) {
+                case 'new_wallet_screen':
+                    return await this.newWalletScreen()
+                case 'new_wallet':
+                    return await this.newWallet(data?.params)
+                case 'save_wallet':
+                    return await this.saveWallet(data?.params)
+                case 'unlock_wallet':
+                    return await this.unlockWallet(data?.params)
+                case 'lock_wallet':
+                    return await this.lockWallet()
+                case 'new_account':
+                    return await this.newAccount(data?.params)
+                case 'save_network':
+                    return await this.saveNetwork(data?.params)
+                case 'change_network':
+                    return await this.changeNetwork(data?.params)
+                case 'get_last_block':
+                    return await this.getLastBlock()
+                case 'get_balance':
+                    return await this.getBalance()
+                case 'get_all_balances':
+                    return await this.getAllBalances()
+                case 'get_vesting_contract':
+                    return await this.getVestingContract()
+                case 'get_transactions':
+                    return await this.getTransactions()
+                case 'get_asset_transactions':
+                    return await this.getAssetTransactions()
+                case 'get_token_transactions':
+                    return await this.getTokenTransactions()
+                case 'reveal_mnemonic':
+                    return await this.revealMnemonic(data?.params)
+                case 'check_login':
+                    return await this.checkLogin()
+                case 'fast_check_login':
+                    return await this.fastCheckLogin()
+                case 'sign_in':
+                    return await this.signIn(data?.id, data?.params)
+                case 'transfer':
+                    return await this.transfer(data?.id, data?.params)
+                case 'extrinsic':
+                    return await this.submitExtrinsic(data?.id, data?.params)
+                case 'change_setting':
+                    return await this.changeSetting(data?.params)
+                case 'get_collators':
+                    return await this.getCollators()
+                case 'get_estimated_fee':
+                    return await this.getEstimatedFee(data?.params)
+                case 'check_api_ready':
+                    return await this.checkApiReady()
+                case 'reconnect_api':
+                    return await this.reconnectApi()
+                default:
+                    return false
+            }
+        } catch (e) {
+            return false
         }
+
     }
 
     async savePassword(password) {
@@ -278,40 +283,12 @@ class Extension {
 
         if(!['mainnet', 'testnet'].includes(current_network.id)) return false;
 
-        const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address;
-        let result = await fetch(url, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        result = await result.json()
-
         const balances = {
             tokens: [],
             assets: [],
 
             total: new BigNumber(0),
             tokens_total: new BigNumber(0)
-        }
-
-        for(const asset of result.assets) {
-            let price = 0
-
-            try {
-                const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
-                if(data) {
-                    balances.assets.push({
-                        asset_name: asset,
-                        balance: parseInt(data.balance.replaceAll(',', '')),
-                        price: price
-                    })
-
-                    balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))
-                }
-            } catch (e) {
-                console.log('error getting asset balance')
-            }
         }
 
         // Add BBB on the list
@@ -327,29 +304,63 @@ class Extension {
         })
         balances.total = balances.total.plus(new BigNumber(bbb_balance.free)).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0))
 
-        for(const token of result.tokens) {
-            let price = 0
-            if(token === 'USDT' || token === 'USDC') {
-                price = 0.9898
+
+        try {
+            const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address + '&includeInfo=true';
+            let result = await fetch(url, {
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            result = await result.json()
+
+            for(const asset of result.assets) {
+                let price = 0
+
+                const asset_id = asset.assetId !== null ? asset.assetId : asset
+                const asset_name = asset?.projectName ? asset.projectName : `Credits [${asset}]`
+                try {
+                    const data = (await polkadot_api.query.assets.account(asset_id, current_account.address)).toHuman()
+                    if(data) {
+                        balances.assets.push({
+                            asset_id: asset_id,
+                            asset_name: asset_name,
+                            balance: parseInt(data.balance.replaceAll(',', '')),
+                            price: price
+                        })
+
+                        balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))
+                    }
+                } catch (e) {
+                    console.log('error getting asset balance')
+                }
             }
 
-            try {
-                const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
-                balances.tokens.push({
-                    token_name: token,
-                    free: new BigNumber(free),
-                    reserved: new BigNumber(reserved),
-                    frozen: new BigNumber(frozen),
-                    total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
-                    price: price
-                })
+            for(const token of result.tokens) {
+                let price = 0
+                if(token === 'USDT' || token === 'USDC') {
+                    price = 0.9898
+                }
 
-                balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
-                balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
-            } catch (e) {
-                console.log('error getting token balance')
+                try {
+                    const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+                    balances.tokens.push({
+                        token_name: token,
+                        free: new BigNumber(free),
+                        reserved: new BigNumber(reserved),
+                        frozen: new BigNumber(frozen),
+                        total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
+                        price: price
+                    })
+
+                    balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                    balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                } catch (e) {
+                    console.log('error getting token balance')
+                }
             }
-        }
+        } catch (e) {}
 
         balances.total = balances.total.toString()
         balances.tokens_total = balances.tokens_total.toString()
@@ -733,7 +744,7 @@ class Extension {
                     transaction = polkadot_api.tx.tokens.transfer(params?.recipient, asset.name, humanToBalance(params?.amount))
                 }
             } else {
-                transaction = polkadot_api.tx.assets.transfer(asset.name, params?.recipient, params?.amount)
+                transaction = polkadot_api.tx.assets.transfer(asset.asset_id, params?.recipient, params?.amount)
             }
 
             await transaction

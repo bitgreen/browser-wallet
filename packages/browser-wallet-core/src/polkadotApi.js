@@ -15,8 +15,6 @@ const initPolkadotApi = async(force = false) => {
         const networks_store = new NetworkStore()
         const current_network = await networks_store.current()
 
-        console.log('ws_provider.isConnected', ws_provider?.isConnected)
-
         if(force) {
             if(ws_provider?.isConnected) ws_provider.disconnect()
             ws_provider = null

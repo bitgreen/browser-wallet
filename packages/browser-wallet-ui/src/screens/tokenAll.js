@@ -20,20 +20,17 @@ export default async function tokenAllScreen(params) {
   sendMessage('get_all_balances').then(async(balances) => {
     const defaultIcon = await renderTemplate('shared/icons/default')
 
-    const bbbIcon = await renderTemplate('shared/icons/bbb')
+    const other_tokens = balances.tokens.filter((t) => t.token_name !== 'BBB')
+
     const usdtIcon = await renderTemplate('shared/icons/usdt')
     const usdcIcon = await renderTemplate('shared/icons/usdc')
     const dotIcon = await renderTemplate('shared/icons/dot')
 
-    for (const token of balances.tokens) {
+    for (const token of other_tokens) {
       let icon = defaultIcon
-      if(token.token_name === 'BBB') icon = bbbIcon
       if(token.token_name === 'USDT') icon = usdtIcon
       if(token.token_name === 'USDC') icon = usdcIcon
       if(token.token_name === 'DOT') icon = dotIcon
-
-      // Skip BBB here
-      if(token.token_name === 'BBB') continue
 
       const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
       const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
@@ -57,6 +54,13 @@ export default async function tokenAllScreen(params) {
         locked: locked_info.amount,
         lockedDecimal: locked_info.decimals
       });
+    }
+
+    if(other_tokens.length < 1) {
+      await screen.append('#root #transactions', 'shared/alert', {
+        message: 'No tokens found.',
+        alert_type: 'alert-info'
+      })
     }
 
     document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {

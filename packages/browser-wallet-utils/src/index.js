@@ -239,12 +239,13 @@ const getAverageApy = (all_collators, block_reward) => {
 
     if(total_apy.isEqualTo(0)) return 0
 
-    console.log('total_apy', total_apy, total_apy.toString())
+    // console.log('total_apy', total_apy, total_apy.toString())
 
     return total_apy.dividedBy(new BigNumber(all_collators.length))
 }
 
 const calculateCollatorApy = (all_collators, collator, block_reward) => {
+    const blocks_per_year = new BigNumber(365 * 24 * 60 * 60 / 12)
     block_reward = new BigNumber(block_reward.toString())
 
     let total_stake = new BigNumber(0)
@@ -252,34 +253,13 @@ const calculateCollatorApy = (all_collators, collator, block_reward) => {
         total_stake = total_stake.plus(new BigNumber(collator?.totalStake.replaceAll(',', '')))
     }
 
-    const apy_per_delegators = []
-    for(const [key, delegator] of Object.entries(collator.delegators)) {
-        let apy = new BigNumber(0)
-        if(collator.delegators.length > 0) {
-            apy = calculateUserApy(
-                new BigNumber(delegator?.deposit.replaceAll(',', '')),
-                new BigNumber(collator.totalStake.replaceAll(',', '')),
-                total_stake,
-                new BigNumber(block_reward),
-                all_collators.length
-            )
-        }
+    if (total_stake.isEqualTo(0)) return 0; // Handle division by zero
+    const collator_stake = new BigNumber(collator?.totalStake.replaceAll(',', ''));
 
-        if(!apy.isNaN()) {
-            apy_per_delegators.push(apy)
-        }
-    }
+    const share = collator_stake.dividedBy(total_stake).times(blocks_per_year).times(block_reward);
 
-    let collator_apy = new BigNumber(0)
-    for(const apy of apy_per_delegators) {
-        collator_apy = collator_apy.plus(apy)
-    }
+    const collator_apy = share.dividedBy(collator_stake).times(100)
 
-    if(!collator_apy.isNaN() && apy_per_delegators.length > 0) {
-        collator_apy = collator_apy.dividedBy(apy_per_delegators.length)
-    } else {
-        collator_apy = new BigNumber(0)
-    }
 
     return collator_apy
 }
