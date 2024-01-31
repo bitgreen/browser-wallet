@@ -487,7 +487,7 @@ class Extension {
         // position to derive other 3 passwords
         const p = vb1*vb2;
 
-        // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+        // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
         let randomstring = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -577,14 +577,14 @@ class Extension {
             // position to derive other 3 passwords
             const p = vb1*vb2;
 
-            // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+            // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
             const enc = wallet_data;
             let randomstring = enc.iv;
             let dpwd1 = '';
             let dpwd2 = '';
             let dpwd3 = '';
             let h = keccakAsU8a(password + randomstring);
-            for(let i = 0; i < 10000; i++) {
+            for(let i = 0; i < 100000; i++) {
                 h = keccakAsU8a(h);
                 if(i === p) {
                     dpwd1 = h;
