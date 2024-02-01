@@ -37,6 +37,8 @@ class userInterface {
     }
 
     initUi = async() => {
+        await this.db.ensureInit()
+
         await updateElement('body', 'init', {}, false)
 
         this.current_account = await this.db.stores.accounts.current()
