@@ -3,22 +3,24 @@ import NetworkStore from "../stores/network.js";
 
 class DatabaseService {
     constructor() {
-        this.init().then()
+        this.init()
     }
 
-    async init() {
+    init() {
         const networks_store = new NetworkStore()
-        const current_network = await networks_store.current()
-        const cache_store = new CacheStore(current_network)
 
-        this.stores = {
-            accounts: new AccountStore(),
-            session: new SessionStore(),
-            settings: new SettingsStore(),
-            wallets: new WalletStore(),
-            networks: networks_store,
-            cache: cache_store
-        }
+        networks_store.current().then(current_network => {
+            const cache_store = new CacheStore(current_network)
+
+            this.stores = {
+                accounts: new AccountStore(),
+                session: new SessionStore(),
+                settings: new SettingsStore(),
+                wallets: new WalletStore(),
+                networks: networks_store,
+                cache: cache_store
+            }
+        })
     }
 }
 
