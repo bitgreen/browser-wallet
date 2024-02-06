@@ -11,11 +11,11 @@ let api = undefined
 const initPolkadotApi = async(force = false) => {
     const db = new DatabaseService()
 
+    await db.ensureInit()
+
     return new Promise(async(resolve) => {
         const networks_store = new NetworkStore()
         const current_network = await networks_store.current()
-
-        console.log('ws_provider.isConnected', ws_provider?.isConnected)
 
         if(force) {
             if(ws_provider?.isConnected) ws_provider.disconnect()

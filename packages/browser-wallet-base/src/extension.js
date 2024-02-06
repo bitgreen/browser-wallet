@@ -5,6 +5,8 @@ const db = new databaseService()
 const ui = new userInterface()
 
 const extension = async() => {
+    await db.ensureInit()
+
     await ui.initUi()
 
     // preload polkadot api

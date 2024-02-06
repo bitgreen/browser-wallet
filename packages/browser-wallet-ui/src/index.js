@@ -37,6 +37,8 @@ class userInterface {
     }
 
     initUi = async() => {
+        await this.db.ensureInit()
+
         await updateElement('body', 'init', {}, false)
 
         this.current_account = await this.db.stores.accounts.current()
@@ -243,6 +245,15 @@ class userInterface {
 
         document.querySelector("#login_screen #password").addEventListener("blur", async() => {
             document.querySelector("#login_screen").classList.remove('focused')
+        })
+
+        window.addEventListener("click", async() => {
+            const login_screen = document.querySelector("#login_screen")
+            const input_field = input_form.querySelector("#password")
+
+            if(login_screen.classList.contains('inactive')) return
+
+            input_field.focus()
         })
     }
 

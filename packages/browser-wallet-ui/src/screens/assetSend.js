@@ -400,6 +400,7 @@ export default async function assetSendScreen(params) {
 
                 current_asset = {
                     is_token: true,
+                    asset_id: token.name,
                     name: token.token_name.toLowerCase(),
                     balance: token.free,
                     price: token.price
@@ -442,15 +443,17 @@ export default async function assetSendScreen(params) {
             let icon = carbonCreditIcon
 
             const available_balance = asset.balance
+            const asset_short_name = asset.asset_name.length > 22 ? asset.asset_name.substring(0,22) + '...' : asset.asset_name
 
-            if(parseInt(selected_asset) === parseInt(asset.asset_name)) {
+            if(parseInt(selected_asset) === parseInt(asset.asset_id)) {
                 screen.setParam('#choose_quantity .asset-name', 'CREDITS')
                 screen.setParam('#bordered_content .asset-symbol', 'CREDITS')
                 usd_amount_el.setAttribute('disabled', 'disabled')
 
                 current_asset = {
                     is_token: false,
-                    name: asset.asset_name,
+                    asset_id: asset.asset_id,
+                    name: asset_short_name,
                     balance: asset.balance,
                     price: asset.price
                 }
@@ -463,8 +466,8 @@ export default async function assetSendScreen(params) {
 
                 setTimeout(async() => {
                     await screen.set('#bordered_content #asset_info .selected', 'asset/list_item', {
-                        asset: asset.asset_name,
-                        asset_name: `Credits [${asset.asset_name}]`,
+                        asset: asset.asset_id,
+                        asset_name: asset_short_name,
                         balance: available_balance,
                         icon: icon
                     })
@@ -479,8 +482,8 @@ export default async function assetSendScreen(params) {
                 // little delay for smooth transition
                 setTimeout(() => {
                     screen.append('#bordered_content #asset_info .dropdown .content', 'asset/list_item', {
-                        asset: asset.asset_name,
-                        asset_name: `Credits [${asset.asset_name}]`,
+                        asset: asset.asset_id,
+                        asset_name: asset_short_name,
                         balance: available_balance,
                         icon: icon
                     })

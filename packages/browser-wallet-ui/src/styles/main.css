@@ -353,6 +353,11 @@ p {
     padding: 0;
     margin-bottom: 8px;
 }
+.alert-info {
+    background-color: #ffffff;
+    border-color: #224851;
+    color: #24293A;
+}
 .alert-danger {
     background-color: #ffffff;
     border-color: #991900;
@@ -368,6 +373,11 @@ p {
     border-color: rgba(255, 255, 255, 0.4);
     color: #FFFFFF;
 }
+.alert-info-transparent {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
+}
 .alert-dismissible {
     padding-right: 8px !important;
 }
@@ -378,6 +388,9 @@ p {
 }
 .alert .icon .icon-small {
     font-size: 20px !important;
+}
+.alert.alert-info .icon {
+    background-color: #224851;
 }
 .alert.alert-danger .icon {
     background-color: #991900;
