@@ -46,58 +46,67 @@ class Extension {
     async handle(data, from, port) {
         await this.refreshPassword(data.command)
 
-        switch(data.command) {
-            case 'new_wallet_screen':
-                return await this.newWalletScreen()
-            case 'new_wallet':
-                return await this.newWallet(data?.params)
-            case 'save_wallet':
-                return await this.saveWallet(data?.params)
-            case 'unlock_wallet':
-                return await this.unlockWallet(data?.params)
-            case 'lock_wallet':
-                return await this.lockWallet()
-            case 'new_account':
-                return await this.newAccount(data?.params)
-            case 'save_network':
-                return await this.saveNetwork(data?.params)
-            case 'change_network':
-                return await this.changeNetwork(data?.params)
-            case 'get_last_block':
-                return await this.getLastBlock()
-            case 'get_balance':
-                return await this.getBalance()
-            case 'get_all_balances':
-                return await this.getAllBalances()
-            case 'get_vesting_contract':
-                return await this.getVestingContract()
-            case 'get_transactions':
-                return await this.getTransactions()
-            case 'get_asset_transactions':
-                return await this.getAssetTransactions()
-            case 'get_token_transactions':
-                return await this.getTokenTransactions()
-            case 'reveal_mnemonic':
-                return await this.revealMnemonic(data?.params)
-            case 'check_login':
-                return await this.checkLogin()
-            case 'fast_check_login':
-                return await this.fastCheckLogin()
-            case 'sign_in':
-                return await this.signIn(data?.id, data?.params)
-            case 'transfer':
-                return await this.transfer(data?.id, data?.params)
-            case 'extrinsic':
-                return await this.submitExtrinsic(data?.id, data?.params)
-            case 'change_setting':
-                return await this.changeSetting(data?.params)
-            case 'get_collators':
-                return await this.getCollators()
-            case 'get_estimated_fee':
-                return await this.getEstimatedFee(data?.params)
-            default:
-                return false
+        try {
+            switch(data.command) {
+                case 'new_wallet_screen':
+                    return await this.newWalletScreen()
+                case 'new_wallet':
+                    return await this.newWallet(data?.params)
+                case 'save_wallet':
+                    return await this.saveWallet(data?.params)
+                case 'unlock_wallet':
+                    return await this.unlockWallet(data?.params)
+                case 'lock_wallet':
+                    return await this.lockWallet()
+                case 'new_account':
+                    return await this.newAccount(data?.params)
+                case 'save_network':
+                    return await this.saveNetwork(data?.params)
+                case 'change_network':
+                    return await this.changeNetwork(data?.params)
+                case 'get_last_block':
+                    return await this.getLastBlock()
+                case 'get_balance':
+                    return await this.getBalance()
+                case 'get_all_balances':
+                    return await this.getAllBalances()
+                case 'get_vesting_contract':
+                    return await this.getVestingContract()
+                case 'get_transactions':
+                    return await this.getTransactions()
+                case 'get_asset_transactions':
+                    return await this.getAssetTransactions()
+                case 'get_token_transactions':
+                    return await this.getTokenTransactions()
+                case 'reveal_mnemonic':
+                    return await this.revealMnemonic(data?.params)
+                case 'check_login':
+                    return await this.checkLogin()
+                case 'fast_check_login':
+                    return await this.fastCheckLogin()
+                case 'sign_in':
+                    return await this.signIn(data?.id, data?.params)
+                case 'transfer':
+                    return await this.transfer(data?.id, data?.params)
+                case 'extrinsic':
+                    return await this.submitExtrinsic(data?.id, data?.params)
+                case 'change_setting':
+                    return await this.changeSetting(data?.params)
+                case 'get_collators':
+                    return await this.getCollators()
+                case 'get_estimated_fee':
+                    return await this.getEstimatedFee(data?.params)
+                case 'check_api_ready':
+                    return await this.checkApiReady()
+                case 'reconnect_api':
+                    return await this.reconnectApi()
+                default:
+                    return false
+            }
+        } catch (e) {
+            return false
         }
+
     }
 
     async savePassword(password) {
@@ -259,12 +268,10 @@ class Extension {
         const { nonce, data: balance } = await polkadot_api.query.system.account(account.address);
 
         return {
-            free: new BigNumber(balance.free),
-            reserved: new BigNumber(balance.reserved),
-            miscFrozen: new BigNumber(balance.miscFrozen),
-            feeFrozen: new BigNumber(balance.feeFrozen),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
+            free: new BigNumber(balance.free).toString(),
+            reserved: new BigNumber(balance.reserved).toString(),
+            frozen: new BigNumber(balance?.frozen || 0).toString(),
+            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance?.frozen || 0)).toString(),
         }
     }
 
@@ -276,15 +283,6 @@ class Extension {
 
         if(!['mainnet', 'testnet'].includes(current_network.id)) return false;
 
-        const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address;
-        let result = await fetch(url, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        result = await result.json()
-
         const balances = {
             tokens: [],
             assets: [],
@@ -293,52 +291,79 @@ class Extension {
             tokens_total: new BigNumber(0)
         }
 
-        for(const asset of result.assets) {
-            let price = 0
-
-            const data = (await polkadot_api.query.assets.account(asset, current_account.address)).toHuman()
-            balances.assets.push({
-                asset_name: asset,
-                balance: parseFloat(data.balance),
-                price: price
-            })
-
-            balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance)))
-        }
-
         // Add BBB on the list
         const { nonce, data: balance } = await polkadot_api.query.system.account(current_account.address);
+        const bbb_balance = balance.toPrimitive()
         balances.tokens.push({
             token_name: 'BBB',
-            free: new BigNumber(balance.free),
-            reserved: new BigNumber(balance.reserved),
-            miscFrozen: new BigNumber(balance.miscFrozen),
-            feeFrozen: new BigNumber(balance.feeFrozen),
-            frozen: new BigNumber(balance.miscFrozen).plus(new BigNumber(balance.feeFrozen)),
-            total: new BigNumber(balance.free).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen)),
+            free: new BigNumber(bbb_balance.free).toString(),
+            reserved: new BigNumber(bbb_balance.reserved).toString(),
+            frozen: new BigNumber(bbb_balance?.frozen || 0).toString(),
+            total: new BigNumber(bbb_balance.free).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0)).toString(),
             price: bbbTokenPrice
         })
-        balances.total = balances.total.plus(new BigNumber(balance.free)).plus(new BigNumber(balance.reserved)).plus(new BigNumber(balance.feeFrozen)).plus(new BigNumber(balance.miscFrozen))
+        balances.total = balances.total.plus(new BigNumber(bbb_balance.free)).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0))
 
-        for(const token of result.tokens) {
-            let price = 0
-            if(token === 'USDT' || token === 'USDC') {
-                price = 0.9898
+
+        try {
+            const url = current_network.api_endpoint + '/tokens-assets/ids?account=' + current_account.address + '&includeInfo=true';
+            let result = await fetch(url, {
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            result = await result.json()
+
+            for(const asset of result.assets) {
+                let price = 0
+
+                const asset_id = asset.assetId !== null ? asset.assetId : asset
+                const asset_name = asset?.projectName ? asset.projectName : `Credits [${asset}]`
+                try {
+                    const data = (await polkadot_api.query.assets.account(asset_id, current_account.address)).toHuman()
+                    if(data) {
+                        balances.assets.push({
+                            asset_id: asset_id,
+                            asset_name: asset_name,
+                            balance: parseInt(data.balance.replaceAll(',', '')),
+                            price: price
+                        })
+
+                        balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))
+                    }
+                } catch (e) {
+                    console.log('error getting asset balance')
+                }
             }
 
-            const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
-            balances.tokens.push({
-                token_name: token,
-                free: new BigNumber(free),
-                reserved: new BigNumber(reserved),
-                frozen: new BigNumber(frozen),
-                total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)),
-                price: price
-            })
+            for(const token of result.tokens) {
+                let price = 0
+                if(token === 'USDT' || token === 'USDC') {
+                    price = 0.9898
+                }
 
-            balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
-            balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
-        }
+                try {
+                    const { free, reserved, frozen } = await polkadot_api.query.tokens.accounts(current_account.address, token);
+                    balances.tokens.push({
+                        token_name: token,
+                        free: new BigNumber(free),
+                        reserved: new BigNumber(reserved),
+                        frozen: new BigNumber(frozen),
+                        total: new BigNumber(free).plus(new BigNumber(reserved)).plus(new BigNumber(frozen)).toString(),
+                        price: price
+                    })
+
+                    balances.total = balances.total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                    balances.tokens_total = balances.tokens_total.plus(new BigNumber(free)).plus(new BigNumber(reserved)).plus(new BigNumber(frozen))
+                } catch (e) {
+                    console.log('error getting token balance')
+                }
+            }
+        } catch (e) {}
+
+        balances.total = balances.total.toString()
+        balances.tokens_total = balances.tokens_total.toString()
 
         return balances
     }
@@ -348,7 +373,7 @@ class Extension {
         const current_account = await this.accounts_store.current()
 
         let contract = await polkadot_api.query.vestingContract.vestingContracts(current_account.address)
-        contract = contract.toJSON()
+        contract = contract.toPrimitive()
 
         if(contract && contract.amount) {
             return contract
@@ -462,7 +487,7 @@ class Extension {
         // position to derive other 3 passwords
         const p = vb1*vb2;
 
-        // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
+        // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
         let randomstring = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -544,68 +569,73 @@ class Extension {
             return false;
         }
 
-        // get ascii value of first 2 chars
-        const vb1 = password.charCodeAt(0);
-        const vb2 = password.charCodeAt(1);
+        try {
+            // get ascii value of first 2 chars
+            const vb1 = password.charCodeAt(0);
+            const vb2 = password.charCodeAt(1);
 
-        // position to derive other 3 passwords
-        const p = vb1*vb2;
+            // position to derive other 3 passwords
+            const p = vb1*vb2;
 
-        // derive the password used for encryption with an init vector (random string) and 10000 hashes with 3 different algorithms
-        const enc = wallet_data;
-        let randomstring = enc.iv;
-        let dpwd1 = '';
-        let dpwd2 = '';
-        let dpwd3 = '';
-        let h = keccakAsU8a(password + randomstring);
-        for(let i = 0; i < 100000; i++) {
-            h = keccakAsU8a(h);
-            if(i === p) {
-                dpwd1 = h;
+            // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
+            const enc = wallet_data;
+            let randomstring = enc.iv;
+            let dpwd1 = '';
+            let dpwd2 = '';
+            let dpwd3 = '';
+            let h = keccakAsU8a(password + randomstring);
+            for(let i = 0; i < 100000; i++) {
+                h = keccakAsU8a(h);
+                if(i === p) {
+                    dpwd1 = h;
+                }
+                h = sha512AsU8a(h);
+                if(i === p) {
+                    dpwd2 = h;
+                }
+                h = blake2AsU8a(h);
+                if(i === p) {
+                    dpwd3 = h;
+                }
             }
-            h = sha512AsU8a(h);
-            if(i === p) {
-                dpwd2 = h;
-            }
-            h = blake2AsU8a(h);
-            if(i === p) {
-                dpwd3 = h;
-            }
-        }
 
-        // decrypt AES-OFB
-        const ivaesofb = hexToU8a(enc.ivaesofb);
-        const keyaesofb = dpwd3.slice(0, 32);
-        let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
-        const encryptedhex = enc.encrypted;
-        const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
-        let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
+            // decrypt AES-OFB
+            const ivaesofb = hexToU8a(enc.ivaesofb);
+            const keyaesofb = dpwd3.slice(0, 32);
+            let aesOfb = new aesjs.ModeOfOperation.ofb(keyaesofb, ivaesofb);
+            const encryptedhex = enc.encrypted;
+            const encryptedaesofb = aesjs.utils.hex.toBytes(encryptedhex);
+            let encryptedaesctr = aesOfb.decrypt(encryptedaesofb);
 
-        // decrypt AES-CTR
-        const ivaesctr = hexToU8a(enc.ivaesctr);
-        const keyaesctr = dpwd2.slice(0, 32);
-        let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
-        let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
+            // decrypt AES-CTR
+            const ivaesctr = hexToU8a(enc.ivaesctr);
+            const keyaesctr = dpwd2.slice(0, 32);
+            let aesCtr = new aesjs.ModeOfOperation.ctr(keyaesctr, ivaesctr);
+            let encryptedaescfb = aesCtr.decrypt(encryptedaesctr);
 
-        // decrypt AES-CFB
-        const ivaescfb = hexToU8a(enc.ivaescfb);
-        const keyaescfb = dpwd1.slice(0, 32);
-        let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
-        let decrypted = aesCfb.decrypt(encryptedaescfb);
-        let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
+            // decrypt AES-CFB
+            const ivaescfb = hexToU8a(enc.ivaescfb);
+            const keyaescfb = dpwd1.slice(0, 32);
+            let aesCfb = new aesjs.ModeOfOperation.cfb(keyaescfb, ivaescfb);
+            let decrypted = aesCfb.decrypt(encryptedaescfb);
+            let decrypted_mnemonic = aesjs.utils.utf8.fromBytes(decrypted);
 
-        if(!decrypted_mnemonic) {
-            return false;
-        } else {
-            if(!mnemonicValidate(decrypted_mnemonic)) {
+            if(!decrypted_mnemonic) {
                 return false;
-            }
+            } else {
+                if(!mnemonicValidate(decrypted_mnemonic)) {
+                    return false;
+                }
 
-            if(mnemonic_only) {
-                return decrypted_mnemonic;
-            }
+                if(mnemonic_only) {
+                    return decrypted_mnemonic;
+                }
 
-            return true;
+                return true;
+            }
+        } catch (e) {
+            console.log('Error decoding wallet:', e)
+            return false
         }
     }
 
@@ -714,7 +744,7 @@ class Extension {
                     transaction = polkadot_api.tx.tokens.transfer(params?.recipient, asset.name, humanToBalance(params?.amount))
                 }
             } else {
-                transaction = polkadot_api.tx.assets.transfer(asset.name, params?.recipient, params?.amount)
+                transaction = polkadot_api.tx.assets.transfer(asset.asset_id, params?.recipient, params?.amount)
             }
 
             await transaction
@@ -771,7 +801,7 @@ class Extension {
         const pallet = params?.pallet
         const call = params?.call
         const call_parameters = params?.call_parameters
-        let call_request = call_parameters
+        let call_request = call_parameters ? JSON.parse(call_parameters) : []
 
         let response = {}
 
@@ -782,12 +812,22 @@ class Extension {
         }
 
         if(pallet === 'utility' && (call === 'batch' || call === 'batchAll' || call === 'forceBatch')) {
-            call_request = []
-            for(const extrinsic of call_parameters) {
-                call_request.push(await polkadot_api.tx[extrinsic[0]][extrinsic[1]](...extrinsic[2]))
+            try {
+                call_request = []
+
+                for(const extrinsic of JSON.parse(call_parameters)) {
+                    call_request.push(await polkadot_api.tx[extrinsic[0]][extrinsic[1]](...extrinsic[2]))
+                }
+
+                call_request = [call_request]
+            } catch (e) {
+                return {
+                    success: false,
+                    status: 'failed',
+                    error: e.message
+                }
             }
 
-            call_request = [call_request]
         }
 
         return new Promise(async(resolve) => {
@@ -807,51 +847,91 @@ class Extension {
                 }
                 return resolve(response)
             }
-            await polkadot_api.tx[pallet][call](...call_request)
-                .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
-                    if(dispatchError) {
-                        // for module errors, we have the section indexed, lookup
-                        const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
-                        const { docs, method, section } = decoded
 
-                        if(dispatchError.isModule) {
-                            response = {
-                                success: false,
-                                status: 'failed',
-                                error: section + '.' + method + ' ' + docs.join(' '),
-                                data: {
-                                    section,
-                                    method
+            try {
+                await polkadot_api.tx[pallet][call](...call_request)
+                    .signAndSend(account, { nonce: -1 }, ({ status, events = [], dispatchError }) => {
+                        events.forEach((e) => {
+                            const ex = e.toHuman()
+
+                            // handle batch interrupted case
+                            if((pallet === 'utility' && (call === 'batch' || call === 'batchAll' || call === 'forceBatch'))
+                                && (ex.event.section === 'utility' && ex.event.method === 'BatchInterrupted')) {
+
+                                const failedIndex = e.event.data[0];
+                                const error = e.event.data[1];
+
+                                console.log(`Batch failed at call index: ${failedIndex}`);
+
+                                if (error) {
+                                    const decoded = polkadot_api.registry.findMetaError(error.asModule);
+                                    const { docs, method, section } = decoded;
+
+                                    // console.log("Error Details:", error, decoded);
+
+                                    if(error.isModule) {
+                                        resolve({
+                                            success: false,
+                                            status: 'failed',
+                                            error: section + '.' + method + ' - ' + docs.join(' '),
+                                            data: {
+                                                failedIndex: failedIndex.toString()
+                                            }
+                                        })
+                                    }
                                 }
                             }
-                        } else {
-                            // Other, CannotLookup, BadOrigin, no extra info
-                            response = {
-                                success: false,
-                                status: 'failed',
-                                error: dispatchError.toString()
+                        })
+                        if(dispatchError) {
+                            if(dispatchError.isModule) {
+                                // for module errors, we have the section indexed, lookup
+                                const decoded = polkadot_api.registry.findMetaError(dispatchError.asModule)
+                                const { docs, method, section } = decoded
+
+                                response = {
+                                    success: false,
+                                    status: 'failed',
+                                    error: section + '.' + method + ' - ' + docs.join(' '),
+                                    data: {
+                                        section,
+                                        method
+                                    }
+                                }
+                            } else {
+                                // Other, CannotLookup, BadOrigin, no extra info
+                                response = {
+                                    success: false,
+                                    status: 'failed',
+                                    error: dispatchError.toString()
+                                }
                             }
+
+                            resolve(response)
                         }
 
-                        resolve(response)
-                    }
 
-
-                    if(status.isInBlock) {
+                        if(status.isInBlock) {
+                            resolve({
+                                success: true,
+                                data: {
+                                    block_hash: status.asInBlock.toHex()
+                                }
+                            })
+                        }
+                    }).catch(err => {
                         resolve({
-                            success: true,
-                            data: {
-                                block_hash: status.asInBlock.toHex()
-                            }
+                            success: false,
+                            status: 'failed',
+                            error: err.message
                         })
-                    }
-                }).catch(err => {
-                    resolve({
-                        success: false,
-                        status: 'failed',
-                        error: err.message
-                    })
-                });
+                    });
+            } catch (e) {
+                resolve({
+                    success: false,
+                    status: 'failed',
+                    error: e.message
+                })
+            }
         });
     }
 
@@ -864,18 +944,36 @@ class Extension {
     async getCollators() {
         const polkadot_api = await polkadotApi()
 
-        const data = await polkadot_api.query.parachainStaking.candidates()
+        const candidates = await polkadot_api.query.parachainStaking.candidates()
+        const invulnerables = await polkadot_api.query.parachainStaking.invulnerables()
 
-        return data.toJSON()
+        return (candidates.toHuman()).concat(invulnerables.toHuman())
     }
 
     async getEstimatedFee(params) {
         const polkadot_api = await polkadotApi()
 
-        let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
-        info = info.toJSON()
+        try {
+            let info = await polkadot_api.tx[params?.pallet][params?.call](...params?.call_parameters).paymentInfo(params?.account_address)
+            info = info.toJSON()
 
-        return info.partialFee
+            return info.partialFee
+        } catch (e) {
+            console.log('Error getting estimated fee: ', e)
+            return 0
+        }
+    }
+
+    async checkApiReady() {
+        const polkadot_api = await polkadotApi()
+
+        return !!polkadot_api?.isReady
+    }
+
+    async reconnectApi() {
+        const polkadot_api = await polkadotApi(true)
+
+        return !!polkadot_api?.isReady
     }
 }
 

@@ -1,7 +1,7 @@
 import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import { AccountStore, checkIfAppIsKnown, SettingsStore, WalletStore } from "@bitgreen/browser-wallet-core";
+import { AccountStore, SettingsStore, WalletStore } from "@bitgreen/browser-wallet-core";
 
 import anime from "animejs";
 import { showNotification } from "../notifications.js";

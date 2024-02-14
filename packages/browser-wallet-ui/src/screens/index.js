@@ -1,15 +1,7 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {
-    formatAddress,
-    isIOs,
-    isMacOs,
-    isWindows,
-    sleep,
-    getCurrentBrowser,
-    isStandaloneApp
-} from "@bitgreen/browser-wallet-utils";
-import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
+import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
+import {AccountStore, CacheStore, NetworkStore} from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
 import anime from 'animejs';
@@ -48,6 +40,9 @@ import stakingCollatorsScreen from "./stakingCollators.js";
 import stakingCollatorScreen from "./stakingCollator.js";
 import kycStartScreen from "./kycStart.js";
 import kycBasicScreen from "./kycBasic.js";
+import connectionErrorScreen from "./connectionError.js";
+import kycAdvancedScreen from "./kycAdvanced.js";
+import kycAccreditedScreen from "./kycAccredited.js";
 
 const current_browser = getCurrentBrowser()
 
@@ -148,6 +143,10 @@ class Screen {
 
     unFreezeRoot() {
         document.querySelector('#root').classList.remove('freeze')
+    }
+
+    showInit() {
+        document.querySelector("#init_screen").classList.remove("inactive")
     }
 
     async set(element = this.options.element, template_name = this.options.template_name, params = this.options.template_params) {
@@ -296,6 +295,14 @@ class Screen {
             return false
         }
     }
+}
+
+const freezeRoot = () => {
+    document.querySelector('#root').classList.add('freeze')
+}
+
+const unFreezeRoot = () => {
+    document.querySelector('#root').classList.remove('freeze')
 }
 
 const showInit = (locked = false) => {
@@ -482,7 +489,10 @@ const screens = {
     stakingCollatorsScreen,
     stakingCollatorScreen,
     kycStartScreen,
-    kycBasicScreen
+    kycBasicScreen,
+    kycAdvancedScreen,
+    kycAccreditedScreen,
+    connectionErrorScreen
 }
 
 let screen_history = []
@@ -673,6 +683,8 @@ const updateAccounts = async(current_account_id = null) => {
                 }
             }
 
+            const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+
             await updateElement('#accounts_modal #wallet_list', 'accounts/modal_item', {
                 account_id,
                 account_jdenticon,
@@ -680,7 +692,7 @@ const updateAccounts = async(current_account_id = null) => {
                 account_address: formatAddress(account?.address, 16, 8),
                 is_main: account_id?.toString() === 'main' ? '' : 'hidden',
                 is_current: is_current ? '' : 'hidden',
-                is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified',
+                is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
             }, true)
         }
 
@@ -735,6 +747,8 @@ export {
     enableFooter,
     disableFooter,
     scrollToBottom,
+    freezeRoot,
+    unFreezeRoot,
     showInit,
     hideInit
 }

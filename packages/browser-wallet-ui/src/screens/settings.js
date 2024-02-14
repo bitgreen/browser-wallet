@@ -71,6 +71,7 @@ export default async function settingsScreen(params) {
             listener: async() => {
                 const network_id = DOMPurify.sanitize(document.querySelector("#change_network").value);
 
+                screen.showInit()
                 screen.freezeRoot()
 
                 await sendMessage('change_network', {

@@ -11,9 +11,9 @@ import {
     getAmountDecimal,
     humanToBalance,
 } from "@bitgreen/browser-wallet-utils";
-import { hexToBn } from "@polkadot/util";
 import anime from "animejs";
 import * as jdenticon from "jdenticon";
+import BigNumber from "bignumber.js";
 
 export default async function stakingCollatorScreen(params) {
     const screen = new Screen({
@@ -51,8 +51,8 @@ export default async function stakingCollatorScreen(params) {
 
     await screen.set('#bordered_content', 'staking/collator/content', {
         collator_jdenticon: jdenticon.toSvg(params?.collator, 56),
-        total_stake: formatAmount(balanceToHuman(hexToBn(collator.totalStake)), 2, '', true),
-        my_stake: formatAmount(balanceToHuman(hexToBn(delegator?.deposit)), 2, '', true),
+        total_stake: formatAmount(balanceToHuman(new BigNumber(collator?.totalStake?.replaceAll(',', '') || 0)), 2, '', true),
+        my_stake: formatAmount(balanceToHuman(new BigNumber(delegator?.deposit?.replaceAll(',', '') || 0)), 2, '', true),
         balance: formatAmount(balanceToHuman(original_balance.free, 2), 2),
         max_balance: balanceToHuman(original_balance.free, 18),
         apy_amount: collator_apy_data.amount,
@@ -61,7 +61,7 @@ export default async function stakingCollatorScreen(params) {
     document.querySelector('#bordered_content').classList.add('medium')
     document.querySelector('#bordered_content').classList.add('no-overflow')
 
-    if(balanceToHuman(hexToBn(delegator?.deposit)) > 0) {
+    if(balanceToHuman(new BigNumber(delegator?.deposit.replaceAll(',', ''))) > 0) {
         document.querySelector('#bordered_content #unbond').classList.remove('disabled')
     }
 

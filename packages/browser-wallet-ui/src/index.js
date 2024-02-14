@@ -12,6 +12,8 @@ import {
     scrollToBottom,
     disableFooter,
     enableFooter,
+    freezeRoot,
+    unFreezeRoot,
     showInit,
     hideInit
 } from './screens/index.js'
@@ -24,7 +26,7 @@ import * as jdenticon from 'jdenticon'
 import {Tooltip} from 'bootstrap'
 
 /* import stores */
-import { AccountStore, databaseService } from "@bitgreen/browser-wallet-core";
+import { databaseService } from "@bitgreen/browser-wallet-core";
 
 /* import all css files */
 import './styles/main.css'
@@ -39,6 +41,8 @@ class userInterface {
     }
 
     initUi = async() => {
+        await this.db.ensureInit()
+
         await updateElement('body', 'init', {}, false)
 
         this.current_account = await this.db.stores.accounts.current()
@@ -112,13 +116,14 @@ class userInterface {
 
     initAccounts = async() => {
         const current_account = await this.db.stores.accounts.current()
+        const kyc_level = await this.db.stores.cache.asyncGet('kyc_' + current_account.address)
 
         await updateElement('#accounts_modal', 'accounts/modal', {
             current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,
             current_account_address: formatAddress(current_account?.address, 16, 8),
             full_account_address: current_account?.address,
             is_primary: current_account?.id === 'main' ? '' : 'hidden',
-            is_kyc_verified: await this.db.stores.cache.asyncGet('kyc_' + current_account.address) ? 'verified' : 'unverified'
+            is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
         }, false)
 
         await updateAccounts(current_account?.id)
@@ -237,6 +242,20 @@ class userInterface {
             wallet_title: isStandaloneApp() ? 'WALLET APP' : 'BROWSER WALLET'
         }, false)
 
+        const input_form = document.querySelector("#login_screen #input_form")
+        const input_field = input_form.querySelector("#password")
+        const show_password = input_form.querySelector(".show-password")
+
+        show_password.addEventListener("click", () => {
+            if(input_field.type === 'password') {
+                input_field.type = 'text'
+                show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+            } else {
+                input_field.type = 'password'
+                show_password.innerHTML = '<span class="icon icon-eye"></span>'
+            }
+        })
+
         document.querySelector("#login_screen #do_login").addEventListener("click", () => this.doLoginEvent())
         document.querySelector("#login_screen #password").addEventListener("keypress", async(e) => {
             if (e.key === "Enter") {
@@ -244,11 +263,42 @@ class userInterface {
             }
             await scrollToBottom()
         })
+
+        document.querySelector("#login_screen #password").addEventListener("focus", async() => {
+            document.querySelector("#login_screen").classList.add('focused')
+
+            await scrollToBottom()
+            await scrollToBottom(200)
+            await scrollToBottom(1600)
+        })
+
+        document.querySelector("#login_screen #password").addEventListener("blur", async() => {
+            document.querySelector("#login_screen").classList.remove('focused')
+        })
+
+        window.addEventListener("click", async() => {
+            const login_screen = document.querySelector("#login_screen")
+            const input_field = input_form.querySelector("#password")
+
+            if(login_screen.classList.contains('inactive')) return
+
+            input_field.focus()
+        })
     }
 
     doLoginEvent = async() => {
+        freezeRoot()
+
+        const status_message = document.querySelector("#login_screen #status_message")
+        const input_form = document.querySelector("#login_screen #input_form")
+        const input_field = input_form.querySelector("#password")
+        const show_password = input_form.querySelector(".show-password")
+
         const current_screen = currentScreen()
         const password = DOMPurify.sanitize(document.querySelector("#login_screen #password").value);
+
+        status_message.classList.add('active')
+        input_form.classList.add('inactive')
 
         const result = await doLogin(password)
 
@@ -258,7 +308,18 @@ class userInterface {
             if(current_screen.name === 'dashboardScreen') await reloadScreen()
         } else {
             await showNotification('Password is wrong!', 'error', 1800, isStandaloneApp() ? 60 : 0)
+            input_form.classList.remove('inactive')
         }
+
+        setTimeout(() => {
+            input_form.classList.remove('inactive')
+        }, 1000)
+
+        // reset to init screen
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
+        status_message.classList.remove('active')
+        unFreezeRoot()
     }
 
     goToScreen = async(name, params = {}, force = false) => {

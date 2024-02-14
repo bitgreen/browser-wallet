@@ -25,6 +25,8 @@ export default async function accountManageScreen() {
     for(const a of all_accounts) {
         const account_id = a?.key
         const account = a.value
+        const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+
         await screen.append('#root #wallet_list', 'accounts/manage/list_item', {
             account_id,
             derivation_path: account_id?.toString() === 'main' ? '' : '//' + account_id,
@@ -34,7 +36,7 @@ export default async function accountManageScreen() {
             account_address: formatAddress(account?.address, 16, 8),
             is_main: account_id?.toString() === 'main' ? '' : 'hidden',
             is_current: account_id?.toString() === current_account?.id?.toString() ? '' : 'hidden',
-            is_kyc_verified: await cache_store.asyncGet('kyc_' + account.address) ? 'verified' : 'unverified'
+            is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
         })
     }
 

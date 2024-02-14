@@ -66,6 +66,7 @@ export default async function assetAllScreen(params) {
 
       await screen.append("#root #transactions", "asset/all/list_item", {
         assetName: asset.asset_name,
+        assetId: asset.asset_id,
         balance: balance_info.amount,
         decimal: balance_info.decimals,
 

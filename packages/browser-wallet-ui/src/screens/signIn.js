@@ -41,7 +41,9 @@ export default async function signInScreen(params) {
         title: params?.title?.substring(0, 60)
     });
 
-    if(checkIfAppIsKnown(domain)) {
+    const app = checkIfAppIsKnown(domain)
+    if(app) {
+        screen.setParam('#app_info h3', app.title)
         document.querySelector('#app_info').classList.add('known')
     }
 
@@ -63,6 +65,9 @@ export default async function signInScreen(params) {
         class: 'btn-dark btn-sm btn-rounded',
         icon: 'hidden m-0'
     });
+
+    const input_field = document.querySelector("#root .footer #password")
+    const show_password = document.querySelector("#root .footer .show-password")
 
     anime({
         targets: '#bordered_content',
@@ -118,6 +123,18 @@ export default async function signInScreen(params) {
                 return await goToScreen('dashboardScreen')
             }
         },
+        {
+            element: '#root .footer .show-password',
+            listener: () => {
+                if(input_field.type === 'password') {
+                    input_field.type = 'text'
+                    show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+                } else {
+                    input_field.type = 'password'
+                    show_password.innerHTML = '<span class="icon icon-eye"></span>'
+                }
+            }
+        }
     ])
 
     const doSignIn = async() => {
@@ -143,6 +160,9 @@ export default async function signInScreen(params) {
             hideProcessing()
             await showNotification('Password is wrong!', 'error')
         }
+
+        show_password.innerHTML = '<span class="icon icon-eye"></span>'
+        input_field.type = 'password'
     }
 
     const showProcessing = () => {

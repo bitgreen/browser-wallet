@@ -1,22 +1,27 @@
 <div id="app_info" class="d-flex align-items-center"></div>
-<div class="button-item transaction-item" data-id="1">
-    <div class="d-flex align-items-center">
-        <span class="status">1</span>
-        <div class="transaction-info w-100 d-flex align-items-center justify-content-center pe-5">
-            <div class="align-items-center pe-2"><span class="d-block w-100 icon icon-cog"></span><span class="desc d-block w-100">${pallet}</span></div>
-            <div class="align-items-center ps-2"><span class="d-block w-100 icon icon-add-plus"></span><span class="desc d-block w-100">${call}</span></div>
-        </div>
-        <span class="icon icon-right icon-down-arrow"></span>
+<div id="error_alert" class="alert alert-danger d-flex align-items-stretch d-none">
+    <div class="icon d-flex align-items-center rounded-1 px-3">
+        <span class="icon-danger icon-small"></span>
     </div>
-    <div class="transaction-details d-block w-100">
-        <h4 class="text-uppercase text-bold text-small">${pallet}:${call}</h4>
-        <p class="text-gray mt-2 mb-2">${docs}</p>
-        <div class="element d-flex align-items-center"><div class="col-2 pe-3 text-center"><span class="icon icon-code"></span></div><div class="col-7"><h4>Raw Request</h4></div></div>
-        <div class="parameters d-flex text-gray text-small"><div class="col-2"></div><div class="col-10">${raw_request}</div></div>
-    </div>
+    <p class="m-0 p-2">
+        <span class="text-bold text-bigger mb-2 d-block">Failed transactions</span>
+        <span>One or more transactions were not successful. Expand each transaction for a summary.</span>
+    </p>
 </div>
+<div id="transactions" style="height: calc(100% - 195px); min-height: 100px; padding-bottom: 12px;"></div>
+<div class="transactions-end"></div>
 <div class="footer flex-row-reverse pt-0 pb-0">
     <div class="alert alert-warning d-flex align-items-stretch mb-0"><div class="icon d-flex align-items-center"><span class="icon-warning"></span></div><p class="w-100 m-0 p-2">Review all queued transactions carefully as they will be executed automatically and sequentially.</p></div>
-    <div class="w-100"><label class="label text-dark">Enter your password to approve this transaction</label><div class="form-group custom-border"><div class="input-group"><span class="input-group-text rounded-left"><span class="icon icon-password"></span></span><input id="password" type="password" class="form-control" placeholder="Wallet Password"><span class="input-group-text p-0"><button id="approve_extrinsic" type="button" class="btn btn-sm btn-primary rounded-right">Approve <span class="icon icon-right-arrow"></span></button></span></div></div></div>
+    <div class="w-100">
+        <label class="label text-dark">Enter your password to approve this transaction</label>
+        <div class="form-group custom-border">
+            <div class="input-group">
+                <span class="input-group-text rounded-left"><span class="icon icon-password"></span></span>
+                <input id="password" type="password" class="form-control" placeholder="Wallet Password">
+                <div class="show-password align-items-center"><span class="icon icon-eye"></span></div>
+                <span class="input-group-text p-0"><button id="approve_extrinsic" type="button" class="btn btn-sm btn-primary rounded-right">Approve <span class="icon icon-right-arrow"></span></button></span>
+            </div>
+        </div>
+    </div>
     <div class="w-100"><div class="w-100 text-center"><button id="deny_extrinsic" type="button" class="btn btn-sm btn-error"><span class="icon icon-close"></span> Cancel</button></div></div>
 </div>

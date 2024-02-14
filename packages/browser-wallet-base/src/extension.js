@@ -5,10 +5,24 @@ const db = new databaseService()
 const ui = new userInterface()
 
 const extension = async() => {
+    await db.ensureInit()
+
     await ui.initUi()
 
     // preload polkadot api
-    await polkadotApi()
+    const polkadotApiReady = await polkadotApi(true)
+
+    if(!polkadotApiReady) {
+        return setTimeout(() => {
+            polkadotApi(true).then(async(api_ready) => {
+                if(!api_ready) {
+                    return await ui.goToScreen('connectionErrorScreen')
+                }
+
+                await extension()
+            })
+        }, 2000)
+    }
 
     const params = new URLSearchParams(window.location.search)
 

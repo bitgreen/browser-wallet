@@ -1,5 +1,5 @@
 import { backgroundMessageHandler, findTab, polkadotApi, idleTime, reconnectTime } from '@bitgreen/browser-wallet-core'
-import {getCurrentBrowser, isFirefox, isIOs, isSafari} from "@bitgreen/browser-wallet-utils";
+import { isIOs, isIPad } from "@bitgreen/browser-wallet-utils";
 
 let waiting_to_stop = false
 let openCount = 0;
@@ -72,6 +72,15 @@ current_browser.runtime.onConnect.addListener((port) => {
         console.warn(`Disconnected from ${port.name}`);
     });
 });
+
+current_browser.runtime.onInstalled.addListener((details) => {
+    if((isIOs() || isIPad()) && details.reason === 'install' && process.env.NODE_ENV === 'production') {
+        current_browser.runtime.setUninstallURL('', () => {
+            // Clear data on uninstall
+            current_browser.storage.local.clear()
+        })
+    }
+})
 
 function forceReconnect(port) {
     deleteTimer(port);

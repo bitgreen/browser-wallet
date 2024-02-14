@@ -35,6 +35,8 @@ export default async function transactionHistoryScreen() {
         padding_top: '40px',
     });
 
+    showLoading()
+
     anime({
         targets: '#bordered_content',
         opacity: [0, 1],
@@ -42,8 +44,6 @@ export default async function transactionHistoryScreen() {
         easing: 'easeInOutSine',
         duration: 400
     });
-
-    showLoading()
 
     const all_transactions = []
 
@@ -53,31 +53,48 @@ export default async function transactionHistoryScreen() {
       sendMessage('get_asset_transactions')
     ])
 
-    for(const t of transactions) {
-        all_transactions.push({
-            type: 'bbb',
-            ...t
-        })
+    if(transactions?.length) {
+        for(const t of transactions) {
+            all_transactions.push({
+                type: 'bbb',
+                ...t
+            })
+        }
     }
 
-    for(const t of token_transactions) {
-        all_transactions.push({
-            type: 'token',
-            ...t
-        })
+    if(token_transactions?.length) {
+        for (const t of token_transactions) {
+            all_transactions.push({
+                type: 'token',
+                ...t
+            })
+        }
     }
 
-    for(const t of asset_transactions) {
-        all_transactions.push({
-            type: 'asset',
-            ...t
-        })
+    if(asset_transactions?.length) {
+        for (const t of asset_transactions) {
+            all_transactions.push({
+                type: 'asset',
+                ...t
+            })
+        }
     }
 
-    // Default sort by date
+    // Default sort by date with secondary sort by index (if available)
     all_transactions.sort((a, b) => {
-        return new Date(Date.parse(b.value.createdAt)) - new Date(Date.parse(a.value.createdAt));
-    })
+        const dateA = new Date(a.value.createdAt);
+        const dateB = new Date(b.value.createdAt);
+
+        // Compare dates in descending order
+        if (dateB > dateA) return 1;
+        if (dateA > dateB) return -1;
+
+        // If dates are equal, compare indices in ascending order (treat undefined as Infinity)
+        const indexA = a.value.index || Infinity;
+        const indexB = b.value.index || Infinity;
+
+        return indexB - indexA;
+    });
 
     for(const transaction of all_transactions) {
         if(!transaction.value) continue
@@ -95,20 +112,64 @@ export default async function transactionHistoryScreen() {
 
         const asset_info = getAmountDecimal(human_balance, 2)
         const created_at = new Date(Date.parse(transaction.value.createdAt))
-        const sent = transaction.value.sender.toLowerCase() === current_account.address.toLowerCase()
+        const sent = transaction.value.from.toLowerCase() === current_account.address.toLowerCase()
+
+        let asset_decimals = '.' + asset_info.decimals
+
+        let icon
+        let asset_prefix = ''
+        if(transaction.type === 'asset') {
+            asset_decimals = ''
+
+            if(transaction.value.type === 'PURCHASED') {
+                icon = '<span class="d-block w-100 icon icon-cart icon-success"></span><span class="desc d-block w-100 text-gray">PURCHASED</span>'
+                asset_prefix = '+'
+            } else if(transaction.value.type === 'SOLD') {
+                icon = '<span class="d-block w-100 icon icon-cart icon-error"></span><span class="desc d-block w-100 text-gray">SOLD</span>'
+                asset_prefix = '-'
+            } else if(transaction.value.type === 'SENT' || transaction.value.type === 'ORDER_CREATED') {
+                icon = '<span class="d-block w-100 icon icon-right-up-arrow icon-error"></span><span class="desc d-block w-100 text-gray">SENT</span>'
+                asset_prefix = '-'
+            } else if(transaction.value.type === 'RECEIVED' || transaction.value.type === 'ORDER_CANCELLED') {
+                icon = '<span class="d-block w-100 icon icon-left-down-arrow icon-success"></span><span class="desc d-block w-100 text-gray">RECEIVED</span>'
+                asset_prefix = '+'
+            }else if(transaction.value.type === 'RETIRED') {
+                icon = '<span class="d-block w-100 icon icon-retired icon-green"></span><span class="desc d-block w-100 text-gray">RETIRED</span>'
+                asset_prefix = '-'
+            } else if(transaction.value.type === 'ISSUED') {
+                icon = '<span class="d-block w-100 icon icon-carbon icon-orange"></span><span class="desc d-block w-100 text-gray">ISSUED</span>'
+                asset_prefix = '+'
+            }
+        } else {
+            if(sent) {
+                icon = '<span class="d-block w-100 icon icon-right-up-arrow icon-error"></span><span class="desc d-block w-100 text-gray">SENT</span>'
+                asset_prefix = '-'
+            } else {
+                icon = '<span class="d-block w-100 icon icon-left-down-arrow icon-success"></span><span class="desc d-block w-100 text-gray">RECEIVED</span>'
+                asset_prefix = '+'
+            }
+        }
 
         await screen.append('#bordered_content #transactions', 'transaction/list_item', {
             asset_name: asset_name,
             hash: transaction.value.hash,
             created_at: created_at.getDate(),
             created_at_month: created_at.toLocaleString('default', { month: 'short' }),
-            asset_amount: (sent ? '-' : '+') + asset_info.amount,
-            asset_decimals: asset_info.decimals,
+            asset_amount: asset_prefix + asset_info.amount,
+            asset_decimals: asset_decimals,
             asset_type: asset_type,
-            sent: sent ? '' : 'd-none hidden',
+            icon: icon,
             received: !sent ? '' : 'd-none hidden',
         })
     }
+
+    if(all_transactions?.length < 1) {
+        await screen.append('#bordered_content #transactions', 'shared/alert', {
+            message: 'No transactions found yet.',
+            alert_type: 'alert-info'
+        })
+    }
+
     // hide loading
     const loading_el = document.querySelector("#loading_content")
     setTimeout(() => {
@@ -130,6 +191,13 @@ export default async function transactionHistoryScreen() {
             element: '#root #transactions .button-item',
             listener: async(e) => {
                 if(!e.target.dataset?.hash) return false
+
+                const transaction = all_transactions.find((t) => {
+                    return e.target.dataset?.hash.toLowerCase() === t.value.hash.toLowerCase()
+                })
+
+                // TODO: temp disable asset transaction details.
+                if(transaction?.type === 'asset' || transaction?.type === 'token') return
 
                 return await goToScreen('transactionDetailsScreen', {
                     hash: e.target.dataset?.hash
