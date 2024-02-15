@@ -1,3 +1,7 @@
+html {
+    background: linear-gradient(to bottom, #224851, #133948)
+}
+
 body.macos {
     position: fixed;
 }
