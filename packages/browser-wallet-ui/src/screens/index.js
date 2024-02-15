@@ -1,6 +1,15 @@
 import { resetElement, updateElement } from "../screens.js";
 import { sendMessage } from "../messaging.js";
-import {formatAddress, isFirefox, isIOs, isMacOs, isSafari, isWindows, sleep} from "@bitgreen/browser-wallet-utils";
+import {
+    formatAddress,
+    getCurrentBrowser,
+    isFirefox,
+    isIOs,
+    isMacOs,
+    isSafari,
+    isWindows,
+    sleep
+} from "@bitgreen/browser-wallet-utils";
 import {AccountStore, CacheStore, NetworkStore} from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 
