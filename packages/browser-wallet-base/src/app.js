@@ -9,6 +9,8 @@ const db = new databaseService()
 const ui = new userInterface()
 
 async function extension() {
+    await db.ensureInit()
+
     await ui.initUi()
 
     // Break if there is no wallet created/imported, and return to welcome screen.
