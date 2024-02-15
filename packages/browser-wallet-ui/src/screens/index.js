@@ -6,7 +6,7 @@ import {
     isFirefox,
     isIOs,
     isMacOs,
-    isSafari,
+    isSafari, isStandaloneApp,
     isWindows,
     sleep
 } from "@bitgreen/browser-wallet-utils";
@@ -332,11 +332,11 @@ const hideInit = (unlocked = false) => {
         setTimeout(function() {
             document.querySelector("#init_screen").classList.remove("fade-in")
             document.querySelector("#init_screen").classList.add("fade-out");
-        }, unlocked & isLoaded ? 0 : 300);
+        }, unlocked && isLoaded ? 0 : 300);
         setTimeout(function() {
             document.querySelector("#init_screen").classList.add("inactive")
             document.querySelector("#init_screen").classList.remove("fade-out")
-        }, unlocked & isLoaded ? 300 : 600)
+        }, unlocked && isLoaded ? 300 : 600)
     }
 }
 
