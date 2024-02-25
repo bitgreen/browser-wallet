@@ -1,0 +1,14 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+
+[*.css]
+indent_size = 4
+
+[*.scss]
+indent_size = 4
+
+[*.html]
+indent_size = 4

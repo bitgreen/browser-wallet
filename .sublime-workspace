@@ -1,0 +1,17 @@
+{
+  "tab_size": 2,
+  "translate_tabs_to_spaces": true,
+  "settings": {
+    "syntax_specific": {
+      "*.css": {
+        "tab_size": 4
+      },
+      "*.scss": {
+        "tab_size": 4
+      },
+      "*.html": {
+        "tab_size": 4
+      }
+    }
+  }
+}

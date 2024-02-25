@@ -1,0 +1,8 @@
+set tabsize 2
+set tabstospaces
+
+syntax "css" "\.(css|scss)$"
+set tabsize 4
+
+syntax "html" "\.html$"
+set tabsize 4

@@ -1,0 +1,14 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "[css]": {
+    "editor.tabSize": 4
+  },
+  "[scss]": {
+    "editor.tabSize": 4
+  },
+  "[html]": {
+    "editor.tabSize": 4
+  }
+}
