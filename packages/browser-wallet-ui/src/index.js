@@ -28,11 +28,10 @@ import {Tooltip} from 'bootstrap'
 /* import stores */
 import { databaseService } from "@bitgreen/browser-wallet-core";
 
-/* import all css files */
-import './styles/main.css'
-import './styles/app.css'
-import './styles/icomoon.css'
-import 'bootstrap/dist/css/bootstrap.css'
+/* import styles  */
+import './scss/styles.scss'
+
+/* import utilitis */
 import {formatAddress, isIOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
 
 class userInterface {

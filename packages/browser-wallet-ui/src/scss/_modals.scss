@@ -1,0 +1,128 @@
+.modal {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+    transition: all linear 0.2s;
+    height: auto;
+    box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
+
+    &:after {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1200px;
+        background-color: rgba(17, 20, 30, 0.66);
+        content: " ";
+        z-index: -1;
+        transition: all linear 0.2s;
+    }
+    &.show {
+        height: 100%;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 9998;
+
+        .modal-dialog {
+            transform: translateY(0);
+        }
+    }
+    
+    .modal-dialog {
+        transform: translateY(-60px);
+        transition: all linear 0.2s;
+        margin: 0;
+    }
+    .modal-content {
+        border: none !important;
+    }
+    .modal-header {
+        position: relative;
+        background-color: $colorTealLight;
+        border-radius: 0 !important;
+        border-bottom: 0 !important;
+
+        &.equal-padding {
+            padding: 6px 12px;
+        }
+        &.modal-header-danger {
+            background-color: $colorDanger;
+        }
+        &.modal-header-primary {
+            background-color: $colorTealLight;
+        }
+    }
+    .modal-body {
+        margin-top: -2px;
+        
+        &.small-padding {
+            padding: 6px 10px;
+        }
+        &.modal-body-primary {
+            background-color: $colorTealLight;
+        }
+    }
+    .modal-footer {
+        box-shadow: 0 12px 16px -4px rgba(17, 20, 30, 0.1), 0 4px 6px -2px rgba(17, 20, 30, 0.05);
+        border-radius: 0 0 8px 8px;
+        border: none !important;
+    }
+}
+
+#accounts_modal {
+    width: calc(100% - 16px);
+    top: 0;
+    left: 8px;
+    padding-top: 8px;
+    user-select: none;
+
+    .modal-content {
+        border-radius: 10px !important;
+    }
+    .modal-header {
+        border-top-left-radius: 8px !important;
+        border-top-right-radius: 8px !important;
+    }
+    .current-wallet {
+        .address {
+            font-size: 14px;
+    
+            .icon {
+                font-size: 16px;
+            }
+        }
+    }
+    .modal-body {
+        padding-right: 8px;
+    
+        .button-item {
+            min-height: 60px;
+    
+            .icon {
+                font-size: 14px;
+                width: 40px;
+            }
+        }
+    }
+    #wallet_list {
+        max-height: 290px;
+    }
+    #hide_accounts_modal {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        font-size: 14px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding: 0;
+        color: $colorWhite !important;
+        transition: all linear 0.1s;
+
+        &:hover {
+            font-size: 16px;
+        }
+    }
+}

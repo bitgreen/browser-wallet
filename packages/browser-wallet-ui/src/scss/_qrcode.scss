@@ -1,0 +1,31 @@
+#qrcode {
+    position: relative;
+    padding: 16px;
+    border: 3px solid $colorGreenElectric;
+    margin: 16px 16px 32px;
+
+    &:after {
+        position: absolute;
+        content: " ";
+        top: -5px;
+        left: 32px;
+        width: calc(100% - 64px);
+        height: calc(100% + 10px);
+        background-color: $colorWhite;
+    }
+    &:before {
+        position: absolute;
+        content: " ";
+        top: 32px;
+        left: -5px;
+        width: calc(100% + 10px);
+        height: calc(100% - 64px);
+        background-color: $colorWhite;
+        z-index: 999;
+    }
+
+    * {
+        position: relative;
+        z-index: 999;
+    }
+}

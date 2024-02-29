@@ -23,7 +23,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build:chrome && npm run build:firefox && npm run build:apple",
+    "build": "npm run build:chrome && npm run build:firefox && npm run build:apple && npm run build:android",
     "build:all": "npm run build",
     "build:chrome": "webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode production",
     "build:firefox": "webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode production",
@@ -35,16 +35,18 @@
     "dev:firefox": "webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode development --watch",
     "dev:safari": "webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode development --watch",
     "dev:ios": "webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode development --watch",
+    "dev:apple": "npm run build:safari && npm run build:ios --mode development --watch",
+    "dev:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode development --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@bitgreen/browser-wallet-base": "^1.0.0",
-    "@polkadot/api": "^10.10.1",
     "@capacitor/android": "^5.2.2",
     "@capacitor/app": "^5.0.6",
     "@capacitor/core": "^5.2.2",
     "@capacitor/ios": "^5.2.2",
     "@capacitor/keyboard": "^5.0.6",
+    "@polkadot/api": "^10.10.1",
     "@polkadot/keyring": "^10.1.11",
     "@polkadot/types": "^9.7.1",
     "@polkadot/util": "^10.1.11",

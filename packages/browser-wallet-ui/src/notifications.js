@@ -1,5 +1,4 @@
 import Toastify from 'toastify-js'
-import 'toastify-js/src/toastify.css'
 
 let notification
 const showNotification = async(message, type, duration = 2000, offset = 40) => {

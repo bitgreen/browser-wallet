@@ -1,0 +1,147 @@
+body.app {
+    position: relative;
+    height: 100vh;
+    min-height: 400px;
+    transition: all ease-out 0.33s;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    &.keyboard-opened {
+        #bordered_content {
+            padding-bottom: 16px;
+        }
+
+        .footer {
+            bottom: 8px !important;
+        }
+    }
+
+    * {
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+    }
+
+    #login_screen {
+        position: absolute !important;
+        width: 100vw;
+        background-color: transparent;
+
+        &:after {
+            background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+            content: "";
+            height: 100%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 98;
+        }
+    }
+
+    #init_screen {
+        position: fixed;
+        overflow: hidden;
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+
+        .init-logo {
+            position: fixed;
+            bottom: auto;
+            top: 300px;
+        }
+    }
+
+    #full_page,
+    #heading,
+    #bordered_content {
+        position: absolute;
+        width: 100vw;
+    }
+
+    #bordered_content {
+        overflow: auto;
+        overflow-x: hidden;
+
+        &.no-overflow {
+            overflow: unset;
+        }
+    }
+
+    #main_footer,
+    .footer {
+        position: absolute;
+        width: calc(100vw - 32px);
+        left: 16px;
+    }
+
+    .footer {
+        bottom: 8px;
+        pointer-events: none;
+
+        &.double-footer {
+            bottom: 86px;
+        }
+
+        > div {
+            pointer-events: all;
+        }
+    }
+
+    #accounts_modal {
+        padding-top: 50px !important;
+    }
+    #staking_info {
+        padding: 0 16px;
+        bottom: 100px;
+    
+        .dots {
+            top: auto;
+            bottom: 120px;
+        }
+    }
+
+    #root .full-only {
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+    }
+    #main_footer.disabled {
+        pointer-events: none !important;
+    }
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+
+    &.full-only {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('../assets/bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    
+        z-index: -1;
+    }
+
+    &.init {
+        opacity: 1;
+    
+        transition: all ease-in-out 0.4s;
+    }
+
+    &.freeze * {
+        pointer-events: none !important;
+    }
+}
+
+#connection_error {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    z-index: 10000;
+}

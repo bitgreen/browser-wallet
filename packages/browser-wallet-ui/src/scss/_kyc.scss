@@ -1,0 +1,46 @@
+#go_kyc {
+    position: relative;
+    padding: 12px 8px;
+    border-radius: 8px;
+    transition: all linear 0.2s;
+    margin: 0 16px;
+
+    &.kyced .icon-shield {
+        color: $colorGreenElectric;
+    }
+
+    .icon-shield {
+        color: $colorLightGray1;
+    }
+}
+#kyc_shield {
+    position: relative;
+    top: -40px;
+    width: 150px;
+    height: 120px;
+    user-select: none !important;
+
+    .text {
+        font-size: 22px;
+        line-height: 1;
+        text-anchor: middle;
+        transform: translateY(-0.25em);
+
+        .not-verified {
+            font-size: 24px;
+            font-weight: 500;
+            fill: $colorBlueGray;
+        }
+        .verified {
+            font-size: 16px;
+            font-weight: 400;
+            fill: $colorTealLight;
+        }
+        .level {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 500;
+            fill: $colorTealLight;
+        }
+    }
+}

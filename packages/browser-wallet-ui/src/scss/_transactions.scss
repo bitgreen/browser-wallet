@@ -1,0 +1,36 @@
+#transactions {
+    min-height: 300px;
+    height: calc(100% - 5px);
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+    
+    &.smaller {
+        height: 320px;
+    }
+    
+    .button-item {
+        height: 65px;
+        padding: 0 8px;
+        opacity: 0;
+        margin-bottom: 10px;
+    }
+    .transaction-info {
+        width: 90%;
+        text-align: center;
+        text-transform: uppercase;
+    }
+}
+.transactions-end {
+    position: absolute;
+    margin-top: -45px;
+    left: 0;
+    width: calc(100% - 30px);
+    height: 45px;
+    background: linear-gradient(to bottom, transparent 0%, transparent 10%, $colorWhite 80%, $colorWhite 100%);
+    pointer-events: none;
+
+    z-index: 55;
+}

@@ -1,0 +1,91 @@
+.alert {
+    padding: 0;
+    margin-bottom: 8px;
+
+    &.alert-info {
+        background-color: $colorWhite;
+        border-color: $colorTealLight;
+        color: $colorBlueDark;
+
+        .icon {
+            background-color: $colorTealLight;
+        }
+    }
+    &.alert-danger {
+        background-color: $colorWhite;
+        border-color: $colorBurntOrange;
+        color: $colorBurntOrange;
+
+        .icon {
+            background-color: $colorBurntOrange;
+        }
+        .close-alert {
+            color: $colorAlertDanger;
+
+            &:hover,
+            &:focus,
+            &:active {
+                color: $colorBurntOrange;
+            }
+        }
+    }
+    &.alert-warning {
+        background-color: $colorWhite;
+        border-color: $colorAlertWarning;
+        color: $colorAlertWarning;
+
+        .icon {
+            background-color: $colorAlertWarning;
+        }
+        .close-alert {
+            color: $colorAlertWarning1;
+
+            &:hover,
+            &:focus,
+            &:active {
+                color: $colorAlertWarning;
+            }
+        }
+    }
+    &.alert-danger-transparent {
+        background-color: transparent;
+        border-color: rgba(255, 255, 255, 0.4);
+        color: $colorWhite;
+
+        .icon {
+            background-color: rgba(255, 255, 255, 0.4);
+            color: $colorDanger2;
+        }
+    }
+    &.alert-info-transparent {
+        background-color: transparent;
+        border-color: rgba(255, 255, 255, 0.4);
+        color: $colorWhite;
+    }
+    &.alert-dismissible {
+        padding-right: 8px !important;
+    }
+
+    .icon {
+        width: 60px;
+        color: $colorWhite;
+        text-align: center;
+
+        .icon-small {
+            font-size: 20px !important;
+        }
+        span {
+            width: 100%;
+            font-size: 26px;
+        }
+    }
+    .close-alert {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 6px;
+        font-size: 12px;
+    
+        transition: all linear 0.2s;
+    }
+}

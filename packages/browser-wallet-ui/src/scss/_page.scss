@@ -1,0 +1,78 @@
+#full_page {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+    .heading {
+        width: 100%;
+        height: 60px;
+        padding: 12px 64px 12px 24px;
+        color: $colorWhite;
+        user-select: none;
+
+        &.equal-padding {
+            padding: 12px 24px;
+        }
+        
+        .icon {
+            width: 40px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        h3 {
+            width: 270px;
+            margin: 0;
+            text-align: center;
+            color: $colorWhite;
+        }
+    }
+    
+    .content {
+        position: relative;
+        width: 100%;
+        height: calc(100% - 60px);
+        padding: 16px;
+        background-color: $colorWhite;
+        overflow: auto;
+        overflow-x: hidden;
+
+        &.full-content {
+            height: 100%;
+
+            &.secondary-bg {
+                background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+                padding-top: 60px;
+            }
+        }
+
+        .icon-huge {
+            font-size: 53px;
+        }
+    }
+}
+
+#full_page #success_icon {
+    margin-top: 90px;
+    margin-bottom: 40px;
+}
+#full_page #message_text {
+    margin-bottom: 100px;
+}
+#full_page #password_input {
+    &:after {
+        position: absolute;
+        top: -80px;
+        left: 0;
+        width: 100%;
+        height: 220px;
+        content: " ";
+        background: linear-gradient(to bottom, transparent 0%, transparent 10%, $colorWhite 50%, $colorWhite 100%);
+        z-index: 99;
+    }
+
+    .w-100 {
+        position: relative;
+        z-index: 999;
+    }
+}

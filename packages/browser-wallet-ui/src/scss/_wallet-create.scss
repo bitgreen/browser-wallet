@@ -1,0 +1,174 @@
+#full_page {
+    .content {
+        .choose-words {
+            .btn {
+                &.btn-left {
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                }
+                &.btn-right {
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;
+                }
+            }
+        }
+
+        .help-desc {
+            user-select: none !important;
+            padding-left: 16px;
+            font-weight: 500;
+            color: $colorBlueGray;
+        }
+
+        .mnemonics {
+            width: 100%;
+            
+            &.mnemonics-hidden {
+                user-select: none !important;
+            }
+            &.clickable {
+                .word {
+                    &.selected {
+                        .badge {
+                            transform: scale(0.9) !important;
+                            background-color: $colorWhite !important;
+                            border: 2px dashed $colorLightGray1;
+                            transition: none !important;
+                        }
+                        .index {
+                            display: none;
+                        }
+                        .remove {
+                            display: none;
+                        }
+                    }
+                    &:hover {
+                        cursor: pointer;
+
+                        .badge {
+                            border-left-width: 2px;
+                            border-right-width: 2px;
+
+                            .remove {
+                                width: 24px;
+                                opacity: 1;
+
+                                &:hover {
+                                    background-color: $colorBadge;
+                                }
+                            }
+                        }
+                        
+                        > * {
+                            pointer-events: none;
+                            z-index: 99;
+                        }
+                    }
+
+                    .badge {
+                        border: 2px solid $colorWhite;
+
+                        .remove {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 0;
+                            height: 100%;
+                            line-height: 100%;
+                            font-size: 10px;
+                            color: $colorWhite;
+                            background-color: $colorDanger1;
+                            border-radius: 8px 0 0 8px;
+                            transition: all linear 0.2s;
+                            z-index: 99;
+                            pointer-events: all !important;
+                            overflow: hidden;
+                            opacity: 0;
+
+                            &:hover > * {
+                                pointer-events: none;
+                            }
+
+                            span {
+                                display: block;
+                                width: 100%;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+            &.bordered {
+                min-height: 38px;
+                border: 1px solid $colorLightestGray;
+                border-radius: 8px;
+                padding: 4px;
+
+                &.bordered-green {
+                    border-color: $colorGreenElectric;
+                }
+            }
+            &.dragging .word .badge .remove {
+                transition: none !important;
+                opacity: 0 !important;
+            }
+            &.mnemonics-hidden .word .badge .text {
+                color: transparent !important;
+                text-shadow: 0 0 4px $colorGrayLight;
+            }
+
+            .word {
+                padding: 2px;
+                overflow: visible;
+
+                .badge {
+                    position: relative;
+                    display: flex;
+                    border-radius: 8px;
+                    background-color: $colorLightestGray !important;
+                    color: $colorDark !important;
+                    padding: 9px 4px 9px 8px;
+                    z-index: 10;
+                    transition: all 0.3s;
+
+                    .icon {
+                        width: 13px;
+                        font-size: 11px;
+                        color: $colorGrayLight;
+                    }
+
+                    .index {
+                        font-size: 12px;
+                        width: 14px;
+                        line-height: 14px;
+                        text-align: center;
+                        color: $colorGrayLight;
+                        user-select: none;
+                    }
+
+                    .text {
+                        width: 100%;
+                        text-align: center;
+                        font-size: 15px;
+                        text-transform: lowercase;
+                    }
+                }
+            }
+        }
+
+        #mnemonics_info {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 12px;
+            user-select: none;
+            
+            .col-6 {
+                padding: 0 8px;
+            }
+            .icon {
+                font-size: 22px;
+                margin: 0 12px;
+            }
+        }
+    }
+}

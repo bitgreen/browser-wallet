@@ -1,0 +1,212 @@
+#login_screen {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../assets/bg.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	opacity: 1;
+    z-index: 9998;
+
+    &.fade-out {
+        opacity: 0 !important;
+        transition: all ease-in 0.3s;
+    }
+    &.inactive {
+        display: none !important;
+        z-index: -1;
+    }
+
+    #input_form {
+        transition: all ease-in 0.3s;
+        visibility: visible;
+    
+        &.inactive {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    }
+
+    #status_message {
+        position: absolute;
+        text-align: center;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 36px;
+        opacity: 0;
+        transition: all ease-in-out 0.4s;
+        color: $colorLightGray;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+    
+        animation-name: beat-text-fade;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+        animation-duration: 1s;
+    
+        &.active {
+            opacity: 1;
+        }
+    }
+}
+
+.bitgreen-svg {
+    position: fixed;
+    top: 180px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 99;
+}
+.separator {
+    position: fixed;
+    top: 250px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 50px;
+    height: 2px;
+    background: $colorWhite;
+    z-index: 99;
+}
+.separator-line {
+    margin: 0 auto 8px;
+    width: 100%;
+    height: 1px;
+    background-color: $colorLightGray;
+}
+.browser-wallet {
+    position: fixed;
+    top: 260px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    color: $colorWhite;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0;
+    text-align: center;
+    user-select: none !important;
+    z-index: 99;
+}
+#get_started {
+    position: fixed;
+    top: 380px;
+    left: 0;
+    right: 0;
+    width: 150px;
+    margin: auto;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+#app_info {
+    border: 1px solid $colorBurntOrange;
+    border-radius: 8px;
+    height: 90px;
+    margin-bottom: 8px;
+
+    &.known {
+        border: 1px solid $colorTealLight;
+
+        .left {
+            background-color: $colorTealLight;
+        }
+
+        .icon-known {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .icon-unknown {
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .message.known {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .message.unknown {
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .right {
+            color: $colorTealLight !important;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: $colorTealLight !important;
+        }
+    }
+
+    .left {
+        width: 80px;
+        height: 90px;
+        background-color: $colorBurntOrange;
+        padding: 16px 4px 16px 4px;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        user-select: none;
+    }
+
+    .icon {
+        display: none;
+        width: 100%;
+        text-align: center;
+        color: $colorWhite;
+        font-size: 26px;
+        padding: 0 25px;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .icon-unknown {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .message {
+        display: none;
+        text-transform: uppercase;
+        color: $colorWhite;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        padding: 6px 6px 10px 6px;
+        opacity: 0;
+        visibility: hidden;
+
+        &.unknown {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .right {
+        height: 100%;
+        color: $colorBurntOrange !important;
+        padding: 8px 12px;
+    }
+
+    h3 {
+        font-size: 16px;
+        color: $colorBurntOrange !important;
+    }
+}

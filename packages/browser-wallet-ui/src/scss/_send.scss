@@ -1,0 +1,139 @@
+#send_info {
+    height: 30px;
+    color: $colorBlueGray;
+
+    .info,
+    .error {
+        display: none;
+    }
+    .info {
+        .text {
+            font-weight: 500;
+        }
+        .separator-line {
+            margin: 8px auto;
+        }
+    }
+    .error {
+        color: $colorDanger2;
+        font-weight: 400;
+    }
+}
+#recipient {
+    overflow: hidden;
+
+    &.form-control {
+        width: 320px;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        padding: 0;
+        border-radius: 4px;
+    }
+}
+#review_transaction {
+    padding: 16px;
+    margin-bottom: 32px;
+    color: $colorDark;
+    user-select: none;
+
+    .token {
+        padding-left: 32px;
+    }
+    .estimated_fees {
+        padding-right: 32px;
+    }
+}
+#amounts,
+#apy_info,
+#review_transaction {
+    .title {
+        margin-top: 6px;
+        font-family: 'Neue Haas Unica Pro', sans-serif;
+        font-weight: 500;
+        color: $colorBlueGray;
+        font-size: 14px;
+    }
+    .amount {
+        font-family: 'Neue Haas Unica Pro', sans-serif;
+        font-weight: 500;
+        font-size: 26px;
+    
+        padding: 0 1px 4px;
+    }
+    .decimals {
+        font-family: 'Neue Haas Unica Pro', sans-serif;
+        font-size: 16px;
+    
+        position: relative;
+        top: -6px;
+        font-weight: 400;
+    
+        letter-spacing: -0.05em;
+    }
+    .dollar {
+        font-family: 'Neue Haas Unica Pro', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        letter-spacing: -0.05em;
+    }
+}
+#transaction_info {
+    .wallet {
+        height: 40px;
+        margin-bottom: 30px;
+
+        .right {
+            padding-left: 8px;
+
+            .address {
+                font-size: 12px;
+            }
+        }
+    }
+    .dot {
+        display: block;
+        position: relative;
+        width: 16px;
+        height: 16px;
+        background-color: $colorWhite;
+        border-radius: 8px;
+        border: 1px solid $colorGrayLight;
+        text-align: center;
+        margin-top: -18px;
+
+        &:after {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 8px;
+            height: 8px;
+            content: " ";
+            background-color: $colorGrayLight;
+            border-radius: 4px;
+        }
+        
+        &.dot-green {
+            border: 1px solid $colorGreenElectric2;
+        
+            &:after {
+                background-color: $colorGreenElectric2;
+            }
+            
+            .dot-line {
+                background-color: $colorGreenElectric2;
+            }
+        }
+
+        .dot-line {
+            position: absolute;
+            bottom: 15px;
+            left: 6px;
+            width: 2px;
+            height: 55px;
+            content: " ";
+            background-color: $colorGrayLight;
+            border-radius: 4px;
+        }
+    }
+}

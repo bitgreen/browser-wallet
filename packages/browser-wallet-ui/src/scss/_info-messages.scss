@@ -1,0 +1,41 @@
+.info-messages {
+    font-weight: 500;
+    color: $colorDark;
+
+    &.bigger {
+        font-size: 16px;
+
+        .message {
+            padding: 8px 0;
+        }
+        .icon {
+            width: 20px;
+            margin-right: 12px;
+        }
+    }
+
+    .message {
+        padding: 4px 0;
+    }
+    .icon {
+        display: block;
+        width: 18px;
+        text-align: center;
+        color: $colorGrayLight;
+        margin-right: 10px;
+
+        &.icon-arrow-right-2 {
+            font-size: 12px;
+            color: $colorTealLight !important;
+        }
+        &.icon-success {
+            color: $colorGreenElectric2;
+        }
+        &.icon-check {
+            color: $colorGreenElectric2;
+        }
+        &.icon-error {
+            color: $colorDanger2;
+        }
+    }
+}
