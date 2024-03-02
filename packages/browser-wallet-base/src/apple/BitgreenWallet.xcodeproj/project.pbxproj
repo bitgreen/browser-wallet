@@ -27,12 +27,8 @@
 		047C28FF2A75C26E00F81F5E /* CapacitorApp in Frameworks */ = {isa = PBXBuildFile; fileRef = 047C28FE2A75C26E00F81F5E /* CapacitorApp */; };
 		047D48EE2A040A1B00C416FC /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 047D48E92A040A1B00C416FC /* icons */; };
 		047D48EF2A040A1B00C416FC /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 047D48E92A040A1B00C416FC /* icons */; };
-		047D48F02A040A1B00C416FC /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EA2A040A1B00C416FC /* default.css */; };
-		047D48F12A040A1B00C416FC /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EA2A040A1B00C416FC /* default.css */; };
 		047D48F22A040A1B00C416FC /* default.js in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EB2A040A1B00C416FC /* default.js */; };
 		047D48F32A040A1B00C416FC /* default.js in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EB2A040A1B00C416FC /* default.js */; };
-		047D48F42A040A1B00C416FC /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EC2A040A1B00C416FC /* main.css */; };
-		047D48F52A040A1B00C416FC /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 047D48EC2A040A1B00C416FC /* main.css */; };
 		047D48F62A040A1B00C416FC /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 047D48ED2A040A1B00C416FC /* main.js */; };
 		047D48F72A040A1B00C416FC /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 047D48ED2A040A1B00C416FC /* main.js */; };
 		04B0525B29F9EC730049B197 /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 04B0525629F9EC730049B197 /* inject.js */; };
@@ -151,9 +147,7 @@
 		047C28772A716A4800F81F5E /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		047C28A82A716CD500F81F5E /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		047D48E92A040A1B00C416FC /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
-		047D48EA2A040A1B00C416FC /* default.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = default.css; sourceTree = "<group>"; };
 		047D48EB2A040A1B00C416FC /* default.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = default.js; sourceTree = "<group>"; };
-		047D48EC2A040A1B00C416FC /* main.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = main.css; sourceTree = "<group>"; };
 		047D48ED2A040A1B00C416FC /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		04B0525629F9EC730049B197 /* inject.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = inject.js; sourceTree = "<group>"; };
 		04C9AD792A13080B00EFF193 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -349,10 +343,8 @@
 		8E8684912872B3510037E6C9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				047D48EA2A040A1B00C416FC /* default.css */,
 				047D48EB2A040A1B00C416FC /* default.js */,
 				047D48E92A040A1B00C416FC /* icons */,
-				047D48EC2A040A1B00C416FC /* main.css */,
 				047D48ED2A040A1B00C416FC /* main.js */,
 				04B0525629F9EC730049B197 /* inject.js */,
 				271FBF0D29B8DB52001D0940 /* assets */,
@@ -520,6 +512,7 @@
 		047C28BB2A7173A400F81F5E /* Pods-BitgreenWallet (iOS) */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
+			name = "Pods-BitgreenWallet (iOS)";
 			path = Pods_BitgreenWallet__iOS_.framework;
 			remoteRef = 047C28BA2A7173A400F81F5E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -574,12 +567,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				047D48F62A040A1B00C416FC /* main.js in Resources */,
-				047D48F42A040A1B00C416FC /* main.css in Resources */,
 				047D48EE2A040A1B00C416FC /* icons in Resources */,
 				04B0525B29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3D29B8DB52001D0940 /* index.html in Resources */,
 				271FBF2529B8DB52001D0940 /* page.js in Resources */,
-				047D48F02A040A1B00C416FC /* default.css in Resources */,
 				271FBF2D29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1129B8DB52001D0940 /* manifest.json in Resources */,
 				271FBF2929B8DB52001D0940 /* background.js in Resources */,
@@ -595,12 +586,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				047D48F72A040A1B00C416FC /* main.js in Resources */,
-				047D48F52A040A1B00C416FC /* main.css in Resources */,
 				047D48EF2A040A1B00C416FC /* icons in Resources */,
 				04B0525C29F9EC730049B197 /* inject.js in Resources */,
 				271FBF3E29B8DB52001D0940 /* index.html in Resources */,
 				271FBF2629B8DB52001D0940 /* page.js in Resources */,
-				047D48F12A040A1B00C416FC /* default.css in Resources */,
 				271FBF2E29B8DB52001D0940 /* content.js in Resources */,
 				271FBF1229B8DB52001D0940 /* manifest.json in Resources */,
 				271FBF2A29B8DB52001D0940 /* background.js in Resources */,
