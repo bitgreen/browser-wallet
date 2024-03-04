@@ -22,19 +22,8 @@ body.app {
     }
 
     #login_screen {
-        position: absolute !important;
         width: 100vw;
         background-color: transparent;
-
-        &:after {
-            background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
-            content: "";
-            height: 100%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 98;
-        }
     }
 
     #init_screen {
@@ -52,7 +41,6 @@ body.app {
     #full_page,
     #heading,
     #bordered_content {
-        position: absolute;
         width: 100vw;
     }
 
