@@ -9,77 +9,77 @@ const db = new databaseService()
 const ui = new userInterface()
 
 async function extension() {
-    await db.ensureInit()
+  await db.ensureInit()
 
-    await ui.initUi()
+  await ui.initUi()
 
-    // Break if there is no wallet created/imported, and return to welcome screen.
-    if(!await db.stores.wallets.exists()) {
-        if(await db.stores.settings.asyncGet('skip_intro')) {
-            return await ui.goToScreen('walletScreen')
-        } else {
-            return await ui.goToScreen('welcomeScreen')
-        }
+  // Break if there is no wallet created/imported, and return to welcome screen.
+  if(!await db.stores.wallets.exists()) {
+    if(await db.stores.settings.asyncGet('skip_intro')) {
+      return await ui.goToScreen('walletScreen')
+    } else {
+      return await ui.goToScreen('welcomeScreen')
     }
+  }
 
-    return await ui.goToScreen('dashboardScreen', {
-        extend_delay: true
-    })
+  return await ui.goToScreen('dashboardScreen', {
+    extend_delay: true
+  })
 }
 
 document.addEventListener('deviceready', async() => {
-    await extension()
+  await extension()
 
-    App.addListener('appStateChange', async({ isActive }) => {
-        if(isActive) {
-            const logged_in = await ui.fastCheckLogin()
+  App.addListener('appStateChange', async({ isActive }) => {
+    if(isActive) {
+      const logged_in = await ui.fastCheckLogin()
 
-            if(await ui.db.stores.wallets.exists() && !logged_in) {
-                await ui.showLogin(true, true)
-            }
+      if(await ui.db.stores.wallets.exists() && !logged_in) {
+        await ui.showLogin(true, true)
+      }
 
-            if(isAndroid()) {
-                setTimeout(() => {
-                    ui.hideInit(true)
-                }, 600)
-            } else {
-                ui.hideInit(true)
-            }
-        } else {
-            ui.showInit(true)
+      if(isAndroid()) {
+        setTimeout(() => {
+          ui.hideInit(true)
+        }, 600)
+      } else {
+        ui.hideInit(true)
+      }
+    } else {
+      ui.showInit(true)
 
-            await Keyboard.hide()
+      await Keyboard.hide()
 
-            // reset body
-            document.body.style.height = '';
-            document.body.classList.remove('keyboard-opened')
-        }
-    });
+      // reset body
+      document.body.style.height = '';
+      document.body.classList.remove('keyboard-opened')
+    }
+  });
 
-    Keyboard.addListener('keyboardWillShow', info => {
-        const bodyHeight = window.innerHeight - info.keyboardHeight
+  Keyboard.addListener('keyboardWillShow', info => {
+    const bodyHeight = window.innerHeight - info.keyboardHeight
 
-        // update body height and add class
-        if(isIOs()) document.body.style.height = bodyHeight + 'px';
-        document.body.classList.add('keyboard-opened')
+    // update body height and add class
+    if(isIOs()) document.body.style.height = bodyHeight + 'px';
+    document.body.classList.add('keyboard-opened')
 
-        ui.disableFooter()
-    });
+    ui.disableFooter()
+  });
 
-    Keyboard.addListener('keyboardWillHide', info => {
-        // reset body
-        if(isIOs()) document.body.style.height = '';
-        document.body.classList.remove('keyboard-opened')
+  Keyboard.addListener('keyboardWillHide', info => {
+    // reset body
+    if(isIOs()) document.body.style.height = '';
+    document.body.classList.remove('keyboard-opened')
 
-        ui.enableFooter()
-    });
+    ui.enableFooter()
+  });
 }, false)
 
 // request message
 window.addEventListener('message', async(event) => {
-    const data = event.data;
+  const data = event.data;
 
-    if(data.source !== 'ui') return false
+  if(data.source !== 'ui') return false
 
-    return appMessageHandler(data)
+  return appMessageHandler(data)
 });

@@ -13,83 +13,83 @@ polkadotApi(true).then()
 
 // listen for messages from both content.js and extension.js
 current_browser.runtime.onConnect.addListener((port) => {
-    console.info(`Connected to ${port.name}`);
+  console.info(`Connected to ${port.name}`);
 
-    if(port.name === 'PORT_EXTENSION') {
-        // reload on every wallet opening
-        polkadotApi(true).then()
+  if(port.name === 'PORT_EXTENSION') {
+    // reload on every wallet opening
+    polkadotApi(true).then()
 
-        openCount += 1;
+    openCount += 1;
 
-        if(waiting_to_stop) {
-            deleteTimer(port)
-            waiting_to_stop = false;
-        }
-
-        port.open_count = openCount
-        ports_extension.push(port)
-    } else if(port.name === 'PORT_CONTENT') {
-        port_content = port
-    } else if(port.name === 'KEEP_ALIVE') {
-        port._timer = setTimeout(forceReconnect, reconnectTime, port);
+    if(waiting_to_stop) {
+      deleteTimer(port)
+      waiting_to_stop = false;
     }
 
-    port.onMessage.addListener((data) => {
-        return backgroundMessageHandler(data, port)
-    })
+    port.open_count = openCount
+    ports_extension.push(port)
+  } else if(port.name === 'PORT_CONTENT') {
+    port_content = port
+  } else if(port.name === 'KEEP_ALIVE') {
+    port._timer = setTimeout(forceReconnect, reconnectTime, port);
+  }
 
-    port.onDisconnect.addListener(async(port) => {
-        if(port.name === 'PORT_EXTENSION') {
-            openCount -= 1;
+  port.onMessage.addListener((data) => {
+    return backgroundMessageHandler(data, port)
+  })
 
-            if(openCount <= 0) {
-                waiting_to_stop = true;
+  port.onDisconnect.addListener(async(port) => {
+    if(port.name === 'PORT_EXTENSION') {
+      openCount -= 1;
 
-                port._timer = setTimeout(() => {
-                    waiting_to_stop = false
-                }, idleTime);
-            }
+      if(openCount <= 0) {
+        waiting_to_stop = true;
 
-            // remove port from the list
-            ports_extension = ports_extension.filter((object, index) => {
-                return object.open_count !== port.open_count
-            })
-        } else if(port.name === 'KEEP_ALIVE') {
-            await findTab()
-            deleteTimer(port)
-        }
+        port._timer = setTimeout(() => {
+          waiting_to_stop = false
+        }, idleTime);
+      }
 
-        if(port.name === 'PORT_CONTENT' && ports_extension.length > 0) {
-            for(const port_extension of ports_extension) {
-                // sends a kill signal back to extension
-                port_extension.postMessage({
-                    command: 'kill_popup',
-                    tab_id: port?.sender?.tab?.id
-                })
-            }
-        }
+      // remove port from the list
+      ports_extension = ports_extension.filter((object, index) => {
+        return object.open_count !== port.open_count
+      })
+    } else if(port.name === 'KEEP_ALIVE') {
+      await findTab()
+      deleteTimer(port)
+    }
 
-        console.warn(`Disconnected from ${port.name}`);
-    });
+    if(port.name === 'PORT_CONTENT' && ports_extension.length > 0) {
+      for(const port_extension of ports_extension) {
+        // sends a kill signal back to extension
+        port_extension.postMessage({
+          command: 'kill_popup',
+          tab_id: port?.sender?.tab?.id
+        })
+      }
+    }
+
+    console.warn(`Disconnected from ${port.name}`);
+  });
 });
 
 current_browser.runtime.onInstalled.addListener((details) => {
-    if((isIOs() || isIPad()) && details.reason === 'install' && process.env.NODE_ENV === 'production') {
-        current_browser.runtime.setUninstallURL('', () => {
-            // Clear data on uninstall
-            current_browser.storage.local.clear()
-        })
-    }
+  if((isIOs() || isIPad()) && details.reason === 'install' && process.env.NODE_ENV === 'production') {
+    current_browser.runtime.setUninstallURL('', () => {
+      // Clear data on uninstall
+      current_browser.storage.local.clear()
+    })
+  }
 })
 
 function forceReconnect(port) {
-    deleteTimer(port);
-    port.disconnect();
+  deleteTimer(port);
+  port.disconnect();
 }
 
 function deleteTimer(port) {
-    if(port._timer) {
-        clearTimeout(port._timer);
-        delete port._timer;
-    }
+  if(port._timer) {
+    clearTimeout(port._timer);
+    delete port._timer;
+  }
 }
