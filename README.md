@@ -1,11 +1,8 @@
 # Bitgreen Browser Wallet
 
-Bitgreen Browser extension with wallet functionalities.
+Bitgreen Browser extension and android, iOS hybrid apps with wallet functionalities.
 
-The Bitgreen Browser Wallet is a browser extension that allows users to create wallets, send and receive funds, and make
-disbursements to the Bitgreen ecosystem in order to create, sell, purchase and retire Verified Carbon Credits (VCUs). To
-incorporate this functionality into your own project, please see the technical description below. If you require any
-assistance using these features, or this repo, please contact us at [contact], we are happy to assist.
+The Bitgreen Browser Wallet is a browser extension, android and iOS app that allows users to create wallets, send and receive funds, and make disbursements to the Bitgreen ecosystem in order to create, sell, purchase and retire Verified Carbon Credits (VCUs). To incorporate this functionality into your own project, please see the technical description below. If you require any assistance using these features, or this repo, please [contact us](https://bitgreen.org/contact), we are happy to assist.
 
 ### Features:
 
@@ -28,6 +25,12 @@ assistance using these features, or this repo, please contact us at [contact], w
 
 ___
 
+## Quickstart
+- `npm run setup` installs all npm packages and initializes app platforms
+- `npm run dev:{target}` builds development build and runs watchdog for the desired target (chrome, firefox, safari, android, ios)
+
+___
+
 ## Browser Compatibility
 
 The wallet extension is available for the following browsers:
@@ -37,13 +40,22 @@ The wallet extension is available for the following browsers:
 - Safari (Desktop and Mobile version)
 - Edge (compatible with Chrome Extension)
 - Brave (compatible with Chrome Extension)
-- Other Browsers based on Chrome Engine
+- Other Browsers based on chromium Engine
+
+___
+
+## OS Compatability
+
+The wallet app is available on the following operating systems:
+
+- android
+- iOS
 
 ___
 
 ## Project Structure
 
-- **packages/browser-wallet-base** - Extension base structure.
+- **packages/browser-wallet-base** - Extension base structure, including capacitorjs project and webpack configs.
 - **packages/browser-wallet-core** - Main features mostly used for background tasks, stores, API messaging.
 - **packages/browser-wallet-ui** - The UI components for the extension.
 - **packages/browser-wallet-utils** - Helpers and utilities for both UI and background.
@@ -53,35 +65,33 @@ ___
 ## Developing & Building
 
 Install [node.js >18.12](https://nodejs.org).  
-Install the required dependencies from the root for this repo, by running the following command:
+Install the required dependencies and initialize the capacitorjs project from the root for this repo, by running the following command:
 
 ```bash
-npm install
+npm run setup
 ```
+
+More detailed information to the build process can be found [here](packages/browser-wallet-base/readme.md)
 
 ### Production Build
 
-You can build all versions of extensions, and output will be located at `/build` directory, where each sub folder
-represents each browser extension type:
+You can build all production versions of extensions and apps, and output will be located at `/build` directory, where each sub folder represents each browser extension type or app platform:
 
 ```bash
-npm run build
+npm run build:all
 ```
 
-You can also specify which version to build. There is 3 possible versions of this extension: `chrome`, `firefox`
-and `safari`.
+You can also specify which version to build. There is 3 possible versions of this extension/app: `chrome`, `firefox`, `safari`, `android` and `ios`.
 
 ```bash
-npm run build:chrome
+npm run build:{target}
 ```
 
 ___
 
 ### Development
 
-Also, you can use the `npm run dev:chrome` to start the local development of the extension. Please keep in mind that in
-this case, you need to specify browser type. Webpack will be running with `--watch` flag set to true. Output directory
-is the same (read above).
+Also, you can use the `npm run dev:{target}` to start the local development of the extension/app. Please keep in mind that in this case, you need to specify browser type or app platform. Webpack will be running with `watch` flag set to true and inline-sourcemaps for all JS and SCSS files. Output directory is the same (read above).
 ___
 
 ## Wallet Docs

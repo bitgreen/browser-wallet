@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const exec = require('child_process').exec;
 
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const ManifestPlugin = require('webpack-extension-manifest-plugin');
@@ -11,8 +12,8 @@ const args = process.argv.slice(2);
 let mode = 'production';
 
 if (args) {
-  args.forEach((p, index) => {
-    if (p === '--mode') {
+  args.forEach((arg, index) => {
+    if (arg === '--mode') {
       mode = args[index + 1] || mode;
     }
   });
@@ -33,23 +34,19 @@ module.exports = (
   useSplitChunk = false,
   platform = 'chrome'
 ) => {
-  if (!['chrome', 'firefox', 'safari', 'ios', 'android'].includes(platform)) {
+  if (!['chrome', 'firefox', 'safari', 'android', 'ios'].includes(platform)) {
     platform = 'chrome';
   }
 
-  const is_app = !!['ios', 'android'].includes(platform)
+  const is_app = ['android', 'ios'].includes(platform)
   const manifest = !is_app ? require(`./manifest-${platform}.json`) : null
-  let platform_dir = path.join(__dirname, `../../build/${platform}`);
-  let output_dir = platform_dir;
-  let cleanDirs = [platform_dir];
-  if(platform === 'safari') {
-    output_dir = path.join(__dirname, `../../build/apple/Shared (Extension)`)
-    cleanDirs = [path.join(__dirname, `../../build/apple`)]
-  } else if(platform === 'ios') {
-    output_dir = path.join(__dirname, `../../build/apple/iOS (App)/public`)
-  } else if(platform === 'android') {
-    output_dir = path.join(__dirname, `../../build/android/app/src/main/assets/public`)
-  }
+  const output_dir = path.join(__dirname, `../../build/${is_app ? 'app' : platform}`)
+
+  // clean destination folder
+  exec('rm -Rf ' + output_dir, (err, stdout, stderr) => {
+    if (stdout) process.stdout.write(stdout);
+    if (stderr) process.stderr.write(stderr);
+  });
   
   let plugins = [
     new webpack.ProvidePlugin({
@@ -70,36 +67,47 @@ module.exports = (
         PLATFORM: JSON.stringify(platform)
       }
     }),
-  ];
-  
-  let filesToCopy = [
-    {
-      source: path.resolve(__dirname, '../browser-wallet-ui/src/components'),
-      destination: path.join(output_dir, 'components')
-    },
-  ];
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'src/index.html',
+      chunks: [is_app ? 'app' : 'extension']
+    }),
+  ]
 
-  if (useSplitChunk) {
-    if(is_app) {
-        plugins.push(
-            new HtmlWebpackPlugin({
-                filename: 'index.html',
-                template: 'public/app.html',
-                chunks: ['app']
-            })
-        );
-    } else {
-        plugins.push(
-            new HtmlWebpackPlugin({
-                filename: 'index.html',
-                template: 'public/index.html',
-                chunks: ['extension']
-            })
-        );
-    }
+  let copyFiles = [{ // components
+    source: path.resolve(__dirname, '../browser-wallet-ui/src/components'),
+    destination: path.join(output_dir, 'components')
+  }]
+  if(!is_app) {
+    copyFiles.push({ // safari gets square icons, everyone else normal
+      source: path.join(__dirname, '../browser-wallet-ui/src/assets/icons/' + (platform === 'safari' ? 'square' : 'normal')),
+      destination: path.join(output_dir, 'icons')
+    })
   }
 
-  if(!is_app) {
+  plugins.push(new FileManagerPlugin({
+    events: {
+      onEnd: {
+        copy: copyFiles
+      }
+    }
+  }))
+
+  if(is_app) {
+    if(mode === 'development') {
+      plugins.push({
+        apply: (compiler) => {
+          compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+            exec('cd ' + path.resolve(__dirname) + ' && cap sync ' + platform, (err, stdout, stderr) => {
+              if (stdout) process.stdout.write(stdout);
+              if (stderr) process.stderr.write(stderr);
+            });
+          });
+        }
+      })
+    }
+  } else {
+    // add manifest for extension
     plugins.push(new ManifestPlugin({
       config: {
         base: manifest,
@@ -110,62 +118,20 @@ module.exports = (
     }))
   }
 
-  if(platform === 'safari') {
-    filesToCopy.push({
-      source: 'src/apple',
-      destination: path.join(output_dir, '../')
-    });
-    filesToCopy.push({
-      source: path.join(__dirname, '../browser-wallet-ui/src/assets/icons/square'),
-      destination: path.join(output_dir, 'icons')
-    });
-  } else if(platform === 'ios') {
-    filesToCopy.push({
-      source: 'capacitor.config.json',
-      destination: path.join(__dirname, '../../build/apple/iOS (App)/')
-    });
-  } else if(platform === 'android') {
-    filesToCopy.push({
-      source: 'src/android',
-      destination: path.join(__dirname, '../../build/android/'),
-    });
-    filesToCopy.push({
-      source: 'capacitor.config.json',
-      destination: path.join(__dirname, '../../build/android/app/src/main/assets/')
-    });
-  } else {
-    filesToCopy.push({
-      source: path.join(__dirname, '../browser-wallet-ui/src/assets/icons/normal'),
-      destination: path.join(output_dir, 'icons')
-    });
-  }
-
-  plugins.push(new FileManagerPlugin({
-    events: {
-      onStart: {
-        delete: cleanDirs
-      },
-      onEnd: {
-        copy: filesToCopy
-      }
-    },
-    runOnceInWatchMode: true
-  }));
-
   const result = {
     context: __dirname,
-    devtool: mode == 'development' ? 'source-map' : false,
+    devtool: mode == 'development' ? 'inline-source-map' : false,
     entry,
     module: {
       rules: [
-        {
+        { // graphics and fonts go in assest folder
           test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
           type: 'asset/resource',
           generator: {
             filename: './assets/[hash]-[name][ext][query]',
           },
         },
-        {
+        { // compile and auto-prefix SCSS
           test: /\.s?css$/,
           use: [
             require.resolve('style-loader'),
@@ -186,11 +152,8 @@ module.exports = (
       ],
     },
     output: {
-      chunkFilename: '[name].min.js',
       filename: '[name].js',
-      globalObject: '(typeof self !== \'undefined\' ? self : this)',
       path: output_dir,
-      publicPath: '',
     },
     performance: {
       hints: false,
@@ -216,12 +179,14 @@ module.exports = (
         url: false,
       },
     },
-    watch: false,
-  };
+    optimization: {},
+    watch: mode === 'development',
+    watchOptions: {
+      ignored: /node_modules|\.json$|\.csj$|\.xml|\.md$/
+    }
+  }
 
-  result.optimization = {};
-
-  if (useSplitChunk) {
+  if(useSplitChunk) {
     result.optimization = {
       splitChunks: {
         chunks: 'all',
@@ -243,8 +208,8 @@ module.exports = (
           },
         },
       },
-    };
+    }
   }
 
-  return result;
-};
+  return result
+}

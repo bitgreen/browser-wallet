@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Bitgreen Wallet</string>
-    <string name="title_activity_main">Bitgreen Wallet</string>
-    <string name="package_name">com.bitgreen.wallet</string>
-    <string name="custom_url_scheme">com.bitgreen.wallet</string>
-</resources>

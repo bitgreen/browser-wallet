@@ -1,10 +1,15 @@
 {
   "appId": "com.bitgreen.wallet",
   "appName": "Bitgreen Wallet",
+  "webDir": "../../build/app",
   "server": {
     "androidScheme": "https"
   },
+  "android": {
+    "path": "../../build/android"
+  },
   "ios": {
+    "path": "../../build/ios",
     "scrollEnabled": false,
     "contentInset": "never"
   },
