@@ -10,6 +10,8 @@ import {
 } from "@bitgreen/browser-wallet-utils";
 import {AccountStore, CacheStore, NetworkStore} from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
+import { Clipboard } from '@capacitor/clipboard';
+
 
 import anime from 'animejs';
 import * as jdenticon from "jdenticon";
@@ -719,7 +721,7 @@ const updateAccounts = async(current_account_id = null) => {
 }
 
 const copyText = async(text) => {
-  await navigator.clipboard.writeText(text);
+  await Clipboard.write({string: text});
 }
 
 const scrollToBottom = async(delay = 0) => {

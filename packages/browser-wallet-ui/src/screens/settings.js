@@ -111,13 +111,6 @@ export default async function settingsScreen(params) {
     {
       element: '#go_new',
       listener: () => goToScreen('walletCreateScreen')
-    },
-    {
-      element: '#go_support',
-      listener: () => {
-        const current_browser = getCurrentBrowser()
-        current_browser.tabs.create({ url: 'https://bitgreen.org/contact' })
-      }
     }
   ])
 }
