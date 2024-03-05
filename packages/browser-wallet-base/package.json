@@ -65,8 +65,8 @@
   "scripts": {
     "setup": "rm -Rf ../../build/android && rm -Rf ../../build/ios && cap add android && cap add ios && npm run icons",
     "icons": "npm run icons:android && npm run icons:ios",
-    "icons:android": "capacitor-assets generate --iconBackgroundColor='#224851' --iconBackgroundColorDark='#224851' --splashBackgroundColor='#224851' --splashBackgroundColorDark='#224851' --android --assetPath src/app-resources --androidProject ../../build/android",
-    "icons:ios": "capacitor-assets generate --iconBackgroundColor='#224851' --iconBackgroundColorDark='#224851' --splashBackgroundColor='#224851' --splashBackgroundColorDark='#224851' --ios --assetPath src/app-resources --iosProject ../../build/ios",
+    "icons:android": "bash generate-icons.sh --target=android",
+    "icons:ios": "bash generate-icons.sh --target=ios",
     "build": "npm run build:android && npm run build:ios",
     "build:android": "cap sync android --deployment",
     "build:ios": "cap sync ios --deployment"
