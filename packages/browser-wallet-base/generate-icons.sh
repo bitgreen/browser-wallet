@@ -17,4 +17,5 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
-npx capacitor-assets generate --iconBackgroundColor \#224851 --iconBackgroundColorDark \#224851 --splashBackgroundColor \#224851 --splashBackgroundColorDark \#224851 --${target} --assetPath src/app-resources --${target}Project ../../build/${target}
+if [ "$target" = "ios" ]; then appPath="/App"; else appPath=""; fi
+npx capacitor-assets generate --iconBackgroundColor \#224851 --iconBackgroundColorDark \#224851 --splashBackgroundColor \#224851 --splashBackgroundColorDark \#224851 --${target} --assetPath src/app-resources --${target}Project ../../build/${target}${appPath}
