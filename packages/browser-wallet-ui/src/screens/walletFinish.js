@@ -1,4 +1,4 @@
-import Screen, { goToScreen, clearHistory, updateAccounts } from './index.js'
+import Screen, { goToScreen, expireBrowserTabRequest, updateAccounts } from './index.js'
 
 import anime from 'animejs';
 
@@ -23,7 +23,7 @@ export default async function walletFinishScreen(params) {
     })
   }
 
-  await clearHistory()
+  await expireBrowserTabRequest()
   await updateAccounts()
 
   anime({

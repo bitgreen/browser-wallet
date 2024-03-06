@@ -1,4 +1,4 @@
-import Screen, { clearHistory, goBackScreen, goToScreen, scrollToBottom } from './index.js'
+import Screen, { expireBrowserTabRequest, goBackScreen, goToScreen, scrollToBottom } from './index.js'
 import { sendMessage } from "../messaging.js";
 import { AccountStore, checkIfAppIsKnown, NetworkStore, WalletStore, CacheStore } from "@bitgreen/browser-wallet-core";
 
@@ -10,7 +10,7 @@ export default async function extrinsicSendScreen(params) {
   const wallet_store = new WalletStore()
   if(!await wallet_store.exists()) {
     await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
-    await clearHistory()
+    await expireBrowserTabRequest()
     return await goToScreen('walletScreen', {}, false, true)
   }
 

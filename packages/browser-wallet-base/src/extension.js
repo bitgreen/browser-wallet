@@ -16,7 +16,7 @@ const extension = async() => {
     return setTimeout(() => {
       polkadotApi(true).then(async(api_ready) => {
         if(!api_ready) {
-          return await ui.goToScreen('connectionErrorScreen')
+          return await ui.goToScreen('connectionErrorScreen', {}, true)
         }
 
         await extension()
@@ -40,7 +40,7 @@ const extension = async() => {
       }
       return await ui.goToScreen('walletScreen', {}, true)
     } else {
-      return await ui.goToScreen('welcomeScreen')
+      return await ui.goToScreen('welcomeScreen', {}, true)
     }
   }
 
@@ -50,7 +50,7 @@ const extension = async() => {
       tab_id: params.get('tab_id'),
       domain: params.get('origin'),
       title: params.get('title')
-    })
+    }, true)
   }
 
   if(command === 'send') {

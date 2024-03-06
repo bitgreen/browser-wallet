@@ -1,5 +1,5 @@
 import {bbbTokenPrice, WalletStore} from "@bitgreen/browser-wallet-core";
-import Screen, { clearHistory, goToScreen } from './index.js'
+import Screen, { expireBrowserTabRequest, goToScreen } from './index.js'
 
 import anime from 'animejs';
 import { sendMessage } from "../messaging.js";
@@ -12,7 +12,7 @@ export default async function dashboardScreen(params = {
 }) {
   const wallet_store = new WalletStore()
   if(!await wallet_store.exists()) {
-    await clearHistory()
+    await expireBrowserTabRequest()
     return await goToScreen('walletScreen', {}, false, true)
   }
 
@@ -35,7 +35,7 @@ export default async function dashboardScreen(params = {
   await screen.set('#bordered_content', 'dashboard/content')
   document.querySelector('#bordered_content').classList.add('no-overflow')
 
-  await clearHistory()
+  await expireBrowserTabRequest()
 
   anime({
     targets: '#bordered_content',

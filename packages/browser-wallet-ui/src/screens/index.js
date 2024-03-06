@@ -3,16 +3,16 @@ import { sendMessage } from "../messaging.js";
 import {
   formatAddress,
   getCurrentBrowser,
+  isAndroid,
   isMacOs,
   isStandaloneApp,
   isWindows,
   sleep
 } from "@bitgreen/browser-wallet-utils";
-import {AccountStore, CacheStore, NetworkStore} from "@bitgreen/browser-wallet-core";
+import { AccountStore, CacheStore, NetworkStore, databaseService } from "@bitgreen/browser-wallet-core";
 import { hideNotification } from "../notifications.js";
 import { Clipboard } from '@capacitor/clipboard';
-
-
+import { App } from '@capacitor/app';
 import anime from 'animejs';
 import * as jdenticon from "jdenticon";
 
@@ -350,6 +350,7 @@ const showLogin = async(instant = false, force = false) => {
   }
 
   logged_in = false
+  screen_history = []
 
   if(document.querySelector("#login_screen").classList.contains('inactive')) {
     document.querySelector("#login_screen").classList.remove('inactive')
@@ -508,31 +509,43 @@ let screen_history = []
 let active_screen = null
 let transitioning = false
 
-const goToScreen = async(name, params = {}, go_back = false, force = false) => {
-  if(!force) hideNotification()
-
-  // pause if still changing screen
-  if(transitioning && !force) return false
-  transitioning = true
-  setTimeout(() => {
-    transitioning = false
-  }, 600)
-
+const goToScreen = async(name, params = {}, can_go_back = true, force = false) => {
+  
   if(typeof screens[name] !== 'function') {
     console.warn(`Screen not found. [${name}]`)
     return false
   }
 
-  if(active_screen?.name === name && !force) {
-    return false
+  if(force) {
+    screen_history = []
+  } else {
+    hideNotification()
   }
 
-  if(!go_back && !force) {
-    screen_history.push({name, params})
+  if(active_screen?.name === name) {
+    if(force) {
+      can_go_back = false
+      updateCurrentParams(params)
+    } else {
+      return false
+    }
   }
+
+  // pause if still changing screen
+  if(transitioning && !force) return false
+
+  transitioning = true
+  setTimeout(() => {
+    transitioning = false
+  }, 600)
 
   active_screen = {
     name, params
+  }
+
+  if(can_go_back) {
+    screen_history.push(active_screen)
+    history.pushState(active_screen, '')
   }
 
   if(!force) {
@@ -562,33 +575,37 @@ const goToScreen = async(name, params = {}, go_back = false, force = false) => {
 }
 
 const currentScreen = () => {
-  return screen_history[screen_history.length - 1]
+  return active_screen;
 }
 
 const updateCurrentParams = (params) => {
-  let current_screen = screen_history[screen_history.length - 1]
-  current_screen.params = {
-    ...current_screen.params,
+  active_screen.params = {
+    ...active_screen.params,
     ...params
   }
+  screen_history[screen_history.length - 1] = active_screen
+  history.replaceState(active_screen, '')
 }
 
-const goBackScreen = async() => {
-  screen_history.pop()
-
-  const previous_screen = screen_history[screen_history.length - 1]
-
-  if(previous_screen) {
-    return await goToScreen(previous_screen.name, previous_screen.params, true)
-  } else {
-    await clearHistory()
-    return await goToScreen('dashboardScreen')
+const goBackScreen = () => {
+  screen_history.pop();
+  if(screen_history.length) {
+    let last_screen = screen_history[screen_history.length - 1]
+    goToScreen(last_screen.name, last_screen.params, false)
+  } else if(isStandaloneApp()) {
+    App.minimizeApp();
   }
 }
 
-const clearHistory = async() => {
+App.addListener('backButton', goBackScreen)
+
+if(!isAndroid()) {  
+  window.addEventListener('popstate', goBackScreen)
+}
+
+const expireBrowserTabRequest = async() => {
   // send response to page if any
-  for(const screen of screen_history) {
+  for(const state of screen_history) {
     if(screen?.params?.message_id && screen?.params?.tab_id) {
       const tab = await current_browser.tabs.connect(parseInt(screen.params.tab_id), { name: 'PORT_CONTENT_RESOLVE=' + screen.params.message_id });
 
@@ -602,11 +619,9 @@ const clearHistory = async() => {
           }
         })
       } catch(e) {
-        // console.log(e)
       }
     }
   }
-  screen_history = [currentScreen()]
   return true
 }
 
@@ -614,7 +629,7 @@ const reloadScreen = async() => {
   const current_screen = currentScreen()
 
   if(current_screen) {
-    return await goToScreen(current_screen.name, current_screen.params, true, true)
+    return await goToScreen(current_screen.name, current_screen.params, false)
   } else {
     return await goToScreen('dashboardScreen')
   }
@@ -750,7 +765,7 @@ export {
   reloadScreen,
   updateCurrentParams,
   currentScreen,
-  clearHistory,
+  expireBrowserTabRequest,
   updateAccounts,
   copyText,
   enableFooter,
