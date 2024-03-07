@@ -6,10 +6,10 @@
     "androidScheme": "https"
   },
   "android": {
-    "path": "../../build/android"
+    "path": "../../build/platforms/android"
   },
   "ios": {
-    "path": "../../build/ios",
+    "path": "../../build/platforms/ios",
     "scrollEnabled": false,
     "contentInset": "never"
   },

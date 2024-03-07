@@ -7,6 +7,7 @@ const ManifestPlugin = require('webpack-extension-manifest-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const pkgJson = require('./package.json');
+const sharp = require("sharp");
 
 const args = process.argv.slice(2);
 let mode = 'production';
@@ -40,7 +41,7 @@ module.exports = (
 
   const is_app = ['android', 'ios'].includes(platform)
   const manifest = !is_app ? require(`./manifest-${platform}.json`) : null
-  const output_dir = path.join(__dirname, `../../build/${is_app ? 'app' : platform}`)
+  const output_dir = path.join(__dirname, `../../build/${is_app ? 'app' : (platform === 'safari' ? 'tmp/safari' : 'platforms/' + platform)}`)
 
   // clean destination folder
   exec('rm -Rf ' + output_dir, (err, stdout, stderr) => {
@@ -78,12 +79,6 @@ module.exports = (
     source: path.resolve(__dirname, '../browser-wallet-ui/src/components'),
     destination: path.join(output_dir, 'components')
   }]
-  if(!is_app) {
-    copyFiles.push({ // safari gets square icons, everyone else normal
-      source: path.join(__dirname, '../browser-wallet-ui/src/assets/icons/' + (platform === 'safari' ? 'square' : 'normal')),
-      destination: path.join(output_dir, 'icons')
-    })
-  }
 
   plugins.push(new FileManagerPlugin({
     events: {
