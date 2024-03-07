@@ -173,7 +173,7 @@ export default async function dashboardScreen(params = {
         return i*200 + 200
       },
     });
-  }).catch(() => {
+  }).catch((e) => {
     // TODO: handle this like:
     // goToScreen('connectionErrorScreen')
   })

@@ -333,7 +333,7 @@ const initPolkadotApi = async(force = false) => {
 }
 
 const polkadotApi = async(force = false) => {
-  if(!api || force || !ws_provider?.isConnected || isIOs()) {
+  if(!api || force || !ws_provider?.isConnected) {
     const success = await initPolkadotApi(force)
     if(!success) {
       setTimeout(() => {
