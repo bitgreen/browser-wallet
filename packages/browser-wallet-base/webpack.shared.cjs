@@ -43,11 +43,13 @@ module.exports = (
   const manifest = !is_app ? require(`./manifest-${platform}.json`) : null
   const output_dir = path.join(__dirname, `../../build/${is_app ? 'app' : (platform === 'safari' ? 'tmp/safari' : 'platforms/' + platform)}`)
 
-  // clean destination folder
-  exec('rm -Rf ' + output_dir, (err, stdout, stderr) => {
-    if (stdout) process.stdout.write(stdout);
-    if (stderr) process.stderr.write(stderr);
-  });
+  if(mode === 'production') {
+    // clean destination folder
+    exec('rm -Rf ' + output_dir, (err, stdout, stderr) => {
+      if (stdout) process.stdout.write(stdout);
+      if (stderr) process.stderr.write(stderr);
+    });
+  }
   
   let plugins = [
     new webpack.ProvidePlugin({

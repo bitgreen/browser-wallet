@@ -12,7 +12,7 @@ if (!['macos', 'ios', 'safari', 'chrome', 'firefox'].includes(platform)) {
 }
 
 // Load the input image
-const inputImagePath = ['macos', 'ios', 'safari'].includes(platform) ? 'src/app-resources/icon_rounded.png' : 'src/app-resources/icon.png';
+const inputImagePath = ['macos', 'ios', 'safari', 'chrome'].includes(platform) ? 'src/app-resources/icon_rounded.png' : 'src/app-resources/icon.png';
 
 // Create output directory if it doesn't exist
 let outputDirectory =  `../../build/platforms/${platform}/icons`;
