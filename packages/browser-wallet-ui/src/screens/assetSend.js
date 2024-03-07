@@ -1,4 +1,4 @@
-import Screen, { clearHistory, goToScreen, updateCurrentParams } from './index.js'
+import Screen, { expireBrowserTabRequest, goToScreen, updateCurrentParams } from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import {AccountStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import {
@@ -18,7 +18,7 @@ export default async function assetSendScreen(params) {
   const wallet_store = new WalletStore()
   if(!await wallet_store.exists()) {
     await showNotification('You need a wallet to perform this action. Please create or import one.', 'alert', 3200)
-    await clearHistory()
+    await expireBrowserTabRequest()
     return await goToScreen('walletScreen', {}, false, true)
   }
 

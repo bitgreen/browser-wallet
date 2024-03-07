@@ -1,4 +1,4 @@
-import Screen, { clearHistory, goToScreen } from './index.js'
+import Screen, { expireBrowserTabRequest, goToScreen } from './index.js'
 
 import anime from "animejs";
 
@@ -77,7 +77,7 @@ export default async function assetTransactionFinishScreen(params) {
     {
       element: '#root #another_transaction',
       listener: async() => {
-        await clearHistory()
+        await expireBrowserTabRequest()
         await goToScreen('assetSendScreen')
       }
     },

@@ -73,7 +73,7 @@ export default async function accountCreateScreen() {
 
     if(response && !response.error) {
       await updateAccounts(response)
-      await goToScreen('accountManageScreen', {}, true)
+      await goToScreen('accountManageScreen', {}, false)
       await showNotification('New account created!', 'success')
     } else {
       await showNotification(response.error || 'Password is wrong!', 'error')

@@ -1,4 +1,4 @@
-import Screen, { copyText, goToScreen } from './index.js'
+import Screen, { copyText } from './index.js'
 import { AccountStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 import QRCode from 'qrcode'

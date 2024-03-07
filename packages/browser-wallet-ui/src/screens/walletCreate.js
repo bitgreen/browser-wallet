@@ -1,4 +1,4 @@
-import Screen, {clearHistory, goBackScreen, goToScreen, updateCurrentParams} from './index.js'
+import Screen, { expireBrowserTabRequest, goBackScreen, goToScreen, updateCurrentParams } from './index.js'
 import { WalletStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 import { sendMessage } from "../messaging.js";
@@ -18,7 +18,7 @@ export default async function walletCreateScreen(params) {
 
   const wallet_store = new WalletStore()
   if(await wallet_store.exists()) {
-    await clearHistory()
+    await expireBrowserTabRequest()
     return await goToScreen('dashboardScreen', {}, false, true)
   }
 

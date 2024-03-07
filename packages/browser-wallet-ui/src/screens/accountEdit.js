@@ -165,7 +165,7 @@ export default async function accountEditScreen(params) {
 
         accounts_store.remove(id, async() => {
           await updateAccounts()
-          await goToScreen('accountManageScreen', {}, true)
+          await goToScreen('accountManageScreen', {}, false)
           await showNotification('Account deleted successfully.', 'info', 2000, 58)
         })
       }

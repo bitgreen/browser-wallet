@@ -7,7 +7,7 @@ import {
   updateAccounts,
   showLogin,
   currentScreen,
-  clearHistory,
+  expireBrowserTabRequest,
   reloadScreen,
   scrollToBottom,
   disableFooter,
@@ -214,7 +214,7 @@ class userInterface {
         assetSendTooltip.hide()
       }, 800)
 
-      await clearHistory()
+      await expireBrowserTabRequest()
       await goToScreen('assetSendScreen')
     })
     document.querySelector("#main_footer #go_transactionHistoryScreen").addEventListener("click", async() => {
@@ -222,7 +222,7 @@ class userInterface {
         transactionHistoryTooltip.hide()
       }, 800)
 
-      await clearHistory()
+      await expireBrowserTabRequest()
       await goToScreen('transactionHistoryScreen')
     })
     document.querySelector("#main_footer #go_stakingHomeScreen").addEventListener("click", async() => {
@@ -230,7 +230,7 @@ class userInterface {
         stakeHomeTooltip.hide()
       }, 800)
 
-      await clearHistory()
+      await expireBrowserTabRequest()
       await goToScreen('stakingHomeScreen')
     })
   }
@@ -321,7 +321,7 @@ class userInterface {
   }
 
   goToScreen = async(name, params = {}, force = false) => {
-    return goToScreen(name, params, false, force)
+    return goToScreen(name, params, true, force)
   }
 
   initCustomActions = async() => {
