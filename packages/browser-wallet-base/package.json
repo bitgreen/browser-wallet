@@ -75,6 +75,6 @@
     "build": "npm run build:android && npm run build:ios",
     "build:android": "cap sync android",
     "build:ios": "cap sync ios && npm run icons:ios",
-    "build:safari": "node scripts/generate-icons.js --platform 'safari' && xcrun safari-web-extension-converter ../../build/tmp/safari --project-location '../../build/platforms/safari' --app-name 'Bitgreen Wallet' --bundle-identifier 'com.bitgreen.wallet.extension' --copy-resources --macos-only --force --no-open --no-prompt && node scripts/generate-icons.js --platform 'macos'"
+    "build:safari": "node scripts/generate-icons.js --platform 'safari' && xcrun safari-web-extension-converter ../../build/tmp/safari --project-location '../../build/platforms/safari' --app-name 'Bitgreen Wallet' --bundle-identifier 'com.bitgreen.extension' --copy-resources --macos-only --force --no-open --no-prompt && node scripts/generate-icons.js --platform 'macos'"
   }
 }
