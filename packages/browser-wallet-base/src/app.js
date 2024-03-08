@@ -3,7 +3,11 @@ import userInterface from '@bitgreen/browser-wallet-ui'
 
 import { Keyboard } from '@capacitor/keyboard';
 import { App } from '@capacitor/app';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { isAndroid, isIOs } from "@bitgreen/browser-wallet-utils";
+
+// Hide the splash (you should do this on app launch)
+await SplashScreen.hide();
 
 const db = new databaseService()
 const ui = new userInterface()

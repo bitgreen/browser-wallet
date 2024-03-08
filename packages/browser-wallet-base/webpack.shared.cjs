@@ -176,6 +176,9 @@ module.exports = (
         url: false,
       },
     },
+    experiments: {
+      topLevelAwait: true
+    },
     optimization: {},
     watch: mode === 'development',
     watchOptions: {

@@ -33,8 +33,8 @@
     "dev:chrome": "npm run --prefix ./packages/browser-wallet-base icons:chrome && webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode development",
     "dev:firefox": "npm run --prefix ./packages/browser-wallet-base icons:firefox && webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode development",
     "dev:safari": "npm run --prefix ./packages/browser-wallet-base icons:safari && webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode development",
-    "dev:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode development",
-    "dev:ios": "npm run --prefix ./packages/browser-wallet-base icons:ios && webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode development",
+    "dev:android": "npm run --prefix ./packages/browser-wallet-base assets:android && webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode development",
+    "dev:ios": "npm run --prefix ./packages/browser-wallet-base assets:ios && npm run --prefix ./packages/browser-wallet-base icons:ios && webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

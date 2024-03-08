@@ -13,10 +13,15 @@
     "scrollEnabled": false,
     "contentInset": "never"
   },
-  "backgroundColor": "#224851",
   "plugins": {
     "Keyboard": {
       "resize": "none"
+    },
+    "SplashScreen": {
+      "backgroundColor": "#224851",
+      "launchAutoHide": false,
+      "showSpinner": false,
+      "useDialog": false
     }
   }
 }
