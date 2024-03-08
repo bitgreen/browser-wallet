@@ -23,18 +23,18 @@
     "packages/*"
   ],
   "scripts": {
-    "setup": "npm install && cd ./packages/browser-wallet-base && npm run setup",
+    "setup": "npm install && npm run --prefix ./packages/browser-wallet-base setup",
     "build": "npm run build:chrome && npm run build:firefox && npm run build:safari && npm run build:android && npm run build:ios",
-    "build:chrome": "webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode production && cd ./packages/browser-wallet-base && npm run icons:chrome",
-    "build:firefox": "webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode production && cd ./packages/browser-wallet-base && npm run icons:firefox",
-    "build:safari": "webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode production && cd ./packages/browser-wallet-base && npm run build:safari",
-    "build:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode production && cd ./packages/browser-wallet-base && npm run build:android",
-    "build:ios": "webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode production && cd ./packages/browser-wallet-base && npm run build:ios",
-    "dev:chrome": "(cd ./packages/browser-wallet-base && npm run icons:chrome) && (webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode development)",
-    "dev:firefox": "(cd ./packages/browser-wallet-base && npm run icons:firefox) && webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode development",
-    "dev:safari": "(cd ./packages/browser-wallet-base && npm run icons:safari) && webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode development",
+    "build:chrome": "webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode production && npm run --prefix ./packages/browser-wallet-base icons:chrome",
+    "build:firefox": "webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode production && npm run --prefix ./packages/browser-wallet-base icons:firefox",
+    "build:safari": "webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode production && npm run --prefix ./packages/browser-wallet-base build:safari",
+    "build:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode production && npm run --prefix ./packages/browser-wallet-base build:android",
+    "build:ios": "webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode production && npm run --prefix ./packages/browser-wallet-base build:ios",
+    "dev:chrome": "npm run --prefix ./packages/browser-wallet-base icons:chrome && webpack --config ./packages/browser-wallet-base/webpack.chrome.cjs --mode development",
+    "dev:firefox": "npm run --prefix ./packages/browser-wallet-base icons:firefox && webpack --config ./packages/browser-wallet-base/webpack.firefox.cjs --mode development",
+    "dev:safari": "npm run --prefix ./packages/browser-wallet-base icons:safari && webpack --config ./packages/browser-wallet-base/webpack.safari.cjs --mode development",
     "dev:android": "webpack --config ./packages/browser-wallet-base/webpack.android.cjs --mode development",
-    "dev:ios": "(cd ./packages/browser-wallet-base && npm run icons:ios) && webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode development",
+    "dev:ios": "npm run --prefix ./packages/browser-wallet-base icons:ios && webpack --config ./packages/browser-wallet-base/webpack.ios.cjs --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
