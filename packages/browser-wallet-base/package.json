@@ -67,8 +67,8 @@
   "scripts": {
     "setup": "rm -Rf ../../build/platforms/android && rm -Rf ../../build/platforms/ios && cap add android && cap add ios && npm run assets",
     "assets": "npm run assets:android && npm run assets:ios",
-    "assets:ios": "npx capacitor-assets generate --iconBackgroundColor #224851 --iconBackgroundColorDark #224851 --splashBackgroundColor #224851 --splashBackgroundColorDark #224851 --ios --assetPath src/app-resources --iosProject ../../build/platforms/ios/App",
-    "assets:android": "npx capacitor-assets generate --iconBackgroundColor #224851 --iconBackgroundColorDark #224851 --splashBackgroundColor #224851 --splashBackgroundColorDark #224851 --android --assetPath src/app-resources --androidProject ../../build/platforms/android",
+    "assets:ios": "npx capacitor-assets generate --iconBackgroundColor /#224851 --iconBackgroundColorDark /#224851 --splashBackgroundColor /#224851 --splashBackgroundColorDark /#224851 --ios --assetPath src/app-resources --iosProject ../../build/platforms/ios/App",
+    "assets:android": "npx capacitor-assets generate --iconBackgroundColor /#224851 --iconBackgroundColorDark /#224851 --splashBackgroundColor /#224851 --splashBackgroundColorDark /#224851 --android --assetPath src/app-resources --androidProject ../../build/platforms/android",
     "icons": "npm run icons:chrome && npm run icons:firefox && npm run icons:macos && npm run icons:ios && npm run icons:safari",
     "icons:chrome": "node scripts/generate-icons.js --platform chrome",
     "icons:firefox": "node scripts/generate-icons.js --platform firefox",
