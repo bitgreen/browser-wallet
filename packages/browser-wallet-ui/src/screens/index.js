@@ -224,10 +224,7 @@ class Screen {
   }
 
   showFooter() {
-    const current_screen = currentScreen()
-
     if(!logged_in) return false
-
     if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
       anime({
         targets: '#main_footer',
@@ -238,7 +235,8 @@ class Screen {
         delay: 400
       });
     }
-
+    
+    const current_screen = currentScreen()
     for(let element of this.footer_el.querySelectorAll('.item')) {
       element.classList.remove('active')
 
@@ -629,9 +627,9 @@ const reloadScreen = async() => {
   const current_screen = currentScreen()
 
   if(current_screen) {
-    return await goToScreen(current_screen.name, current_screen.params, false)
+    return await goToScreen(current_screen.name, current_screen.params, false, true)
   } else {
-    return await goToScreen('dashboardScreen')
+    return await goToScreen('dashboardScreen', {}, false, true)
   }
 }
 
