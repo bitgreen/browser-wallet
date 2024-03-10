@@ -581,7 +581,8 @@ const updateCurrentParams = (params) => {
     ...active_screen.params,
     ...params
   }
-  screen_history[screen_history.length - 1] = active_screen
+  let active_screen_index = screen_history.length > 0 ? screen_history.length - 1 : 0
+  screen_history[active_screen_index] = active_screen
   history.replaceState(active_screen, '')
 }
 
