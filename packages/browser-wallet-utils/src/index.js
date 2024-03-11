@@ -164,8 +164,6 @@ const getOperatingSystem = () => {
 
   if (userAgent.match(/Windows/i)) {
     osName = "windows";
-  } else if (userAgent.match(/Linux/i)) {
-    osName = "linux";
   } else if (userAgent.match(/Android/i)) {
     osName = "android";
   } else if (userAgent.match(/iPad/i) || navigator.platform === 'iPad' || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
@@ -174,6 +172,8 @@ const getOperatingSystem = () => {
     osName = "ios";
   } else if (userAgent.match(/Macintosh/i)) {
     osName = "macos";
+  } else if (userAgent.match(/Linux/i)) {
+    osName = "linux";
   }
 
   return osName;
@@ -196,7 +196,7 @@ const isIPad = () => {
 }
 
 const isAndroid = () => {
-  return process.env.PLATFORM === 'android'
+  return getOperatingSystem() === 'android'
 }
 
 const isStandaloneApp = () => {

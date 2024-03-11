@@ -15,7 +15,7 @@
   },
   "plugins": {
     "Keyboard": {
-      "resize": "none"
+      "resize": "body"
     },
     "SplashScreen": {
       "backgroundColor": "#224851",

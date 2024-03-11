@@ -34,6 +34,12 @@ body {
 	line-height: 14px;
 	overflow: hidden;
 	background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+
+    &.app {
+        .footer {
+            transition: padding-bottom ease-out 0.222s;
+        }
+    }
 }
 h1 {
 	font-weight: 500;
@@ -177,4 +183,14 @@ p {
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
     }
+}
+.separator-line {
+    margin: 0 auto 8px;
+    width: 100%;
+    height: 1px;
+    background-color: $colorLightGray;
+}
+.blank-space {
+    width: 100%;
+    height: 60px;
 }

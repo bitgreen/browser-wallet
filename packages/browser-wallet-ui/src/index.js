@@ -298,26 +298,26 @@ class userInterface {
     status_message.classList.add('active')
     input_form.classList.add('inactive')
 
-    const result = await doLogin(password)
+    setTimeout(async() => {
+      const result = await doLogin(password)
 
-    if(result) {
-      hideNotification()
-      await hideLogin()
-      if(current_screen.name === 'dashboardScreen') await reloadScreen()
-    } else {
-      await showNotification('Password is wrong!', 'error', 1800, isStandaloneApp() ? 60 : 0)
+      if(result) {
+        hideNotification()
+        await hideLogin()
+        if(current_screen.name === 'dashboardScreen') await reloadScreen()
+      } else {
+        await showNotification('Password is wrong!', 'error', 1800, isStandaloneApp() ? 60 : 0)
+        input_form.classList.remove('inactive')
+      }
+
       input_form.classList.remove('inactive')
-    }
 
-    setTimeout(() => {
-      input_form.classList.remove('inactive')
-    }, 1000)
-
-    // reset to init screen
-    show_password.innerHTML = '<span class="icon icon-eye"></span>'
-    input_field.type = 'password'
-    status_message.classList.remove('active')
-    unFreezeRoot()
+      // reset to init screen
+      show_password.innerHTML = '<span class="icon icon-eye"></span>'
+      input_field.type = 'password'
+      status_message.classList.remove('active')
+      unFreezeRoot()
+    }, 500)
   }
 
   goToScreen = async(name, params = {}, force = false) => {

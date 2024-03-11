@@ -43,37 +43,52 @@ document.addEventListener('deviceready', async() => {
       }
 
       if(isAndroid()) {
-        setTimeout(() => {
-          ui.hideInit(true)
-        }, 600)
+        await SplashScreen.hide()
       } else {
         ui.hideInit(true)
       }
     } else {
-      ui.showInit(true)
 
-      await Keyboard.hide()
+      if(isAndroid()) {
+        await SplashScreen.show({
+          autoHide: false,
+        });
+      } else {
+        ui.showInit(true)
+      }
 
       // reset body
-      document.body.style.height = '';
       document.body.classList.remove('keyboard-opened')
+
+      await Keyboard.hide()
     }
   });
 
   Keyboard.addListener('keyboardWillShow', info => {
     const bodyHeight = window.innerHeight - info.keyboardHeight
 
-    // update body height and add class
-    if(isIOs()) document.body.style.height = bodyHeight + 'px';
     document.body.classList.add('keyboard-opened')
+
+    if(isIOs()) {
+      const footers = document.querySelectorAll('#login_screen .footer, #root .footer')
+      for(const footer of footers) {
+        footer.style.paddingBottom = info.keyboardHeight + 'px'
+      }
+    }
 
     ui.disableFooter()
   });
 
   Keyboard.addListener('keyboardWillHide', info => {
-    // reset body
-    if(isIOs()) document.body.style.height = '';
     document.body.classList.remove('keyboard-opened')
+
+    // reset elements
+    if(isIOs()) {
+      const footers = document.querySelectorAll('#login_screen .footer, #root .footer')
+      for(const footer of footers) {
+        footer.style.paddingBottom = ''
+      }
+    }
 
     ui.enableFooter()
   });
