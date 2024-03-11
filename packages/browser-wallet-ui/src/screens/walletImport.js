@@ -3,8 +3,8 @@ import Screen, { goBackScreen, goToScreen, updateCurrentParams } from './index.j
 import { mnemonicValidate } from "@polkadot/util-crypto";
 
 import anime from 'animejs';
-import Sortable from 'sortablejs';
 import DOMPurify from 'dompurify';
+import { createMnemonicSortable } from '@bitgreen/browser-wallet-utils';
 
 let import_mnemonic_array = [];
 let import_mnemonic_sortable = [];
@@ -27,26 +27,10 @@ export default async function walletImportScreen(params = {}) {
     importWord(false, params.mnemonic.join(' '))
   }
 
-  let import_mnemonics_el = document.querySelector("#import_mnemonics");
-  import_mnemonic_sortable = Sortable.create(import_mnemonics_el, {
-    dataIdAttr: 'data-id',
-    easing: "cubic-bezier(1, 0, 0, 1)",
-    animation: 150,
-    invertSwap: true,
-    emptyInsertThreshold: 100,
-    onUpdate: (evt) => {
-      refreshImportedMnemonics();
-      checkMnemonics()
-    },
-    onChoose: (evt) => {
-      evt.item.classList.add('selected')
-      document.querySelector("#import_mnemonics").classList.add('dragging')
-    },
-    onUnchoose: (evt) => {
-      evt.item.classList.remove('selected')
-      document.querySelector("#import_mnemonics").classList.remove('dragging')
-    }
-  });
+  import_mnemonic_sortable = createMnemonicSortable('#import_mnemonics', (evt) => {
+    refreshImportedMnemonics();
+    checkMnemonics()
+  }, removeWord);
 
   await refreshImportedMnemonics()
   checkMnemonics()
@@ -119,7 +103,7 @@ function importWord(e, input = false) {
           return false;
         }
         // maximum word length is 8
-        refreshImportedMnemonics(word.trim().substring(0, 8));
+        refreshImportedMnemonics(word.trim().toLowerCase().substring(0, 8));
       }
       refreshImportedMnemonics()
     }

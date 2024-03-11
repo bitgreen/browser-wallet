@@ -1,6 +1,7 @@
 import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 import { hexToU8a, isHex } from "@polkadot/util";
 import BigNumber from "bignumber.js";
+import Sortable from 'sortablejs';
 
 const getBrowser = () => {
   let userAgent = navigator.userAgent;
@@ -324,6 +325,43 @@ const customReviver = (key, value) => {
   return value;
 }
 
+// create sortable
+const createMnemonicSortable = (cssQuerySelector, updateFunction, removeFunction) => {
+  const sortableOuterElement = document.querySelector(cssQuerySelector);
+  const sortable = Sortable.create(sortableOuterElement, {
+    dataIdAttr: 'data-id',
+    easing: "cubic-bezier(1, 0, 0, 1)",
+    animation: 150,
+    invertSwap: true,
+    delay: 100,
+    delayOnTouchOnly: true,
+    emptyInsertThreshold: 100,
+    onUpdate: updateFunction,
+    onChoose: (evt) => {
+      evt.item.classList.add('selected')
+      document.querySelector(cssQuerySelector).classList.add('dragging')
+    },
+    onUnchoose: (evt) => {
+      evt.item.classList.remove('selected')
+      document.querySelector(cssQuerySelector).classList.remove('dragging')
+    }
+  });
+
+  // for the app, just remove when "clicked" (touchstart -> touchend without actually moving)
+  if(isStandaloneApp()) {
+    sortableOuterElement.addEventListener('click', (e) => {
+      for (let elem = e.target; elem && elem !== this; elem = elem.parentNode) {
+        if (elem.matches && elem.matches(cssQuerySelector + ' > .word')) {
+          removeFunction({target: elem.querySelector('.remove')})
+          return;
+        }
+      }
+    })
+  }
+
+  return sortable;
+}
+
 export {
   getBrowser,
   isChrome,
@@ -354,5 +392,6 @@ export {
   calculateUserApy,
   calculateUserRewardPerBlock,
   getCurrentBrowser,
-  customReviver
+  customReviver,
+  createMnemonicSortable
 }

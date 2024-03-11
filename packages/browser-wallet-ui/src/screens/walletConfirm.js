@@ -2,7 +2,6 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 import { shuffleArray } from '@bitgreen/browser-wallet-utils'
 
 import anime from 'animejs';
-import Sortable from 'sortablejs';
 
 let mnemonic_array = []
 let shuffled_mnemonic_array = []
@@ -34,26 +33,10 @@ export default async function walletConfirmScreen(params) {
     }
   }
 
-  const user_mnemonics_el = document.querySelector("#user_mnemonics");
-  user_mnemonic_sortable = Sortable.create(user_mnemonics_el, {
-    dataIdAttr: 'data-id',
-    easing: "cubic-bezier(1, 0, 0, 1)",
-    animation: 150,
-    invertSwap: true,
-    emptyInsertThreshold: 100,
-    onUpdate: function(evt) {
-      refreshUserMnemonics()
-      checkWords()
-    },
-    onChoose: function(evt) {
-      evt.item.classList.add('selected')
-      document.querySelector("#user_mnemonics").classList.add('dragging')
-    },
-    onUnchoose: function(evt) {
-      evt.item.classList.remove('selected')
-      document.querySelector("#user_mnemonics").classList.remove('dragging')
-    }
-  });
+  user_mnemonic_sortable = createMnemonicSortable('#user_mnemonics', (evt) => {
+    refreshUserMnemonics()
+    checkWords()
+  }, removeWord);
 
   anime({
     targets: '#shuffled_mnemonics .word',
