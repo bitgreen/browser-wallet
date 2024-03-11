@@ -1,4 +1,4 @@
-import Screen, { expireBrowserTabRequest, goBackScreen, goToScreen, updateCurrentParams } from './index.js'
+import Screen, { copyText, expireBrowserTabRequest, goBackScreen, goToScreen, updateCurrentParams } from './index.js'
 import { WalletStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
 import { sendMessage } from "../messaging.js";
@@ -182,7 +182,7 @@ async function regenerateWords(words) {
 }
 
 async function copySeed(mnemonic_array) {
-  await navigator.clipboard.writeText(mnemonic_array.join(' '));
+  await copyText(mnemonic_array.join(' '));
 
   await showNotification('Secret phrase copied to your clipboard! Keep it safe!', 'info')
 }
