@@ -93,10 +93,6 @@ export default async function settingsScreen(params) {
       }
     },
     {
-      element: '#manage_networks',
-      listener: () => goToScreen('networkManageScreen')
-    },
-    {
       element: '#manage_accounts',
       listener: () => goToScreen('accountManageScreen')
     },

@@ -36,8 +36,6 @@ import accountEditScreen from "./accountEdit.js";
 import assetReceiveScreen from "./assetReceive.js";
 import assetTransactionReviewScreen from "./assetTransactionReview.js";
 import assetTransactionFinishScreen from "./assetTransactionFinish.js";
-import networkManageScreen from "./networkManage.js";
-import networkCreateScreen from "./networkCreate.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
@@ -487,8 +485,6 @@ const screens = {
   transactionHistoryScreen,
   transactionDetailsScreen,
   settingsScreen,
-  networkManageScreen,
-  networkCreateScreen,
   extrinsicSendScreen,
   tokenAllScreen,
   tokenBBBScreen,
