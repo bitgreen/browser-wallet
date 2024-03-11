@@ -12,7 +12,7 @@ class CacheStore extends BaseStore {
         .replace(/^-+|-+$/g, '')
     }
 
-    super('cache_' + network_name);
+    super('cache_' + network_name)
 
     this.network = network
   }

@@ -33,6 +33,7 @@
     "@capacitor/ios": "^5.7.0",
     "@capacitor/keyboard": "^5.0.8",
     "@capacitor/splash-screen": "^5.0.7",
+    "@capacitor/preferences": "^5.0.7",
     "@polkadot/api": "^9.7.1",
     "@polkadot/keyring": "^10.1.11",
     "@polkadot/types": "^9.7.1",
@@ -67,15 +68,15 @@
   "scripts": {
     "setup": "rm -Rf ../../build/platforms/android && rm -Rf ../../build/platforms/ios && cap add android && cap add ios && npm run assets",
     "assets": "npm run assets:android && npm run assets:ios",
-    "assets:ios": "bash scripts/generate-assets.sh --target=ios",
-    "assets:android": "bash scripts/generate-assets.sh --target=android",
+    "assets:ios": "npx capacitor-assets generate --ios --assetPath src/app-resources --iosProject ../../build/platforms/ios/App",
+    "assets:android": "npx capacitor-assets generate --android --assetPath src/app-resources --androidProject ../../build/platforms/android",
     "icons": "npm run icons:chrome && npm run icons:firefox && npm run icons:macos && npm run icons:ios && npm run icons:safari",
     "icons:chrome": "node scripts/generate-icons.js --platform chrome",
     "icons:firefox": "node scripts/generate-icons.js --platform firefox",
     "icons:ios": "node scripts/generate-icons.js --platform ios",
     "build": "npm run build:android && npm run build:ios",
     "build:android": "npm run assets:android && cap sync android",
-    "build:ios": "npm run assets:ios && npm run icons:ios && cap sync ios",
+    "build:ios": "npm run assets:android && npm run icons:ios && cap sync ios",
     "build:safari": "node scripts/generate-icons.js --platform 'safari' && xcrun safari-web-extension-converter ../../build/tmp/safari --project-location '../../build/platforms/safari' --app-name 'Bitgreen Wallet' --bundle-identifier 'com.bitgreen.extension' --copy-resources --macos-only --force --no-open --no-prompt && node scripts/generate-icons.js --platform 'macos'"
   }
 }

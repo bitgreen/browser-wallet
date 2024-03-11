@@ -19,7 +19,7 @@ export default async function kycAccreditedScreen(params) {
   const account_id = params?.account_id
 
   const accounts_store = new AccountStore()
-  const account = await accounts_store.asyncGet(account_id)
+  const account = await accounts_store.get(account_id)
 
   await screen.set('#heading', 'kyc/heading', {
     account_name: account?.name,

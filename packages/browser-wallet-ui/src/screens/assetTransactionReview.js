@@ -24,7 +24,7 @@ export default async function assetTransactionReviewScreen(params) {
   await screen.init()
 
   const accounts_store = new AccountStore()
-  const account = await accounts_store.asyncGet(params?.account_id)
+  const account = await accounts_store.get(params?.account_id)
 
   const recipient = params?.recipient
   const asset_amount = params?.amount

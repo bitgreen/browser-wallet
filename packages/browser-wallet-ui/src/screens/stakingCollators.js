@@ -38,7 +38,7 @@ export default async function stakingCollatorsScreen(params) {
   }
 
   const balance = await sendMessage('get_balance')
-  const inflation_amount = await cache_store.asyncGet('inflation_amount')
+  const inflation_amount = await cache_store.get('inflation_amount')
 
   const all_collators = await sendMessage('get_collators')
   let total_my_nominations = 0

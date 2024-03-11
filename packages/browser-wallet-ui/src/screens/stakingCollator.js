@@ -44,7 +44,7 @@ export default async function stakingCollatorScreen(params) {
   })
 
   const original_balance = await sendMessage('get_balance')
-  const inflation_amount = await cache_store.asyncGet('inflation_amount')
+  const inflation_amount = await cache_store.get('inflation_amount')
 
   const collator_apy = calculateCollatorApy(all_collators, collator, inflation_amount)
   const collator_apy_data = getAmountDecimal(formatAmount(collator_apy.toString(), 2), 2)

@@ -16,10 +16,10 @@ class TransactionStore extends BaseStore {
   }
 
   async fetch() {
-    if(!['mainnet', 'testnet'].includes(this.network.id)) return false;
+    if(!['mainnet', 'testnet'].includes(this.network.id)) return false
 
     const date = new Date();
-    const date_end = date.toISOString().slice(0, 19).replace('T', '+');
+    const date_end = date.toISOString().slice(0, 19).replace('T', '+')
     const url = this.network.api_endpoint + '/transactions?account=' + this.account.address;
     let result = await fetch(url, {
       mode: 'cors'
@@ -27,7 +27,7 @@ class TransactionStore extends BaseStore {
     result = await result.json()
 
     for(const transaction of result.transactions) {
-      await this.asyncSet(transaction.hash, transaction)
+      await this.set(transaction.hash, transaction)
     }
 
     return result

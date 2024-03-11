@@ -6,16 +6,16 @@ class NetworkStore extends BaseStore {
   }
 
   async exists() {
-    return await this.asyncTotal() > 0
+    return await this.total() > 0
   }
 
   async current() {
-    let current_id = await this.asyncGet('current')
+    let current_id = await this.get('current')
     let network
 
     if(!current_id) {
       current_id = 'mainnet'
-      await this.asyncSet('current', current_id)
+      await this.set('current', current_id)
     }
 
     if(current_id === 'mainnet') {
@@ -31,12 +31,12 @@ class NetworkStore extends BaseStore {
         api_endpoint: 'https://api-testnet.bitgreen.org'
       }
     } else {
-      network = await this.asyncGet(current_id)
+      network = await this.get(current_id)
     }
 
     if(!network) {
       current_id = 'mainnet'
-      await this.asyncSet('current', current_id)
+      await this.set('current', current_id)
     }
 
     return {
@@ -47,15 +47,13 @@ class NetworkStore extends BaseStore {
     }
   }
 
-  async asyncAll() {
-    return new Promise((resolve) => {
-      this.all(resolve, ['current']);
-    });
+  async all() {
+    return super.all(['current'])
   }
 
   async nextId() {
     let next_id = 1
-    for(const network of await this.asyncAll()) {
+    for(const network of await this.all()) {
       if(parseInt(network?.key) >= next_id) {
         next_id = parseInt(network?.key) + 1
       }

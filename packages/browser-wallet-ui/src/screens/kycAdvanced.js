@@ -21,7 +21,7 @@ export default async function kycAdvancedScreen(params) {
 
   const accounts_store = new AccountStore()
   const networks_store = new NetworkStore()
-  const account = await accounts_store.asyncGet(account_id)
+  const account = await accounts_store.get(account_id)
   const current_network = await networks_store.current()
 
   await screen.set('#heading', 'kyc/heading', {

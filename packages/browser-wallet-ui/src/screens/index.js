@@ -36,8 +36,6 @@ import accountEditScreen from "./accountEdit.js";
 import assetReceiveScreen from "./assetReceive.js";
 import assetTransactionReviewScreen from "./assetTransactionReview.js";
 import assetTransactionFinishScreen from "./assetTransactionFinish.js";
-import networkManageScreen from "./networkManage.js";
-import networkCreateScreen from "./networkCreate.js";
 import extrinsicSendScreen from "./extrinsicSend.js";
 import transactionHistoryScreen from "./transactionHistory.js";
 import transactionDetailsScreen from "./transactionDetails.js";
@@ -224,10 +222,7 @@ class Screen {
   }
 
   showFooter() {
-    const current_screen = currentScreen()
-
     if(!logged_in) return false
-
     if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
       anime({
         targets: '#main_footer',
@@ -238,7 +233,8 @@ class Screen {
         delay: 400
       });
     }
-
+    
+    const current_screen = currentScreen()
     for(let element of this.footer_el.querySelectorAll('.item')) {
       element.classList.remove('active')
 
@@ -489,8 +485,6 @@ const screens = {
   transactionHistoryScreen,
   transactionDetailsScreen,
   settingsScreen,
-  networkManageScreen,
-  networkCreateScreen,
   extrinsicSendScreen,
   tokenAllScreen,
   tokenBBBScreen,
@@ -583,7 +577,8 @@ const updateCurrentParams = (params) => {
     ...active_screen.params,
     ...params
   }
-  screen_history[screen_history.length - 1] = active_screen
+  let active_screen_index = screen_history.length > 0 ? screen_history.length - 1 : 0
+  screen_history[active_screen_index] = active_screen
   history.replaceState(active_screen, '')
 }
 
@@ -629,9 +624,9 @@ const reloadScreen = async() => {
   const current_screen = currentScreen()
 
   if(current_screen) {
-    return await goToScreen(current_screen.name, current_screen.params, false)
+    return await goToScreen(current_screen.name, current_screen.params, false, true)
   } else {
-    return await goToScreen('dashboardScreen')
+    return await goToScreen('dashboardScreen', {}, false, true)
   }
 }
 
@@ -641,10 +636,10 @@ const updateAccounts = async(current_account_id = null) => {
   const cache_store = new CacheStore(await networks_store.current())
 
   if(current_account_id) {
-    await accounts_store.asyncSet('current', current_account_id)
+    await accounts_store.set('current', current_account_id)
   }
 
-  const accounts = await accounts_store.asyncAll()
+  const accounts = await accounts_store.all()
   const current_account = await accounts_store.current()
 
   const header_logo_el = document.querySelector("#header #top_logo");
@@ -673,7 +668,7 @@ const updateAccounts = async(current_account_id = null) => {
       const account_id = a?.key
       const account_jdenticon = jdenticon.toSvg(account.address,56)
       const is_current = account_id?.toString() === current_account?.id?.toString()
-      const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
+      const is_kyced = await cache_store.get('kyc_' + account.address)
 
       if(is_current) {
         current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
@@ -707,7 +702,7 @@ const updateAccounts = async(current_account_id = null) => {
         }
       }
 
-      const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+      const kyc_level = await cache_store.get('kyc_' + account.address)
 
       await updateElement('#accounts_modal #wallet_list', 'accounts/modal_item', {
         account_id,

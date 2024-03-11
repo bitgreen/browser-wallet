@@ -158,11 +158,11 @@ class Extension {
     }
 
     const encrypted_data = await this.encryptWallet(mnemonic, password)
-    await this.wallets_store.asyncSet('main', encrypted_data)
+    await this.wallets_store.set('main', encrypted_data)
 
     // create main account & set as default
     await this.createAccount(name, mnemonic, 'main')
-    await this.accounts_store.asyncSet('current', 'main')
+    await this.accounts_store.set('current', 'main')
 
     // import accounts with balance > 0
     this.importAccountsWithBalance(mnemonic, password).then()
@@ -206,7 +206,7 @@ class Extension {
         return { error: 'Invalid derivation path.' }
       }
 
-      const account_exist = await this.accounts_store.asyncGet(derivation_path)
+      const account_exist = await this.accounts_store.get(derivation_path)
       if(account_exist) {
         return { error: 'Account already exists.' }
       }
@@ -218,7 +218,7 @@ class Extension {
 
     if(mnemonic) {
       const response = this.createAccount(name, mnemonic, derivation_path)
-      if(response) await this.accounts_store.asyncSet('current', derivation_path)
+      if(response) await this.accounts_store.set('current', derivation_path)
       return response
     }
 
@@ -235,13 +235,13 @@ class Extension {
       network_id = await this.networks_store.nextId()
     }
 
-    await this.networks_store.asyncSet(network_id, {
+    await this.networks_store.set(network_id, {
       name: network_name,
       url: network_url
     })
 
     if(switch_network) {
-      await this.networks_store.asyncSet('current', network_id)
+      await this.networks_store.set('current', network_id)
       await polkadotApi(true) // reload polkadot API
     }
   }
@@ -249,7 +249,7 @@ class Extension {
   async changeNetwork(params) {
     const network_id = params?.network_id
 
-    await this.networks_store.asyncSet('current', network_id)
+    await this.networks_store.set('current', network_id)
     await polkadotApi(true) // reload polkadot API
   }
 
@@ -404,10 +404,10 @@ class Extension {
   async getTransactions() {
     await this.initTransactionsStore()
 
-    await this.transactions_store.asyncRemoveAll()
+    await this.transactions_store.removeAll()
     await this.transactions_store.fetch()
 
-    let transactions = await this.transactions_store.asyncAll()
+    let transactions = await this.transactions_store.all()
 
     // Sort by date by default
     transactions.sort((a, b) => {
@@ -427,10 +427,10 @@ class Extension {
   async getAssetTransactions() {
     await this.initAssetsStore()
 
-    await this.assets_store.asyncRemoveAll()
+    await this.assets_store.removeAll()
     await this.assets_store.fetch()
 
-    let assets = await this.assets_store.asyncAll()
+    let assets = await this.assets_store.all()
 
     // Sort by date by default
     assets.sort((a, b) => {
@@ -450,10 +450,10 @@ class Extension {
   async getTokenTransactions() {
     await this.initTokensStore()
 
-    await this.tokens_store.asyncRemoveAll()
+    await this.tokens_store.removeAll()
     await this.tokens_store.fetch()
 
-    let tokens = await this.tokens_store.asyncAll()
+    let tokens = await this.tokens_store.all()
 
     // Sort by date by default
     tokens.sort((a, b) => {
@@ -564,7 +564,7 @@ class Extension {
       return false;
     }
 
-    const wallet_data = await this.wallets_store.asyncGet('main')
+    const wallet_data = await this.wallets_store.get('main')
     if(!wallet_data) {
       return false;
     }
@@ -655,7 +655,7 @@ class Extension {
       name: ''
     }, 'sr25519');
 
-    await this.accounts_store.asyncSet(account_id, {
+    await this.accounts_store.set(account_id, {
       "address": keypair.address,
       "name": name
     })
@@ -674,7 +674,7 @@ class Extension {
       return false
     }
 
-    const account = await this.accounts_store.asyncGet(account_id)
+    const account = await this.accounts_store.get(account_id)
     if(account_id !== 'main' && account_id && (account || temp_load)) {
       mnemonic += '//' + account_id
     }
@@ -937,7 +937,7 @@ class Extension {
 
   async changeSetting(params) {
     for(const [key, value] of Object.entries(params)) {
-      await this.settings_store.asyncSet(key, value)
+      await this.settings_store.set(key, value)
     }
   }
 

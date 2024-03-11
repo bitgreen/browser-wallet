@@ -2,6 +2,7 @@ import Extension from './extension.js'
 import Tabs from './tabs.js'
 import {
   getCurrentBrowser,
+  isFirefox,
   isIOs,
   isIPad,
   isMacOs,
@@ -78,7 +79,7 @@ const showPopup = async(command, params = {}) => {
     ...params
   }).toString();
 
-  if(isSafari() && isMacOs()) {
+  if(isSafari() && isMacOs()) { // safari extension on desktop only
     const response = await current_browser.windows.create({
       url: url,
       type: 'popup',
@@ -120,7 +121,7 @@ const showPopup = async(command, params = {}) => {
           type: 'popup',
           focused: true,
           width: 400,
-          height: 600,
+          height: isFirefox() ? 650 : 600, // firefox have to add in window title bar
           left,
           top
         });

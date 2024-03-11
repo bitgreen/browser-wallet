@@ -155,7 +155,6 @@ export default async function signInScreen(params) {
       })
 
       showProcessingDone()
-      // window.close()
     } else {
       hideProcessing()
       await showNotification('Password is wrong!', 'error')

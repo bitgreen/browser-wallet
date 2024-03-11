@@ -19,7 +19,7 @@ async function extension() {
 
   // Break if there is no wallet created/imported, and return to welcome screen.
   if(!await db.stores.wallets.exists()) {
-    if(await db.stores.settings.asyncGet('skip_intro')) {
+    if(await db.stores.settings.get('skip_intro')) {
       return await ui.goToScreen('walletScreen')
     } else {
       return await ui.goToScreen('welcomeScreen')
