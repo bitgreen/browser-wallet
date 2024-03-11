@@ -24,14 +24,14 @@ export default async function accountEditScreen(params) {
   const networks_store = new NetworkStore()
   const cache_store = new CacheStore(await networks_store.current())
 
-  const account = await accounts_store.asyncGet(account_id)
+  const account = await accounts_store.get(account_id)
 
   await screen.set('#heading', 'accounts/edit/heading', {
     account_name: account?.name,
     current_account_address: formatAddress(account?.address, 16, 8)
   })
 
-  const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+  const kyc_level = await cache_store.get('kyc_' + account.address)
 
   await screen.set('#bordered_content', 'accounts/edit/content', {
     account_id,
@@ -107,7 +107,7 @@ export default async function accountEditScreen(params) {
         const name = DOMPurify.sanitize(document.querySelector("#root #wallet_name").value)
         const switch_account = switch_account_el?.checked === true
 
-        await accounts_store.asyncSet(id, {
+        await accounts_store.set(id, {
           ...account,
           name
         })

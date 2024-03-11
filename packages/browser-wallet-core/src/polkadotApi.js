@@ -317,7 +317,7 @@ const initPolkadotApi = async(force = false) => {
         console.warn('Polkadot WS provider error: ', e)
 
         if (current_network.id !== 'mainnet' && current_network.id !== 'testnet') {
-          await networks_store.asyncSet('current', 'mainnet') // reset to mainnet
+          await networks_store.set('current', 'mainnet') // reset to mainnet
         }
 
         resolve(api)

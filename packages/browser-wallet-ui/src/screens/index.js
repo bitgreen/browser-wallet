@@ -640,10 +640,10 @@ const updateAccounts = async(current_account_id = null) => {
   const cache_store = new CacheStore(await networks_store.current())
 
   if(current_account_id) {
-    await accounts_store.asyncSet('current', current_account_id)
+    await accounts_store.set('current', current_account_id)
   }
 
-  const accounts = await accounts_store.asyncAll()
+  const accounts = await accounts_store.all()
   const current_account = await accounts_store.current()
 
   const header_logo_el = document.querySelector("#header #top_logo");
@@ -672,7 +672,7 @@ const updateAccounts = async(current_account_id = null) => {
       const account_id = a?.key
       const account_jdenticon = jdenticon.toSvg(account.address,56)
       const is_current = account_id?.toString() === current_account?.id?.toString()
-      const is_kyced = await cache_store.asyncGet('kyc_' + account.address)
+      const is_kyced = await cache_store.get('kyc_' + account.address)
 
       if(is_current) {
         current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
@@ -706,7 +706,7 @@ const updateAccounts = async(current_account_id = null) => {
         }
       }
 
-      const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+      const kyc_level = await cache_store.get('kyc_' + account.address)
 
       await updateElement('#accounts_modal #wallet_list', 'accounts/modal_item', {
         account_id,

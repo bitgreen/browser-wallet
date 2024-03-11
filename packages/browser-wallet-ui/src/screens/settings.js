@@ -31,7 +31,7 @@ export default async function settingsScreen(params) {
   }
 
   const networks_store = new NetworkStore()
-  const all_networks = await networks_store.asyncAll()
+  const all_networks = await networks_store.all()
   const current_network = await networks_store.current()
 
   await screen.append('#root #change_network', 'settings/partial/network_select', {

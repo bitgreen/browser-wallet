@@ -20,12 +20,12 @@ export default async function accountManageScreen() {
   const networks_store = new NetworkStore()
   const cache_store = new CacheStore(await networks_store.current())
   const current_account = await accounts_store.current()
-  const all_accounts = await accounts_store.asyncAll()
+  const all_accounts = await accounts_store.all()
 
   for(const a of all_accounts) {
     const account_id = a?.key
     const account = a.value
-    const kyc_level = await cache_store.asyncGet('kyc_' + account.address)
+    const kyc_level = await cache_store.get('kyc_' + account.address)
 
     await screen.append('#root #wallet_list', 'accounts/manage/list_item', {
       account_id,

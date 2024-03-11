@@ -103,7 +103,7 @@ export default async function walletPasswordScreen(params) {
     },
     {
       element: '#go_to_dashboard',
-      listener: () => goToScreen('dashboardScreen')
+      listener: () => goToScreen('dashboardScreen', {}, false, true)
     },
     {
       element: '#new_account',

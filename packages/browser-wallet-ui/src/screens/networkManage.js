@@ -14,7 +14,8 @@ export default async function networkManageScreen() {
   await screen.set('#bordered_content', 'network/manage/content')
 
   const network_store = new NetworkStore()
-  const all_networks = await network_store.asyncAll()
+  const current_network = await network_store.current()
+  const all_networks = await network_store.all()
 
   if(all_networks?.length < 1) {
     await screen.append('#root #wallet_list', 'shared/alert', {

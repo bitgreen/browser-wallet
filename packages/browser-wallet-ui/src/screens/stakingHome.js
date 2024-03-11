@@ -41,7 +41,7 @@ export default async function stakingHomeScreen() {
   const all_collators = await sendMessage('get_collators')
 
   const balance = await sendMessage('get_balance')
-  const inflation_amount = await cache_store.asyncGet('inflation_amount')
+  const inflation_amount = await cache_store.get('inflation_amount')
 
   const my_total_stake = getTotalStakedByAddress(all_collators, current_account.address)
   const average_user_apy = getApyByAddress(all_collators, current_account.address, inflation_amount)

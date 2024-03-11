@@ -33,6 +33,7 @@
     "@capacitor/ios": "^5.7.0",
     "@capacitor/keyboard": "^5.0.8",
     "@capacitor/splash-screen": "^5.0.7",
+    "@capacitor/preferences": "^5.0.7",
     "@polkadot/api": "^9.7.1",
     "@polkadot/keyring": "^10.1.11",
     "@polkadot/types": "^9.7.1",

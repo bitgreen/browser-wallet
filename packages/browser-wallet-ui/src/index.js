@@ -114,7 +114,7 @@ class userInterface {
 
   initAccounts = async() => {
     const current_account = await this.db.stores.accounts.current()
-    const kyc_level = await this.db.stores.cache.asyncGet('kyc_' + current_account.address)
+    const kyc_level = await this.db.stores.cache.get('kyc_' + current_account.address)
 
     await updateElement('#accounts_modal', 'accounts/modal', {
       current_account_name: (current_account?.name && current_account?.name?.length > 14) ? current_account?.name?.substring(0,14)+'...' : current_account?.name,

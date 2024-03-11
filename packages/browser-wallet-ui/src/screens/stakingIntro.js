@@ -152,7 +152,7 @@ export default async function stakingIntroScreen(params) {
     {
       element: '#staking_intro #go_nominating',
       listener: async() => {
-        await settings_store.asyncSet('staking_intro', 'true')
+        await settings_store.set('staking_intro', 'true')
         await goToScreen('stakingCollatorsScreen')
       }
     }

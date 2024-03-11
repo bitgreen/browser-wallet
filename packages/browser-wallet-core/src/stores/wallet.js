@@ -2,11 +2,11 @@ import BaseStore from "./base.js";
 
 class WalletStore extends BaseStore {
   constructor() {
-    super('wallet');
+    super('wallet')
   }
 
   async exists() {
-    return await this.asyncTotal() > 0
+    return await this.total() > 0
   }
 }
 

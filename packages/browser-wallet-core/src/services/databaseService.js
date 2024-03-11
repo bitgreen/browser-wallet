@@ -1,4 +1,4 @@
-import { AccountStore, SessionStore, SettingsStore, CacheStore, WalletStore } from '../stores/index.js'
+import { AccountStore, SettingsStore, CacheStore, WalletStore } from '../stores/index.js'
 import NetworkStore from "../stores/network.js";
 
 class DatabaseService {
@@ -15,7 +15,6 @@ class DatabaseService {
 
     this.stores = {
       accounts: new AccountStore(),
-      session: new SessionStore(),
       settings: new SettingsStore(),
       wallets: new WalletStore(),
       networks: networks_store,

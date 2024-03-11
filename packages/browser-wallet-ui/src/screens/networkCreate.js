@@ -18,7 +18,7 @@ export default async function networkCreateScreen(params) {
 
   const network_id = params?.network_id
   const network_store = new NetworkStore()
-  const network = await network_store.asyncGet(network_id)
+  const network = await network_store.get(network_id)
 
   await screen.set('.content', 'network/create', {
     network_id: network_id,

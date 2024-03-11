@@ -71,7 +71,7 @@ export default async function extrinsicSendScreen(params) {
 
   // Show all extrinsics
   for(const extrinsic of extrinsics) {
-    const docs = await cache_store.asyncGet(`docs_${extrinsic.pallet}:${extrinsic.call}`)
+    const docs = await cache_store.get(`docs_${extrinsic.pallet}:${extrinsic.call}`)
 
     // show request params
     let raw_request = {}

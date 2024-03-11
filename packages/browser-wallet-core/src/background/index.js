@@ -79,7 +79,7 @@ const showPopup = async(command, params = {}) => {
     ...params
   }).toString();
 
-  if(isSafari() && isMacOs()) {
+  if(isSafari() && isMacOs()) { // safari extension on desktop only
     const response = await current_browser.windows.create({
       url: url,
       type: 'popup',
