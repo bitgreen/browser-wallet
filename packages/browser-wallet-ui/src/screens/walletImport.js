@@ -1,10 +1,8 @@
 import Screen, { goBackScreen, goToScreen, updateCurrentParams } from './index.js'
-
+import { createMnemonicSortable, isIOs } from '@bitgreen/browser-wallet-utils';
 import { mnemonicValidate } from "@polkadot/util-crypto";
-
 import anime from 'animejs';
 import DOMPurify from 'dompurify';
-import {createMnemonicSortable, isIOs} from '@bitgreen/browser-wallet-utils';
 
 let import_mnemonic_array = [];
 let import_mnemonic_sortable = [];

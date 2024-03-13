@@ -522,6 +522,13 @@ const goToScreen = async(name, params = {}, can_go_back = true, force = false) =
     screen_history = []
   } else {
     hideNotification()
+    // sometimes the history is empty, so we must give it at least the home screen
+    if(screen_history.length === 0) {
+      screen_history.push({
+        name: 'dashboardScreen',
+        params: {}
+      })
+    }
   }
 
   if(active_screen?.name === name) {
@@ -786,6 +793,7 @@ const scrollContentToBottom = async (element = '#root .content') => {
 
     requestAnimationFrame(animateScroll);
   }, delay);
+
 };
 
 export default Screen

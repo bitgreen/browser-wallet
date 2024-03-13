@@ -325,7 +325,7 @@ class userInterface {
   }
 
   initCustomActions = async() => {
-    if(isIOs() || isStandaloneApp()) {
+    if(isStandaloneApp()) {
       const url_params = new URLSearchParams(window.location.search)
       if(url_params.has('popup')) {
         document.querySelector("#login_screen").classList.add('mini')

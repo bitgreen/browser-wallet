@@ -1,10 +1,9 @@
 import Screen, {goBackScreen, goToScreen, scrollContentToBottom, updateAccounts} from './index.js'
-
-import DOMPurify from 'dompurify';
 import { sendMessage } from "../messaging.js";
 import { showNotification } from "../notifications.js";
+import { isIOs } from "@bitgreen/browser-wallet-utils";
 import anime from "animejs";
-import {isIOs} from "@bitgreen/browser-wallet-utils";
+import DOMPurify from 'dompurify';
 
 export default async function walletPasswordScreen(params) {
   const screen = new Screen({

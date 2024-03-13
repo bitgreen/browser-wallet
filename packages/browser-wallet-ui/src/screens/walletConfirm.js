@@ -1,5 +1,5 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
-import {createMnemonicSortable, shuffleArray} from '@bitgreen/browser-wallet-utils'
+import { createMnemonicSortable, shuffleArray } from '@bitgreen/browser-wallet-utils'
 
 import anime from 'animejs';
 

@@ -65,8 +65,6 @@ document.addEventListener('deviceready', async() => {
   });
 
   Keyboard.addListener('keyboardWillShow', info => {
-    const bodyHeight = window.innerHeight - info.keyboardHeight
-
     document.body.classList.add('keyboard-opened')
 
     if(isIOs()) {

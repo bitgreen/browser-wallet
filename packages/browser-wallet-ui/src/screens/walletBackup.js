@@ -1,5 +1,5 @@
 import Screen, { goBackScreen } from './index.js'
-import { randomString } from '@bitgreen/browser-wallet-utils'
+import { randomString, sleep } from '@bitgreen/browser-wallet-utils'
 import { sendMessage } from "../messaging.js";
 import { showNotification } from "../notifications.js";
 import DOMPurify from 'dompurify';
@@ -16,6 +16,13 @@ export default async function walletBackupScreen(params) {
   await screen.init()
 
   await screen.set('.content', 'wallet/backup')
+
+  await screen.append('.content', 'global/loading', {
+    title: 'getting phrase words',
+    desc: 'Hold tight while we get your phrase words.',
+    top: '0;',
+    padding_top: '60px'
+  });
 
   let copy_mnemonic = ''
 
@@ -71,6 +78,8 @@ export default async function walletBackupScreen(params) {
   ])
 
   const revealMnemonics = async() => {
+    showProcessing();
+    await sleep(250); // give it a chance to start animating
     const password = DOMPurify.sanitize(document.querySelector('#password_input #password').value)
 
     const mnemonics = await sendMessage('reveal_mnemonic', {
@@ -88,6 +97,8 @@ export default async function walletBackupScreen(params) {
           value: word
         })
       }
+
+      hideProcessing();
 
       document.querySelector('#backup_mnemonics').classList.remove('mnemonics-hidden')
       document.querySelector('#copy_seed').classList.remove('btn-hidden')
@@ -117,10 +128,28 @@ export default async function walletBackupScreen(params) {
         delay: function(el, i) { return i * 50 + 1200 },
       });
     } else {
+      hideProcessing();
       await showNotification('Password is wrong!', 'error')
     }
 
     show_password.innerHTML = '<span class="icon icon-eye"></span>'
     input_field.type = 'password'
+  }
+
+  const showProcessing = () => {
+    const loading_el = document.querySelector("#loading_content")
+
+    loading_el.classList.add('active')
+
+    screen.freezeRoot()
+  }
+
+  const hideProcessing = () => {
+    setTimeout(() => {
+      const loading_el = document.querySelector("#loading_content")
+
+      loading_el.classList.remove('active')
+      screen.unFreezeRoot()
+    }, 1200)
   }
 }
