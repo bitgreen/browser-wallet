@@ -4,7 +4,7 @@ import { showNotification } from "../notifications.js";
 
 import DOMPurify from 'dompurify';
 import anime from "animejs";
-import { formatAddress } from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isIOs} from "@bitgreen/browser-wallet-utils";
 
 export default async function accountEditScreen(params) {
   const screen = new Screen({
@@ -38,6 +38,10 @@ export default async function accountEditScreen(params) {
     account_address: account?.address,
     derivation_path: account_id !== 'main' ? account_id : ''
   })
+
+  if(isIOs()) {
+    await screen.moveFooterOnTop()
+  }
 
   if(kyc_level) {
     const go_kyc_el = document.querySelector('#heading #go_kyc')

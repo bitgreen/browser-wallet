@@ -34,6 +34,10 @@ body.ios {
         }
         
     }
+    #full_page,
+    #bordered_content {
+        position: absolute;
+    }
     #full_page {
         height: calc(100% - 44px);
     
@@ -51,6 +55,7 @@ body.ios {
     }
     #main_footer,
     .footer {
+        position: fixed;
         bottom: 24px;
     }
 }

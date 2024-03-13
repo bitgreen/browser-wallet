@@ -172,6 +172,14 @@ class Screen {
     return await resetElement(element)
   }
 
+  // used for ios to adjust footer
+  async moveFooterOnTop() {
+    const root = document.querySelector('#root')
+    const footer_old = root.querySelector('.footer')
+
+    root.appendChild(footer_old)
+  }
+
   setParam(element, value) {
     document.querySelector(element).innerHTML = value
   }
@@ -749,6 +757,37 @@ const scrollToBottom = async(delay = 0) => {
   }
 }
 
+const scrollContentToBottom = async (element = '#root .content') => {
+  const delay = 1000; // Delay in milliseconds
+  setTimeout(() => {
+    const scrollableDiv = document.querySelector(element);
+    const targetScrollTop = scrollableDiv.scrollHeight - scrollableDiv.clientHeight;
+
+    // Check if the scroll position is already at the bottom
+    if (scrollableDiv.scrollTop === targetScrollTop) {
+      return; // No need to scroll if already at the bottom
+    }
+
+    const duration = 300; // Duration of the animation in milliseconds
+    const startTime = performance.now();
+
+    const animateScroll = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1); // Ensure progress does not exceed 1
+      const easeProgress = easeOutQuad(progress); // Apply easing function for smoother animation
+      scrollableDiv.scrollTop = easeProgress * targetScrollTop;
+
+      if (elapsedTime < duration) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    const easeOutQuad = (t) => t * (2 - t);
+
+    requestAnimationFrame(animateScroll);
+  }, delay);
+};
+
 export default Screen
 export {
   screens,
@@ -766,6 +805,7 @@ export {
   enableFooter,
   disableFooter,
   scrollToBottom,
+  scrollContentToBottom,
   freezeRoot,
   unFreezeRoot,
   showInit,

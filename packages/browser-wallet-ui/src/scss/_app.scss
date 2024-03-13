@@ -2,18 +2,25 @@ body.app {
     position: relative;
     height: 100vh;
     min-height: 400px;
-    transition: all ease-out 0.33s;
+    transition: height ease-out 0.1s;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
 
+    .footer {
+        transition: all ease-out 0.2s;
+    }
+
     &.keyboard-opened {
-        #bordered_content {
-            padding-bottom: 16px;
+        #bordered_content,
+        #full_page .content {
+            padding-bottom: 60px;
         }
 
         .footer {
             bottom: 8px !important;
         }
+
+        transition: height ease-out 0.33s
     }
 
     * {
@@ -56,8 +63,8 @@ body.app {
     #main_footer,
     .footer {
         position: absolute;
-        width: calc(100vw - 32px);
-        left: 16px;
+        width: calc(100vw - 24px);
+        left: 12px;
     }
 
     .footer {
@@ -83,6 +90,13 @@ body.app {
         .dots {
             top: auto;
             bottom: 120px;
+        }
+    }
+
+    #staking_intro {
+        .dots {
+            top: auto;
+            bottom: 100px;
         }
     }
 

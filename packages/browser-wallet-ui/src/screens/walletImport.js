@@ -4,7 +4,7 @@ import { mnemonicValidate } from "@polkadot/util-crypto";
 
 import anime from 'animejs';
 import DOMPurify from 'dompurify';
-import { createMnemonicSortable } from '@bitgreen/browser-wallet-utils';
+import {createMnemonicSortable, isIOs} from '@bitgreen/browser-wallet-utils';
 
 let import_mnemonic_array = [];
 let import_mnemonic_sortable = [];
@@ -21,6 +21,10 @@ export default async function walletImportScreen(params = {}) {
   await screen.init()
 
   await screen.set('.content', 'wallet/import')
+
+  if(isIOs()) {
+    await screen.moveFooterOnTop()
+  }
 
   import_mnemonic_array = []
   if(params.mnemonic) {

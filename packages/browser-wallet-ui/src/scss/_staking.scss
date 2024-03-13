@@ -53,7 +53,8 @@
             p {
                 opacity: 0;
                 padding: 0 16px;
-                height: 86px;
+                min-height: 86px;
+                height: 16vh;
             }
             .btn {
                 opacity: 0;
@@ -63,7 +64,7 @@
     .dots {
         opacity: 0;
         position: fixed;
-        top: 540px;
+        bottom: 60px;
         left: 0;
         width: 100%;
         text-align: center;

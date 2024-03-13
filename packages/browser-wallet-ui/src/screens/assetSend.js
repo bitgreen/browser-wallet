@@ -1,4 +1,4 @@
-import Screen, { expireBrowserTabRequest, goToScreen, updateCurrentParams } from './index.js'
+import Screen, {expireBrowserTabRequest, goToScreen, scrollContentToBottom, updateCurrentParams} from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import {AccountStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import {
@@ -6,7 +6,7 @@ import {
   balanceToHuman,
   formatAddress,
   formatAmount,
-  humanToBalance
+  humanToBalance, isIOs
 } from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
@@ -71,6 +71,10 @@ export default async function assetSendScreen(params) {
   const recipient_el = document.querySelector("#root #recipient")
 
   const feeTooltip = new Tooltip('#root #go_review_transaction')
+
+  if(isIOs()) {
+    await screen.moveFooterOnTop()
+  }
 
   screen.setListeners([
     {
@@ -139,6 +143,13 @@ export default async function assetSendScreen(params) {
       element: '#root #recipient',
       type: 'input',
       listener: () => checkAddress()
+    },
+    {
+      element: '#root #recipient',
+      type: 'focus',
+      listener: () => {
+        if(isIOs()) scrollContentToBottom('#root #bordered_content')
+      }
     },
     {
       element: '#go_review_transaction',
