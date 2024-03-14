@@ -1,5 +1,5 @@
 {
-  "appId": "com.bitgreen.wallet.app",
+  "appId": "com.bitgreen.wallet",
   "appName": "Bitgreen Wallet",
   "webDir": "../../build/app",
   "server": {
