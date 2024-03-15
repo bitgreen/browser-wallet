@@ -1,3 +1,6 @@
+html {
+    overflow: hidden;
+}
 body.app {
     position: relative;
     height: 100vh;
@@ -13,7 +16,7 @@ body.app {
     &.keyboard-opened {
         #bordered_content,
         #full_page .content {
-            padding-bottom: 60px;
+            padding-bottom: 62px;
         }
 
         .footer {
@@ -29,8 +32,9 @@ body.app {
     }
 
     #login_screen {
+        overflow: hidden !important;
         width: 100vw;
-        background-color: transparent;
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
     }
 
     #init_screen {
@@ -60,19 +64,28 @@ body.app {
         }
     }
 
+    #bordered_content,
+    #full_page .content {
+        overflow-x: unset;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
     #main_footer,
     .footer {
         position: absolute;
-        width: calc(100vw - 24px);
-        left: 12px;
+        width: 92vw;
+        left: 4vw;
+        bottom: 4vw;
     }
 
     .footer {
-        bottom: 8px;
         pointer-events: none;
 
         &.double-footer {
-            bottom: 86px;
+            bottom: 74px;
         }
 
         > div {

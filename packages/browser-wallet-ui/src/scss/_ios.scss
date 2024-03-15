@@ -57,5 +57,9 @@ body.ios {
     .footer {
         position: fixed;
         bottom: 24px;
+
+        &.double-footer {
+            bottom: 86px;
+        }
     }
 }
