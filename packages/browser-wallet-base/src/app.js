@@ -5,9 +5,12 @@ import { Keyboard } from '@capacitor/keyboard';
 import { App } from '@capacitor/app';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { isAndroid, isIOs } from "@bitgreen/browser-wallet-utils";
+import { StatusBar } from '@capacitor/status-bar';
 
 // Hide the splash (you should do this on app launch)
 await SplashScreen.hide();
+
+await StatusBar.setBackgroundColor({ color: '#224851' });
 
 const db = new databaseService()
 const ui = new userInterface()
