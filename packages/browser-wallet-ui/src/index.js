@@ -384,7 +384,9 @@ class userInterface {
           const htmlElement = document.getElementsByTagName('html')[0]
           const htmlElementOffset = htmlElement.offsetHeight;
 
-          if(htmlElementOffset < 400 || !(await this.db.stores.wallets.exists())) {
+          const bodyElement = document.getElementsByTagName('body')[0]
+
+          if(htmlElementOffset < 400 || !(await this.db.stores.wallets.exists()) || bodyElement.classList.contains('keyboard-opened')) {
             await disableFooter()
           } else {
             await enableFooter()

@@ -1,4 +1,4 @@
-import Screen, {goBackScreen, goToScreen, scrollContentToBottom, updateAccounts} from './index.js'
+import Screen, {goBackScreen, goToScreen, scrollContentTo, updateAccounts} from './index.js'
 import { sendMessage } from "../messaging.js";
 import { showNotification } from "../notifications.js";
 import { isIOs } from "@bitgreen/browser-wallet-utils";
@@ -27,9 +27,7 @@ export default async function walletPasswordScreen(params) {
     checkmark_top: '128px'
   });
 
-  if(isIOs()) {
-    await screen.moveFooterOnTop()
-  }
+  await screen.moveFooterOnTop()
 
   if(params?.imported) {
     // TODO: do not show for now
@@ -84,7 +82,11 @@ export default async function walletPasswordScreen(params) {
       element: 'input',
       type: 'focus',
       listener: (e) => {
-        if(isIOs() && e.target.id !== 'password') scrollContentToBottom()
+        if(e.target.id === 'password') {
+          scrollContentTo('bottom')
+        } else {
+          scrollContentTo('top')
+        }
       }
     },
     {

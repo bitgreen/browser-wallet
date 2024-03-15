@@ -1,4 +1,9 @@
-import Screen, {expireBrowserTabRequest, goToScreen, scrollContentToBottom, updateCurrentParams} from './index.js'
+import Screen, {
+  expireBrowserTabRequest,
+  goToScreen,
+  scrollContentTo,
+  updateCurrentParams
+} from './index.js'
 import { disableKillPopup, sendMessage } from "../messaging.js";
 import {AccountStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import {
@@ -72,9 +77,7 @@ export default async function assetSendScreen(params) {
 
   const feeTooltip = new Tooltip('#root #go_review_transaction')
 
-  if(isIOs()) {
-    await screen.moveFooterOnTop()
-  }
+  await screen.moveFooterOnTop()
 
   screen.setListeners([
     {
@@ -145,10 +148,14 @@ export default async function assetSendScreen(params) {
       listener: () => checkAddress()
     },
     {
-      element: '#root #recipient',
+      element: '#root #bordered_content input',
       type: 'focus',
-      listener: () => {
-        if(isIOs()) scrollContentToBottom('#root #bordered_content')
+      listener: (e) => {
+        if(e.target.id === 'recipient') {
+          scrollContentTo('bottom', '#root #bordered_content')
+        } else {
+          scrollContentTo('top', '#root #bordered_content')
+        }
       }
     },
     {
@@ -261,7 +268,10 @@ export default async function assetSendScreen(params) {
 
     estimated_fee = formatAmount(balanceToHuman(estimated_fee , 18), 18)
 
-    document.querySelector('#bordered_content #go_review_transaction').dataset.bsOriginalTitle = `Estimated Transaction Fee:<br>${estimated_fee.toString()} BBB`
+    const button = document.querySelector('#bordered_content #go_review_transaction')
+    if(button) {
+      button.dataset.bsOriginalTitle = `Estimated Transaction Fee:<br>${estimated_fee.toString()} BBB`
+    }
 
     return estimated_fee
   }

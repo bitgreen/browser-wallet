@@ -67,14 +67,14 @@ document.addEventListener('deviceready', async() => {
   Keyboard.addListener('keyboardWillShow', info => {
     document.body.classList.add('keyboard-opened')
 
+    ui.disableFooter()
+
     if(isIOs()) {
       const footers = document.querySelectorAll('#login_screen .footer, #root .footer')
       for(const footer of footers) {
         footer.style.paddingBottom = info.keyboardHeight + 'px'
       }
     }
-
-    ui.disableFooter()
   });
 
   Keyboard.addListener('keyboardWillHide', info => {

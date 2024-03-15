@@ -39,9 +39,7 @@ export default async function accountEditScreen(params) {
     derivation_path: account_id !== 'main' ? account_id : ''
   })
 
-  if(isIOs()) {
-    await screen.moveFooterOnTop()
-  }
+  await screen.moveFooterOnTop()
 
   if(kyc_level) {
     const go_kyc_el = document.querySelector('#heading #go_kyc')

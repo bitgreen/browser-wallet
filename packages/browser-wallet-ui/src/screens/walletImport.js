@@ -20,9 +20,7 @@ export default async function walletImportScreen(params = {}) {
 
   await screen.set('.content', 'wallet/import')
 
-  if(isIOs()) {
-    await screen.moveFooterOnTop()
-  }
+  await screen.moveFooterOnTop()
 
   import_mnemonic_array = []
   if(params.mnemonic) {

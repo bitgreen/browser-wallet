@@ -3,7 +3,7 @@ import { sendMessage } from "../messaging.js";
 import {
   formatAddress,
   getCurrentBrowser,
-  isAndroid,
+  isAndroid, isIOs,
   isMacOs,
   isStandaloneApp,
   isWindows,
@@ -460,7 +460,7 @@ const disableFooter = () => {
   if(!footer_el.classList.contains('disabled')) {
     anime({
       targets: '#main_footer',
-      duration: 300,
+      duration: isIOs() ? 300 : 0,
       translateY: [0, 120],
       opacity: [1, 0],
       easing: 'linear',
@@ -764,25 +764,29 @@ const scrollToBottom = async(delay = 0) => {
   }
 }
 
-const scrollContentToBottom = async (element = '#root .content') => {
-  const delay = 1000; // Delay in milliseconds
+const scrollContentTo = async (direction, element = '#root .content') => {
+  const delay = 600; // Delay in milliseconds
   setTimeout(() => {
     const scrollableDiv = document.querySelector(element);
-    const targetScrollTop = scrollableDiv.scrollHeight - scrollableDiv.clientHeight;
+    const targetScrollTop = (direction === 'top') ? 0 : scrollableDiv.scrollHeight;
 
-    // Check if the scroll position is already at the bottom
-    if (scrollableDiv.scrollTop === targetScrollTop) {
-      return; // No need to scroll if already at the bottom
+    // Check if the scroll position is already at the target
+    if (
+      (direction === 'top' && scrollableDiv.scrollTop === 0) ||
+      (direction === 'bottom' && scrollableDiv.scrollTop === scrollableDiv.scrollHeight - scrollableDiv.clientHeight)
+    ) {
+      return; // No need to scroll if already at the target
     }
 
     const duration = 300; // Duration of the animation in milliseconds
     const startTime = performance.now();
+    const startScrollTop = scrollableDiv.scrollTop;
 
     const animateScroll = (currentTime) => {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1); // Ensure progress does not exceed 1
       const easeProgress = easeOutQuad(progress); // Apply easing function for smoother animation
-      scrollableDiv.scrollTop = easeProgress * targetScrollTop;
+      scrollableDiv.scrollTop = startScrollTop + (easeProgress * (targetScrollTop - startScrollTop));
 
       if (elapsedTime < duration) {
         requestAnimationFrame(animateScroll);
@@ -793,7 +797,6 @@ const scrollContentToBottom = async (element = '#root .content') => {
 
     requestAnimationFrame(animateScroll);
   }, delay);
-
 };
 
 export default Screen
@@ -813,7 +816,7 @@ export {
   enableFooter,
   disableFooter,
   scrollToBottom,
-  scrollContentToBottom,
+  scrollContentTo,
   freezeRoot,
   unFreezeRoot,
   showInit,
