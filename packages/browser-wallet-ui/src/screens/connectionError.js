@@ -1,4 +1,4 @@
-import Screen, {goBackScreen, goToScreen, reloadScreen} from './index.js'
+import Screen, {goBackScreen} from './index.js'
 import anime from "animejs";
 import {showNotification} from "../notifications.js";
 import {sendMessage} from "../messaging.js";
