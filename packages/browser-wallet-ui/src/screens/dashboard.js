@@ -174,8 +174,7 @@ export default async function dashboardScreen(params = {
       },
     });
   }).catch((e) => {
-    // TODO: handle this like:
-    // goToScreen('connectionErrorScreen')
+    goToScreen('connectionErrorScreen')
   })
 
   screen.setListeners([
