@@ -73,6 +73,10 @@ npm run setup
 
 More detailed information to the build process can be found [here](packages/browser-wallet-base/readme.md)
 
+## Versioning
+
+Please see [browser-wallet-base README](packages/browser-wallet-base/readme.md#versioning) for detailed information
+
 ### Production Build
 
 You can build all production versions of extensions and apps, and output will be located at `/build` directory, where each sub folder represents each browser extension type or app platform:
