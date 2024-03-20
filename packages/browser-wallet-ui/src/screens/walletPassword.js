@@ -83,9 +83,9 @@ export default async function walletPasswordScreen(params) {
       type: 'focus',
       listener: (e) => {
         if(e.target.id === 'password') {
-          scrollContentTo('bottom')
-        } else {
           scrollContentTo('top')
+        } else {
+          scrollContentTo('bottom')
         }
       }
     },

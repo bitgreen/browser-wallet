@@ -10,7 +10,11 @@ import { StatusBar } from '@capacitor/status-bar';
 // Hide the splash (you should do this on app launch)
 await SplashScreen.hide();
 
-await StatusBar.setBackgroundColor({ color: '#224851' });
+await StatusBar.setStyle({ style: 'DARK' });
+
+if(isAndroid()) {
+  await StatusBar.setBackgroundColor({ color: '#224851' });
+}
 
 const db = new databaseService()
 const ui = new userInterface()
