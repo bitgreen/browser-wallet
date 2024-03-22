@@ -480,38 +480,15 @@ class Extension {
   }
 
   async encryptWallet(mnemonic, password) {
-    // get ascii value of first 2 chars
-    const vb1 = password.charCodeAt(0);
-    const vb2 = password.charCodeAt(1);
-
-    // position to derive other 3 passwords
-    const p = vb1*vb2;
-
-    // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
+    // Generate a random string to use as an initialization vector (IV) for encryption
     let randomstring = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     for(let i = 0; i < 32; i++) {
       randomstring += characters.charAt(Math.floor(Math.random()*charactersLength));
     }
-    let dpwd1 = '';
-    let dpwd2 = '';
-    let dpwd3 = '';
-    let h = keccakAsU8a(password + randomstring);
-    for(let i = 0; i < 100000; i++) {
-      h = keccakAsU8a(h);
-      if(i === p) {
-        dpwd1 = h;
-      }
-      h = sha512AsU8a(h);
-      if(i === p) {
-        dpwd2 = h;
-      }
-      h = blake2AsU8a(h);
-      if(i === p) {
-        dpwd3 = h;
-      }
-    }
+
+    const [dpwd1, dpwd2, dpwd3] = await this.derivePasswords(password, randomstring)
 
     // 3 Layers encryption
     // encrypt the secret words in AES256-CFB
@@ -564,40 +541,14 @@ class Extension {
       return false;
     }
 
-    const wallet_data = await this.wallets_store.get('main')
-    if(!wallet_data) {
+    const enc = await this.wallets_store.get('main')
+    if(!enc || !enc?.iv) {
       return false;
     }
 
     try {
-      // get ascii value of first 2 chars
-      const vb1 = password.charCodeAt(0);
-      const vb2 = password.charCodeAt(1);
-
-      // position to derive other 3 passwords
-      const p = vb1*vb2;
-
-      // derive the password used for encryption with an init vector (random string) and 100000 hashes with 3 different algorithms
-      const enc = wallet_data;
-      let randomstring = enc.iv;
-      let dpwd1 = '';
-      let dpwd2 = '';
-      let dpwd3 = '';
-      let h = keccakAsU8a(password + randomstring);
-      for(let i = 0; i < 100000; i++) {
-        h = keccakAsU8a(h);
-        if(i === p) {
-          dpwd1 = h;
-        }
-        h = sha512AsU8a(h);
-        if(i === p) {
-          dpwd2 = h;
-        }
-        h = blake2AsU8a(h);
-        if(i === p) {
-          dpwd3 = h;
-        }
-      }
+      const randomstring = enc.iv;
+      const [dpwd1, dpwd2, dpwd3] = await this.derivePasswords(password, randomstring)
 
       // decrypt AES-OFB
       const ivaesofb = hexToU8a(enc.ivaesofb);
@@ -637,6 +588,46 @@ class Extension {
       console.log('Error decoding wallet:', e)
       return false
     }
+  }
+
+  /*
+  * Derive multiple passwords for encryption using the provided password and the random string IV
+  * */
+  async derivePasswords(password, randomString) {
+    let derivedPassword1, derivedPassword2, derivedPassword3
+
+    try {
+      // Get ASCII value of the first 2 characters of the password
+      const vb1 = password.charCodeAt(0);
+      const vb2 = password.charCodeAt(1);
+
+      // Calculate the position to derive other 3 passwords
+      const p = vb1*vb2;
+
+      // Derive the passwords used for encryption with an initialization vector (random string) and 100000 hashes with 3 different algorithms
+      let h = keccakAsU8a(password + randomString);
+      for (let i = 0; i < 100000; i++) {
+        h = keccakAsU8a(h);
+        if (i === p) {
+          derivedPassword1 = h;
+        }
+        h = sha512AsU8a(h);
+        if (i === p) {
+          derivedPassword2 = h;
+        }
+        h = blake2AsU8a(h);
+        if (i === p) {
+          derivedPassword3 = h;
+        }
+
+        // Exit loop early if all passwords have been derived
+        if(derivedPassword1 && derivedPassword2 && derivedPassword3) break
+      }
+    } catch (e) {
+      console.log('Error deriving passwords.', e)
+    }
+
+    return [derivedPassword1, derivedPassword2, derivedPassword3]
   }
 
   async createAccount(name, mnemonic, account_id) {
