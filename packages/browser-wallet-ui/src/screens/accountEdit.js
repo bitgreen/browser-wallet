@@ -56,7 +56,7 @@ export default async function accountEditScreen(params) {
     }
   }
 
-  if(account_id !== 'main') await screen.set('#bordered_content .footer .forget-account', 'accounts/edit/delete_button')
+  if(account_id !== 'main') await screen.set('#root .footer .forget-account', 'accounts/edit/delete_button')
 
   await screen.append('#root', 'accounts/edit/delete_modal', {
     account_id,

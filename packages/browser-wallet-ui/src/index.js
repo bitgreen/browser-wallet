@@ -338,6 +338,23 @@ class userInterface {
       this.disableDoubleClickZoom()
       await this.handleFooterVisibility()
     }
+
+    this.clickHelpers()
+  }
+
+  clickHelpers = () => {
+    const accounts_modal_el = document.querySelector("#accounts_modal");
+    const accounts_modal_dialog_el = accounts_modal_el.querySelector(".modal-dialog");
+    const current_wallet_el = document.querySelector("#header #current_wallet");
+
+    /* Global click event */
+    document.addEventListener("click", (e) => {
+      /* Click anywhere to close opened account modal */
+      if (accounts_modal_el.classList.contains('show') && accounts_modal_el.contains(e.target) && !current_wallet_el.contains(e.target) && !accounts_modal_dialog_el.contains(e.target)) {
+        accounts_modal_el.classList.remove('fade')
+        accounts_modal_el.classList.remove('show')
+      }
+    })
   }
 
   // Disable double click event on iOS

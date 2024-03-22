@@ -39,7 +39,7 @@
     }
     
     .modal-dialog {
-        transform: translateY(-60vh) scale(0.6);
+        transform: translateY(-60vh) scale(0.666);
         transition: all linear 0.2s;
         margin: 0;
     }
@@ -69,7 +69,7 @@
             padding: 6px 10px;
         }
         &.modal-body-primary {
-            background-color: $colorTealLight;
+            background-color: $colorTealLight !important;
         }
     }
     .modal-footer {
@@ -89,7 +89,15 @@
 
     .modal-content {
         border-radius: 10px !important;
+        border: none !important;
+        background-color: transparent !important;
+
+        .modal-body,
+        .modal-footer {
+            background-color: #FFFFFF;
+        }
     }
+
     .modal-header {
         border-top-left-radius: 8px !important;
         border-top-right-radius: 8px !important;
