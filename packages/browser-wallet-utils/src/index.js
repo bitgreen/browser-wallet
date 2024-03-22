@@ -265,8 +265,9 @@ const calculateCollatorApy = (all_collators, collator, block_reward) => {
 
   const share = collator_stake.dividedBy(total_stake).times(blocks_per_year).times(block_reward);
 
-  const collator_apy = share.dividedBy(collator_stake).times(100)
+  if (share.isEqualTo(0)) return 0; // Handle division by zero
 
+  const collator_apy = share.dividedBy(collator_stake).times(100)
 
   return collator_apy
 }
