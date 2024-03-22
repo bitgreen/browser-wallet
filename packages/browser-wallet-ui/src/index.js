@@ -306,11 +306,13 @@ class userInterface {
         await hideLogin()
         if(current_screen.name === 'dashboardScreen') await reloadScreen()
       } else {
-        await showNotification('Password is wrong!', 'error', 1800, isStandaloneApp() ? 60 : 0)
+        await showNotification('Password is wrong!', 'error', 1800, isIOs() ? 60 : 0)
         input_form.classList.remove('inactive')
       }
 
-      input_form.classList.remove('inactive')
+      setTimeout(() => {
+        input_form.classList.remove('inactive')
+      }, 800)
 
       // reset to init screen
       show_password.innerHTML = '<span class="icon icon-eye"></span>'

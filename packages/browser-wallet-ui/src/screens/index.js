@@ -578,6 +578,14 @@ const goToScreen = async(name, params = {}, can_go_back = true, force = false) =
 
   await screens[name](params)
 
+  anime({
+    targets: '#root .footer',
+    opacity: [0, 1],
+    easing: 'easeInOutSine',
+    duration: 200,
+    delay: 300
+  });
+
   transitioning = false
 
   return true
@@ -609,7 +617,7 @@ const goBackScreen = () => {
 
 App.addListener('backButton', goBackScreen)
 
-if(!isAndroid()) {  
+if(!isAndroid()) {
   window.addEventListener('popstate', goBackScreen)
 }
 

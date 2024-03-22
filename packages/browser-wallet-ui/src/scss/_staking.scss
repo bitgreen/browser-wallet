@@ -121,7 +121,7 @@
 }
 #staking_collators {
     position: relative;
-    height: 100%;
+    height: calc(100% - 16px);
 
     .btn {
         transition: all linear 0.2s;
@@ -192,7 +192,7 @@
         }
     }
 }
-#amounts .collator-image {
+.collator-image {
     position: absolute;
     top: -41px;
     left: calc(50% - 41px);

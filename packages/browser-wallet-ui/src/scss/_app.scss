@@ -14,9 +14,10 @@ body.app {
     }
 
     &.keyboard-opened {
-        #bordered_content,
+        #bordered_content .content,
         #full_page .content {
-            padding-bottom: 62px;
+            height: 100%;
+            padding-bottom: 64px;
         }
 
         .footer {
@@ -53,18 +54,13 @@ body.app {
     #heading,
     #bordered_content {
         width: 100vw;
-    }
-
-    #bordered_content {
-        overflow: auto;
-        overflow-x: hidden;
 
         &.no-overflow {
             overflow: unset;
         }
     }
 
-    #bordered_content,
+    #bordered_content .content,
     #full_page .content {
         overflow-x: unset;
 
@@ -76,16 +72,13 @@ body.app {
     #main_footer,
     .footer {
         position: absolute;
-        width: 92vw;
-        left: 4vw;
-        bottom: 4vw;
     }
 
     .footer {
         pointer-events: none;
 
         &.double-footer {
-            bottom: 74px;
+            bottom: 76px;
         }
 
         > div {
@@ -93,9 +86,6 @@ body.app {
         }
     }
 
-    #accounts_modal {
-        padding-top: 50px !important;
-    }
     #staking_info {
         padding: 0 16px;
         bottom: 100px;

@@ -76,3 +76,10 @@
         z-index: 999;
     }
 }
+
+#full_page .content,
+#bordered_content .content {
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+}

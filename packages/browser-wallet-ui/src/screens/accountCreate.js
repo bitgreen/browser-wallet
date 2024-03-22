@@ -17,6 +17,8 @@ export default async function accountCreateScreen() {
 
   await screen.set('.content', 'accounts/create')
 
+  await screen.moveFooterOnTop()
+
   const input_field = document.querySelector("#root #password")
   const show_password = document.querySelector("#root .show-password")
 
