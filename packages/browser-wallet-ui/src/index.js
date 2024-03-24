@@ -306,7 +306,7 @@ class userInterface {
         await hideLogin()
         if(current_screen.name === 'dashboardScreen') await reloadScreen()
       } else {
-        await showNotification('Password is wrong!', 'error', 1800, isIOs() ? 60 : 0)
+        await showNotification('Password is wrong!', 'error', 1800, 0)
         input_form.classList.remove('inactive')
       }
 

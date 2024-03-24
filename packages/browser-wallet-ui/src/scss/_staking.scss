@@ -171,7 +171,7 @@
         color: $colorBlueGray;
     }
     .collator-list {
-        height: calc(100% - 106px);
+        height: calc(100% - 40px);
         overflow: hidden;
         overflow-y: auto;
         padding-right: 8px;
@@ -202,6 +202,7 @@
     padding-top: 10px;
     background-color: $colorWhite;
     border-radius: 40px;
+    z-index: 99;
     border: 2px solid $colorTealLight;
 }
 #staking_info {

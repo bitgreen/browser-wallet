@@ -14,10 +14,10 @@ body.app {
     }
 
     &.keyboard-opened {
-        #bordered_content .content,
-        #full_page .content {
+        #bordered_content .scroll-content,
+        #full_page .scroll-content {
             height: 100%;
-            padding-bottom: 64px;
+            padding-bottom: 34px;
         }
 
         .footer {
@@ -60,8 +60,9 @@ body.app {
         }
     }
 
-    #bordered_content .content,
-    #full_page .content {
+    #bordered_content > .scroll-content,
+    #full_page > .scroll-content {
+        overflow: auto;
         overflow-x: unset;
 
         &::-webkit-scrollbar {
@@ -89,7 +90,7 @@ body.app {
     #staking_info {
         padding: 0 16px;
         bottom: 100px;
-    
+
         .dots {
             top: auto;
             bottom: 120px;
@@ -106,8 +107,13 @@ body.app {
     #root .full-only {
         background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
     }
+
     #main_footer.disabled {
         pointer-events: none !important;
+    }
+
+    .transactions-end {
+        width: 100% !important;
     }
 }
 

@@ -10,6 +10,7 @@ body.ios {
     }
     #accounts_modal {
         width: 100%;
+        top: 40px;
         left: 0;
         padding: 8px;
     
@@ -18,7 +19,7 @@ body.ios {
        }
     }
     #bordered_content {
-        padding: 16px 16px 94px;
+        padding: 16px;
         height: calc(100% - 168px);
         top: 168px;
     
@@ -60,19 +61,27 @@ body.ios {
             left: 0;
             right: 0;
             top: 50%;
-            transform: translateY(-50%);
-            margin: auto;
-            width: 30%;
+            margin: -150px auto auto;
+            width: 33%;
+            height: 300px;
         }
+
+        //&.fade-out {
+        //    .init-logo {
+        //        transform: scale(30);
+        //    }
+        //}
     }
 
     #main_footer,
     .footer {
         position: fixed;
-        bottom: 24px;
+        width: 92vw;
+        left: 4vw;
+        bottom: 8vw;
 
         &.double-footer {
-            bottom: 86px;
+            bottom: calc(14vw + 44px);
         }
     }
 }

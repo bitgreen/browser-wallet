@@ -152,9 +152,9 @@ export default async function assetSendScreen(params) {
       type: 'focus',
       listener: (e) => {
         if(e.target.id === 'recipient') {
-          scrollContentTo('bottom', '#root #bordered_content')
+          scrollContentTo('bottom')
         } else {
-          scrollContentTo('top', '#root #bordered_content')
+          scrollContentTo('top')
         }
       }
     },

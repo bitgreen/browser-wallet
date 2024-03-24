@@ -772,8 +772,8 @@ const scrollToBottom = async(delay = 0) => {
   }
 }
 
-const scrollContentTo = async (direction, element = '#root .content') => {
-  const delay = 600; // Delay in milliseconds
+const scrollContentTo = async (direction, element = '#root .scroll-content') => {
+  const delay = 800; // Delay in milliseconds
   setTimeout(() => {
     const scrollableDiv = document.querySelector(element);
     const targetScrollTop = (direction === 'top') ? 0 : scrollableDiv.scrollHeight;

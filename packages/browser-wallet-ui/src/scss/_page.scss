@@ -77,8 +77,8 @@
     }
 }
 
-#full_page .content,
-#bordered_content .content {
+#full_page .scroll-content,
+#bordered_content .scroll-content {
     height: 100%;
     overflow: auto;
     overflow-x: hidden;

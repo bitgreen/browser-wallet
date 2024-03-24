@@ -1,4 +1,4 @@
-import Screen, { goBackScreen, goToScreen } from './index.js'
+import Screen, {goBackScreen, goToScreen, scrollContentTo} from './index.js'
 import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { sendMessage } from "../messaging.js";
 
@@ -93,6 +93,11 @@ export default async function stakingCollatorScreen(params) {
       element: '#root #amount',
       type: 'input',
       listener: () => syncAmount()
+    },
+    {
+      element: '#root #amount',
+      type: 'focus',
+      listener: () => scrollContentTo('bottom')
     },
     {
       element: '#root #max_amount',
