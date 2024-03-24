@@ -37,39 +37,34 @@ async function extension() {
     extend_delay: true
   })
 }
+App.addListener('appStateChange', async({ isActive }) => {
+  if(isActive) {
+    const logged_in = await ui.fastCheckLogin()
 
+    if(await ui.db.stores.wallets.exists() && !logged_in) {
+      await ui.showLogin(true, true)
+    }
+
+    if(isAndroid()) {
+      setTimeout(() => {
+        ui.hideInit(true)
+      }, 600)
+    } else {
+      ui.hideInit(true)
+    }
+  } else {
+    ui.showInit(true)
+
+    // reset body
+    document.body.classList.remove('keyboard-opened')
+
+    await Keyboard.hide()
+  }
+});
 document.addEventListener('deviceready', async() => {
   await extension()
 
-  App.addListener('appStateChange', async({ isActive }) => {
-    if(isActive) {
-      const logged_in = await ui.fastCheckLogin()
 
-      if(await ui.db.stores.wallets.exists() && !logged_in) {
-        await ui.showLogin(true, true)
-      }
-
-      if(isAndroid()) {
-        await SplashScreen.hide()
-      } else {
-        ui.hideInit(true)
-      }
-    } else {
-
-      if(isAndroid()) {
-        await SplashScreen.show({
-          autoHide: false,
-        });
-      } else {
-        ui.showInit(true)
-      }
-
-      // reset body
-      document.body.classList.remove('keyboard-opened')
-
-      await Keyboard.hide()
-    }
-  });
 
   Keyboard.addListener('keyboardWillShow', info => {
     document.body.classList.add('keyboard-opened')

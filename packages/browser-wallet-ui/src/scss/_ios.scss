@@ -53,6 +53,19 @@ body.ios {
     #staking_intro .step {
         padding-top: 140px
     }
+
+    #init_screen {
+        .init-logo {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: auto;
+            width: 30%;
+        }
+    }
+
     #main_footer,
     .footer {
         position: fixed;
