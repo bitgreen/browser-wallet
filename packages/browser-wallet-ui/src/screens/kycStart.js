@@ -54,7 +54,7 @@ export default async function kycStartScreen(params) {
       element: '#heading #copy_address',
       listener: async() => {
         await copyText(account.address)
-        await showNotification('Account address copied to clipboard.', 'info', 2000, 58)
+        await showNotification('Account address copied to clipboard.', 'info', 2000)
       }
     },
     {

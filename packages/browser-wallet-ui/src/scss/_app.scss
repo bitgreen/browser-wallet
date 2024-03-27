@@ -51,12 +51,30 @@ body.app {
     }
 
     #full_page,
-    #heading,
     #bordered_content {
         width: 100vw;
+        left: 0;
 
         &.no-overflow {
             overflow: unset;
+        }
+    }
+
+    #full_page {
+        .heading {
+            h3 {
+                width: 100%;
+            }
+            .icon {
+                height: 40px;
+                line-height: 40px;
+            }
+        }
+    }
+
+    @media (min-width: 576px) {
+        .container-sm, .container {
+            max-width: 100%;
         }
     }
 

@@ -6,6 +6,7 @@ import { App } from '@capacitor/app';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { isAndroid, isIOs } from "@bitgreen/browser-wallet-utils";
 import { StatusBar } from '@capacitor/status-bar';
+import {PrivacyScreen} from "@capacitor-community/privacy-screen";
 
 // Hide the splash (you should do this on app launch)
 await SplashScreen.hide();
@@ -13,6 +14,7 @@ await SplashScreen.hide();
 await StatusBar.setStyle({ style: 'DARK' });
 
 if(isAndroid()) {
+  await PrivacyScreen.enable();
   await StatusBar.setBackgroundColor({ color: '#224851' });
 }
 
@@ -37,36 +39,34 @@ async function extension() {
     extend_delay: true
   })
 }
-App.addListener('appStateChange', async({ isActive }) => {
-  if(isActive) {
-    const logged_in = await ui.fastCheckLogin()
 
-    if(await ui.db.stores.wallets.exists() && !logged_in) {
-      await ui.showLogin(true, true)
-    }
-
-    if(isAndroid()) {
-      setTimeout(() => {
-        ui.hideInit(true)
-      }, 600)
-    } else {
-      ui.hideInit(true)
-    }
-  } else {
-    ui.showInit(true)
-
-    // reset body
-    document.body.classList.remove('keyboard-opened')
-
-    await Keyboard.hide()
-  }
-});
 document.addEventListener('deviceready', async() => {
   await extension()
 
+  App.addListener('appStateChange', async({ isActive }) => {
+    if(isActive) {
+      const logged_in = await ui.fastCheckLogin()
 
+      if(await ui.db.stores.wallets.exists() && !logged_in) {
+        await ui.showLogin(true, true)
+      }
 
-  Keyboard.addListener('keyboardWillShow', info => {
+      if(isIOs()) {
+        ui.hideInit(true)
+      }
+    } else {
+      if(isIOs()) {
+        ui.showInit(true)
+      }
+
+      // reset body
+      document.body.classList.remove('keyboard-opened')
+
+      await Keyboard.hide()
+    }
+  });
+
+  Keyboard.addListener('keyboardWillShow', (info) => {
     document.body.classList.add('keyboard-opened')
 
     ui.disableFooter()

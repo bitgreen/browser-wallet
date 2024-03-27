@@ -11,7 +11,7 @@ import {
   balanceToHuman,
   formatAddress,
   formatAmount,
-  humanToBalance, isIOs
+  humanToBalance, isIOs, isStandaloneApp
 } from "@bitgreen/browser-wallet-utils";
 import { showNotification } from "../notifications.js";
 
@@ -167,17 +167,20 @@ export default async function assetSendScreen(params) {
           amount: amount_el.value,
           recipient: recipient_el.value
         })
-        await goToScreen('assetTransactionReviewScreen', {
-          amount: amount_el.value,
-          recipient: recipient_el.value,
-          account_id: current_account.id,
 
-          current_asset: current_asset,
+        setTimeout(() => {
+          goToScreen('assetTransactionReviewScreen', {
+            amount: amount_el.value,
+            recipient: recipient_el.value,
+            account_id: current_account.id,
 
-          // forward this in order to send response
-          tab_id: params?.tab_id,
-          message_id: params?.message_id
-        })
+            current_asset: current_asset,
+
+            // forward this in order to send response
+            tab_id: params?.tab_id,
+            message_id: params?.message_id
+          })
+        }, isStandaloneApp() ? 500 : 0)
       }
     }
   ])

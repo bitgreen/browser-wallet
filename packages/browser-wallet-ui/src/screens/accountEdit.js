@@ -99,7 +99,7 @@ export default async function accountEditScreen(params) {
       element: '#heading #copy_address',
       listener: async() => {
         await copyText(account.address)
-        await showNotification('Account address copied to clipboard.', 'info', 2000, 54)
+        await showNotification('Account address copied to clipboard.', 'info', 2000)
       }
     },
     {
@@ -116,7 +116,7 @@ export default async function accountEditScreen(params) {
 
         await updateAccounts(switch_account ? id : null)
 
-        await showNotification('Account data saved successfully.', 'success', 2000, 58)
+        await showNotification('Account data saved successfully.', 'success', 2000)
       }
     },
     {
@@ -168,7 +168,7 @@ export default async function accountEditScreen(params) {
         accounts_store.remove(id, async() => {
           await updateAccounts()
           await goToScreen('accountManageScreen', {}, false)
-          await showNotification('Account deleted successfully.', 'info', 2000, 58)
+          await showNotification('Account deleted successfully.', 'info', 2000)
         })
       }
     }

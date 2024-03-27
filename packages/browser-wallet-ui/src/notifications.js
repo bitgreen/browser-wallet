@@ -2,7 +2,7 @@ import Toastify from 'toastify-js'
 import {isIOs} from "@bitgreen/browser-wallet-utils";
 
 let notification
-const showNotification = async(message, type, duration = 2000, offset = 44) => {
+const showNotification = async(message, type, duration = 2000, offset = 54) => {
   offset += isIOs() ? 40 : 0 // Additional offset for ios
 
   let classes, icon_classes

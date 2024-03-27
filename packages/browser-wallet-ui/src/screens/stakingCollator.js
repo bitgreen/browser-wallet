@@ -9,7 +9,7 @@ import {
   formatAddress,
   formatAmount,
   getAmountDecimal,
-  humanToBalance,
+  humanToBalance, isStandaloneApp,
 } from "@bitgreen/browser-wallet-utils";
 import anime from "animejs";
 import * as jdenticon from "jdenticon";
@@ -118,14 +118,16 @@ export default async function stakingCollatorScreen(params) {
     {
       element: '#root #nominate',
       listener: async() => {
-        await goToScreen('extrinsicSendScreen', {
-          pallet: 'parachainStaking',
-          call: 'delegate',
-          call_parameters: JSON.stringify([
-            params?.collator,
-            humanToBalance(amount_el.value)
-          ])
-        })
+        setTimeout(() => {
+          goToScreen('extrinsicSendScreen', {
+            pallet: 'parachainStaking',
+            call: 'delegate',
+            call_parameters: JSON.stringify([
+              params?.collator,
+              humanToBalance(amount_el.value)
+            ])
+          })
+        }, isStandaloneApp() ? 500 : 0)
       }
     }
   ])

@@ -1,9 +1,4 @@
 body.android {
-    #bordered_content {
-        padding: 16px 16px calc(10vh + 16px + 40px);
-        height: calc(100% - 124px);
-    }
-
     &.keyboard-opened {
         .footer {
             bottom: 5vw !important;

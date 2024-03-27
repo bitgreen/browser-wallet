@@ -1,11 +1,6 @@
 /* for full screen */
 @media screen and (min-width: 600px) {
     body,
-    #init_screen,
-    #login_screen {
-        background: radial-gradient(circle at center top, $colorTealLight, $colorTealDarkest) !important;
-    }
-    body,
     #header,
     #full_page,
     #bordered_content,
@@ -13,6 +8,17 @@
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
+    }
+    #full_page,
+    #heading,
+    #bordered_content {
+        width: auto;
+        left: auto !important;
+        right: auto !important;
+
+        &.no-overflow {
+            overflow: unset;
+        }
     }
     #full_page .heading h3 {
         padding-left: 20px;
@@ -26,6 +32,11 @@
     body #init_screen {
         background-image: none;
         background-color: $colorTealLight;
+    }
+    #login_screen {
+        .footer {
+            left: 5vw !important;
+        }
     }
     #main_footer {
         max-width: 584px;
@@ -77,5 +88,9 @@
     }
     #transactions .button-item {
         height: 80px;
+    }
+    #main_footer,
+    .footer {
+        left: auto !important;
     }
 }

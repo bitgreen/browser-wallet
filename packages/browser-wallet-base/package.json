@@ -26,6 +26,7 @@
     "@bitgreen/browser-wallet-core": "^1.0.0",
     "@bitgreen/browser-wallet-ui": "^1.0.0",
     "@bitgreen/browser-wallet-utils": "^1.0.0",
+    "@capacitor-community/privacy-screen": "^4.2.4",
     "@capacitor/android": "^5.7.0",
     "@capacitor/app": "^5.0.7",
     "@capacitor/clipboard": "^5.0.7",
@@ -78,8 +79,8 @@
     "icons:firefox": "node scripts/generate-icons.js --platform firefox",
     "icons:ios": "node scripts/generate-icons.js --platform ios",
     "build": "npm run build:android && npm run build:ios",
-    "build:android": "npm run assets:android && cap sync android && touch ../../build/platforms/capacitor.config.json && capacitor-set-version -v 1.3.0 -b 5 ../../build/platforms && rm ../../build/platforms/capacitor.config.json",
-    "build:ios": "npm run assets:ios && npm run icons:ios && cap sync ios && touch ../../build/platforms/capacitor.config.json && capacitor-set-version -v 1.3.0 -b 5 ../../build/platforms && rm ../../build/platforms/capacitor.config.json",
+    "build:android": "npm run assets:android && cap sync android && touch ../../build/platforms/capacitor.config.json && capacitor-set-version -v 1.3.0 -b 6 ../../build/platforms && rm ../../build/platforms/capacitor.config.json",
+    "build:ios": "npm run assets:ios && npm run icons:ios && cap sync ios && touch ../../build/platforms/capacitor.config.json && capacitor-set-version -v 1.3.0 -b 6 ../../build/platforms && rm ../../build/platforms/capacitor.config.json",
     "build:safari": "node scripts/generate-icons.js --platform 'safari' && xcrun safari-web-extension-converter ../../build/tmp/safari --project-location '../../build/platforms/safari' --app-name 'Bitgreen Wallet' --bundle-identifier 'com.bitgreen.extension' --copy-resources --macos-only --force --no-open --no-prompt && node scripts/generate-icons.js --platform 'macos'"
   }
 }

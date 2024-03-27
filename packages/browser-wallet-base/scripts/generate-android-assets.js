@@ -41,4 +41,4 @@ function copyFile(source, target) {
 copyFile('src/app-resources/android/gradient.xml', '../../build/platforms/android/app/src/main/res/drawable/gradient.xml');
 copyFile('src/app-resources/android/logo.xml', '../../build/platforms/android/app/src/main/res/drawable/logo.xml');
 copyFile('src/app-resources/android/splash.xml', '../../build/platforms/android/app/src/main/res/layout/splash.xml');
-copyFile('src/app-resources/android/MainActivity.java', '../../build/platforms/android/app/src/main/java/com/bitgreen/wallet/MainActivity.java');
+copyFile('src/app-resources/android/MainActivity.java', '../../build/platforms/android/app/src/main/java/com/bitgreen/wallet/app/MainActivity.java');
