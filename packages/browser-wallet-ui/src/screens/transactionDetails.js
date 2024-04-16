@@ -1,5 +1,5 @@
 import Screen, { goBackScreen } from './index.js'
-import {AccountStore, bbbTokenPrice, NetworkStore, TransactionStore} from "@bitgreen/browser-wallet-core";
+import {AccountStore, CacheStore, NetworkStore, TransactionStore} from "@bitgreen/browser-wallet-core";
 import {balanceToHuman, formatAddress, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 
 export default async function transactionDetailsScreen(params) {
@@ -13,12 +13,15 @@ export default async function transactionDetailsScreen(params) {
 
   const networks_store = new NetworkStore()
   const accounts_store = new AccountStore()
+  const cache_store = new CacheStore()
 
   const current_network = await networks_store.current()
   const current_account = await accounts_store.current()
 
   const transactions_store = new TransactionStore(current_network, current_account)
   const transaction = await transactions_store.get(params?.hash)
+
+  const bbbTokenPrice = await cache_store.get('bbb_price')
 
   const asset_info = getAmountDecimal(balanceToHuman(transaction.amount, 2), 2)
   const usd_info = getAmountDecimal(balanceToHuman(transaction.amount) * bbbTokenPrice, 2) // TODO: update price!

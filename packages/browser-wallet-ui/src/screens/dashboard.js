@@ -1,4 +1,4 @@
-import {bbbTokenPrice, WalletStore} from "@bitgreen/browser-wallet-core";
+import {CacheStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import Screen, { expireBrowserTabRequest, goToScreen } from './index.js'
 
 import anime from 'animejs';
@@ -10,6 +10,9 @@ import BigNumber from "bignumber.js";
 export default async function dashboardScreen(params = {
   imported: false
 }) {
+  const cache_store = new CacheStore()
+  const bbbTokenPrice = await cache_store.get('bbb_price')
+
   const wallet_store = new WalletStore()
   if(!await wallet_store.exists()) {
     await expireBrowserTabRequest()

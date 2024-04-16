@@ -1,7 +1,7 @@
 import Screen, { goBackScreen, goToScreen } from './index.js'
 import { sendMessage } from "../messaging.js";
 import DOMPurify from "dompurify";
-import {AccountStore, bbbTokenPrice} from "@bitgreen/browser-wallet-core";
+import {AccountStore, CacheStore} from "@bitgreen/browser-wallet-core";
 import {
   balanceToHuman,
   getAmountDecimal,
@@ -25,6 +25,8 @@ export default async function assetTransactionReviewScreen(params) {
 
   const accounts_store = new AccountStore()
   const account = await accounts_store.get(params?.account_id)
+
+  const cache_store = new CacheStore()
 
   const recipient = params?.recipient
   const asset_amount = params?.amount
@@ -68,6 +70,7 @@ export default async function assetTransactionReviewScreen(params) {
     })
   }
 
+  const bbbTokenPrice = await cache_store.get('bbb_price')
   const fee_usd = balanceToHuman(estimated_fee, 4) * bbbTokenPrice
   const fee_info = getAmountDecimal(fee_usd, 4)
 

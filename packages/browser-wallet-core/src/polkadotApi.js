@@ -1,7 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { NetworkStore } from "./stores/index.js";
 import { isIOs } from "@bitgreen/browser-wallet-utils";
-import { getChainMetaData, getInflationAmount, getKycAddresses } from "./cache.js";
+import {getBbbTokenPrice, getChainMetaData, getInflationAmount, getKycAddresses} from "./cache.js";
 import DatabaseService from "./services/databaseService.js";
 
 let ws_provider_url = undefined;
@@ -309,6 +309,7 @@ const initPolkadotApi = async(force = false) => {
         getChainMetaData(api_promise, db).then()
         getInflationAmount(api_promise, db).then()
         getKycAddresses(api_promise, db).then()
+        getBbbTokenPrice(db).then()
       })
 
       ws_provider.on('error', async (e) => {

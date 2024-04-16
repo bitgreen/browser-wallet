@@ -1,3 +1,5 @@
+import {CacheStore} from "./stores/index.js";
+
 const getChainMetaData = async (polkadot_api, db) => {
   const now = new Date().getTime()
   const last_fetch = await db.stores.cache.get('last_fetch_metadata') || 0
@@ -43,7 +45,6 @@ const getInflationAmount = async(polkadot_api, db) => {
 }
 
 const getKycAddresses = async(polkadot_api, db) => {
-  
   const now = new Date().getTime()
 
   const last_fetch = await db.stores.cache.get('last_fetch_kyc') || 0
@@ -74,9 +75,38 @@ const getKycAddresses = async(polkadot_api, db) => {
   db.stores.cache.set('last_fetch_kyc', now)
 }
 
+const getBbbTokenPrice = async(db) => {
+  const now = new Date().getTime()
+
+  const cache_store = new CacheStore()
+
+  const last_fetch = await cache_store.get('last_fetch_bbb_price') || 0
+
+  // One call per 2 minutes
+  if(now < (last_fetch + 1000 * 60 * 2)) return false
+
+  const current_network = await db.stores.networks.current()
+
+  const url = current_network.api_endpoint + '/bbb-info'
+  let result = await fetch(url, {
+    mode: 'cors'
+  })
+  result = await result.json()
+
+  if(result.price) {
+    await cache_store.set('bbb_price', result.price);
+  } else {
+    // default
+    await cache_store.set('bbb_price', 0.35);
+  }
+
+  await cache_store.set('last_fetch_bbb_price', now)
+}
+
 export {
   getChainMetaData,
   getInflationAmount,
-  getKycAddresses
+  getKycAddresses,
+  getBbbTokenPrice
 }
 

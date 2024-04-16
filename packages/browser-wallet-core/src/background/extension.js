@@ -21,7 +21,7 @@ import {Keyring} from "@polkadot/keyring"
 import {polkadotApi} from "../polkadotApi.js";
 import {addressValid, balanceToHuman, humanToBalance} from "@bitgreen/browser-wallet-utils";
 
-import {bbbTokenPrice, passwordTimeout} from "../constants.js";
+import {passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
 import BigNumber from "bignumber.js";
 
@@ -300,7 +300,7 @@ class Extension {
       reserved: new BigNumber(bbb_balance.reserved).toString(),
       frozen: new BigNumber(bbb_balance?.frozen || 0).toString(),
       total: new BigNumber(bbb_balance.free).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0)).toString(),
-      price: bbbTokenPrice
+      price: await this.cache_store.get('bbb_price')
     })
     balances.total = balances.total.plus(new BigNumber(bbb_balance.free)).plus(new BigNumber(bbb_balance.reserved)).plus(new BigNumber(bbb_balance?.frozen || 0))
 

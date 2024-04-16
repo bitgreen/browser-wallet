@@ -7,8 +7,6 @@ export const reconnectTime = 60000*3; // 3 minutes
 
 export const idleTime = 60000*2 // 2 minutes
 
-export const bbbTokenPrice = 0.35 // price of bbb token
-
 // list of all known apps
 export const knownApps = [
   {

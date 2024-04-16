@@ -1,11 +1,14 @@
 import Screen, { goBackScreen, goToScreen } from "./index.js";
 import { balanceToHuman, formatAmount, getAmountDecimal } from "@bitgreen/browser-wallet-utils";
-import { bbbTokenPrice } from "@bitgreen/browser-wallet-core";
 import { sendMessage } from "../messaging.js";
 import anime from "animejs";
 import BigNumber from "bignumber.js";
+import {CacheStore} from "@bitgreen/browser-wallet-core";
 
 export default async function tokenBBBScreen(params) {
+  const cache_store = new CacheStore()
+  const bbbTokenPrice = await cache_store.get('bbb_price')
+
   const screen = new Screen({
     template_name: "layouts/default_custom_header_medium",
     header: false,
