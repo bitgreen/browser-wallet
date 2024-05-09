@@ -56,7 +56,8 @@ export default async function signInScreen(params) {
     desc: 'Hold tight while we get confirmation of this sign in request.',
     top: '16px',
     padding_top: '40px',
-    checkmark_top: '88px'
+    checkmark_top: '88px',
+    progress: '25 75'
   });
 
   await screen.append('#loading_content #content .done', 'global/button', {
@@ -171,6 +172,8 @@ export default async function signInScreen(params) {
 
     screen.freezeRoot()
   }
+
+  showProcessing()
 
   const showProcessingDone = () => {
     screen.unFreezeRoot()

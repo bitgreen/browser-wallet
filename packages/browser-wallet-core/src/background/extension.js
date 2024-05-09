@@ -100,6 +100,8 @@ class Extension {
           return await this.checkApiReady()
         case 'reconnect_api':
           return await this.reconnectApi()
+        case 'estimate_block_time':
+          return await this.estimateBlockTime()
         default:
           return false
       }
@@ -258,7 +260,7 @@ class Extension {
 
     const block = await polkadot_api.rpc.chain.getBlock()
 
-    return block.toJSON().block
+    return block.toPrimitive().block
   }
 
   async getBalance() {
@@ -965,6 +967,22 @@ class Extension {
     const polkadot_api = await polkadotApi(true)
 
     return !!polkadot_api?.isReady
+  }
+
+  async estimateBlockTime() {
+    const polkadot_api = await polkadotApi()
+
+    const now = Date.now() / 1000
+
+    const last_block = await polkadot_api.rpc.chain.getFinalizedHead()
+
+    const last_block_time = await polkadot_api.query.timestamp.now.at(last_block.toString())
+
+    const estimate_time = (5 * 12) - (now - last_block_time.toPrimitive() / 1000)
+
+    const seconds = parseInt(estimate_time.toString())
+
+    return seconds > 18 ? seconds : 18
   }
 }
 

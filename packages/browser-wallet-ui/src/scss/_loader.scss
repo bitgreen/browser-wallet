@@ -21,6 +21,7 @@
     &.active {
         opacity: 1;
         visibility: visible;
+        transition-delay: 200ms;
     }
     &.circle {
         .text {
@@ -115,6 +116,34 @@
                 margin-bottom: 30px;
             }
         }
+        .processing {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all ease-in-out 0.4s;
+            padding: 40px 40px 0;
+
+            opacity: 0;
+
+            .desc {
+                text-transform: uppercase;
+                font-size: 10px;
+                font-weight: 500;
+                padding-top: 4px;
+                color: $colorGrayLight;
+
+                animation-name: beat-dark-text-fade;
+                animation-iteration-count: infinite;
+                animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+                animation-duration: 1.4s;
+            }
+
+            &.active {
+                opacity: 1;
+            }
+        }
     }
 
     .text {
@@ -133,13 +162,58 @@
         color: $colorBlueGray;
     }
     #loading_circle {
-        animation: rotation 3.333s linear infinite;
+        animation: rotation 1.4s linear infinite;
+
+        &.no-animation {
+            animation: none !important;
+        }
 
         #primary {
             stroke: $colorTealLight;
         }
         #secondary {
-            stroke: $colorLightGray1;
+            stroke: $colorWhiteish1;
+        }
+    }
+    #progress {
+        position: absolute;
+        top: 120px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-weight: 500;
+        font-size: 12px;
+        padding-left: 3px;
+        color: $colorBlueGray;
+        display: flex;
+        justify-content: center;
+
+        opacity: 0;
+
+        transition: all ease-in-out 0.4s;
+
+        .percentage {
+            line-height: 14px;
+
+            display: inline-block;
+            width: 30px;
+            text-align: right;
+            padding-right: 1px;
+        }
+
+        .sign {
+            line-height: 16px;
+
+            display: inline-block;
+            width: 30px;
+            text-align: left;
+            font-weight: 600;
+            color: $colorGrayLight;
+            padding-left: 1px
+        }
+
+        &.show {
+            opacity: 1;
         }
     }
     #checkmark,

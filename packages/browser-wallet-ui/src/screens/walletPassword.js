@@ -24,7 +24,8 @@ export default async function walletPasswordScreen(params) {
     desc: 'Hold on tight as we prepare your wallet for use. Please be patient.',
     top: '0',
     padding_top: '80px',
-    checkmark_top: '128px'
+    checkmark_top: '128px',
+    progress: '25 75'
   });
 
   await screen.moveFooterOnTop()

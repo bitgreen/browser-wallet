@@ -24,6 +24,16 @@
 			fill: $colorWhite;
 	}
 }
+@keyframes beat-dark-text-fade {
+    0%, to {
+        color: $colorBlueGrayDark;
+        fill: $colorBlueGrayDark;
+    }
+    50% {
+        color: $colorGray;
+        fill: $colorGray;
+    }
+}
 @keyframes dash {
 	to {
 			stroke-dashoffset: 1000;

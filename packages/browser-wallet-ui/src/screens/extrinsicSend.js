@@ -120,7 +120,8 @@ export default async function extrinsicSendScreen(params) {
     title: 'Processing Transaction',
     desc: 'Hold tight while we get confirmation of this transaction.',
     top: '5px',
-    padding_top: '60px'
+    padding_top: '60px',
+    progress: '0 100'
   });
 
   const transaction_items = document.querySelector("#bordered_content #transactions")
@@ -311,7 +312,7 @@ export default async function extrinsicSendScreen(params) {
 
       showProcessingFail()
     } else {
-      hideProcessing()
+      hideProcessing(0)
       await showNotification('Password is wrong!', 'error')
     }
 
@@ -321,14 +322,81 @@ export default async function extrinsicSendScreen(params) {
 
   const showProcessing = () => {
     const loading_el = document.querySelector("#loading_content")
+    const loading_circle_el = document.querySelector('#loading_content #loading_circle')
+
+    loading_circle_el.classList.add('no-animation')
 
     loading_el.classList.add('active')
+
+    startProgress()
 
     screen.freezeRoot()
   }
 
+  let intervalId = null;  // Store the interval ID for clearing later
+
+  const startProgress = async() => {
+    resetProgress()
+    updateProgressBar(0);
+
+    const progress_el = document.querySelector('#loading_content #progress')
+    progress_el.classList.add('show')
+
+    const estimate_block_time = await sendMessage('estimate_block_time')
+
+    const total_repeats = estimate_block_time * 1000 / 200
+
+    let current = 0;
+    let increment = 100 / total_repeats;
+
+    intervalId = setInterval(() => {
+      if(current > 90) {
+        current += increment * 0.5
+      } else if(current > 80) {
+        current += increment * 0.75
+      } else if(current > 70) {
+        current += increment * 0.85
+      } else if(current > 60) {
+        current += increment * 0.95
+      } else {
+        current += increment
+      }
+
+      if (current < 99) {
+        updateProgressBar(current);
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 200);
+  };
+
+  const resetProgress = () => {
+    const progress_el = document.querySelector('#loading_content #progress')
+    progress_el.classList.remove('show')
+
+    clearInterval(intervalId);
+  }
+
+  const updateProgressBar = (value) => {
+    const primary_element = document.querySelector('#loading_content #primary')
+    const percentage_el = document.querySelector('#loading_content #progress .percentage')
+
+    if (value > 100) {
+      value = 100;
+    }
+
+    if(value < 100) {
+      percentage_el.innerHTML = value.toFixed(0)
+    }
+
+    primary_element.style.transition = `stroke-dasharray 0.4s linear, stroke-dashoffset 0.4s linear`;
+    primary_element.style.strokeDasharray = `${value} ${100-value}`;
+  };
+
   const showProcessingDone = () => {
     screen.unFreezeRoot()
+
+    resetProgress()
 
     const loading_el = document.querySelector("#loading_content")
     const checkmark_el = loading_el.querySelector("#checkmark")
@@ -338,11 +406,7 @@ export default async function extrinsicSendScreen(params) {
     const content_done_text_el = loading_el.querySelector("#content .done .text")
     const content_done_desc_el = loading_el.querySelector("#content .done .desc")
 
-    const primary_element = document.querySelector('#loading_content #primary')
-
-    primary_element.style.transition = "stroke-dasharray 1.2s ease-out, stroke-dashoffset 1.2s ease-out";
-    primary_element.style.strokeDasharray = "100 0";
-    primary_element.style.strokeDashoffset = "0";
+    updateProgressBar(100)
 
     // mark transaction(s) as completed
     document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
@@ -350,33 +414,33 @@ export default async function extrinsicSendScreen(params) {
       t.querySelector('.status').innerHTML = '<span class="icon icon-check"></span>'
     })
 
-    setTimeout(() => {
-      content_done_el.classList.add('active')
+    content_done_el.classList.add('active')
 
-      content_done_text_el.innerHTML = 'Transaction Completed'
-      if(params?.tab_id) {
-        content_done_desc_el.innerHTML = 'You can close this window and continue with the application that made the request.'
-      } else {
-        content_done_desc_el.innerHTML = 'Your transaction details are provided below.'
-      }
+    content_done_text_el.innerHTML = 'Transaction Completed'
+    if(params?.tab_id) {
+      content_done_desc_el.innerHTML = 'You can close this window and continue with the application that made the request.'
+    } else {
+      content_done_desc_el.innerHTML = 'Your transaction details are provided below.'
+    }
 
-      content_init_text_el.classList.add('d-none')
-      content_init_desc_el.classList.add('d-none')
-    }, 600)
+    content_init_text_el.classList.add('d-none')
+    content_init_desc_el.classList.add('d-none')
 
     setTimeout(() => {
       checkmark_el.classList.add('show')
-    }, 800)
+    }, 200)
 
     setTimeout(() => {
       loading_el.classList.add('done')
-    }, 1200)
+    }, 600)
 
     prepareSummary()
   }
 
   const showProcessingFail = () => {
     screen.unFreezeRoot()
+
+    resetProgress()
 
     const loading_el = document.querySelector("#loading_content")
     const failed_el = loading_el.querySelector("#failed")
@@ -388,28 +452,25 @@ export default async function extrinsicSendScreen(params) {
 
     const primary_element = document.querySelector('#loading_content #primary')
 
-    primary_element.style.transition = "stroke 1.2s ease-out, stroke-dasharray 1.2s ease-out, stroke-dashoffset 1.2s ease-out";
-    primary_element.style.strokeDasharray = "100 0";
-    primary_element.style.strokeDashoffset = "0";
+    updateProgressBar(100)
+
     primary_element.style.stroke = "#CC2400";
 
-    setTimeout(() => {
-      content_done_el.classList.add('active')
+    content_done_el.classList.add('active')
 
-      content_done_text_el.innerHTML = 'Transaction Failed'
-      content_done_desc_el.innerHTML = 'Your transaction was not successful.'
+    content_done_text_el.innerHTML = 'Transaction Failed'
+    content_done_desc_el.innerHTML = 'Your transaction was not successful.'
 
-      content_init_text_el.classList.add('d-none')
-      content_init_desc_el.classList.add('d-none')
-    }, 600)
+    content_init_text_el.classList.add('d-none')
+    content_init_desc_el.classList.add('d-none')
 
     setTimeout(() => {
       failed_el.classList.add('show')
-    }, 800)
+    }, 200)
 
     setTimeout(() => {
       loading_el.classList.add('done')
-    }, 1200)
+    }, 600)
 
     // show alert
     document.querySelector('#error_alert').classList.remove('d-none')
@@ -444,6 +505,9 @@ export default async function extrinsicSendScreen(params) {
 
       loading_el.classList.remove('active')
       screen.unFreezeRoot()
+
+      resetProgress()
+      updateProgressBar(0);
     }, delay)
   }
 }

@@ -21,7 +21,8 @@ export default async function walletBackupScreen(params) {
     title: 'getting phrase words',
     desc: 'Hold tight while we get your phrase words.',
     top: '0;',
-    padding_top: '60px'
+    padding_top: '60px',
+    progress: '25 75'
   });
 
   let copy_mnemonic = ''

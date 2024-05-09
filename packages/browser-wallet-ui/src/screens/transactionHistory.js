@@ -213,4 +213,8 @@ export default async function transactionHistoryScreen() {
 
     screen.freezeRoot()
   }
+
+  const bordered_content_el = document.querySelector("#bordered_content")
+  bordered_content_el.classList.add('padding-bottom')
+
 }

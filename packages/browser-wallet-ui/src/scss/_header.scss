@@ -83,6 +83,10 @@
     background-color: $colorWhite;
     border-radius: 16px 16px 0 0;
 
+    &.padding-bottom {
+        padding-bottom: 72px;
+    }
+
     &.smaller {
         top: 254px;
         height: calc(100% - 254px);

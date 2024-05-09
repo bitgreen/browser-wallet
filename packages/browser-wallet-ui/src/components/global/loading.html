@@ -2,14 +2,19 @@
     <svg id="loading_circle" width="130" height="130" viewBox="0 0 42 42">
         <circle class="hole" cx="21" cy="21" r="15.91549430918954" fill="transparent"></circle>
         <circle id="secondary" cx="21" cy="21" r="15.91549430918954" fill="transparent"
-                stroke-width="2" stroke-dasharray="25 75" stroke-dashoffset="25"></circle>
+                stroke-width="2" stroke-dasharray="100 0" stroke-dashoffset="25"></circle>
         <circle id="primary" cx="21" cy="21" r="15.91549430918954" fill="transparent"
-                stroke-width="2" stroke-dasharray="75 25" stroke-dashoffset="0"></circle>
+                stroke-width="2" stroke-dasharray="${progress}" stroke-dashoffset="25" stroke-linecap="round"></circle>
     </svg>
 
     <svg id="checkmark" style="top: ${checkmark_top};" width="46" height="37" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12.1626 23.2667L3.26664 14.3707L0.237305 17.3787L12.1626 29.304L37.7626 3.704L34.7546 0.695999L12.1626 23.2667Z"/>
     </svg>
+
+    <div id="progress">
+        <span class="percentage"></span>
+        <span class="sign">％</span>
+    </div>
 
     <svg id="failed" style="top: ${checkmark_top};" width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 6.48968L19.53 19.4986H4.47L12 6.48968ZM12 2.5L1 21.4985H23L12 2.5ZM13 16.4989H11V18.4987H13V16.4989ZM13 10.4994H11V14.499H13V10.4994Z" fill="white"/>

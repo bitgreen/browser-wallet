@@ -98,7 +98,8 @@ export default async function assetTransactionReviewScreen(params) {
     title: 'processing transaction',
     desc: 'Hold tight while we get confirmation of this transaction.',
     top: '0;',
-    padding_top: '60px'
+    padding_top: '60px',
+    progress: '25 75'
   });
 
   const input_field = document.querySelector("#root .footer #password")
