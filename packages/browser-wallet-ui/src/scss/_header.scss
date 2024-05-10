@@ -123,6 +123,18 @@
             }
         }
     }
+
+    #kyc_status {
+        .shield {
+            &.verified {
+                fill: $colorGreenElectric;
+            }
+            &.unverified {
+                //fill: #ef3a3a;
+                fill: $colorLightGray;
+            }
+        }
+    }
 }
 
 #current_wallet {
@@ -168,19 +180,16 @@
             position: absolute;
             bottom: -2px;
             right: -8px;
-            opacity: 0;
 
-            &.verified {
-                opacity: 1;
-
-                .icon {
-                    color: $colorGreenElectric;
-                }
+            &:after {
+                font-size: 12px !important;
+                bottom: 4px !important;
+                right: 7px !important;
             }
 
             .icon {
                 color: $colorLightestGray;
-                font-size: 16px;
+                font-size: 16px !important;
                 text-shadow: -1px -1px 0 $colorTealMedium, 1px -1px 0 $colorTealMedium, -1px 1px 0 $colorTealMedium, 1px 1px 0 $colorTealMedium;
             }
         }

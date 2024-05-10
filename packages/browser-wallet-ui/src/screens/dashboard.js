@@ -1,4 +1,4 @@
-import {CacheStore, WalletStore} from "@bitgreen/browser-wallet-core";
+import {AccountStore, CacheStore, NetworkStore, WalletStore} from "@bitgreen/browser-wallet-core";
 import Screen, { expireBrowserTabRequest, goToScreen } from './index.js'
 
 import anime from 'animejs';
@@ -10,8 +10,16 @@ import BigNumber from "bignumber.js";
 export default async function dashboardScreen(params = {
   imported: false
 }) {
+  const network_store = new NetworkStore()
+  const current_network = await network_store.current()
   const cache_store = new CacheStore()
   const bbbTokenPrice = await cache_store.get('bbb_price')
+  const cache_store_network = new CacheStore(current_network)
+
+  const accounts_store = new AccountStore()
+  const current_account = await accounts_store.current()
+
+  const kyc_level = await cache_store_network.get('kyc_' + current_account.address)
 
   const wallet_store = new WalletStore()
   if(!await wallet_store.exists()) {
@@ -39,6 +47,22 @@ export default async function dashboardScreen(params = {
   document.querySelector('#bordered_content').classList.add('no-overflow')
 
   await expireBrowserTabRequest()
+
+  const kyc_status_el = document.querySelector('#bordered_content #kyc_status .pill span')
+  const kyc_shield_el = document.querySelector('#bordered_content #kyc_status .shield')
+  if(kyc_level) {
+    if(kyc_level === '4') {
+      kyc_status_el.innerHTML = 'Accredited'
+    } else if (kyc_level === '1') {
+      kyc_status_el.innerHTML = 'Basic'
+    } else {
+      kyc_status_el.innerHTML = 'Advanced'
+    }
+    kyc_shield_el.classList.add('verified')
+  } else {
+    kyc_shield_el.classList.add('unverified')
+    kyc_status_el.innerHTML = 'Not Verified'
+  }
 
   anime({
     targets: '#bordered_content',
@@ -190,24 +214,51 @@ export default async function dashboardScreen(params = {
       listener: () => goToScreen('assetReceiveScreen')
     },
     {
-      element: '#nature_based_credits',
+      element: '#bordered_content #nature_based_credits',
       listener: () => goToScreen('natureBasedCreditsScreen')
     },
     {
-      element: '#retired_credits',
+      element: '#bordered_content #retired_credits',
       listener: () => goToScreen('retiredCreditsScreen')
     },
     {
-      element: '#all_assests',
+      element: '#bordered_content #all_assests',
       listener: () => goToScreen('assetAllScreen')
     },
     {
-      element: '#bbb_tokens',
+      element: '#bordered_content #bbb_tokens',
       listener: () => goToScreen('tokenBBBScreen')
     },
     {
-      element: '#other_tokens',
+      element: '#bordered_content #other_tokens',
       listener: () => goToScreen('tokenAllScreen')
+    },
+    {
+      element: '#bordered_content #kyc_status',
+      listener: () => {
+        if(kyc_level) {
+          if(kyc_level === '4') {
+            return goToScreen('kycAccreditedScreen', {
+              account_id: current_account.id
+            })
+          }
+
+          if(kyc_level === '2' || kyc_level === '3') {
+            return goToScreen('kycAdvancedScreen', {
+              account_id: current_account.id,
+              kyc_level: kyc_level
+            })
+          }
+
+          return goToScreen('kycBasicScreen', {
+            account_id: current_account.id
+          })
+        } else {
+          return goToScreen('kycStartScreen', {
+            account_id: current_account.id
+          })
+        }
+      }
     },
   ])
 }

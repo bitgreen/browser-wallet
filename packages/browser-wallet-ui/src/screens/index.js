@@ -700,8 +700,10 @@ const updateAccounts = async(current_account_id = null) => {
 
         if(is_kyced) {
           current_account_el.querySelector('.kyc-status').classList.add('verified')
+          current_account_el.querySelector('.kyc-status').classList.remove('unverified')
         } else {
           current_account_el.querySelector('.kyc-status').classList.remove('verified')
+          current_account_el.querySelector('.kyc-status').classList.add('unverified')
         }
 
         go_copy_el.dataset.address = account?.address;
