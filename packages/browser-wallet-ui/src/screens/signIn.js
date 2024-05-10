@@ -173,8 +173,6 @@ export default async function signInScreen(params) {
     screen.freezeRoot()
   }
 
-  showProcessing()
-
   const showProcessingDone = () => {
     screen.unFreezeRoot()
 
