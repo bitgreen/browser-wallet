@@ -51,7 +51,7 @@ export default async function kycAccreditedScreen(params) {
       element: '#heading #copy_address',
       listener: async() => {
         await copyText(account.address)
-        await showNotification('Account address copied to clipboard.', 'info', 2000)
+        await showNotification('Account address copied to clipboard.', 'info', 2000, 44)
       }
     }
   ])
