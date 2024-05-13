@@ -158,6 +158,7 @@ export default async function transactionHistoryScreen() {
       asset_amount: asset_prefix + asset_info.amount,
       asset_decimals: asset_decimals,
       asset_type: asset_type,
+      hide_decimals: transaction.type === 'asset' ? 'd-none' : '',
       icon: icon,
       received: !sent ? '' : 'd-none hidden',
     })

@@ -127,7 +127,7 @@
     #kyc_status {
         .shield {
             &.verified {
-                fill: $colorGreenElectric;
+                fill: $colorGreenElectric1;
             }
             &.unverified {
                 //fill: #ef3a3a;
@@ -183,8 +183,8 @@
 
             &:after {
                 font-size: 12px !important;
-                bottom: 4px !important;
-                right: 7px !important;
+                bottom: 3px !important;
+                right: 7.5px !important;
             }
 
             .icon {

@@ -318,18 +318,19 @@ class Extension {
       result = await result.json()
 
       for(const asset of result.assets) {
-        let price = 0
-
         const asset_id = asset.assetId !== null ? asset.assetId : asset
-        const asset_name = asset?.projectName ? asset.projectName : `Credits [${asset}]`
+        const asset_name = asset?.projectName ? asset.projectName : `Credits #${asset_id}`
         try {
           const data = (await polkadot_api.query.assets.account(asset_id, current_account.address)).toHuman()
           if(data) {
             balances.assets.push({
               asset_id: asset_id,
+              project_id: asset.projectId,
               asset_name: asset_name,
               balance: parseInt(data.balance.replaceAll(',', '')),
-              price: price
+              price: asset.price,
+              info: asset.year,
+              image: asset.projectImage
             })
 
             balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))

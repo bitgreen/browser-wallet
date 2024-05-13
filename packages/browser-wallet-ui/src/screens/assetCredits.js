@@ -4,59 +4,21 @@ import {sendMessage} from "../messaging.js";
 import {renderTemplate} from "../screens.js";
 import anime from "animejs";
 
-export default async function assetAllScreen(params) {
+export default async function assetCreditsScreen(params) {
   const screen = new Screen({
-    template_name: 'layouts/default_custom_header',
+    template_name: "layouts/default_custom_header",
     header: false,
-    footer: true
+    footer: true,
   });
   await screen.init();
 
-  await screen.set('#heading', 'asset/all/heading')
+  await screen.set('#heading', 'asset/credits/heading')
 
-  await screen.set('#bordered_content', 'asset/all/content')
+  await screen.set("#bordered_content", "asset/credits/content");
+
+  const carbonCreditIcon = await renderTemplate('shared/icons/carbon_credit')
 
   sendMessage('get_all_balances').then(async(balances) => {
-    const defaultIcon = await renderTemplate('shared/icons/default')
-
-    const bbbIcon = await renderTemplate('shared/icons/bbb')
-    const usdtIcon = await renderTemplate('shared/icons/usdt')
-    const usdcIcon = await renderTemplate('shared/icons/usdc')
-    const dotIcon = await renderTemplate('shared/icons/dot')
-
-    const carbonCreditIcon = await renderTemplate('shared/icons/carbon_credit')
-
-    for (const token of balances.tokens) {
-      let icon = defaultIcon
-      if(token.token_name === 'BBB') icon = bbbIcon
-      if(token.token_name === 'USDT') icon = usdtIcon
-      if(token.token_name === 'USDC') icon = usdcIcon
-      if(token.token_name === 'DOT') icon = dotIcon
-
-      const balance_info = getAmountDecimal(balanceToHuman(token.total), 2)
-      const balance_usd_info = getAmountDecimal(balanceToHuman(token.total) * token.price, 2)
-      const price_info = getAmountDecimal(token.price, 2)
-      const free_info = getAmountDecimal(balanceToHuman(token.free), 2)
-      const locked_info = getAmountDecimal(balanceToHuman(token.reserved), 2)
-
-      await screen.append("#root #transactions", "token/all/list_item", {
-        tokenName: token.token_name,
-        balance: balance_info.amount,
-        decimal: balance_info.decimals,
-
-        tokenLogo: icon,
-
-        price: token.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
-        priceDecimal: token.price > 0 ? '.' + price_info.decimals : 'N/A',
-        balanceUsd: token.price > 0 ? `<span class="dollar">$</span>${balance_usd_info.amount}` : '',
-        balanceUsdDecimal: token.price > 0 ? '.' + balance_usd_info.decimals : 'N/A',
-        free: free_info.amount,
-        freeDecimal: free_info.decimals,
-        locked: locked_info.amount,
-        lockedDecimal: locked_info.decimals
-      });
-    }
-
     for (const asset of balances.assets) {
       const balance_info = getAmountDecimal(asset.balance, 2)
       const balance_usd_info = getAmountDecimal(asset.balance * asset.price, 2)
@@ -92,10 +54,17 @@ export default async function assetAllScreen(params) {
       });
     }
 
+    if(balances.assets.length < 1) {
+      await screen.append('#root #transactions', 'shared/alert', {
+        message: 'No credits found.',
+        alert_type: 'alert-info'
+      })
+    }
+
     document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
       t.querySelector('.btn-send').addEventListener("click", async(e) => {
         await goToScreen('assetSendScreen', {
-          asset: e.target?.dataset?.token ? e.target.dataset.token : e.target?.dataset?.asset
+          asset: e.target?.dataset?.asset
         })
       })
 
@@ -134,7 +103,7 @@ export default async function assetAllScreen(params) {
 
   screen.setListeners([
     {
-      element: ".heading #go_back",
+      element: "#heading #go_back",
       listener: () => goBackScreen(),
     },
     {

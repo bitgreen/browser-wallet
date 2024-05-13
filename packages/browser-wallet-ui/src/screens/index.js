@@ -15,6 +15,7 @@ import { Clipboard } from '@capacitor/clipboard';
 import { App } from '@capacitor/app';
 import anime from 'animejs';
 import * as jdenticon from "jdenticon";
+import {Tooltip} from "bootstrap";
 
 /* all screens */
 import welcomeScreen from './welcome.js'
@@ -50,6 +51,7 @@ import kycBasicScreen from "./kycBasic.js";
 import connectionErrorScreen from "./connectionError.js";
 import kycAdvancedScreen from "./kycAdvanced.js";
 import kycAccreditedScreen from "./kycAccredited.js";
+import assetCreditsScreen from "./assetCredits.js";
 
 const current_browser = getCurrentBrowser()
 
@@ -230,7 +232,7 @@ class Screen {
   }
 
   showFooter() {
-    if(!logged_in) return false
+    // if(!logged_in) return false
     if(!this.footer_el.classList.contains('visible') && !this.footer_el.classList.contains('disabled')) {
       anime({
         targets: '#main_footer',
@@ -486,6 +488,7 @@ const screens = {
   dashboardScreen,
   signInScreen,
   assetAllScreen,
+  assetCreditsScreen,
   assetSendScreen,
   assetReceiveScreen,
   assetTransactionReviewScreen,
@@ -692,6 +695,7 @@ const updateAccounts = async(current_account_id = null) => {
       const account_jdenticon = jdenticon.toSvg(account.address,56)
       const is_current = account_id?.toString() === current_account?.id?.toString()
       const is_kyced = await cache_store.get('kyc_' + account.address)
+      // const kyc_level = await cache_store.get('kyc_' + account.address)
 
       if(is_current) {
         current_account_el.querySelector('.jdenticon .jdenticon-content').innerHTML = account_jdenticon
@@ -699,10 +703,15 @@ const updateAccounts = async(current_account_id = null) => {
         current_account_el.querySelector('.address').innerHTML = formatAddress(account?.address, 8, 8)
 
         if(is_kyced) {
-          current_account_el.querySelector('.kyc-status').classList.add('verified')
+          current_account_el.querySelector('.kyc-status').classList.add(`verified`)
+          current_account_el.querySelector('.kyc-status').classList.add(`verified-${is_kyced}`)
           current_account_el.querySelector('.kyc-status').classList.remove('unverified')
         } else {
           current_account_el.querySelector('.kyc-status').classList.remove('verified')
+          current_account_el.querySelector('.kyc-status').classList.remove('verified-1')
+          current_account_el.querySelector('.kyc-status').classList.remove('verified-2')
+          current_account_el.querySelector('.kyc-status').classList.remove('verified-3')
+          current_account_el.querySelector('.kyc-status').classList.remove('verified-4')
           current_account_el.querySelector('.kyc-status').classList.add('unverified')
         }
 
@@ -738,6 +747,32 @@ const updateAccounts = async(current_account_id = null) => {
         is_current: is_current ? '' : 'hidden',
         is_kyc_verified: kyc_level ? `verified verified-${kyc_level}` : 'unverified',
       }, true)
+
+      document.querySelectorAll('#current_wallet .kyc-status').forEach((el) => {
+        kycTooltip(el, '#current_wallet', 'bottom')
+      })
+
+      document.querySelectorAll('#accounts_modal #wallet_list .wallet .kyc-status, #accounts_modal .current-wallet .kyc-status').forEach((el) => {
+        kycTooltip(el, '#accounts_modal')
+      })
+
+      function kycTooltip(el, container, placement = 'top') {
+        let status = 'KYC not verified.'
+        if(el.classList.contains('verified')) {
+          if(el.classList.contains('verified-4')) {
+            status = 'Accredited KYC.'
+          } else if(el.classList.contains('verified-2') || (el.classList.contains('verified-3'))) {
+            status = 'Advanced KYC.'
+          } else {
+            status = 'Basic KYC.'
+          }
+        }
+        new Tooltip(el, {
+          title: status,
+          container: container,
+          placement: placement
+        })
+      }
     }
 
     document.querySelectorAll("#accounts_modal #wallet_list .wallet").forEach(w => {

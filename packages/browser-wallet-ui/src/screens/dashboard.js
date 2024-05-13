@@ -141,6 +141,7 @@ export default async function dashboardScreen(params = {
 
   sendMessage('get_all_balances').then(async(all_balances) => {
     let bbb_balance = 0
+    let credits_balance = 0
     let other_usd_amount = 0
     for(const token of all_balances.tokens) {
       if(token.token_name === 'BBB') {
@@ -151,6 +152,7 @@ export default async function dashboardScreen(params = {
     }
     for(const asset of all_balances.assets) {
       other_usd_amount += asset.balance * asset.price
+      credits_balance += asset.balance
     }
 
     const vesting_contract = await sendMessage('get_vesting_contract')
@@ -184,6 +186,7 @@ export default async function dashboardScreen(params = {
 
     screen.setParam('#bordered_content .all_balance', formatAmount(balanceToHuman(new BigNumber(all_balances.total).plus(new BigNumber(vesting_contract?.amount || 0))), 2))
     screen.setParam('#bordered_content .bbb_balance', formatAmount(total_bbb_balance, 2))
+    screen.setParam('#bordered_content .credits_balance', formatAmount(credits_balance, 0))
     screen.setParam('#bordered_content .token_balance', formatAmount(balanceToHuman(all_balances.tokens_total), 2))
   }).then(() => {
     renderChart()
@@ -214,15 +217,15 @@ export default async function dashboardScreen(params = {
       listener: () => goToScreen('assetReceiveScreen')
     },
     {
-      element: '#bordered_content #nature_based_credits',
-      listener: () => goToScreen('natureBasedCreditsScreen')
+      element: '#bordered_content #go_credits',
+      listener: () => goToScreen('assetCreditsScreen')
     },
     {
       element: '#bordered_content #retired_credits',
       listener: () => goToScreen('retiredCreditsScreen')
     },
     {
-      element: '#bordered_content #all_assests',
+      element: '#bordered_content #all_assets',
       listener: () => goToScreen('assetAllScreen')
     },
     {

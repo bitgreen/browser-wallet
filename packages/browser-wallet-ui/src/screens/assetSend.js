@@ -163,7 +163,7 @@ export default async function assetSendScreen(params) {
       listener: async() => {
         feeTooltip.hide()
         updateCurrentParams({
-          asset: current_asset.name,
+          asset: current_asset.asset_id,
           amount: amount_el.value,
           recipient: recipient_el.value
         })
@@ -449,7 +449,7 @@ export default async function assetSendScreen(params) {
           setTimeout(async() => {
             asset_icon_el.classList.add('animate-in')
           }, 10)
-        }, 300)
+        }, 200)
       } else {
         // little delay for smooth transition
         setTimeout(() => {
@@ -459,15 +459,21 @@ export default async function assetSendScreen(params) {
             balance: formatAmount(available_balance, 2),
             icon: icon
           })
-        }, 300)
+        }, 600)
       }
     }
 
     for (const asset of all_balances.assets) {
       let icon = carbonCreditIcon
 
+      if(asset.image) {
+        icon = await renderTemplate('shared/icons/custom_icon', {
+          image_src: asset.image
+        })
+      }
+
       const available_balance = asset.balance
-      const asset_short_name = asset.asset_name.length > 22 ? asset.asset_name.substring(0,22) + '...' : asset.asset_name
+      const asset_short_name = (asset.asset_name.length > 18 ? asset.asset_name.substring(0,18) + '...' : asset.asset_name) + (asset.info ? ` [${asset.info}]` : '')
 
       if(parseInt(selected_asset) === parseInt(asset.asset_id)) {
         screen.setParam('#choose_quantity .asset-name', 'CREDITS')
@@ -511,7 +517,7 @@ export default async function assetSendScreen(params) {
             balance: available_balance,
             icon: icon
           })
-        }, 400)
+        }, 600)
       }
     }
 
@@ -520,6 +526,11 @@ export default async function assetSendScreen(params) {
     }
 
     syncAmount('amount')
+
+    return current_asset
   }
-  selectAsset(preselected_asset, preselected_amount).then()
+
+  selectAsset(preselected_asset, preselected_amount).then((asset) => {
+    if(!asset.asset_id && asset.name !== 'bbb') setTimeout(() => selectAsset('bbb', ''), 400)
+  })
 }

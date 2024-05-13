@@ -109,7 +109,7 @@ class userInterface {
 
   copyCurrentAddress = async(address) =>  {
     await copyText(address)
-    await showNotification('Account address copied to clipboard.', 'info')
+    await showNotification('Account address copied to clipboard.', 'info', 2000, 44)
   }
 
   initAccounts = async() => {
@@ -132,7 +132,7 @@ class userInterface {
 
     const dashboardTooltip = new Tooltip('#main_footer #go_dashboardScreen', {
       html: true,
-      offset: [0, -8],
+      offset: [0, -4],
       placement: 'top',
       container: 'body',
       popperConfig: (config) => {
@@ -150,7 +150,7 @@ class userInterface {
 
     const assetSendTooltip = new Tooltip('#main_footer #go_assetSendScreen', {
       html: true,
-      offset: [0, -8],
+      offset: [0, -4],
       placement: 'top',
       container: 'body',
       popperConfig: (config) => {
@@ -168,7 +168,7 @@ class userInterface {
 
     const transactionHistoryTooltip = new Tooltip('#main_footer #go_transactionHistoryScreen', {
       html: true,
-      offset: [0, -8],
+      offset: [0, -4],
       placement: 'top',
       container: 'body',
       popperConfig: (config) => {
@@ -186,7 +186,7 @@ class userInterface {
 
     const stakeHomeTooltip = new Tooltip('#main_footer #go_stakingHomeScreen', {
       html: true,
-      offset: [0, -8],
+      offset: [0, -4],
       placement: 'top',
       container: 'body',
       popperConfig: (config) => {
@@ -244,13 +244,33 @@ class userInterface {
     const input_field = input_form.querySelector("#password")
     const show_password = input_form.querySelector(".show-password")
 
+    this.showPasswordTooltip = new Tooltip(show_password, {
+      title: 'Show password',
+      container: '#login_screen',
+      placement: 'top'
+    })
+
     show_password.addEventListener("click", () => {
+      this.showPasswordTooltip.dispose()
+
       if(input_field.type === 'password') {
         input_field.type = 'text'
         show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
+
+        this.showPasswordTooltip = new Tooltip(show_password, {
+          title: 'Hide Password',
+          container: '#login_screen',
+          placement: 'top'
+        })
       } else {
         input_field.type = 'password'
         show_password.innerHTML = '<span class="icon icon-eye"></span>'
+
+        this.showPasswordTooltip = new Tooltip(show_password, {
+          title: 'Show Password',
+          container: '#login_screen',
+          placement: 'top'
+        })
       }
     })
 
@@ -322,6 +342,13 @@ class userInterface {
       // reset to init screen
       show_password.innerHTML = '<span class="icon icon-eye"></span>'
       input_field.type = 'password'
+
+      this.showPasswordTooltip = new Tooltip(show_password, {
+        title: 'Show password',
+        container: '#login_screen',
+        placement: 'top'
+      })
+
       status_message.classList.remove('active')
       unFreezeRoot()
     }, 500)

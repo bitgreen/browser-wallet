@@ -66,9 +66,20 @@
         }
 
         .icon {
+            pointer-events: auto !important;
             color: $colorLightestGray;
             font-size: 22px !important;
             text-shadow: 0 1px 2px rgba(17, 20, 30, 0.1), 0 1px 1px rgba(17, 20, 30, 0.06);
+        }
+    }
+}
+
+#current_wallet {
+    .kyc-status {
+        &.verified {
+            &:after {
+                content: "" !important;
+            }
         }
     }
 }

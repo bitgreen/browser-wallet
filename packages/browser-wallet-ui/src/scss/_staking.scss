@@ -213,14 +213,18 @@
     padding: 0 22px;
 }
 #asset_info .selected .asset-icon {
-    &.animate-in svg {
-        transform: rotateY(0deg);
+    &.animate-in {
+        svg, .custom-image-icon {
+            transform: rotateY(0deg);
+        }
     }
-    &.animate-out svg {
-        transform: rotateY(90deg);
+    &.animate-out {
+        svg, .custom-image-icon {
+            transform: rotateY(90deg);
+        }
     }
 
-    svg {
+    svg, .custom-image-icon {
         transition: all ease-out 0.3s;
         transform: rotateY(-90deg);
     }

@@ -174,3 +174,16 @@ body.app {
     width: calc(100% - 40px);
     z-index: 10000;
 }
+
+.custom-image-icon {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 42px;
+    border: 2px solid $colorWhite;
+    box-shadow: 0 0 6px -2px $colorBlueDark !important;
+
+    background-size: cover;
+    background-position: center;
+    border-radius: 21px;
+}
