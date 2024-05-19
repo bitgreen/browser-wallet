@@ -209,7 +209,7 @@
     min-height: 85px;
     background-color: $colorWhite;
     text-decoration: none;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
     border-radius: 4px;
     cursor: pointer;
@@ -540,6 +540,65 @@
             line-height: 28px;
             margin-bottom: 2px;
             color: $colorTealLight;
+        }
+    }
+    &.retired-transaction {
+        position: relative;
+        width: 48%;
+        flex-basis: 48%;
+        border-radius: 8px;
+        height: 160px !important;
+        padding: 4px !important;
+        background-position: center;
+        background-size: cover;
+        border: none !important;
+        box-shadow: none !important;
+        overflow: hidden;
+
+        .amount {
+            width: 30%;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            padding: 4px;
+            text-align: center;
+            //color: $colorTealLight;
+            color: #FFFFFF;
+            border-radius: 4px;
+            z-index: 5;
+
+            .tons {
+                margin-bottom: 2px;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 28px;
+            }
+        }
+
+        .details {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            width: calc(100% - 12px);
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            padding: 4px;
+            opacity: 0;
+
+            z-index: 6;
+        }
+
+        &:after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            //background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 15%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(34, 72, 81, 0.6) 0%, rgba(34, 72, 81, 0.6) 20%, transparent 100%);
+            transform: rotate(45deg) scale(1.6);
+            z-index: 4;
         }
     }
     

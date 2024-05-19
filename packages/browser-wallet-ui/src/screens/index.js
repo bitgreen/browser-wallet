@@ -52,6 +52,7 @@ import connectionErrorScreen from "./connectionError.js";
 import kycAdvancedScreen from "./kycAdvanced.js";
 import kycAccreditedScreen from "./kycAccredited.js";
 import assetCreditsScreen from "./assetCredits.js";
+import retiredCreditsScreen from "./retiredCredits.js";
 
 const current_browser = getCurrentBrowser()
 
@@ -507,7 +508,8 @@ const screens = {
   kycBasicScreen,
   kycAdvancedScreen,
   kycAccreditedScreen,
-  connectionErrorScreen
+  connectionErrorScreen,
+  retiredCreditsScreen
 }
 
 let screen_history = []
@@ -757,7 +759,7 @@ const updateAccounts = async(current_account_id = null) => {
       })
 
       function kycTooltip(el, container, placement = 'top') {
-        let status = 'KYC not verified.'
+        let status = 'Not KYC verified.'
         if(el.classList.contains('verified')) {
           if(el.classList.contains('verified-4')) {
             status = 'Accredited KYC.'

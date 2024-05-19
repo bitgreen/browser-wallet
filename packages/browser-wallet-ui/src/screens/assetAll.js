@@ -75,7 +75,7 @@ export default async function assetAllScreen(params) {
       await screen.append("#root #transactions", "asset/all/list_item", {
         info: asset.info,
 
-        assetName: (asset.asset_name.length > 28 ? asset.asset_name.substring(0,28) + '...' : asset.asset_name),
+        assetName: (asset.asset_name.length > 24 ? asset.asset_name.substring(0,24) + '...' : asset.asset_name),
         assetId: asset.asset_id,
         projectId: asset.project_id,
         balance: balance_info.amount,

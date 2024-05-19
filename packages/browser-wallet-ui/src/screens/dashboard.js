@@ -221,7 +221,7 @@ export default async function dashboardScreen(params = {
       listener: () => goToScreen('assetCreditsScreen')
     },
     {
-      element: '#bordered_content #retired_credits',
+      element: '#bordered_content #go_retired_credits',
       listener: () => goToScreen('retiredCreditsScreen')
     },
     {

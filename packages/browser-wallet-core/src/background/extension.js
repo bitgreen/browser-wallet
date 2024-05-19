@@ -75,7 +75,7 @@ class Extension {
         case 'get_transactions':
           return await this.getTransactions()
         case 'get_asset_transactions':
-          return await this.getAssetTransactions()
+          return await this.getAssetTransactions(data?.params)
         case 'get_token_transactions':
           return await this.getTokenTransactions()
         case 'reveal_mnemonic':
@@ -427,11 +427,11 @@ class Extension {
     this.assets_store = new AssetStore(current_network, current_account)
   }
 
-  async getAssetTransactions() {
+  async getAssetTransactions(params) {
     await this.initAssetsStore()
 
     await this.assets_store.removeAll()
-    await this.assets_store.fetch()
+    await this.assets_store.fetch(params?.type)
 
     let assets = await this.assets_store.all()
 

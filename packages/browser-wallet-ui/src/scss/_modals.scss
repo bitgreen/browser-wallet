@@ -125,6 +125,12 @@
     }
     #wallet_list {
         max-height: 290px;
+
+        .button-item {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
     #hide_accounts_modal {
         position: absolute;

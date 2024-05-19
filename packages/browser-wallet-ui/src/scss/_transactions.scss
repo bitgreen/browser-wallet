@@ -6,9 +6,21 @@
     padding-right: 8px;
     padding-bottom: 8px;
     scroll-behavior: smooth;
+
+    &.extra-height {
+        height: calc(100% + 10px);
+    }
+
+    &.extra-bottom-padding {
+        padding-bottom: 50px;
+    }
     
     &.smaller {
         height: 320px;
+    }
+
+    &.medium {
+        height: calc(100% - 60px);
     }
     
     .button-item {
@@ -16,6 +28,10 @@
         padding: 0 8px;
         opacity: 0;
         margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
     .transaction-info {
         width: 90%;
@@ -27,9 +43,9 @@
     position: absolute;
     margin-top: -45px;
     left: 0;
-    width: calc(100% - 22px);
+    width: calc(100% - 26px);
     height: 45px;
-    background: linear-gradient(to bottom, transparent 0%, transparent 10%, $colorWhite 80%, $colorWhite 100%);
+    background: linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(255, 255, 255, 0.5) 80%, $colorWhite 100%);
     pointer-events: none;
 
     z-index: 55;
