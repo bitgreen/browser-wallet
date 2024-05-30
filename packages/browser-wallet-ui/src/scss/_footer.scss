@@ -88,6 +88,14 @@
     z-index: 99;
     user-select: none;
 
+    &.no-pointer-event {
+        pointer-events: none;
+
+        .d-flex {
+            pointer-events: auto;
+        }
+    }
+
     &.equal-footer {
         padding-bottom: 0;
         display: flex;
