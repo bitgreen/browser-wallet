@@ -244,7 +244,7 @@ class userInterface {
     const input_field = input_form.querySelector("#password")
     const show_password = input_form.querySelector(".show-password")
 
-    this.showPasswordTooltip = new Tooltip(show_password, {
+    this.showPasswordTooltip = new Tooltip(show_password.querySelector(".icon"), {
       title: 'Show password',
       container: '#login_screen',
       placement: 'top'
@@ -257,7 +257,7 @@ class userInterface {
         input_field.type = 'text'
         show_password.innerHTML = '<span class="icon icon-eye-blocked"></span>'
 
-        this.showPasswordTooltip = new Tooltip(show_password, {
+        this.showPasswordTooltip = new Tooltip(show_password.querySelector(".icon"), {
           title: 'Hide Password',
           container: '#login_screen',
           placement: 'top'
@@ -266,7 +266,7 @@ class userInterface {
         input_field.type = 'password'
         show_password.innerHTML = '<span class="icon icon-eye"></span>'
 
-        this.showPasswordTooltip = new Tooltip(show_password, {
+        this.showPasswordTooltip = new Tooltip(show_password.querySelector(".icon"), {
           title: 'Show Password',
           container: '#login_screen',
           placement: 'top'
@@ -343,7 +343,7 @@ class userInterface {
       show_password.innerHTML = '<span class="icon icon-eye"></span>'
       input_field.type = 'password'
 
-      this.showPasswordTooltip = new Tooltip(show_password, {
+      this.showPasswordTooltip = new Tooltip(show_password.querySelector(".icon"), {
         title: 'Show password',
         container: '#login_screen',
         placement: 'top'
