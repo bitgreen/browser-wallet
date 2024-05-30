@@ -1,7 +1,7 @@
 import Screen, { copyText, goBackScreen } from './index.js'
 import { AccountStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 import { showNotification } from "../notifications.js";
-import {formatAddress, isFirefox, isSafari} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isFirefox, isSafari, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
 
 import anime from "animejs";
 
@@ -61,16 +61,19 @@ export default async function kycAdvancedScreen(params) {
     {
       element: '#root #go_kyc_start',
       listener: async() => {
-        const current_browser = (isFirefox() || isSafari()) ? browser : chrome
-
         const url = `${current_network.api_endpoint}/kyc/start?address=${account.address}&state=wallet&type=accredited`;
         let result = await fetch(url, {
           mode: 'cors'
         })
         result = await result.json()
 
-        current_browser.tabs.create({ url: result.url })
-      }
+        if(isStandaloneApp()) {
+          window.location.href = result.url
+        } else {
+          const current_browser = (isFirefox() || isSafari()) ? browser : chrome
+
+          current_browser.tabs.create({ url: result.url })
+        }      }
     }
   ])
 }
