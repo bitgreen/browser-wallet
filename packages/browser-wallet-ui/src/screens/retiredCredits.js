@@ -37,7 +37,8 @@ export default async function retiredCreditsScreen() {
   });
 
   const asset_transactions = await sendMessage('get_asset_transactions', {
-    type: 'RETIRED'
+    type: 'RETIRED',
+    pageSize: 100
   })
 
   for(const transaction of asset_transactions) {

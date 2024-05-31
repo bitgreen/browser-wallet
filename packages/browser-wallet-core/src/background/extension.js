@@ -431,7 +431,7 @@ class Extension {
     await this.initAssetsStore()
 
     await this.assets_store.removeAll()
-    await this.assets_store.fetch(params?.type)
+    await this.assets_store.fetch(params?.type, params?.pageSize)
 
     let assets = await this.assets_store.all()
 

@@ -15,10 +15,10 @@ class AssetStore extends BaseStore {
     this.account = account
   }
 
-  async fetch(type = false) {
+  async fetch(type = false, pageSize = 10) {
     if(!['mainnet', 'testnet'].includes(this.network.id)) return false
 
-    const url = `${this.network.api_endpoint}/asset/transactions?account=${this.account.address}&pageSize=10&page=1${type ? `&type=${type}` : ''}`;
+    const url = `${this.network.api_endpoint}/asset/transactions?account=${this.account.address}&pageSize=${pageSize}&page=1${type ? `&type=${type}` : ''}`;
     let result = await fetch(url, {
       mode: 'cors'
     })
