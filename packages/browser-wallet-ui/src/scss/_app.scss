@@ -133,6 +133,16 @@ body.app {
     .transactions-end {
         width: 100% !important;
     }
+
+    #current_wallet {
+        .jdenticon {
+            .kyc-status {
+                &:after {
+                    bottom: 2px !important;
+                }
+            }
+        }
+    }
 }
 
 #root {
