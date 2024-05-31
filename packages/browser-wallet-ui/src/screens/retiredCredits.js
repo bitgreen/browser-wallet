@@ -55,8 +55,8 @@ export default async function retiredCreditsScreen() {
 
   if(asset_transactions?.length < 1) {
     await screen.append('#bordered_content #transactions', 'shared/alert', {
-      message: 'No transactions found yet.',
-      alert_type: 'alert-info'
+      message: 'No retirements found yet.',
+      alert_type: 'alert-info alert-small'
     })
   }
 
