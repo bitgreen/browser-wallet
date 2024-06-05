@@ -2,7 +2,7 @@ import Screen, { goBackScreen, goToScreen } from './index.js'
 import { AccountStore, CacheStore, NetworkStore } from "@bitgreen/browser-wallet-core";
 
 import * as jdenticon from 'jdenticon'
-import {formatAddress} from "@bitgreen/browser-wallet-utils";
+import {formatAddress, isIOs, isStandaloneApp} from "@bitgreen/browser-wallet-utils";
 import anime from "animejs";
 
 export default async function accountManageScreen() {
@@ -14,6 +14,7 @@ export default async function accountManageScreen() {
   await screen.init()
 
   await screen.set('#heading', 'accounts/manage/heading')
+
   await screen.set('#bordered_content', 'accounts/manage/content')
 
   const accounts_store = new AccountStore()
@@ -44,6 +45,10 @@ export default async function accountManageScreen() {
     {
       element: '#heading #new_account',
       listener: () => goToScreen('accountCreateScreen')
+    },
+    {
+      element: '#heading #delete_wallet',
+      listener: () => goToScreen('walletDeleteScreen')
     },
     {
       element: '#heading #go_back',

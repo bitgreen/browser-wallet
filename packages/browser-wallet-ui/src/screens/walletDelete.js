@@ -1,39 +1,29 @@
-import Screen, { goBackScreen } from './index.js'
+import Screen, {goBackScreen, goToScreen, reloadScreen} from './index.js'
 import { randomString, sleep } from '@bitgreen/browser-wallet-utils'
 import { sendMessage } from "../messaging.js";
 import { showNotification } from "../notifications.js";
 import DOMPurify from 'dompurify';
 import anime from 'animejs';
 
-export default async function walletBackupScreen(params) {
+export default async function walletDeleteScreen(params) {
   const screen = new Screen({
     template_name: 'layouts/full_page',
     template_params: {
-      title: 'Back Up Wallet'
+      title: 'Delete Wallet'
     },
     header: false
   })
   await screen.init()
 
-  await screen.set('.content', 'wallet/backup')
+  await screen.set('.content', 'wallet/delete')
 
   await screen.append('.content', 'global/loading', {
-    title: 'Getting Phrase Words',
-    desc: 'Hold tight while we get your phrase words.',
+    title: 'Deleting all wallet data',
+    desc: 'Hold tight while we finish the process.',
     top: '0;',
     padding_top: '60px',
     progress: '25 75'
   });
-
-  let copy_mnemonic = ''
-
-  let index = 1
-  for(const w of Array(12).fill()) {
-    const value = randomString(Math.floor(Math.random() * 4) + 3)
-    await screen.append('#backup_mnemonics', 'wallet/partial/word', {
-      index: index++, value
-    })
-  }
 
   const input_field = document.querySelector("#root .footer #password")
   const show_password = document.querySelector("#root .footer .show-password")
@@ -44,23 +34,15 @@ export default async function walletBackupScreen(params) {
       listener: () => goBackScreen()
     },
     {
-      element: '#reveal_mnemonics',
-      listener: () => revealMnemonics()
-    },
-    {
-      element: '#copy_seed',
-      listener: async() => {
-        await navigator.clipboard.writeText(copy_mnemonic);
-
-        await showNotification('Secret phrase copied to your clipboard! Keep it safe!', 'info')
-      }
+      element: '#delete_wallet',
+      listener: () => deleteWallet()
     },
     {
       element: '#password',
       type: 'keypress',
       listener: async(e) => {
         if(e.key === 'Enter') {
-          await revealMnemonics()
+          await deleteWallet()
         }
       }
     },
@@ -78,56 +60,21 @@ export default async function walletBackupScreen(params) {
     }
   ])
 
-  const revealMnemonics = async() => {
+  const deleteWallet = async() => {
     showProcessing();
     await sleep(250); // give it a chance to start animating
     const password = DOMPurify.sanitize(document.querySelector('#password_input #password').value)
 
-    const mnemonics = await sendMessage('reveal_mnemonic', {
+    const result = await sendMessage('delete_wallet', {
       password
     })
 
-    if(mnemonics) {
-      copy_mnemonic = mnemonics
+    if(result) {
+      await showNotification('Wallet deleted successfully.', 'info')
 
-      await screen.reset('#backup_mnemonics')
-      let index = 1
-      for(const word of mnemonics.split(' ')) {
-        await screen.append('#backup_mnemonics', 'wallet/partial/word', {
-          index: index++,
-          value: word
-        })
-      }
-
-      hideProcessing();
-
-      document.querySelector('#backup_mnemonics').classList.remove('mnemonics-hidden')
-      document.querySelector('#copy_seed').classList.remove('btn-hidden')
-
-      anime({
-        targets: '#password_input',
-        duration: 300,
-        translateY: [0, 60],
-        opacity: [1, 0],
-        easing: 'linear',
-        delay: 0
-      });
-
-      anime({
-        targets: '#copy_seed',
-        duration: 300,
-        opacity: [0, 1],
-        easing: 'linear',
-        delay: 1200
-      });
-
-      anime({
-        targets: '#backup_mnemonics .badge .text',
-        opacity: [0, 1],
-        easing: 'easeInOutSine',
-        duration: 250,
-        delay: function(el, i) { return i * 50 + 1200 },
-      });
+      setTimeout(() => {
+        window.top.location.reload()
+      }, 1000)
     } else {
       hideProcessing();
       await showNotification('Password is wrong!', 'error')

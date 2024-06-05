@@ -19,11 +19,18 @@ import {
 } from "../stores/index.js"
 import {Keyring} from "@polkadot/keyring"
 import {polkadotApi} from "../polkadotApi.js";
-import {addressValid, balanceToHuman, humanToBalance} from "@bitgreen/browser-wallet-utils";
+import {
+  addressValid,
+  balanceToHuman,
+  getCurrentBrowser,
+  humanToBalance,
+  isStandaloneApp
+} from "@bitgreen/browser-wallet-utils";
 
 import {passwordTimeout} from "../constants.js";
 import {showPopup} from "./index.js";
 import BigNumber from "bignumber.js";
+import {Preferences} from "@capacitor/preferences";
 
 class Extension {
   #password
@@ -80,6 +87,8 @@ class Extension {
           return await this.getTokenTransactions()
         case 'reveal_mnemonic':
           return await this.revealMnemonic(data?.params)
+        case 'delete_wallet':
+          return await this.deleteWallet(data?.params)
         case 'check_login':
           return await this.checkLogin()
         case 'fast_check_login':
@@ -472,6 +481,26 @@ class Extension {
     if(!password) return false
 
     return await this.decryptWallet(password, true)
+  }
+
+  async deleteWallet(params) {
+    const password = params?.password
+
+    if(!password) return false
+
+    const result = await this.decryptWallet(password)
+
+    if(!result) return false
+
+
+    // remove all data
+    if(isStandaloneApp()) {
+      await Preferences.clear()
+    } else {
+      getCurrentBrowser().storage.local.clear()
+    }
+
+    return true
   }
 
   async checkLogin() {

@@ -53,6 +53,7 @@ import kycAdvancedScreen from "./kycAdvanced.js";
 import kycAccreditedScreen from "./kycAccredited.js";
 import assetCreditsScreen from "./assetCredits.js";
 import retiredCreditsScreen from "./retiredCredits.js";
+import walletDeleteScreen from "./walletDelete.js";
 
 const current_browser = getCurrentBrowser()
 
@@ -483,6 +484,7 @@ const screens = {
   walletPasswordScreen,
   walletFinishScreen,
   walletBackupScreen,
+  walletDeleteScreen,
   accountManageScreen,
   accountCreateScreen,
   accountEditScreen,
