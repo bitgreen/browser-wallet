@@ -46,8 +46,9 @@
                         cursor: pointer;
 
                         .badge {
-                            border-left-width: 2px;
-                            border-right-width: 2px;
+                            border-left-width: 1px;
+                            border-right-width: 1px;
+                            border-color: $colorWhiteish1;
 
                             .remove {
                                 width: 24px;
@@ -66,7 +67,9 @@
                     }
 
                     .badge {
-                        border: 2px solid $colorWhite;
+                        overflow: hidden;
+                        border: 1px solid $colorWhite;
+                        transition: all linear 0.2s;
 
                         .remove {
                             position: absolute;
@@ -78,7 +81,6 @@
                             font-size: 10px;
                             color: $colorWhite;
                             background-color: $colorDanger1;
-                            border-radius: 8px 0 0 8px;
                             transition: all linear 0.2s;
                             z-index: 99;
                             pointer-events: all !important;
@@ -149,8 +151,9 @@
                     .text {
                         width: 100%;
                         text-align: center;
-                        font-size: 15px;
+                        font-size: 14px;
                         text-transform: lowercase;
+                        font-weight: normal;
                     }
                 }
             }

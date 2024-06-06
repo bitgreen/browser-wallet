@@ -30,22 +30,7 @@ export default async function walletPasswordScreen(params) {
 
   await screen.moveFooterOnTop()
 
-  if(params?.type === 'import_wallet') {
-    // TODO: do not show for now
-    await screen.append('#loading_content #content .done', 'global/button', {
-      id: 'new_account',
-      title: 'Import another wallet',
-      class: 'btn-white btn-sm w-75 mt-2 d-none transparent-element',
-      icon: 'icon-import me-2'
-    })
-  } else if(params?.type === 'reset_wallet') {
-    await screen.append('#loading_content #content .done', 'global/button', {
-      id: 'dashboard',
-      title: 'Go to dashboard',
-      class: 'btn-white btn-sm w-75 mt-2 d-none transparent-element',
-      icon: 'icon-import me-2'
-    })
-  } else {
+  if(params?.type !== 'reset_wallet') {
     await screen.append('#loading_content #content .done', 'global/button', {
       id: 'new_account',
       title: 'Create another account',
@@ -102,6 +87,17 @@ export default async function walletPasswordScreen(params) {
       listener: async() => {
         showProcessing()
 
+        const password_el = document.querySelector('#root #password')
+        const password_repeat_el = document.querySelector('#root #password_repeat')
+
+        const password = DOMPurify.sanitize(password_el?.value);
+        const password_repeat = DOMPurify.sanitize(password_repeat_el?.value);
+
+        if(password !== password_repeat) {
+          hideProcessing()
+          return showNotification('Passwords do not match!', 'error')
+        }
+
         const result = await sendMessage('save_wallet', {
           mnemonic: params.mnemonic,
           password: DOMPurify.sanitize(document.querySelector('#root #password')?.value),
@@ -111,7 +107,7 @@ export default async function walletPasswordScreen(params) {
         if(result) {
           setTimeout(() => {
             showProcessingDone()
-          }, 10000)
+          }, 4000)
         } else {
           await showNotification('Something went wrong. Please try again or contact us.', 'error', 2800, 0)
         }
@@ -128,7 +124,7 @@ export default async function walletPasswordScreen(params) {
     },
     {
       element: '#new_account',
-      listener: () => goToScreen('accountCreateScreen')
+      listener: () => goToScreen('accountCreateScreen', { no_back: true })
     },
     {
       element: '#root .show-password-password',
@@ -165,6 +161,15 @@ export default async function walletPasswordScreen(params) {
     screen.freezeRoot()
   }
 
+  const hideProcessing = () => {
+    const loading_el = document.querySelector("#loading_content")
+
+    loading_el.classList.remove('active')
+    loading_el.classList.remove('no-border-radius')
+
+    screen.unFreezeRoot()
+  }
+
   const showProcessingDone = () => {
     screen.unFreezeRoot()
 
@@ -178,7 +183,7 @@ export default async function walletPasswordScreen(params) {
 
     const primary_element = document.querySelector('#loading_content #primary')
 
-    primary_element.style.transition = "stroke-dasharray 0.4s ease-out, stroke-dashoffset 0.4s ease-out, stroke 0.4s ease-out";
+    primary_element.style.transition = "stroke-dasharray 0.3s linear, stroke-dashoffset 0.3s linear, stroke 0.3s linear";
     primary_element.style.strokeDasharray = "100 0";
     primary_element.style.strokeDashoffset = "0";
 
@@ -205,11 +210,9 @@ export default async function walletPasswordScreen(params) {
         translateY: [-30, 0],
         opacity: [0, 1],
         easing: 'easeInOutSine',
-        duration: function(el, i) {
-          return 400
-        },
+        duration: 400,
         delay: function(el, i) {
-          return i*300 + 100
+          return i*400 + 100
         },
       });
     }, 200)
@@ -228,11 +231,9 @@ export default async function walletPasswordScreen(params) {
 
 function checkPassword() {
   const password_el = document.querySelector('#root #password')
-  const password_repeat_el = document.querySelector('#root #password_repeat')
   const wallet_name_el = document.querySelector('#root #wallet_name')
 
   let password = DOMPurify.sanitize(password_el?.value);
-  let password_repeat = DOMPurify.sanitize(password_repeat_el?.value);
   let wallet_name = DOMPurify.sanitize(wallet_name_el?.value);
   let success = true;
 
@@ -277,13 +278,6 @@ function checkPassword() {
     document.querySelector('#symbol_icon').innerHTML = '<span class="icon icon-success icon-check"></span>'
   } else {
     document.querySelector('#symbol_icon').innerHTML = '<span class="icon icon-close"></span>'
-    success = false;
-  }
-
-  if(password === password_repeat) {
-    document.querySelector('#repeat_icon').innerHTML = '<span class="icon icon-success icon-check"></span>'
-  } else {
-    document.querySelector('#repeat_icon').innerHTML = '<span class="icon icon-close"></span>'
     success = false;
   }
 

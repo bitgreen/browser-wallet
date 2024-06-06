@@ -97,19 +97,19 @@ const renderChart = (init_render = false) => {
     }, 1000)
 
     setTimeout(() => {
-      bbb_token_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
+      bbb_token_el.style.transition = "stroke-dasharray 0.6s linear";
       bbb_token_el.style.strokeDasharray = per_1 + " " + (100 - per_1);
       bbb_token_el.style.strokeDashoffset = offset;
 
-      nature_based_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
+      nature_based_el.style.transition = "stroke-dasharray 0.6s linear";
       nature_based_el.style.strokeDasharray = per_2 + " " + (100 - per_2);
       nature_based_el.style.strokeDashoffset = 100 - per_1 + offset;
 
-      impact_bonds_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
+      impact_bonds_el.style.transition = "stroke-dasharray 0.6s linear";
       impact_bonds_el.style.strokeDasharray = per_3 + " " + (100 - per_3);
       impact_bonds_el.style.strokeDashoffset = 100 - (per_1 + per_2) + offset;
 
-      other_el.style.transition = "stroke-dasharray 0.6s ease-in-out";
+      other_el.style.transition = "stroke-dasharray 0.6s linear";
       other_el.style.strokeDasharray = per_4 + " " + (100 - per_4);
       other_el.style.strokeDashoffset = 100 - (per_1 + per_2 + per_3) + offset;
     }, 600);

@@ -4,7 +4,7 @@ import { showNotification } from "../notifications.js";
 
 import DOMPurify from 'dompurify';
 
-export default async function accountCreateScreen() {
+export default async function accountCreateScreen(params = {}) {
   const screen = new Screen({
     template_name: 'layouts/full_page',
     template_params: {
@@ -25,7 +25,13 @@ export default async function accountCreateScreen() {
   screen.setListeners([
     {
       element: '.heading #go_back',
-      listener: () => goBackScreen()
+      listener: () => {
+        if(params?.no_back) {
+          goToScreen('dashboardScreen')
+        } else {
+          goBackScreen()
+        }
+      }
     },
     {
       element: '#root #derivation_path_check',

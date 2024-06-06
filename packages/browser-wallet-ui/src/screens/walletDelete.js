@@ -18,7 +18,7 @@ export default async function walletDeleteScreen(params) {
   await screen.set('.content', 'wallet/delete')
 
   await screen.append('.content', 'global/loading', {
-    title: 'Deleting all wallet data',
+    title: 'Processing...',
     desc: 'Hold tight while we finish the process.',
     top: '0;',
     padding_top: '60px',

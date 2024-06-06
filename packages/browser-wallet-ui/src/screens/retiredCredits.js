@@ -42,7 +42,7 @@ export default async function retiredCreditsScreen() {
   })
 
   for(const transaction of asset_transactions) {
-    if(!transaction.value) continue
+    if(!transaction.value || !transaction.value.info.projectName) continue
 
     const created_at = new Date(Date.parse(transaction.value.createdAt))
 

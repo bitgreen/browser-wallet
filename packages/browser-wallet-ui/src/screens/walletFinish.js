@@ -83,7 +83,7 @@ export default async function walletFinishScreen(params) {
     },
     {
       element: '#new_account',
-      listener: () => goToScreen('accountCreateScreen')
+      listener: () => goToScreen('accountCreateScreen', { no_back: true })
     }
   ])
 }

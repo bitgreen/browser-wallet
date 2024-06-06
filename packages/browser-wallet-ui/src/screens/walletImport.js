@@ -21,7 +21,7 @@ export default async function walletImportScreen(params = {}) {
   await screen.init()
 
   await screen.set('.content', 'wallet/import', {
-    text: params.type === 'reset_wallet' ? 'Enter an existing secret phrase to reset the wallet password. Each phrase must be in the correct sequence.'
+    text: params.type === 'reset_wallet' ? 'Please enter the Seed Phrase you used to setup the wallet or that you got when you created the wallet. The seed phrase must match to recover access.'
       : 'Enter an existing secret phrase to import the wallet. Each phrase must be in the correct sequence.'
   })
 
@@ -34,11 +34,9 @@ export default async function walletImportScreen(params = {}) {
 
   import_mnemonic_sortable = createMnemonicSortable('#import_mnemonics', (evt) => {
     refreshImportedMnemonics();
-    checkMnemonics()
   }, removeWord);
 
   await refreshImportedMnemonics()
-  checkMnemonics()
 
   anime({
     targets: '#shuffled_mnemonics .word',
@@ -80,6 +78,14 @@ export default async function walletImportScreen(params = {}) {
           mnemonic: import_mnemonic_array
         })
 
+        if(import_mnemonic_array.length === 0) {
+          return showNotification('Please enter your seed phrase.', 'error')
+        }
+
+        if(!checkMnemonics()) {
+          return showNotification('This seed phrase is not valid.', 'error')
+        }
+
         if(params?.type === 'reset_wallet') {
           const result = await sendMessage('try_password_reset', {
             mnemonic: import_mnemonic_array.join(' ')
@@ -119,13 +125,11 @@ function importWord(e, input = false) {
           return false;
         }
         // maximum word length is 8
-        refreshImportedMnemonics(word.trim().toLowerCase().substring(0, 8));
+        refreshImportedMnemonics(word.trim().toLowerCase().substring(0, 12));
       }
       refreshImportedMnemonics()
     }
   }
-
-  checkMnemonics()
 }
 
 function removeWord(e) {
@@ -138,8 +142,6 @@ function removeWord(e) {
   }
 
   refreshImportedMnemonics(index, 'remove');
-
-  checkMnemonics()
 }
 
 function refreshImportedMnemonics(word = null, action = 'add') {
@@ -176,11 +178,5 @@ function checkMnemonics() {
 
   const isValidMnemonic = mnemonicValidate(m);
 
-  if(!isValidMnemonic) {
-    document.querySelector("#continue_new_key").classList.add('disabled')
-    document.querySelector("#continue_new_key").classList.remove('btn-primary')
-  } else {
-    document.querySelector("#continue_new_key").classList.remove('disabled')
-    document.querySelector("#continue_new_key").classList.add('btn-primary')
-  }
+  return isValidMnemonic
 }
