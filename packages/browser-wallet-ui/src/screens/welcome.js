@@ -30,8 +30,8 @@ export default async function welcomeScreen() {
     delay: 600,
     easing: 'linear',
     keyframes: [
-      { translateY: isStandaloneApp() ? -163 : -36, scale: 0.323232, duration: 800 },
-      { translateX: isStandaloneApp() ? -288 : -290, duration: 600 },
+      { translateY: isStandaloneApp() ? -216 : -36, scale: isStandaloneApp() ? 0.3 : 0.323232, duration: 800 },
+      { translateX: isStandaloneApp() ? -294 : -290, duration: 600 },
     ]
   });
 
