@@ -55,6 +55,19 @@
             opacity: 1;
         }
     }
+
+    #go_reset_wallet {
+        color: #c0ff00b5;
+        padding: 2px 8px;
+        bottom: 8px;
+        transition: all ease-in 0.2s;
+        background-color: rgba(31, 31, 31, 0.5);
+        border-radius: 4px;
+
+        &:hover {
+            color: $colorWhite;
+        }
+    }
 }
 
 .bitgreen-svg {

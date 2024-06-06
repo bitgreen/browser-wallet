@@ -30,11 +30,18 @@ export default async function walletPasswordScreen(params) {
 
   await screen.moveFooterOnTop()
 
-  if(params?.imported) {
+  if(params?.type === 'import_wallet') {
     // TODO: do not show for now
     await screen.append('#loading_content #content .done', 'global/button', {
       id: 'new_account',
       title: 'Import another wallet',
+      class: 'btn-white btn-sm w-75 mt-2 d-none transparent-element',
+      icon: 'icon-import me-2'
+    })
+  } else if(params?.type === 'reset_wallet') {
+    await screen.append('#loading_content #content .done', 'global/button', {
+      id: 'dashboard',
+      title: 'Go to dashboard',
       class: 'btn-white btn-sm w-75 mt-2 d-none transparent-element',
       icon: 'icon-import me-2'
     })
@@ -180,10 +187,12 @@ export default async function walletPasswordScreen(params) {
 
       content_done_el.classList.add('active')
 
-      if(params?.imported) {
-        content_done_text_el.innerHTML = 'Successfully imported wallet'
+      if(params?.type === 'import_wallet') {
+        content_done_text_el.innerHTML = 'Wallet imported successfully'
+      } else if (params?.type === 'reset_wallet') {
+        content_done_text_el.innerHTML = 'Password reset successfully'
       } else {
-        content_done_text_el.innerHTML = 'Successfully created wallet'
+        content_done_text_el.innerHTML = 'Wallet created successfully'
       }
 
       content_done_desc_el.innerHTML = 'Congratulations, your wallet is ready to use.'

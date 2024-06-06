@@ -65,6 +65,8 @@ class Extension {
           return await this.unlockWallet(data?.params)
         case 'lock_wallet':
           return await this.lockWallet()
+        case 'try_password_reset':
+          return await this.tryPasswordReset(data?.params)
         case 'new_account':
           return await this.newAccount(data?.params)
         case 'save_network':
@@ -196,6 +198,22 @@ class Extension {
   async lockWallet() {
     this.#password = null
     clearTimeout(this.password_timer)
+  }
+
+  async tryPasswordReset(params) {
+    await cryptoWaitReady()
+
+    const keyring = new Keyring({
+      type: 'sr25519'
+    });
+
+    const keypair = keyring.addFromUri(params.mnemonic, {
+      name: ''
+    }, 'sr25519');
+
+    const main_account = await this.accounts_store.get('main')
+
+    return keypair.address.toLowerCase() === main_account.address.toLowerCase()
   }
 
   async newAccount(params) {
@@ -345,7 +363,7 @@ class Extension {
             balances.total = balances.total.plus(new BigNumber(humanToBalance(data.balance.replaceAll(',', ''))))
           }
         } catch (e) {
-          console.log('error getting asset balance')
+          console.log('error getting asset balance', e)
         }
       }
 

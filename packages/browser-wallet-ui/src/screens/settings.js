@@ -102,7 +102,7 @@ export default async function settingsScreen(params) {
     },
     {
       element: '#go_import',
-      listener: () => goToScreen('walletImportScreen')
+      listener: () => goToScreen('walletImportScreen', { type: 'import_wallet' })
     },
     {
       element: '#go_new',

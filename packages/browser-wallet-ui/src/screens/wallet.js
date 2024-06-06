@@ -31,7 +31,7 @@ export default async function walletScreen() {
     },
     {
       element: '#import_wallet',
-      listener: () => goToScreen('walletImportScreen')
+      listener: () => goToScreen('walletImportScreen', { type: 'import_wallet' })
     }
   ])
 }

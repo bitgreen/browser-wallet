@@ -243,11 +243,18 @@ class userInterface {
     const input_form = document.querySelector("#login_screen #input_form")
     const input_field = input_form.querySelector("#password")
     const show_password = input_form.querySelector(".show-password")
+    const reset_password = input_form.querySelector(".reset-password")
 
     this.showPasswordTooltip = new Tooltip(show_password.querySelector(".icon"), {
       title: 'Show password',
       container: '#login_screen',
       placement: 'top'
+    })
+
+    reset_password.addEventListener("click", () => {
+      goToScreen('walletImportScreen', {
+        type: 'reset_wallet',
+      })
     })
 
     show_password.addEventListener("click", () => {

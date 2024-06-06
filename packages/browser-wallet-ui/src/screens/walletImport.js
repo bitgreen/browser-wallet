@@ -3,6 +3,8 @@ import { createMnemonicSortable, isIOs } from '@bitgreen/browser-wallet-utils';
 import { mnemonicValidate } from "@polkadot/util-crypto";
 import anime from 'animejs';
 import DOMPurify from 'dompurify';
+import {sendMessage} from "../messaging.js";
+import {showNotification} from "../notifications.js";
 
 let import_mnemonic_array = [];
 let import_mnemonic_sortable = [];
@@ -11,14 +13,17 @@ export default async function walletImportScreen(params = {}) {
   const screen = new Screen({
     template_name: 'layouts/full_page',
     template_params: {
-      title: 'Import Wallet'
+      title: params.type === 'reset_wallet' ? 'Reset Wallet' : 'Import Wallet'
     },
     login: false,
     header: false
   })
   await screen.init()
 
-  await screen.set('.content', 'wallet/import')
+  await screen.set('.content', 'wallet/import', {
+    text: params.type === 'reset_wallet' ? 'Enter an existing secret phrase to reset the wallet password. Each phrase must be in the correct sequence.'
+      : 'Enter an existing secret phrase to import the wallet. Each phrase must be in the correct sequence.'
+  })
 
   await screen.moveFooterOnTop()
 
@@ -70,13 +75,24 @@ export default async function walletImportScreen(params = {}) {
     },
     {
       element: '#continue_new_key',
-      listener: () => {
+      listener: async() => {
         updateCurrentParams({
           mnemonic: import_mnemonic_array
         })
-        goToScreen('walletPasswordScreen', {
+
+        if(params?.type === 'reset_wallet') {
+          const result = await sendMessage('try_password_reset', {
+            mnemonic: import_mnemonic_array.join(' ')
+          })
+
+          if(!result) {
+            return showNotification('This seed phrase is not associated with current account.', 'error')
+          }
+        }
+
+        await goToScreen('walletPasswordScreen', {
           mnemonic: import_mnemonic_array,
-          imported: true
+          type: params?.type
         })
       }
     }

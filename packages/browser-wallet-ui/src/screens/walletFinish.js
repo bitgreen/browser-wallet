@@ -10,11 +10,17 @@ export default async function walletFinishScreen(params) {
   })
   await screen.init()
 
+  let finish_message = 'Wallet created successfully'
+  if(params?.type === 'import_wallet') {
+    finish_message = 'Wallet imported successfully'
+  } else if(params?.type === 'reset_wallet') {
+    finish_message = 'Password reset successfully'
+  }
   await screen.set('.content', 'wallet/finish', {
-    message: params?.imported ? 'imported' : 'created'
+    message: finish_message
   })
 
-  if(!params?.imported) {
+  if(params?.type !== 'import_wallet') {
     await screen.set('#create_new_account', 'global/button', {
       id: 'new_account',
       title: 'Create another account',
