@@ -1,0 +1,30 @@
+{
+  "appId": "com.bitgreen.wallet.app",
+  "appName": "Bitgreen Wallet",
+  "webDir": "../../build/app",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "path": "../../build/platforms/android"
+  },
+  "ios": {
+    "path": "../../build/platforms/ios",
+    "scrollEnabled": false,
+    "contentInset": "never"
+  },
+  "plugins": {
+    "Keyboard": {
+      "resize": "body"
+    },
+    "SplashScreen": {
+      "backgroundColor": "#224851",
+      "launchAutoHide": false,
+      "showSpinner": false,
+      "useDialog": false
+    },
+    "PrivacyScreen": {
+      "enable": false
+    }
+  }
+}

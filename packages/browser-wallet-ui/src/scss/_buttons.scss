@@ -1,0 +1,620 @@
+.btn {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 24px;
+	border-radius: 0;
+	padding: 10px 18px;
+	box-shadow: none !important;
+    text-decoration: none;
+
+    &.btn-hidden {
+        pointer-events: none;
+    }
+    &.btn-sm {
+        padding: 4px 12px;
+        font-size: 14px;
+        line-height: 22px;
+        min-height: 40px;
+
+        .icon {
+            font-size: 12px;
+            margin-left: 6px;
+            min-width: 18px;
+
+            &.icon-left {
+                margin-left: 0;
+                margin-right: 6px;
+            }
+            &.icon-large {
+                font-size: 16px;
+            }
+        }
+    }
+    &.btn-xs {
+        padding: 4px 6px !important;
+        font-size: 12px;
+        line-height: 22px;
+        min-height: 30px;
+
+        .icon {
+            font-size: 10px;
+            margin-left: 3px;
+            margin-top: 1px;
+            width: 12px;
+            min-width: 12px;
+
+            &.icon-left {
+                margin-left: 0;
+                margin-right: 3px;
+            }
+            &.icon-large {
+                font-size: 14px;
+            }
+        }
+    }
+    &.disabled {
+        background-color: $colorLightGray1 !important;
+        opacity: 1;
+        pointer-events: none;
+        border-color: transparent !important;
+        color: $colorDark !important;
+    }
+    &.btn-rounded {
+        border-radius: 4px;
+    }
+
+    * {
+        pointer-events: none !important;
+    }
+    .icon {
+        font-size: 14px;
+        margin-left: 8px;
+        min-width: 20px;
+        color: inherit;
+    
+        &.icon-left {
+            margin-left: 0;
+            margin-right: 8px;
+        }
+        &.icon-large {
+            font-size: 18px;
+        }
+    }
+}
+.btn-primary {
+	background-color: $colorGreenElectric;
+	border-color: $colorGreenElectric;
+	color: $colorDark;
+
+    &:hover,
+    &:active {
+        background-color: $colorGreenElectric1 !important;
+        border-color: $colorGreenElectric1 !important;
+        color: $colorDark !important;
+    }
+}
+.btn-danger {
+	background-color: $colorDanger2;
+	border-color: $colorDanger2;
+	color: $colorWhite;
+
+    &:hover,
+    &:active {
+        background-color: $colorDanger2Active !important;
+        border-color: $colorDanger2Active !important;
+        color: $colorWhite !important;
+}
+}
+.btn-outline-danger {
+	background-color: $colorWhite;
+	border-color: $colorDanger2;
+	color: $colorDanger2;
+
+    &:hover,
+    &:active {
+        background-color: $colorDanger2Active !important;
+        border-color: $colorDanger2Active !important;
+        color: $colorWhite !important;
+    }
+    &.disabled {
+        background-color: $colorWhite !important;
+        border-color: $colorLightGray1 !important;
+    }
+}
+.btn-dark {
+	background-color: $colorTealLight;
+	border-color: $colorTealLight;
+	color: $colorWhite;
+
+    &:hover,
+    &:active {
+        background-color: $colorTealDarker !important;
+        border-color: $colorTealDarker !important;
+        color: $colorWhite !important;
+    }
+}
+.btn-secondary-outline {
+	background-color: $colorLightestGray;
+	border-color: $colorTealLight;
+	color: $colorTealLight;
+
+    &:hover,
+    &:active {
+        background-color: $colorLightGray1 !important;
+        border-color: $colorTealLight !important;
+        color: $colorTealLight !important;
+    }
+}
+.btn-secondary {
+	background-color: $colorTealLight;
+	border-color: $colorTealLight;
+	color: $colorWhite;
+
+    &:hover,
+    &:active {
+        background-color: $colorTealDarker !important;
+        border-color: $colorTealDarker !important;
+        color: $colorWhite !important;
+    }
+}
+.btn-text {
+	background-color: transparent;
+	border: none !important;
+	color: $colorGrayDark;
+
+    &:hover,
+    &:active {
+        color: $colorBlack;
+    }
+
+    &.btn-danger-text {
+        background-color: transparent;
+        color: $colorDanger2;
+        
+        &:hover,
+        &:active {
+            color: $colorDanger2Active;
+        }
+    }
+    &.btn-bordered {
+        border: 1px solid $colorLightGray1 !important;
+    
+        &:hover,
+        &:active {
+            border: 1px solid $colorGrayLight !important;
+        }
+    }
+}
+.btn-white {
+	border: 2px solid $colorWhite !important;
+	color: $colorWhite;
+
+    &:hover,
+    &:active {
+        color: $colorLightGray1 !important;
+        border-color: $colorLightGray1 !important;
+    }
+}
+.btn-error {
+	color: $colorDanger2;
+
+    &:hover,
+    &:active {
+        color: $colorErrorActive !important;
+    }
+}
+.button-item {
+    width: 100%;
+    min-height: 85px;
+    background-color: $colorWhite;
+    text-decoration: none;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all linear 0.3s;
+    user-select: none;
+
+    &.bordered {
+        border: 1px solid rgba(17, 20, 30, 0.03);
+    }
+    &.disabled {
+        cursor: auto !important;
+    }
+    &.click-only * {
+        pointer-events: none !important;
+    }
+    &:hover {
+        box-shadow: 0 3px 4px rgb(17 20 30 / 18%), 0 2px 3px rgb(17 20 30 / 8%);
+        transition: box-shadow linear 0.1s;
+    }
+    &.display-only {
+        cursor: default;
+
+        &:hover {
+            box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
+            transition: none !important;
+        }
+    }
+    &.button-gray {
+        background-color: $colorLightestGray;
+    }
+    &.settings-item {
+        cursor: auto;
+        box-shadow: none !important;
+        min-height: 45px;
+        height: auto;
+        margin-bottom: 8px;
+
+        &.click:hover .icon {
+            transform: translateX(0px);
+        }
+
+        .icon {
+            transition: all linear 0.1s;
+            transform: translateX(-4px);
+            width: 15px;
+            font-size: 12px;
+        }
+
+        select {
+            width: 120px;
+            outline: none !important;
+            border-radius: 0 !important;
+            border: 1px solid $colorWhiteish1 !important;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
+        }
+    }
+    &.tab-item {
+        padding: 4px 0;
+        border-radius: 8px;
+        opacity: 0; // es shown via javascript
+        height: 114px;
+        margin-bottom: 12px;
+        border: 2px solid transparent;
+        transition: border-color linear 0.1s;
+    
+        &:hover {
+            box-shadow: 0 1px 3px rgba(17, 20, 30, 0.1), 0 1px 2px rgba(17, 20, 30, 0.06);
+            border-color: $colorTealLight;
+        }
+        &.disabled {
+            .title {
+                color: $colorGray;
+            }
+            .pill {
+                color: $colorWhite;
+                background-color: $colorGray;
+            }
+        }
+    
+        .icon {
+            display: block;
+            width: 100%;
+            height: 52px;
+            line-height: 42px;
+            font-size: 36px;
+            text-align: center;
+        }
+        .title {
+            width: 100%;
+            height: 26px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: $colorTealLight;
+        }
+        .pill {
+            width: calc(100% - 12px);
+            margin-left: 6px;
+            margin-right: 6px;
+            height: 22px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: $colorTealLight;
+            background-color: $colorWhite;
+            border-radius: 12px;
+        }
+    }
+    &.collator-item {
+        min-height: 70px;
+    }
+    &.transaction-item {
+        min-height: 65px;
+        height: 65px;
+        overflow: hidden;
+        border: 1px solid rgba(17, 20, 30, 0.03);
+        transition: all ease-in-out 0.2s;
+
+        &.active {
+            min-height: 265px;
+            
+            .icon.icon-right {
+                transform: scaleY(-1) translateX(-4px);
+            }
+        }
+        &.click:hover .icon.icon-right {
+            transform: translateX(0px);
+        }
+        &.transaction-item-big {
+            height: 72px;
+    
+            .amount {
+                font-size: 26px;
+    
+                .digits {
+                    font-size: 16px;
+                }
+            }
+            .desc {
+                font-size: 12px;
+            }
+        }
+        &.transaction-item-disabled {
+            box-shadow: none;
+            border-color: transparent;
+            background-color: $colorLightestGray;
+    
+            .amount,
+            .amount * {
+                color: $colorBlueGray !important;
+            }
+        }
+        &.small {
+            &.active {
+                min-height: 140px;
+            }
+
+            .transaction-details {
+                height: 80px;
+            }
+        }
+        &.medium {
+            &.active {
+                min-height: 190px;
+            }
+
+            .transaction-details {
+                height: 130px;
+            }
+        }
+
+        .status {
+            position: relative;
+            text-align: center;
+            min-width: 32px;
+            height: 32px;
+            line-height: 30px;
+            background-color: $colorLightestGray;
+            color: $colorBlueGrayDark;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 16px;
+            padding-left: 1px;
+            margin: 0 16px 0 16px;
+        
+            transition: all ease-in-out 0.1s;
+
+            &.success {
+                background-color: $colorGreenElectric2;
+                color: $colorWhite;
+
+                .icon {
+                    position: absolute;
+                    top: 10px;
+                    left: 0;
+                    font-size: 12px;
+                    width: 100%;
+                    height: 100%;
+
+                    color: $colorWhite !important;
+                }
+            }
+            &.pending {
+                font-size: 16px;
+                background-color: $colorLightGray;
+                color: $colorWhite;
+            }
+            &.error {
+                background-color: $colorDanger1;
+                color: $colorWhite;
+
+                .icon {
+                    position: absolute;
+                    top: 10px;
+                    left: 0;
+                    font-size: 12px;
+                    width: 100%;
+                    height: 100%;
+
+                    color: $colorWhite !important;
+                }
+            }
+        }
+
+        .transaction-info {
+            width: 90%;
+            min-height: 65px;
+
+            .token-amount {
+                width: 100px;
+            }
+            .col {
+                padding: 0 2px;
+                max-width: 64px;
+            }
+            .icon {
+                padding: 0;
+                text-align: center;
+                font-size: 18px;
+                color: $colorGrayDark;
+
+                &.icon-success {
+                    color: $colorSuccess;
+                }
+                &.icon-green {
+                    color: $colorGreenElectric2;
+                }
+                &.icon-error {
+                    color: $colorDanger1;
+                }
+                &.icon-orange {
+                    color: $colorInfo;
+                }
+            }
+        }
+
+        .transaction-details {
+            background: $colorLightestGray;
+            height: 190px;
+            padding: 16px;
+            overflow: hidden;
+            cursor: default;
+            transition: all 0.3s;
+
+            h4 {
+                margin: 0;
+                color: $colorTealLight;
+            }
+            .text-small {
+                word-break: break-all;
+            }
+            .element {
+                margin-bottom: 4px;
+
+                .icon {
+                    color: $colorSuccess;
+
+                    &.icon-cog {
+                        font-size: 18px;
+                    }
+                    &icon-code {
+                        font-size: 26px;
+                    }
+                }
+            }
+        }
+
+        .amount {
+            font-size: 20px;
+
+            .digits {
+                min-width: 0;
+                position: relative;
+                font-size: 16px;
+                top: -2px;
+            }
+            .dollar {
+                position: relative;
+                font-size: 16px;
+                top: 0;
+                right: 2px;
+            }
+        }
+
+        .desc {
+            color: $colorBlueGray;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .icon.icon-right {
+            transition: all linear 0.1s;
+            transform: translateX(-4px);
+            min-width: 40px;
+            width: 40px;
+            font-size: 8px;
+            text-align: center;
+        }
+
+        .transaction-info .icon,
+        .amount,
+        .amount .digits {
+            text-align: center;
+            min-width: 28px;
+            height: 28px;
+            line-height: 28px;
+            margin-bottom: 2px;
+            color: $colorTealLight;
+        }
+    }
+    &.retired-transaction {
+        position: relative;
+        width: 48%;
+        flex-basis: 48%;
+        border-radius: 8px;
+        height: 160px !important;
+        padding: 4px !important;
+        background-position: center;
+        background-size: cover;
+        border: none !important;
+        box-shadow: none !important;
+        overflow: hidden;
+
+        .amount {
+            width: 30%;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            padding: 4px;
+            text-align: center;
+            //color: $colorTealLight;
+            color: #FFFFFF;
+            border-radius: 4px;
+            z-index: 5;
+
+            .tons {
+                margin-bottom: 2px;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 28px;
+            }
+        }
+
+        .details {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            width: calc(100% - 12px);
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            padding: 4px;
+            opacity: 0;
+
+            z-index: 6;
+        }
+
+        &:after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            //background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 15%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(34, 72, 81, 0.6) 0%, rgba(34, 72, 81, 0.6) 20%, transparent 100%);
+            transform: rotate(45deg) scale(1.6);
+            z-index: 4;
+        }
+    }
+    
+    .icon {
+        width: 60px;
+        font-size: 18px;
+        color: $colorDark;
+
+        &.icon-small {
+            width: 10%;
+            font-size: 12px !important;
+        }
+    }
+    svg {
+        width: 56px;
+        height: 56px;
+        padding: 0 8px;
+    }
+}

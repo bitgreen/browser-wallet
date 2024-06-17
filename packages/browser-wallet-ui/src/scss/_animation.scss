@@ -1,0 +1,46 @@
+.animated {
+	transition: all linear 0.2s;
+}
+
+@keyframes beat-fade {
+	0%, to {
+			color: $colorWhite;
+			fill: $colorWhite;
+			transform: scale(1)
+	}
+	50% {
+			color: $colorLightestGray;
+			fill: $colorLightestGray;
+			transform: scale(1.125)
+	}
+}
+@keyframes beat-text-fade {
+	0%, to {
+			color: $colorLightGray;
+			fill: $colorLightGray;
+	}
+	50% {
+			color: $colorWhite;
+			fill: $colorWhite;
+	}
+}
+@keyframes beat-dark-text-fade {
+    0%, to {
+        color: $colorBlueGrayDark;
+        fill: $colorBlueGrayDark;
+    }
+    50% {
+        color: $colorGray;
+        fill: $colorGray;
+    }
+}
+@keyframes dash {
+	to {
+			stroke-dashoffset: 1000;
+	}
+}
+
+@keyframes rotation {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

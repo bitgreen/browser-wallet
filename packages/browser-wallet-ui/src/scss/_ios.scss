@@ -1,0 +1,90 @@
+body.ios {
+    padding-top: 44px;
+
+    #header {
+        top: 44px
+    }
+    #root .full-only {
+        background-image: none;
+        background-color: $colorTealLight;
+    }
+    #accounts_modal {
+        width: 100%;
+        top: 40px;
+        left: 0;
+        padding: 8px;
+    
+        .modal-header {
+            border: 1px solid transparent;
+       }
+    }
+    #bordered_content {
+        padding: 16px;
+        height: calc(100% - 168px);
+        top: 168px;
+    
+        &.smaller {
+            height: calc(100% - 300px);
+            top: 300px;
+            padding-top: 40px;
+        }
+    
+        &.medium {
+            height: calc(100% - 200px);
+            top: 200px;
+        }
+        
+    }
+    #full_page,
+    #bordered_content {
+        position: absolute;
+    }
+    #full_page {
+        height: calc(100% - 44px);
+    
+        .content {
+            height: calc(100% - 60px);
+    
+            &.full-content {
+                height: 100%;
+                padding-top: 80px;
+            }
+        }
+    }
+    #staking_intro .step {
+        padding-top: 140px
+    }
+
+    #init_screen {
+        .init-logo {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            margin: -150px auto auto;
+            width: 33%;
+            height: 300px;
+        }
+    }
+
+    #main_footer,
+    .footer {
+        position: fixed;
+        width: 92vw;
+        left: 4vw;
+        bottom: 8vw;
+
+        &.double-footer {
+            bottom: calc(14vw + 44px);
+        }
+    }
+
+    .modal {
+        top: 50px;
+
+        .modal-header {
+            border-top-left-radius: 0.5rem !important;
+            border-top-right-radius: 0.5rem !important;
+        }
+    }
+}

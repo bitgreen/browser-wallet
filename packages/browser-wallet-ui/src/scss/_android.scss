@@ -1,0 +1,20 @@
+body.android {
+    &.keyboard-opened {
+        .footer {
+            bottom: 5vw !important;
+        }
+    }
+
+    #main_footer,
+    .footer {
+        width: 90vw;
+        left: 5vw;
+        bottom: 5vw;
+    }
+
+    .footer {
+        &.double-footer {
+            bottom: calc(10vh + 8px);
+        }
+    }
+}

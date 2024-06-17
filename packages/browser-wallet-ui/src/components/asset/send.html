@@ -1,62 +1,64 @@
-<div id="from_account" class="d-flex align-items-sketch align-items-center custom-dropdown click" style="height: 70px;">
-    <div class="w-100">
-        <div class="name w-100 d-flex align-items-center">From (${from_name})</div>
-        <div class="desc w-100 d-flex align-items-center"><span class="icon icon-wallet-outline"></span>${from_address}</div>
+<div class="scroll-content">
+    <div id="from_account" class="d-flex align-items-sketch align-items-center custom-dropdown click" style="height: 70px;">
+        <div class="w-100">
+            <div class="name w-100 d-flex align-items-center">From (${from_name})</div>
+            <div class="desc w-100 d-flex align-items-center"><span class="icon icon-wallet-outline"></span>${from_address}</div>
+        </div>
+        <span class="icon icon-down-arrow"></span>
     </div>
-    <span class="icon icon-down-arrow"></span>
-</div>
-<div id="asset_info" class="d-flex align-items-sketch align-items-center custom-dropdown click disabled">
-    <div class="selected w-100"></div>
-    <span class="icon icon-down-arrow"></span>
-    <div class="dropdown">
-        <div class="content" style="padding-bottom: 26px;"></div>
-        <div class="transactions-end"></div>
-    </div>
-</div>
-<div id="choose_quantity" class="d-flex select-none">
-    <div class="w-100">
-        <div class="form-group custom-border">
-            <input id="amount" type="number" class="form-control">
-            <label class="d-flex label w-100" for="amount"><span class="w-100"><span class="asset-name"></span></span><span id="max_amount" class="text-right click">MAX</span></label>
+    <div id="asset_info" class="d-flex align-items-sketch align-items-center custom-dropdown click disabled">
+        <div class="selected w-100"></div>
+        <span class="icon icon-down-arrow"></span>
+        <div class="dropdown">
+            <div class="content" style="padding-bottom: 26px;"></div>
+            <div class="transactions-end"></div>
         </div>
     </div>
-    <div class="equals d-flex align-items-center">=</div>
-    <div class="w-100">
-        <div class="form-group custom-border">
-            <input id="usd_amount" type="number" class="form-control">
-            <label class="label w-100 text-center" for="usd_amount">USD</label>
+    <div id="choose_quantity" class="d-flex select-none">
+        <div class="w-100">
+            <div class="form-group custom-border">
+                <input id="amount" type="number" class="form-control" value="${amount}" inputmode="decimal">
+                <label class="d-flex label w-100" for="amount"><span class="w-100"><span class="asset-name"></span></span><span id="max_amount" class="text-right click">MAX</span></label>
+            </div>
+        </div>
+        <div class="equals d-flex align-items-center">=</div>
+        <div class="w-100">
+            <div class="form-group custom-border">
+                <input id="usd_amount" type="number" class="form-control" inputmode="decimal">
+                <label class="label w-100 text-center" for="usd_amount">USD</label>
+            </div>
         </div>
     </div>
-</div>
-<div id="send_info">
-    <div class="info">
+    <div id="send_info">
+        <div class="info">
+            <div class="d-flex">
+                <div class="col-4 text">Total to send</div>
+                <div class="col-8 text-right fee-info"><span class="total-amount"></span> <span class="asset-symbol"></span></div>
+            </div>
+        </div>
+        <div class="error select-none">
+            <div class="d-flex align-items-center text-center">
+                <span class="w-100"><svg class="me-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.36705 0 0 5.36752 0 12C0 18.633 5.36752 24 12 24C18.633 24 24 18.6325 24 12C24 5.36705 18.6325 0 12 0ZM12 22.125C6.40345 22.125 1.875 17.5962 1.875 12C1.875 6.40345 6.40383 1.875 12 1.875C17.5965 1.875 22.125 6.40383 22.125 12C22.125 17.5965 17.5962 22.125 12 22.125Z" fill="#F53400"/>
+                    <path d="M12 6.04102C11.4822 6.04102 11.0625 6.46073 11.0625 6.97852V13.0157C11.0625 13.5335 11.4822 13.9532 12 13.9532C12.5178 13.9532 12.9375 13.5335 12.9375 13.0157V6.97852C12.9375 6.46073 12.5178 6.04102 12 6.04102Z" fill="#F53400"/>
+                    <path d="M12 17.6326C12.699 17.6326 13.2656 17.0659 13.2656 16.3669C13.2656 15.668 12.699 15.1013 12 15.1013C11.301 15.1013 10.7344 15.668 10.7344 16.3669C10.7344 17.0659 11.301 17.6326 12 17.6326Z" fill="#F53400"/>
+                </svg>Insufficient Balance.</span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-sketch align-items-center custom-dropdown" style="height: 70px;">
+        <div class="row">
+            <div class="name w-100 d-flex align-items-center">Recipient</div>
+            <div class="desc w-100 d-flex align-items-center">
+                <span class="icon icon-wallet-outline"></span>
+                <input id="recipient" type="text" class="form-control desc" placeholder="Address" value="${recipient}" autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+    <div class="footer double-footer d-flex align-items-sketch flex-row-reverse">
         <div class="d-flex">
-            <div class="col-4 text">Total to send</div>
-            <div class="col-8 text-right fee-info"><span class="total-amount"></span> <span class="asset-symbol"></span></div>
+            <button id="go_review_transaction" class="btn btn-sm btn-rounded disabled ps-3 pe-3" title="" data-bs-html="true" data-bs-placement="left">Review <span
+                    class="icon icon-right-arrow"></span></button>
         </div>
-    </div>
-    <div class="error select-none">
-        <div class="d-flex align-items-center text-center">
-            <span class="w-100"><svg class="me-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 0C5.36705 0 0 5.36752 0 12C0 18.633 5.36752 24 12 24C18.633 24 24 18.6325 24 12C24 5.36705 18.6325 0 12 0ZM12 22.125C6.40345 22.125 1.875 17.5962 1.875 12C1.875 6.40345 6.40383 1.875 12 1.875C17.5965 1.875 22.125 6.40383 22.125 12C22.125 17.5965 17.5962 22.125 12 22.125Z" fill="#F53400"/>
-                <path d="M12 6.04102C11.4822 6.04102 11.0625 6.46073 11.0625 6.97852V13.0157C11.0625 13.5335 11.4822 13.9532 12 13.9532C12.5178 13.9532 12.9375 13.5335 12.9375 13.0157V6.97852C12.9375 6.46073 12.5178 6.04102 12 6.04102Z" fill="#F53400"/>
-                <path d="M12 17.6326C12.699 17.6326 13.2656 17.0659 13.2656 16.3669C13.2656 15.668 12.699 15.1013 12 15.1013C11.301 15.1013 10.7344 15.668 10.7344 16.3669C10.7344 17.0659 11.301 17.6326 12 17.6326Z" fill="#F53400"/>
-            </svg>Insufficient Balance.</span>
-        </div>
-    </div>
-</div>
-<div class="d-flex align-items-sketch align-items-center custom-dropdown" style="height: 70px;">
-    <div class="row">
-        <div class="name w-100 d-flex align-items-center">Recipient</div>
-        <div class="desc w-100 d-flex align-items-center">
-            <span class="icon icon-wallet-outline"></span>
-            <input id="recipient" type="text" class="form-control desc" placeholder="Address" value="${recipient}" autocomplete="off" spellcheck="false">
-        </div>
-    </div>
-</div>
-<div class="footer double-footer d-flex align-items-sketch flex-row-reverse pe-2">
-    <div class="d-flex">
-        <button id="go_review_transaction" class="btn btn-sm btn-rounded disabled ps-3 pe-3" title="" data-bs-html="true" data-bs-placement="left">Review <span
-                class="icon icon-right-arrow"></span></button>
     </div>
 </div>

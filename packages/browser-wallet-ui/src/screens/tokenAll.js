@@ -1,7 +1,6 @@
 import Screen, { goBackScreen, goToScreen, reloadScreen } from "./index.js";
 import {balanceToHuman, getAmountDecimal} from "@bitgreen/browser-wallet-utils";
 import {sendMessage} from "../messaging.js";
-import {bbbTokenPrice} from "@bitgreen/browser-wallet-core";
 import {renderTemplate} from "../screens.js";
 import anime from "animejs";
 
@@ -70,12 +69,12 @@ export default async function tokenAllScreen(params) {
         })
       })
 
-      t.addEventListener("click", function(e) {
+      t.addEventListener("click", () => {
         if(t.classList.contains('active')) {
           t.classList.remove('active')
         } else {
           document.querySelectorAll("#bordered_content .transaction-item").forEach(t => {
-            t.classList.remove('active')
+          t.classList.remove('active')
           })
 
           t.classList.add('active')

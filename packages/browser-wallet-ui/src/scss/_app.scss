@@ -1,0 +1,199 @@
+html {
+    overflow: hidden;
+}
+body.app {
+    position: relative;
+    height: 100vh;
+    min-height: 400px;
+    transition: height ease-out 0.1s;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    .footer {
+        transition: all ease-out 0.2s;
+    }
+
+    &.keyboard-opened {
+        #bordered_content .scroll-content,
+        #full_page .scroll-content {
+            height: 100%;
+            padding-bottom: 34px;
+        }
+
+        .footer {
+            bottom: 8px !important;
+        }
+
+        transition: height ease-out 0.33s
+    }
+
+    * {
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+    }
+
+    #login_screen {
+        overflow: hidden !important;
+        width: 100vw;
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+    }
+
+    #init_screen {
+        position: fixed;
+        overflow: hidden;
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+
+        .init-logo {
+            position: fixed;
+            bottom: auto;
+            top: 300px;
+        }
+    }
+
+    #full_page,
+    #bordered_content {
+        width: 100vw;
+        left: 0;
+
+        &.no-overflow {
+            overflow: unset;
+        }
+    }
+
+    #full_page {
+        .heading {
+            h3 {
+                width: 100%;
+            }
+            .icon {
+                height: 40px;
+                line-height: 40px;
+            }
+        }
+    }
+
+    @media (min-width: 576px) {
+        .container-sm, .container {
+            max-width: 100%;
+        }
+    }
+
+    #bordered_content > .scroll-content,
+    #full_page > .scroll-content {
+        overflow: auto;
+        overflow-x: unset;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    #main_footer,
+    .footer {
+        position: absolute;
+    }
+
+    .footer {
+        pointer-events: none;
+
+        &.double-footer {
+            bottom: 76px;
+        }
+
+        > div {
+            pointer-events: all;
+        }
+    }
+
+    #staking_info {
+        padding: 0 16px;
+        bottom: 100px;
+
+        .dots {
+            top: auto;
+            bottom: 120px;
+        }
+    }
+
+    #staking_intro {
+        .dots {
+            top: auto;
+            bottom: 100px;
+        }
+    }
+
+    #root .full-only {
+        background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+    }
+
+    #main_footer.disabled {
+        pointer-events: none !important;
+    }
+
+    .transactions-end {
+        width: 100% !important;
+    }
+
+    #current_wallet {
+        .jdenticon {
+            .kyc-status {
+                &:after {
+                    bottom: 2px !important;
+                }
+            }
+        }
+    }
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+
+    &.full-only {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('../assets/bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    
+        z-index: -1;
+    }
+
+    &.init {
+        opacity: 1;
+    
+        transition: all ease-in-out 0.4s;
+    }
+
+    &.freeze * {
+        pointer-events: none !important;
+    }
+}
+
+#connection_error {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    z-index: 10000;
+}
+
+.custom-image-icon {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 42px;
+    border: 2px solid $colorWhite;
+    box-shadow: 0 0 6px -2px $colorBlueDark !important;
+
+    background-size: cover;
+    background-position: center;
+    border-radius: 21px;
+}

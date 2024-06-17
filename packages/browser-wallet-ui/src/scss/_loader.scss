@@ -1,0 +1,323 @@
+#loading_content {
+	position: absolute;
+	left: 0;
+	top: 16px;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	padding-top: 80px;
+	background-color: $colorWhite;
+	transition: all linear 0.4s;
+	visibility: hidden;
+	opacity: 0;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+
+	z-index: 100;
+
+    &.no-border-radius {
+        border-radius: 0 !important;
+    }
+    &.active {
+        opacity: 1;
+        visibility: visible;
+        transition-delay: 200ms;
+    }
+    &.circle {
+        .text {
+            color: $colorTealLight;
+            font-size: 22px;
+            text-transform: capitalize;
+        }
+    }
+    &.done {
+        #loading_circle {
+            animation: none;
+        }
+    }
+    &.dark {
+        background-color: $colorTealLight;
+    
+        #loading_circle {
+            #primary {
+                stroke: $colorWhite;
+            }
+            #secondary {
+                stroke: transparent;
+            }
+        }
+        &.circle {
+            .text {
+                color: $colorWhite;
+            }
+        }
+        .desc {
+            color: $colorWhite;
+        }
+        #checkmark {
+            path {
+                fill: $colorWhite;
+            }
+        }
+    }
+
+    .bbb-icon {
+        font-size: 42px;
+        animation-name: beat-fade;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+        animation-duration: 2s;
+    
+        fill: $colorLightestGray;
+
+        path {
+            stroke: $colorGreenElectric;
+            stroke-width: 3px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100;
+        
+            animation-name: dash;
+            animation-iteration-count: infinite;
+            animation-duration: 20s;
+        }
+    }
+
+    #content {
+        position: relative;
+        display: block;
+        width: 100%;
+        min-height: 200px;
+    
+        .init {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        
+            transition: all ease-in-out 0.4s;
+        }
+        .done {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all ease-in-out 0.4s;
+        
+            opacity: 0;
+            
+            &.active {
+                opacity: 1;
+            }
+            
+            .desc {
+                margin-bottom: 30px;
+            }
+        }
+        .processing {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all ease-in-out 0.4s;
+            padding: 40px 40px 0;
+
+            opacity: 0;
+
+            .desc {
+                text-transform: uppercase;
+                font-size: 10px;
+                font-weight: 500;
+                padding-top: 4px;
+                color: $colorGrayLight;
+
+                animation-name: beat-dark-text-fade;
+                animation-iteration-count: infinite;
+                animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+                animation-duration: 1.4s;
+            }
+
+            &.active {
+                opacity: 1;
+            }
+        }
+    }
+
+    .text {
+        width: 100%;
+        text-transform: uppercase;
+        color: $colorBlueGray;
+        font-weight: 500;
+        font-size: 10px;
+        text-align: center;
+        padding-top: 16px;
+    }
+    .desc {
+        font-weight: 400;
+        font-size: 14px;
+        padding: 12px 56px;
+        color: $colorBlueGray;
+    }
+    #loading_circle {
+        animation: rotation 1.4s linear infinite;
+
+        &.no-animation {
+            animation: none !important;
+        }
+
+        #primary {
+            stroke: $colorTealLight;
+        }
+        #secondary {
+            stroke: $colorWhiteish1;
+        }
+    }
+    #progress {
+        position: absolute;
+        top: 120px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-weight: 500;
+        font-size: 12px;
+        padding-left: 3px;
+        color: $colorBlueGray;
+        display: flex;
+        justify-content: center;
+
+        opacity: 0;
+
+        transition: all ease-in-out 0.4s;
+
+        .percentage {
+            line-height: 14px;
+
+            display: inline-block;
+            width: 30px;
+            text-align: right;
+            padding-right: 1px;
+        }
+
+        .sign {
+            line-height: 16px;
+
+            display: inline-block;
+            width: 30px;
+            text-align: left;
+            font-weight: 600;
+            color: $colorGrayLight;
+            padding-left: 1px
+        }
+
+        &.show {
+            opacity: 1;
+        }
+    }
+    #checkmark,
+    #failed {
+        position: absolute;
+        top: 108px;
+        left: calc(50% - 22px);
+        opacity: 0;
+    
+        transition: all ease-in-out 0.4s;
+
+        &.show {
+            opacity: 1;
+        }
+    }
+    #checkmark {
+        path {
+            fill: $colorTealLight;
+        
+            transition: all ease-in-out 0.4s;
+        }
+    }
+    #failed {
+        top: 90px;
+        left: calc(50% - 30px);
+
+        path {
+            fill: $colorDanger1;
+        
+            transition: all ease-in-out 0.4s;
+        }
+    }
+}
+
+#bbb_loader {
+	position: relative;
+	width: 100%;
+	height: auto;
+	top: 0;
+	background-color: transparent;
+	text-align: center;
+
+    &.centered {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        text-align: center;
+    }
+    &.active {
+        .bbb-icon {
+            font-size: 42px;
+            animation-name: beat-fade;
+            animation-iteration-count: infinite;
+            animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+    
+            path {
+                stroke: $colorGreenElectric;
+                stroke-width: 3px;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-dasharray: 100;
+            
+                animation-name: dash;
+                animation-iteration-count: infinite;
+                animation-duration: 20s;
+            }
+        }
+        .text {
+            opacity: 1;
+        }
+    }
+
+    .bbb-icon {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 124px;
+        margin: auto;
+    
+        width: 102px;
+        height: 128px;
+        animation-duration: 2s;
+    }
+    .text {
+        position: absolute;
+        bottom: 80px;
+        width: 100%;
+        color: $colorLightGray;
+    
+        text-align: center;
+        padding-top: 16px;
+        transition: all ease-in-out 0.4s;
+        opacity: 0;
+    
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+    
+        animation-name: beat-text-fade;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(.4, 0, .6, 1);
+        animation-duration: 1s;
+    }
+}

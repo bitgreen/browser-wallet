@@ -1,0 +1,202 @@
+:root {
+    --main-bg-color: $colorTealLight;
+    --secondary-font :$colorBlueGray;
+}
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: $colorLightestGray;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: $colorWhiteish1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: $colorGrayLight;
+}
+* {
+	font-family: "Neue Haas Unica Pro", sans-serif !important;
+}
+html {
+	height:100%;
+	background: linear-gradient(to bottom, $colorTealLight, $colorTealDark)
+}
+body {
+	font-family: 'Neue Haas Unica Pro', sans-serif;
+	width: 100%;
+	min-width: 400px;
+	min-height: 600px;
+	height: 100%;
+	color: $colorTealLight;
+	font-size: 14px;
+	line-height: 14px;
+	overflow: hidden;
+	background: linear-gradient(to bottom, $colorTealLight, $colorTealDark);
+
+    &.app {
+        .footer {
+            transition: padding-bottom ease-out 0.222s;
+        }
+    }
+}
+h1 {
+	font-weight: 500;
+	font-size: 24px;
+	color: $colorDark;
+}
+h2 {
+	font-weight: 500;
+	font-size: 22px;
+	color: $colorDark;
+}
+h3 {
+	font-weight: 500;
+	font-size: 18px;
+	color: $colorDark;
+}
+h4 {
+	font-weight: 500;
+	font-size: 16px;
+	color: $colorDark;
+}
+h5 {
+	font-weight: 500;
+	font-size: 14px;
+	color: $colorDark;
+}
+h6 {
+	font-weight: 400;
+	font-size: 12px;
+	color: $colorDark;
+}
+p {
+	line-height: 18px;
+	margin-bottom: 0;
+}
+.text-white {
+	color: $colorWhite !important;
+}
+.text-light-gray {
+	color: $colorLightGray1;
+}
+.text-gray {
+	color: $colorBlueGray;
+}
+.text-disabled {
+	color: $colorGray !important;
+}
+.text-green {
+	color: $colorGreenElectric !important;
+}
+.text-green1 {
+	color: $colorGreenElectric1 !important;
+}
+.text-dark {
+	color: $colorDark;
+}
+.text-danger {
+	color: $colorDanger1;
+}
+.text-dark-blue {
+	color: $colorTealLight !important;
+}
+.text-small {
+	font-size: 14px !important;
+}
+.text-bigger {
+	font-size: 16px;
+}
+.text-biggest {
+	font-size: 20px;
+}
+.text-very-small {
+	font-size: 12px;
+}
+.text-grotesk {
+	font-weight: 300;
+
+    &.text-bold {
+        font-weight: 500;
+    }
+}
+.text-bold {
+	font-weight: 500;
+}
+.text-semibold {
+	font-weight: 400;
+}
+.text-left {
+	text-align: left !important;
+}
+.text-right {
+	text-align: right !important;
+}
+.select-none {
+	user-select: none;
+}
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+.transparent-element {
+    opacity: 0;
+}
+.click {
+	cursor: pointer !important;
+}
+.rounded-left {
+	border-top-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
+}
+.rounded-right {
+	border-top-right-radius: 4px !important;
+	border-bottom-right-radius: 4px !important;
+}
+.border-right-0 {
+	border-right: none !important;
+}
+.no-border {
+    border: none !important;
+}
+.no-border-radius {
+	border-radius: 0 !important;
+}
+.blur-box {
+    > * {
+        z-index: 1;
+    }
+
+    &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        content: " ";
+        backdrop-filter: blur(4px);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        opacity: 0.8;
+        transition: all linear 0.1s;
+    }
+
+    &.blur-box-hover:hover {
+        &::after {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    }
+}
+.separator-line {
+    margin: 0 auto 8px;
+    width: 100%;
+    height: 1px;
+    background-color: $colorLightGray;
+}
+.blank-space {
+    width: 100%;
+    height: 60px;
+}

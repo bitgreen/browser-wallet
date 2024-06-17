@@ -1,0 +1,7 @@
+"*":
+  editor:
+    tabLength: 2
+    softTabs: true
+  ".css.source, .scss.source, .html.source":
+    editor:
+      tabLength: 4

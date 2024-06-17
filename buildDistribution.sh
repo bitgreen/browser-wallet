@@ -7,7 +7,7 @@ cd build/chrome/
 zip -r ../../dist/chrome.zip .
 cd ../firefox/
 zip -r ../../dist/firefox.zip .
-cd ../safari/
-zip -r ../../dist/safari.zip .
+cd ../apple/
+zip -r ../../dist/apple.zip .
 
 ## TODO Create a zip file of relevant source.

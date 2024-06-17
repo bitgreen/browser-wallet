@@ -64,13 +64,24 @@ export default async function assetAllScreen(params) {
 
       const free_info = getAmountDecimal(asset.balance, 2)
 
+      let icon = carbonCreditIcon
+
+      if(asset.image) {
+        icon = await renderTemplate('shared/icons/custom_icon', {
+          image_src: asset.image
+        })
+      }
+
       await screen.append("#root #transactions", "asset/all/list_item", {
-        assetName: asset.asset_name,
+        info: asset.info,
+
+        assetName: (asset.asset_name.length > 24 ? asset.asset_name.substring(0,24) + '...' : asset.asset_name),
         assetId: asset.asset_id,
+        projectId: asset.project_id,
         balance: balance_info.amount,
         decimal: balance_info.decimals,
 
-        assetLogo: carbonCreditIcon,
+        assetLogo: icon,
 
         price: asset.price > 0 ? `<span class="dollar">$</span>${price_info.amount}` : '',
         priceDecimal: asset.price > 0 ? '.' + price_info.decimals : 'N/A',
@@ -88,7 +99,9 @@ export default async function assetAllScreen(params) {
         })
       })
 
-      t.addEventListener("click", function(e) {
+      t.addEventListener("click", (e) => {
+        if(e.target.classList.contains('btn-view')) return
+
         if(t.classList.contains('active')) {
           t.classList.remove('active')
         } else {

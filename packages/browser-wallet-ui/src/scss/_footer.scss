@@ -1,0 +1,110 @@
+#main_footer {
+    position: fixed;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100vw - 16px);
+    background-color: $colorTealLight;
+    border-radius: 8px;
+    padding: 8px;
+    opacity: 0;
+    z-index: 99;
+    pointer-events: none;
+
+    &.visible {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .item {
+        width: 44px;
+        height: 44px;
+        border-radius: 4px;
+        color: $colorWhiteishGreen;
+        font-size: 18px;
+        transition: all linear 0.15s;
+        cursor: pointer;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            background-color: rgba(192, 255, 0, 0.05);
+            color: $colorGreenElectric;
+            transition: color linear 0.3s;
+        
+            svg path {
+                fill: $colorGreenElectric;
+            }
+
+            rect {
+                stroke: $colorGreenElectric;
+            }
+        }
+        
+        &.item-send { // .item-send is stroke, not a path
+            &:hover,
+            &:focus,
+            &:active,
+            &.active {
+                svg path {
+                    fill: transparent;
+                    stroke: $colorGreenElectric;
+                }
+            }
+        }
+
+        * {
+            pointer-events: none;
+        }
+    }
+}
+
+.tooltip.tooltip-footer {
+    &.show {
+        opacity: 1 !important;
+    }
+
+    .tooltip-inner {
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 12px;
+        text-transform: uppercase;
+        color: $colorGreenElectric;
+        padding: 2px 8px;
+        border: 1px solid $colorGreenElectric;
+        background-color: $colorTealLight;
+    }
+}
+.footer-only {
+    padding: 16px;
+}
+.footer {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: calc(100vw - 16px);
+    z-index: 99;
+    user-select: none;
+
+    &.no-pointer-event {
+        pointer-events: none;
+
+        .d-flex {
+            pointer-events: auto;
+        }
+    }
+
+    &.equal-footer {
+        padding-bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+    &.double-footer {
+        bottom: 72px;
+    }
+}
+#root .footer {
+    opacity: 0;
+}
