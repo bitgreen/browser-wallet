@@ -3,7 +3,7 @@
 mkdir -p dist && rm dist/*.zip
 npm install
 npm run build
-cd build/chrome/
+cd build/platforms/chrome/
 zip -r ../../dist/chrome.zip .
 cd ../firefox/
 zip -r ../../dist/firefox.zip .
