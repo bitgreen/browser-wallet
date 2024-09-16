@@ -26,7 +26,7 @@
     "@bitgreen/browser-wallet-utils": "^1.0.0",
     "animejs": "^3.2.1",
     "bootstrap": "^5.3",
-    "dompurify": "^2.4.1",
+    "dompurify": "^2.5.4",
     "jdenticon": "^3.2.0",
     "qrcode": "^1.5.1",
     "sortablejs": "^1.15.0",
